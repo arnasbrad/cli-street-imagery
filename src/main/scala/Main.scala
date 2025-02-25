@@ -1,12 +1,12 @@
 import cats.effect.{IO, IOApp}
 import clients.mapillary.MapillaryClient
-
-import java.nio.file.{Files, Paths}
+import common.Models.{Coordinates, Radius}
 
 object Main extends IOApp.Simple {
   val run: IO[Unit] = {
     MapillaryClient.make().use { client =>
       // Call getImage which returns EitherT[IO, MapillaryError, Array[Byte]]
+      /*
       client.getImage("2966993343542765").value.flatMap {
         // Handle the Either result
         case Right(imageBytes) =>
@@ -27,6 +27,17 @@ object Main extends IOApp.Simple {
         case Left(error) =>
           IO.println(error)
       }
+       */
+      client
+        .getImageIdsByLocation(
+          Coordinates.unsafeCreate(55.597, 12.967),
+          Radius.unsafeCreate(50)
+        )
+        .value
+        .flatMap {
+          case Right(res) => IO.println(res)
+          case Left(e)    => IO.println(e)
+        }
     }
   }
 }

@@ -1,11 +1,19 @@
 package clients.mapillary
 
-import clients.mapillary.Models.MapillaryImageDetails
+import cats.effect.IO
+import clients.mapillary.Models.{
+  ImageData,
+  ImagesResponse,
+  MapillaryImageDetails
+}
 import io.circe.Decoder
+import io.circe.generic.semiauto.deriveDecoder
+import org.http4s.EntityDecoder
+import org.http4s.circe.jsonOf
 
 object Codecs {
   // Circe decoder for JSON response
-  implicit val decoder: Decoder[MapillaryImageDetails] =
+  implicit val mapillaryImageDetailsDecoder: Decoder[MapillaryImageDetails] =
     Decoder.instance { c =>
       for {
         id <- c.get[String]("id")
@@ -17,4 +25,14 @@ object Codecs {
         thumbOriginalUrl = thumbOriginalUrl
       )
     }
+  implicit val mapillaryImageDetailsEntityDecoder
+      : EntityDecoder[IO, MapillaryImageDetails] =
+    jsonOf[IO, MapillaryImageDetails]
+
+  implicit val imageDataDecoder: Decoder[ImageData] = deriveDecoder[ImageData]
+  implicit val imagesResponseDecoder: Decoder[ImagesResponse] =
+    deriveDecoder[ImagesResponse]
+  implicit val responseEntityDecoder: EntityDecoder[IO, ImagesResponse] =
+    jsonOf[IO, ImagesResponse]
+
 }

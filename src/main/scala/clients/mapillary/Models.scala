@@ -6,4 +6,7 @@ object Models {
       thumb2048Url: Option[String] = None,
       thumbOriginalUrl: Option[String] = None
   )
+
+  case class ImagesResponse(data: List[ImageData])
+  case class ImageData(id: String)
 }
