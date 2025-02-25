@@ -1,0 +1,42 @@
+ThisBuild / version := "0.1.0-SNAPSHOT"
+
+ThisBuild / scalaVersion := "2.13.16"
+
+val catsVersion = "2.13.0"
+val catsEffectVersion = "3.5.7"
+val http4sVersion = "0.23.30"
+val logbackVersion = "1.5.16"
+
+libraryDependencies ++= Seq(
+  "org.typelevel" %% "cats-core" % catsVersion,
+  "org.typelevel" %% "cats-effect" % catsEffectVersion,
+
+  "org.http4s" %% "http4s-dsl" % http4sVersion,
+  "org.http4s" %% "http4s-ember-server" % http4sVersion,
+  "org.http4s" %% "http4s-ember-client" % http4sVersion,
+  "org.http4s" %% "http4s-circe" % http4sVersion,
+
+  "io.circe" %% "circe-generic" % "0.14.10",
+  "io.circe" %% "circe-parser" % "0.14.10",
+
+  "ch.qos.logback" % "logback-classic" % logbackVersion
+)
+
+// Compiler options
+scalacOptions ++= Seq(
+  "-encoding", "UTF-8",
+  "-feature",
+  "-language:existentials",
+  "-language:higherKinds",
+  "-language:implicitConversions",
+  "-unchecked",
+  "-Xfatal-warnings",
+  "-deprecation",
+  "-Wunused:imports",
+  "-Wnonunit-statement"
+)
+
+lazy val root = (project in file("."))
+  .settings(
+    name := "cli-street-imagery"
+  )
