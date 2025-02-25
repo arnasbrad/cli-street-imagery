@@ -63,7 +63,7 @@ object MapillaryClient {
     private val baseUri = Uri.unsafeFromString("https://graph.mapillary.com")
 
     // TODO: use oauth instead of http param. And use AppConfig
-    private val apiKey = "MLY|9231864626900852|d5262804c0fe9f4ec9033bc7a6432910"
+    private val apiKey = "MLY|xxx|xxx"
 
     private def getImageDetails(
         imageId: String
