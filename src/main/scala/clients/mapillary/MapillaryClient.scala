@@ -1,17 +1,18 @@
 package clients.mapillary
 
+import cats.data.EitherT
 import cats.effect.{IO, Resource}
 import clients.mapillary.Codecs._
-import clients.mapillary.Errors.NoImageThumbnailFoundException
+import clients.mapillary.Errors.MapillaryError
 import clients.mapillary.Models.MapillaryImageDetails
 import org.http4s.Method.GET
 import org.http4s.circe.jsonOf
-import org.http4s.client.Client
+import org.http4s.client.{Client, UnexpectedStatus}
 import org.http4s.ember.client.EmberClientBuilder
-import org.http4s.{EntityDecoder, Request, Uri}
+import org.http4s.{EntityDecoder, InvalidMessageBodyFailure, Request, Uri}
 
 trait MapillaryClient {
-  def getImage(imageId: String): IO[Array[Byte]]
+  def getImage(imageId: String): EitherT[IO, MapillaryError, Array[Byte]]
 }
 
 object MapillaryClient {
@@ -23,9 +24,9 @@ object MapillaryClient {
     private val baseUri = Uri.unsafeFromString("https://graph.mapillary.com")
     private val apiKey = "enter-api-key"
 
-    // Get image details with all available fields
-    private def getImageDetails(imageId: String): IO[MapillaryImageDetails] = {
-      // Define the fields we want to request
+    private def getImageDetails(
+        imageId: String
+    ): EitherT[IO, MapillaryError, MapillaryImageDetails] = {
       val fields = List(
         "id",
         "thumb_2048_url",
@@ -45,33 +46,128 @@ object MapillaryClient {
       implicit val entityDecoder: EntityDecoder[IO, MapillaryImageDetails] =
         jsonOf[IO, MapillaryImageDetails]
 
-      client.expect[MapillaryImageDetails](request)
+      val res = client
+        .expect[MapillaryImageDetails](request)
+        .attempt
+        .map {
+          case Right(details) => Right(details)
+          case Left(error: InvalidMessageBodyFailure) =>
+            Left(
+              MapillaryError.JsonDecodingError(
+                s"Failed to decode response: ${error.getMessage}"
+              )
+            )
+          case Left(error: UnexpectedStatus) =>
+            error.status.code match {
+              case 401 | 403 =>
+                Left(
+                  MapillaryError.AuthenticationError(
+                    s"Authentication failed with status ${error.status.code}: ${error.status.reason}"
+                  )
+                )
+              case 429 =>
+                Left(
+                  MapillaryError.RateLimitError(
+                    s"Rate limit exceeded: ${error.status.reason}"
+                  )
+                )
+              case _ =>
+                Left(
+                  MapillaryError.ApiError(
+                    s"API returned unexpected status: ${error.status.code} - ${error.status.reason}"
+                  )
+                )
+            }
+          case Left(error) =>
+            Left(
+              MapillaryError.NetworkError(s"Network error: ${error.getMessage}")
+            )
+        }
+      EitherT(res)
     }
 
-    // Get image bytes from a URL
-    private def getImageFromUrl(url: String): IO[Array[Byte]] = {
+    private def getImageFromUrl(
+        url: String
+    ): EitherT[IO, MapillaryError, Array[Byte]] = {
       val uri = Uri.unsafeFromString(url)
       val request = Request[IO](
         method = GET,
         uri = uri
       )
 
-      client.expect[Array[Byte]](request)
+      EitherT(
+        client
+          .expect[Array[Byte]](request)
+          .attempt
+          .map {
+            case Right(imageBytes) => Right(imageBytes)
+            case Left(error: UnexpectedStatus) =>
+              error.status.code match {
+                case 401 | 403 =>
+                  Left(
+                    MapillaryError.AuthenticationError(
+                      s"Authentication failed with status ${error.status.code}: ${error.status.reason}"
+                    )
+                  )
+                case 429 =>
+                  Left(
+                    MapillaryError.RateLimitError(
+                      s"Rate limit exceeded: ${error.status.reason}"
+                    )
+                  )
+                case _ =>
+                  Left(
+                    MapillaryError.ApiError(
+                      s"Image server returned unexpected status: ${error.status.code} - ${error.status.reason}"
+                    )
+                  )
+              }
+            case Left(error: java.net.ConnectException) =>
+              Left(
+                MapillaryError.NetworkError(
+                  s"Failed to connect to image server: ${error.getMessage}"
+                )
+              )
+            case Left(error: java.net.SocketTimeoutException) =>
+              Left(
+                MapillaryError.NetworkError(
+                  s"Connection to image server timed out: ${error.getMessage}"
+                )
+              )
+            case Left(error: java.io.IOException) =>
+              Left(
+                MapillaryError.NetworkError(
+                  s"I/O error when downloading image: ${error.getMessage}"
+                )
+              )
+            case Left(error) =>
+              Left(
+                MapillaryError.UnexpectedError(
+                  s"Unexpected error when downloading image: ${error.getMessage}"
+                )
+              )
+          }
+      )
     }
 
-    // Fetch an image from Mapillary by ID - returns the full byte array
-    override def getImage(imageId: String): IO[Array[Byte]] = {
-      // First get the image details to get the URL
-      getImageDetails(imageId).flatMap { details =>
-        details.thumb2048Url match {
-          case Some(url) =>
-            getImageFromUrl(url)
+    override def getImage(
+        imageId: String
+    ): EitherT[IO, MapillaryError, Array[Byte]] = {
+      for {
+        details <- getImageDetails(imageId)
+
+        imageUrl <- details.thumb2048Url match {
+          case Some(url) => EitherT.rightT[IO, MapillaryError](url)
           case None =>
-            IO.raiseError(
-              new NoImageThumbnailFoundException(imageId)
+            EitherT.leftT[IO, String](
+              MapillaryError.NotFoundError(
+                s"No thumbnail URL available for image ID: $imageId"
+              )
             )
         }
-      }
+
+        imageBytes <- getImageFromUrl(imageUrl)
+      } yield imageBytes
     }
   }
 }
