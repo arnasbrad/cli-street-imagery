@@ -10,7 +10,6 @@ object Errors {
     case class ApiError(message: String) extends MapillaryError
     case class NetworkError(message: String) extends MapillaryError
     case class NotFoundError(message: String) extends MapillaryError
-    case class UnexpectedError(message: String) extends MapillaryError
     case class AuthenticationError(message: String) extends MapillaryError
     case class RateLimitError(message: String) extends MapillaryError
   }
