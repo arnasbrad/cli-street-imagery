@@ -15,13 +15,13 @@ import org.typelevel.ci.CIString
 trait MapillaryClient {
   def getImage(
       imageId: String,
-      apiKey: String
+      apiKey: ApiKey
   ): EitherT[IO, MapillaryError, Array[Byte]]
 
   def getImageIdsByLocation(
       coordinates: Coordinates,
       radiusMeters: Radius,
-      apiKey: String
+      apiKey: ApiKey
   ): EitherT[IO, MapillaryError, List[String]]
 }
 
@@ -36,7 +36,7 @@ object MapillaryClient {
     // TODO: use oauth instead of http param. And use AppConfig
     private def getImageDetails(
         imageId: String,
-        apiKey: String
+        apiKey: ApiKey
     ): EitherT[IO, MapillaryError, MapillaryImageDetails] = {
       val fields = List(
         "id",
@@ -159,7 +159,7 @@ object MapillaryClient {
 
     override def getImage(
         imageId: String,
-        apiKey: String
+        apiKey: ApiKey
     ): EitherT[IO, MapillaryError, Array[Byte]] = {
       for {
         details <- getImageDetails(imageId, apiKey)
@@ -181,7 +181,7 @@ object MapillaryClient {
     override def getImageIdsByLocation(
         coordinates: Coordinates,
         radiusMeters: Radius,
-        apiKey: String
+        apiKey: ApiKey
     ): EitherT[IO, MapillaryError, List[String]] = {
       // Convert meters to degrees (approximate)
       // 1 degree of latitude is approximately 111,320 meters

@@ -1,13 +1,15 @@
 package clients.mapillary
 
 import cats.effect.{IO, IOApp}
+import clients.mapillary.Models.ApiKey
 import common.Models.{Coordinates, Radius}
 
 import java.nio.file.{Files, Paths}
 
 object GetImage extends IOApp.Simple {
   // Will download img to root dir
-  val apiKey = "Enter your api key here for testing"
+  private val apiKey =
+    ApiKey.unsafeCreate("Enter your api key here for testing")
 
   val run: IO[Unit] = MapillaryClient.make().use { client =>
     client.getImage("2966993343542765", apiKey).value.flatMap {
@@ -34,7 +36,8 @@ object GetImage extends IOApp.Simple {
 }
 
 object GetImageIdsByLocation extends IOApp.Simple {
-  val apiKey = "Enter your api key here for testing"
+  private val apiKey =
+    ApiKey.unsafeCreate("Enter your api key here for testing")
 
   val run: IO[Unit] =
     MapillaryClient.make().use { client =>
@@ -42,7 +45,7 @@ object GetImageIdsByLocation extends IOApp.Simple {
         .getImageIdsByLocation(
           Coordinates.unsafeCreate(55.597, 12.967),
           Radius.unsafeCreate(50),
-          "token"
+          apiKey
         )
         .value
         .flatMap {
