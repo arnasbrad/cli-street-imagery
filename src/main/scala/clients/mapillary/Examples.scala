@@ -34,7 +34,6 @@ object GetImage extends IOApp.Simple {
 }
 
 object GetImageIdsByLocation extends IOApp.Simple {
-  // Will download img to root dir
   val apiKey = "Enter your api key here for testing"
 
   val run: IO[Unit] =
