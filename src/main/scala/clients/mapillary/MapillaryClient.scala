@@ -9,7 +9,7 @@ import common.Models._
 import org.http4s.Method.GET
 import org.http4s.client.{Client, UnexpectedStatus}
 import org.http4s.ember.client.EmberClientBuilder
-import org.http4s.{Header, InvalidMessageBodyFailure, Request, Uri}
+import org.http4s.{Header, InvalidMessageBodyFailure, Request, Status, Uri}
 import org.typelevel.ci.CIString
 
 /** Client for interacting with the Mapillary API.
@@ -87,14 +87,14 @@ object MapillaryClient {
             )
           )
         case Left(error: UnexpectedStatus) =>
-          error.status.code match {
-            case 401 | 403 =>
+          error.status match {
+            case Status.Unauthorized | Status.Forbidden =>
               Left(
                 MapillaryError.AuthenticationError(
                   s"Authentication failed with status ${error.status.code}: ${error.status.reason}"
                 )
               )
-            case 429 =>
+            case Status.TooManyRequests =>
               Left(
                 MapillaryError.RateLimitError(
                   s"Rate limit exceeded: ${error.status.reason}"
