@@ -5,12 +5,16 @@ import common.Errors._
 object Models {
   case class MapillaryImageDetails(
       id: String,
-      thumb2048Url: Option[String] = None,
-      thumbOriginalUrl: Option[String] = None
+      sequenceId: String,
+      thumb2048Url: Option[String],
+      thumbOriginalUrl: Option[String]
   )
 
   case class ImagesResponse(data: List[ImageData])
   case class ImageData(id: String)
+
+  case class MapillaryImageSequenceIDsResponse(data: List[MapillaryImageId])
+  case class MapillaryImageId(id: String)
 
   class ApiKey private (val value: String)
   object ApiKey {

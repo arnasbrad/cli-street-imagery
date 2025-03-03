@@ -1,7 +1,7 @@
 package clients.mapillary
 
 object Errors {
-  sealed trait MapillaryError {
+  sealed trait MapillaryError extends Throwable {
     def message: String
   }
 
