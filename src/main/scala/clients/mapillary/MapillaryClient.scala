@@ -212,9 +212,6 @@ object MapillaryClient {
       for {
         details <- getImageDetails(imageId, apiKey)
 
-        // Get sequence images (useful for further operations)
-        sequenceIds <- getImageSequence(details.sequenceId, apiKey)
-
         imageUrl <- details.thumbOriginalUrl match {
           case Some(url) => EitherT.rightT[IO, MapillaryError](url)
           case None =>
