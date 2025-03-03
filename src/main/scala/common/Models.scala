@@ -1,11 +1,8 @@
 package common
 
-object Models {
-  sealed trait ValidationError
-  case class LatitudeOutOfRange(value: Double) extends ValidationError
-  case class LongitudeOutOfRange(value: Double) extends ValidationError
-  case class NegativeRadius(value: Int) extends ValidationError
+import common.Errors._
 
+object Models {
   // Coordinates with direct validation
   class Coordinates private (val lat: Double, val lng: Double)
   object Coordinates {
@@ -25,20 +22,20 @@ object Models {
 
     private def validateLatitude(lat: Double): Either[ValidationError, Double] =
       if (lat >= -90 && lat <= 90) Right(lat)
-      else Left(LatitudeOutOfRange(lat))
+      else Left(LatitudeOutOfRangeError(lat))
 
     private def validateLongitude(
         lng: Double
     ): Either[ValidationError, Double] =
       if (lng >= -180 && lng <= 180) Right(lng)
-      else Left(LongitudeOutOfRange(lng))
+      else Left(LongitudeOutOfRangeError(lng))
   }
 
   // Coordinates with direct validation
   class Radius private (val value: Int)
   object Radius {
     def create(v: Int): Either[ValidationError, Radius] = {
-      Either.cond(v >= 0, new Radius(v), NegativeRadius(v))
+      Either.cond(v >= 0, new Radius(v), NegativeRadiusError(v))
     }
 
     def unsafeCreate(v: Int): Radius = {

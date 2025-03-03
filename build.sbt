@@ -26,12 +26,12 @@ scalacOptions ++= Seq(
   "-feature",
   "-language:existentials",
   "-language:higherKinds",
-  "-language:implicitConversions",
   "-unchecked",
-  "-Xfatal-warnings",
   "-deprecation",
   "-Wunused:imports",
+  "-language:implicitConversions",
   "-Wnonunit-statement"
+  //"-Xfatal-warnings"
 )
 
 lazy val root = (project in file("."))

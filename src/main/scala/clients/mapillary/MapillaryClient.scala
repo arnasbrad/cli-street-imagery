@@ -9,48 +9,19 @@ import common.Models._
 import org.http4s.Method.GET
 import org.http4s.client.{Client, UnexpectedStatus}
 import org.http4s.ember.client.EmberClientBuilder
-import org.http4s.{InvalidMessageBodyFailure, Request, Uri}
+import org.http4s.{Header, InvalidMessageBodyFailure, Request, Uri}
+import org.typelevel.ci.CIString
 
 trait MapillaryClient {
+  def getImage(
+      imageId: String,
+      apiKey: ApiKey
+  ): EitherT[IO, MapillaryError, Array[Byte]]
 
-  /** Retrieves an image from the Mapillary service by its ID.
-    *
-    * @param imageId The unique identifier of the image to retrieve
-    * @return An EitherT containing either a MapillaryError (Left) or the image data as a byte array (Right)
-    * @example {{{
-    * // Fetch image and render it
-    * val imageDataEither = client.getImage("12345678")
-    * imageDataEither.value.flatMap {
-    *   case Right(imageData) => renderImage(imageData)
-    *   case Left(error) => IO.println(s"Failed to retrieve image: $error")
-    * }
-    * }}}
-    */
-  def getImage(imageId: String): EitherT[IO, MapillaryError, Array[Byte]]
-
-  /** Searches for image IDs near a specific geographic location.
-    *
-    * This method queries the Mapillary API to find all images within the specified
-    * radius of the given coordinates.
-    *
-    * @param coordinates The geographic coordinates (latitude/longitude) around which to search
-    * @param radiusMeters The search radius in meters from the specified coordinates
-    * @return An EitherT containing either a MapillaryError (Left) or a list of image IDs (Right)
-    * @example {{{
-    * // Find images near Copenhagen
-    * val coordinatesEither = Coordinates.create(55.676, 12.568)
-    * val radiusEither = Radius.create(50)
-    *
-    * val result = for {
-    *   coordinates <- EitherT.fromEither[IO](coordinatesEither)
-    *   radius <- EitherT.fromEither[IO](radiusEither)
-    *   imageIds <- client.getImageIdsByLocation(coordinates, radius)
-    * } yield imageIds
-    * }}}
-    */
   def getImageIdsByLocation(
       coordinates: Coordinates,
-      radiusMeters: Radius
+      radiusMeters: Radius,
+      apiKey: ApiKey
   ): EitherT[IO, MapillaryError, List[String]]
 }
 
@@ -63,10 +34,9 @@ object MapillaryClient {
     private val baseUri = Uri.unsafeFromString("https://graph.mapillary.com")
 
     // TODO: use oauth instead of http param. And use AppConfig
-    private val apiKey = "MLY|xxx|xxx"
-
     private def getImageDetails(
-        imageId: String
+        imageId: String,
+        apiKey: ApiKey
     ): EitherT[IO, MapillaryError, MapillaryImageDetails] = {
       val fields = List(
         "id",
@@ -77,12 +47,11 @@ object MapillaryClient {
       val imageUri = baseUri
         .addPath(imageId)
         .withQueryParam("fields", fields)
-        .withQueryParam("access_token", apiKey)
 
       val request = Request[IO](
         method = GET,
         uri = imageUri
-      )
+      ).withHeaders(Header.Raw(CIString("Authorization"), s"OAuth $apiKey"))
 
       val res = client
         .expect[MapillaryImageDetails](request)
@@ -189,12 +158,13 @@ object MapillaryClient {
     }
 
     override def getImage(
-        imageId: String
+        imageId: String,
+        apiKey: ApiKey
     ): EitherT[IO, MapillaryError, Array[Byte]] = {
       for {
-        details <- getImageDetails(imageId)
+        details <- getImageDetails(imageId, apiKey)
 
-        imageUrl <- details.thumb2048Url match {
+        imageUrl <- details.thumbOriginalUrl match {
           case Some(url) => EitherT.rightT[IO, MapillaryError](url)
           case None =>
             EitherT.leftT[IO, String](
@@ -203,14 +173,15 @@ object MapillaryClient {
               )
             )
         }
-
+        _ = println(imageUrl)
         imageBytes <- getImageFromUrl(imageUrl)
       } yield imageBytes
     }
 
     override def getImageIdsByLocation(
         coordinates: Coordinates,
-        radiusMeters: Radius
+        radiusMeters: Radius,
+        apiKey: ApiKey
     ): EitherT[IO, MapillaryError, List[String]] = {
       // Convert meters to degrees (approximate)
       // 1 degree of latitude is approximately 111,320 meters
@@ -232,7 +203,6 @@ object MapillaryClient {
       // Construct the request URI
       val uri = baseUri
         .addPath("images")
-        .withQueryParam("access_token", apiKey)
         .withQueryParam("fields", "id")
         .withQueryParam("bbox", bbox)
 
@@ -241,7 +211,7 @@ object MapillaryClient {
       val request = Request[IO](
         method = GET,
         uri = uri
-      )
+      ).withHeaders(Header.Raw(CIString("Authorization"), s"OAuth $apiKey"))
 
       EitherT(
         client
