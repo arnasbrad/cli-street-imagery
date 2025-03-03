@@ -1,5 +1,6 @@
 package common
 
+import java.io.{File, PrintWriter}
 import scala.io.Source
 
 object ImageToAsciiTest {
@@ -11,6 +12,22 @@ object ImageToAsciiTest {
       source.getLines().toList
     } finally {
       source.close()
+    }
+  }
+
+  def sampleVertically(lines: List[String], vertical: Int): List[String] = {
+    if (vertical <= 0) {
+      throw new IllegalArgumentException("Vertical sampling parameter must be positive")
+    }
+
+    if (vertical == 1) {
+      // If vertical is 1, return all lines (no sampling)
+      lines
+    } else {
+      // Keep only indices that are multiples of the vertical parameter
+      lines.zipWithIndex
+        .filter { case (_, index) => index % vertical == 0 }
+        .map(_._1)
     }
   }
 
@@ -44,42 +61,48 @@ object ImageToAsciiTest {
     }
 
     // Build the ASCII image by converting the 1D array to 2D with proper line breaks
-    val asciiImage = new StringBuilder()
-    for (y <- 0 until height) {
-      val startIndex = y * width
-      val endIndex = startIndex + width
-      // Check if we have enough pixels for this row
-      if (startIndex < asciiPixels.length) {
-        val row = asciiPixels.slice(startIndex, math.min(endIndex, asciiPixels.length)).mkString
-        asciiImage.append(row).append("\n")
+    val asciiImage = (0 until height)
+      .map { y =>
+        val startIndex = y * width
+        val endIndex = startIndex + width
+
+        // Check if we have enough pixels for this row
+        if (startIndex < asciiPixels.length) {
+          asciiPixels.slice(startIndex, math.min(endIndex, asciiPixels.length)).mkString
+        } else {
+          ""
+        }
       }
-    }
+      .mkString("\n")
 
     asciiImage.toString
   }
 
+  def printAsciiToFile(asciiArt: String): Unit = {
+    new PrintWriter(new File("ascii_image.txt")) {
+      write(asciiArt);
+      close()
+    }
+    println("\nASCII art has been saved to 'ascii_image.txt'")
+  }
+
   def main(args: Array[String]): Unit = {
-    val width = 463
-    val height = 280
+    val originalWidth = 463
+    val originalHeight = 280
+    val verticalSampling = 2
+
+    val sampledHeight = originalHeight / verticalSampling
     val characters = ".:-=+*#%@" // From darkest to brightest (or configure as needed)
+    val characters2 = " .'`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 
-    val lines = readFileLines(filename)
-    val grayscaleValues = convertToGrayscale(lines)
+    val rgbValues = readFileLines(filename)
+    val sampledInput = sampleVertically(rgbValues, verticalSampling)
 
-    // Print a sample of grayscale values for verification
-    println("Sample of grayscale values:")
-    grayscaleValues.take(10).foreach(println)
+    val grayscaleValues = convertToGrayscale(sampledInput)
 
     // Convert grayscale hex values to ASCII art
-    val asciiArt = grayscaleHexToAscii(grayscaleValues, width, height, characters)
+    val asciiArt = grayscaleHexToAscii(grayscaleValues, originalWidth, sampledHeight, characters)
 
-    // Print ASCII art
-    println("\nASCII Art Image:")
-    println(asciiArt)
-
-    // Optionally save the ASCII art to a file
-    import java.io.{File, PrintWriter}
-    new PrintWriter(new File("ascii_image.txt")) { write(asciiArt); close() }
-    println("\nASCII art has been saved to 'ascii_image.txt'")
+    printAsciiToFile(asciiArt)
   }
 }
