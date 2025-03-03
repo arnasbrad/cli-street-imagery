@@ -4,8 +4,6 @@ import java.io.{File, PrintWriter}
 import scala.io.Source
 
 object ImageToAsciiTest {
-  val filename = "C:\\Users\\ignsu\\OneDrive\\Documents\\GitHub\\cli-street-imagery\\src\\main\\scala\\common/testImage"
-
   def readFileLines(filename: String): List[String] = {
     val source = Source.fromFile(filename)
     try {
@@ -87,8 +85,10 @@ object ImageToAsciiTest {
   }
 
   def main(args: Array[String]): Unit = {
-    val originalWidth = 463
-    val originalHeight = 280
+    val filename = "C:\\Users\\ignsu\\OneDrive\\Documents\\GitHub\\cli-street-imagery\\src\\main\\scala\\common/testImage"
+
+    val originalWidth = 1931
+    val originalHeight = 700
     val verticalSampling = 2
 
     val sampledHeight = originalHeight / verticalSampling
