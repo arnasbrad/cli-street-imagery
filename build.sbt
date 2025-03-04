@@ -16,7 +16,8 @@ libraryDependencies ++= Seq(
   "org.http4s" %% "http4s-circe" % http4sVersion,
   "io.circe" %% "circe-generic" % "0.14.10",
   "io.circe" %% "circe-parser" % "0.14.10",
-  "ch.qos.logback" % "logback-classic" % logbackVersion
+  "ch.qos.logback" % "logback-classic" % logbackVersion,
+  "com.olvind.tui" %% "tui" % "0.0.7"
 )
 
 // Compiler options
