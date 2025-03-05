@@ -178,6 +178,7 @@ object MapillaryClient {
 
     /** Retrieves image IDs for a specific sequence.
       */
+    // TODO: expose through interface
     private def getImageSequence(
         sequenceId: String,
         apiKey: ApiKey
