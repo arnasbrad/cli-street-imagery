@@ -1,140 +1,42 @@
-package tuiexamples
+package ui
 
 import tui._
-import tui.crossterm.CrosstermJni
-import tui.widgets.tabs.TabsWidget
 import tui.widgets.{BlockWidget, ParagraphWidget}
+import ui.TabsExample.App
 
-object TabsExample {
+object Models {
   sealed trait InputMode
   object InputMode {
     case object Normal extends InputMode
     case object Editing extends InputMode
   }
 
-  case class App(
-      titles: Array[String],
-      var index: Int = 1,
-      var input_mode: InputMode = InputMode.Normal,
-      var input: String = "",
-      var messages: Array[String] = Array.empty
-  ) {
-
-    def changeTab(nextTab: String): Unit =
-      nextTab match {
-        case "config"     => index = 0
-        case "streetview" => index = 1
-        case "help"       => index = 2
-      }
+  sealed trait Tab {
+    def name: String
+    def index: Int
+    def render(f: Frame, area: Rect, app: App): Unit
   }
-  def main(args: Array[String]): Unit = withTerminal { (jni, terminal) =>
-    // create app and run it
-    val app = App(titles = Array("Config", "StreetView", "Help"))
-    run_app(terminal, app, jni);
+  case object ConfigTab extends Tab {
+    def name = "Config"
+    def index = 0
+    // Render the Config tab content
+    def render(f: Frame, area: Rect, app: App): Unit =
+      renderConfigTab(f, area, app)
   }
-
-  def run_app(terminal: Terminal, app: App, jni: CrosstermJni): Unit = {
-    var currentState = "streetview"
-    var pastState = ""
-
-    while (true) {
-      terminal.draw(f => ui(f, app))
-
-      jni.read() match {
-        case key: tui.crossterm.Event.Key =>
-          app.input_mode match {
-            case InputMode.Normal =>
-              key.keyEvent.code match {
-                // Original tab navigation
-                case char: tui.crossterm.KeyCode.Char if char.c() == 'q' =>
-                  return
-                case char: tui.crossterm.KeyCode.Char
-                    if char.c() == 'h' && currentState == "streetview" => {
-                  app.changeTab("help")
-                  pastState = currentState
-                  currentState = "help"
-                }
-                case char: tui.crossterm.KeyCode.Char
-                    if char
-                      .c() == 'b' && (currentState == "help" || currentState == "config") => {
-                  app.changeTab(pastState)
-                  val x = pastState
-                  pastState = currentState
-                  currentState = x
-                }
-                case char: tui.crossterm.KeyCode.Char
-                    if char.c() == 'c' && currentState == "streetview" => {
-                  app.changeTab("config")
-                  pastState = currentState
-                  currentState = "config"
-                }
-                case char: tui.crossterm.KeyCode.Char if char.c() == 'e' =>
-                  app.input_mode = InputMode.Editing
-                case _ => ()
-              }
-
-            case InputMode.Editing =>
-              key.keyEvent.code match {
-                case _: tui.crossterm.KeyCode.Enter =>
-                  app.messages = app.messages :+ app.input
-                  app.input = ""
-                case char: tui.crossterm.KeyCode.Char =>
-                  app.input = app.input + char.c()
-                case _: tui.crossterm.KeyCode.Backspace if app.input.nonEmpty =>
-                  app.input = app.input.substring(0, app.input.length - 1)
-                case _: tui.crossterm.KeyCode.Esc =>
-                  app.input_mode = InputMode.Normal
-                case _ => ()
-              }
-          }
-        case _ => ()
-      }
-    }
+  case object StreetViewTab extends Tab {
+    def name = "StreetView"
+    def index = 1
+    def render(f: Frame, area: Rect, app: App): Unit =
+      renderStreetViewTab(f, area, app)
+  }
+  case object HelpTab extends Tab {
+    def name = "Help"
+    def index = 2
+    def render(f: Frame, area: Rect, app: App): Unit =
+      renderHelpTab(f, area, app)
   }
 
-  def ui(f: Frame, app: App): Unit = {
-    val chunks = Layout(
-      direction = Direction.Vertical,
-      margin = Margin(5, 5),
-      constraints = Array(Constraint.Length(3), Constraint.Min(0))
-    ).split(f.size)
-
-    val mainBackground =
-      BlockWidget(style = Style(bg = Some(Color.Black), fg = Some(Color.Gray)))
-    f.renderWidget(mainBackground, f.size)
-
-    val titles = app.titles
-      .map { t =>
-        val (first, rest) = t.splitAt(1)
-        Spans.from(
-          Span.styled(first, Style(fg = Some(Color.White))),
-          Span.styled(rest, Style(fg = Some(Color.White)))
-        )
-      }
-
-    val tabs = TabsWidget(
-      titles = titles,
-      block = Some(
-        BlockWidget(borders = Borders.ALL, title = Some(Spans.nostyle("Tabs")))
-      ),
-      selected = app.index,
-      style = Style(fg = Some(Color.Gray)),
-      highlightStyle =
-        Style(addModifier = Modifier.BOLD, bg = Some(Color.LightGreen))
-    )
-    f.renderWidget(tabs, chunks(0))
-
-    // Render different content based on the selected tab
-    app.index match {
-      case 0 => renderConfigTab(f, chunks(1), app)
-      case 1 => renderStreetViewTab(f, chunks(1), app)
-      case 2 => renderHelpTab(f, chunks(1))
-      case _ => sys.error("unreachable")
-    }
-  }
-
-  // Render the Config tab content
-  def renderConfigTab(f: Frame, area: Rect, app: App): Unit = {
+  private def renderConfigTab(f: Frame, area: Rect, app: App): Unit = {
     // Create a layout with multiple sections for the config tab
     val verticalChunks = Layout(
       direction = Direction.Vertical,
@@ -208,7 +110,10 @@ object TabsExample {
     val input = ParagraphWidget(
       text = Text.nostyle(app.input),
       block = Some(
-        BlockWidget(borders = Borders.ALL, title = Some(Spans.nostyle("Input")))
+        BlockWidget(
+          borders = Borders.ALL,
+          title = Some(Spans.nostyle("Input"))
+        )
       ),
       style = app.input_mode match {
         case InputMode.Normal  => Style.DEFAULT
@@ -233,8 +138,7 @@ object TabsExample {
     }
   }
 
-  // Render the StreetView tab content
-  def renderStreetViewTab(f: Frame, area: Rect, app: App): Unit = {
+  private def renderStreetViewTab(f: Frame, area: Rect, app: App): Unit = {
     val verticalChunks = Layout(
       direction = Direction.Vertical,
       constraints = Array(
@@ -325,8 +229,7 @@ object TabsExample {
     f.renderWidget(input, horizontalChunksBottom(1))
   }
 
-  // Render the Help tab content
-  def renderHelpTab(f: Frame, area: Rect): Unit = {
+  private def renderHelpTab(f: Frame, area: Rect, app: App): Unit = {
     // Split the help area into a header and content
     val verticalChunks = Layout(
       direction = Direction.Vertical,
