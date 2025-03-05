@@ -105,7 +105,7 @@ object TabsExample {
       )
     ).split(area)
 
-    val configChunks = Layout(
+    val horizontalChunks = Layout(
       direction = Direction.Horizontal,
       constraints = Array(Constraint.Percentage(50), Constraint.Percentage(50))
     )
@@ -125,14 +125,14 @@ object TabsExample {
       borders = Borders.ALL,
       style = Style(bg = Some(Color.Black), fg = Some(Color.White))
     )
-    f.renderWidget(generalConfigBlock, configChunks(0))
+    f.renderWidget(generalConfigBlock, horizontalChunks(0))
 
     val imageGenerationSettingsBlock = BlockWidget(
       title = Some(Spans.nostyle("Image generation settings")),
       borders = Borders.ALL,
       style = Style(bg = Some(Color.Black), fg = Some(Color.White))
     )
-    f.renderWidget(imageGenerationSettingsBlock, configChunks(1))
+    f.renderWidget(imageGenerationSettingsBlock, horizontalChunks(1))
 
     val commandLineBlock = BlockWidget(
       title = Some(Spans.nostyle("Command line")),
@@ -144,12 +144,19 @@ object TabsExample {
 
   // Render the StreetView tab content
   def renderStreetViewTab(f: Frame, area: Rect): Unit = {
-    val streetViewBlock = BlockWidget(
-      title = Some(Spans.nostyle("Street View")),
-      borders = Borders.ALL,
-      style = Style(bg = Some(Color.Black), fg = Some(Color.Cyan))
+    val verticalChunks = Layout(
+      direction = Direction.Vertical,
+      constraints = Array(
+        Constraint.Percentage(80),
+        Constraint.Percentage(20)
+      )
+    ).split(area)
+
+    val horizontalChunks = Layout(
+      direction = Direction.Horizontal,
+      constraints = Array(Constraint.Percentage(50), Constraint.Percentage(50))
     )
-    f.renderWidget(streetViewBlock, area)
+      .split(verticalChunks(1))
 
     val SurroundingBlock = BlockWidget(
       borders = Borders.ALL,
@@ -158,35 +165,52 @@ object TabsExample {
       borderType = BlockWidget.BorderType.Rounded
     )
     f.renderWidget(SurroundingBlock, f.size)
+
+    val streetViewBlock = BlockWidget(
+      title = Some(Spans.nostyle("Street View")),
+      borders = Borders.ALL,
+      style = Style(bg = Some(Color.Black), fg = Some(Color.White))
+    )
+    f.renderWidget(streetViewBlock, verticalChunks(0))
+
+    val possibleInputBlock = BlockWidget(
+      title = Some(Spans.nostyle("Possible input")),
+      borders = Borders.ALL,
+      style = Style(bg = Some(Color.Black), fg = Some(Color.Green))
+    )
+    f.renderWidget(possibleInputBlock, horizontalChunks(0))
+
+    val coordinatesBlock = BlockWidget(
+      title = Some(Spans.nostyle("Coordinates & geolocation")),
+      borders = Borders.ALL,
+      style = Style(bg = Some(Color.Black), fg = Some(Color.Green))
+    )
+    f.renderWidget(coordinatesBlock, horizontalChunks(1))
   }
-
-
 
   // Render the Help tab content
   def renderHelpTab(f: Frame, area: Rect): Unit = {
     // Split the help area into a header and content
-    val helpChunks = Layout(
+    val verticalChunks = Layout(
       direction = Direction.Vertical,
       constraints = Array(
-        Constraint.Length(3),
-        Constraint.Min(0)
+        Constraint.Percentage(80),
+        Constraint.Percentage(20)
       )
     ).split(area)
 
-    val helpHeaderBlock = BlockWidget(
+    val helpBlock = BlockWidget(
       title = Some(Spans.nostyle("Help")),
-      borders = Borders.ALL,
-      style = Style(bg = Some(Color.Black), fg = Some(Color.Magenta))
-    )
-    f.renderWidget(helpHeaderBlock, helpChunks(0))
-
-    val helpContentBlock = BlockWidget(
-      title = Some(Spans.nostyle("Instructions")),
       borders = Borders.ALL,
       style = Style(bg = Some(Color.Black), fg = Some(Color.White))
     )
-    f.renderWidget(helpContentBlock, helpChunks(1))
+    f.renderWidget(helpBlock, verticalChunks(0))
+
+    val controlsBlock = BlockWidget(
+      title = Some(Spans.nostyle("Controls")),
+      borders = Borders.ALL,
+      style = Style(bg = Some(Color.Black), fg = Some(Color.Green))
+    )
+    f.renderWidget(controlsBlock, verticalChunks(1))
   }
-
-
 }
