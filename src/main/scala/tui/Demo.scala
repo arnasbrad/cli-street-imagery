@@ -65,14 +65,15 @@ object TabsExample {
       constraints = Array(Constraint.Length(3), Constraint.Min(0))
     ).split(f.size)
 
-    val block = BlockWidget(style = Style(bg = Some(Color.White), fg = Some(Color.Black)))
-    f.renderWidget(block, f.size)
+    val mainBackground = BlockWidget(style = Style(bg = Some(Color.Black), fg = Some(Color.Black)))
+    f.renderWidget(mainBackground, f.size)
+
     val titles = app.titles
       .map { t =>
         val (first, rest) = t.splitAt(1)
         Spans.from(
-          Span.styled(first, Style(fg = Some(Color.Yellow))),
-          Span.styled(rest, Style(fg = Some(Color.Green)))
+          Span.styled(first, Style(fg = Some(Color.White))),
+          Span.styled(rest, Style(fg = Some(Color.White)))
         )
       }
 
@@ -80,8 +81,8 @@ object TabsExample {
       titles = titles,
       block = Some(BlockWidget(borders = Borders.ALL, title = Some(Spans.nostyle("Tabs")))),
       selected = app.index,
-      style = Style(fg = Some(Color.Cyan)),
-      highlightStyle = Style(addModifier = Modifier.BOLD, bg = Some(Color.Black))
+      style = Style(fg = Some(Color.Gray)),
+      highlightStyle = Style(addModifier = Modifier.BOLD, bg = Some(Color.LightGreen))
     )
     f.renderWidget(tabs, chunks(0))
 
