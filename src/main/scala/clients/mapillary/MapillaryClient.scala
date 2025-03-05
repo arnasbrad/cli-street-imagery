@@ -70,22 +70,26 @@ object MapillaryClient {
       )
     }
 
-    /** Generic error handler for HTTP requests.
+    /** Enhanced error handler for HTTP requests and IO operations.
       *
-      * @param attempt The attempted HTTP request
-      * @return An IO containing either an error or the successful result
+      * @param attempt The attempted IO operation
+      * @return An IO containing either a MapillaryError or the successful result
       */
-    private def handleRequestErrors[A](
-        attempt: IO[Either[Throwable, A]]
+    private def handleErrors[A](
+        attempt: IO[A]
     ): IO[Either[MapillaryError, A]] = {
-      attempt.map {
+      attempt.attempt.map {
         case Right(result) => Right(result)
+
+        // JSON decoding errors
         case Left(error: InvalidMessageBodyFailure) =>
           Left(
             MapillaryError.JsonDecodingError(
               s"Failed to decode response: ${error.getMessage}"
             )
           )
+
+        // HTTP status errors
         case Left(error: UnexpectedStatus) =>
           error.status match {
             case Status.Unauthorized | Status.Forbidden =>
@@ -100,6 +104,18 @@ object MapillaryClient {
                   s"Rate limit exceeded: ${error.status.reason}"
                 )
               )
+            case Status.NotFound =>
+              Left(
+                MapillaryError.NotFoundError(
+                  s"Resource not found: ${error.status.reason}"
+                )
+              )
+            case Status.BadRequest =>
+              Left(
+                MapillaryError.ValidationError(
+                  s"Bad request: ${error.status.reason}"
+                )
+              )
             case _ =>
               Left(
                 MapillaryError.ApiError(
@@ -107,9 +123,33 @@ object MapillaryClient {
                 )
               )
           }
+
+        // Network-specific errors
+        case Left(error: java.net.ConnectException) =>
+          Left(
+            MapillaryError.NetworkError(
+              s"Failed to connect to server: ${error.getMessage}"
+            )
+          )
+        case Left(error: java.net.SocketTimeoutException) =>
+          Left(
+            MapillaryError.NetworkError(
+              s"Connection to server timed out: ${error.getMessage}"
+            )
+          )
+        case Left(error: java.io.IOException) =>
+          Left(
+            MapillaryError.NetworkError(
+              s"I/O error during request: ${error.getMessage}"
+            )
+          )
+
+        // Fallback for other errors
         case Left(error) =>
           Left(
-            MapillaryError.NetworkError(s"Network error: ${error.getMessage}")
+            MapillaryError.UnknownError(
+              s"Unexpected error: ${error.getMessage}"
+            )
           )
       }
     }
@@ -133,15 +173,12 @@ object MapillaryClient {
 
       val request = authenticatedRequest(imageUri, apiKey)
 
-      EitherT(
-        handleRequestErrors(
-          client.expect[MapillaryImageDetails](request).attempt
-        )
-      )
+      EitherT(handleErrors(client.expect[MapillaryImageDetails](request)))
     }
 
     /** Retrieves image IDs for a specific sequence.
       */
+    // TODO: expose through interface
     private def getImageSequence(
         sequenceId: String,
         apiKey: ApiKey
@@ -154,11 +191,10 @@ object MapillaryClient {
       val request = authenticatedRequest(imageUri, apiKey)
 
       EitherT(
-        handleRequestErrors(
+        handleErrors(
           client
             .expect[MapillaryImageSequenceIDsResponse](request)
             .map(response => response.data.map(_.id))
-            .attempt
         )
       )
     }
@@ -174,33 +210,7 @@ object MapillaryClient {
         uri = uri
       )
 
-      EitherT(
-        handleRequestErrors(
-          client.expect[Array[Byte]](request).attempt.map {
-            case Right(imageBytes) => Right(imageBytes)
-            case Left(error: java.net.ConnectException) =>
-              Left(
-                MapillaryError.NetworkError(
-                  s"Failed to connect to image server: ${error.getMessage}"
-                )
-              )
-            case Left(error: java.net.SocketTimeoutException) =>
-              Left(
-                MapillaryError.NetworkError(
-                  s"Connection to image server timed out: ${error.getMessage}"
-                )
-              )
-            case Left(error: java.io.IOException) =>
-              Left(
-                MapillaryError.NetworkError(
-                  s"I/O error when downloading image: ${error.getMessage}"
-                )
-              )
-            case Left(error) =>
-              Left(error) // Will be handled by the outer handler
-          }
-        )
-      )
+      EitherT(handleErrors(client.expect[Array[Byte]](request)))
     }
 
     /** Retrieves an image by its ID.
@@ -269,11 +279,10 @@ object MapillaryClient {
       val request = authenticatedRequest(uri, apiKey)
 
       EitherT(
-        handleRequestErrors(
+        handleErrors(
           client
             .expect[ImagesResponse](request)
             .map(response => response.data.map(_.id))
-            .attempt
         )
       )
     }
