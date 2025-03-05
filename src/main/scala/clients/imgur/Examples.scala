@@ -17,6 +17,7 @@ object UploadImage extends IOApp.Simple {
           title = Some("Test Title"),
           description = Some("test desc")
         )
+        .value
       _ <- IO.println(res)
     } yield ()
   }
