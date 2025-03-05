@@ -11,12 +11,7 @@ object UploadImage extends IOApp.Simple {
 
     for {
       res <- client
-        .uploadImage(
-          imageBytes = imageBytes,
-          // TODO: check if titles are even used
-          title = Some("Test Title"),
-          description = Some("test desc")
-        )
+        .uploadImage(imageBytes)
         .value
       _ <- IO.println(res)
     } yield ()

@@ -23,14 +23,10 @@ trait ImgurClient {
   /** Uploads an image to Imgur.
     *
     * @param imageBytes The raw image bytes to upload
-    * @param title Optional title for the image
-    * @param description Optional description for the image
     * @return Either an ImgurError or a successful ImgurResponse
     */
   def uploadImage(
-      imageBytes: Array[Byte],
-      title: Option[String] = None,
-      description: Option[String] = None
+      imageBytes: Array[Byte]
   ): EitherT[IO, ImgurError, ImgurResponse]
 }
 
@@ -138,27 +134,12 @@ object ImgurClient {
     /** Uploads an image to Imgur.
       */
     def uploadImage(
-        imageBytes: Array[Byte],
-        title: Option[String] = None,
-        description: Option[String] = None
+        imageBytes: Array[Byte]
     ): EitherT[IO, ImgurError, ImgurResponse] = {
       // Build the URI with optional parameters
-      val uri = (title, description) match {
-        case (Some(t), Some(d)) =>
-          baseUri
-            .withQueryParam("title", t)
-            .withQueryParam("description", d)
-        case (Some(t), None) =>
-          baseUri.withQueryParam("title", t)
-        case (None, Some(d)) =>
-          baseUri.withQueryParam("description", d)
-        case (None, None) =>
-          baseUri
-      }
-
       val request = Request[IO](
         method = Method.POST,
-        uri = uri,
+        uri = baseUri,
         headers = Headers(
           `Content-Type`(MediaType.image.jpeg)
         )
