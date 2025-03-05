@@ -84,13 +84,109 @@ object TabsExample {
       highlightStyle = Style(addModifier = Modifier.BOLD, bg = Some(Color.Black))
     )
     f.renderWidget(tabs, chunks(0))
-    val inner = app.index match {
-      case 0 => BlockWidget(title = Some(Spans.nostyle("Inner 0")), borders = Borders.ALL)
-      case 1 => BlockWidget(title = Some(Spans.nostyle("Inner 1")), borders = Borders.ALL)
-      case 2 => BlockWidget(title = Some(Spans.nostyle("Inner 2")), borders = Borders.ALL)
-      case 3 => BlockWidget(title = Some(Spans.nostyle("Inner 3")), borders = Borders.ALL)
+
+    // Render different content based on the selected tab
+    app.index match {
+      case 0 => renderConfigTab(f, chunks(1))
+      case 1 => renderStreetViewTab(f, chunks(1))
+      case 2 => renderHelpTab(f, chunks(1))
       case _ => sys.error("unreachable")
     }
-    f.renderWidget(inner, chunks(1))
   }
+
+  // Render the Config tab content
+  def renderConfigTab(f: Frame, area: Rect): Unit = {
+    // Create a layout with multiple sections for the config tab
+    val verticalChunks = Layout(
+      direction = Direction.Vertical,
+      constraints = Array(
+        Constraint.Percentage(80),
+        Constraint.Percentage(20)
+      )
+    ).split(area)
+
+    val configChunks = Layout(
+      direction = Direction.Horizontal,
+      constraints = Array(Constraint.Percentage(50), Constraint.Percentage(50))
+    )
+      .split(verticalChunks(0))
+
+    val SurroundingBlock = BlockWidget(
+      borders = Borders.ALL,
+      title = Some(Spans.nostyle("Configuration")),
+      titleAlignment = Alignment.Center,
+      borderType = BlockWidget.BorderType.Rounded
+    )
+    f.renderWidget(SurroundingBlock, f.size)
+
+    // Render different widgets for each section
+    val generalConfigBlock = BlockWidget(
+      title = Some(Spans.nostyle("General configuration")),
+      borders = Borders.ALL,
+      style = Style(bg = Some(Color.Black), fg = Some(Color.White))
+    )
+    f.renderWidget(generalConfigBlock, configChunks(0))
+
+    val imageGenerationSettingsBlock = BlockWidget(
+      title = Some(Spans.nostyle("Image generation settings")),
+      borders = Borders.ALL,
+      style = Style(bg = Some(Color.Black), fg = Some(Color.White))
+    )
+    f.renderWidget(imageGenerationSettingsBlock, configChunks(1))
+
+    val commandLineBlock = BlockWidget(
+      title = Some(Spans.nostyle("Command line")),
+      borders = Borders.ALL,
+      style = Style(bg = Some(Color.Black), fg = Some(Color.Green))
+    )
+    f.renderWidget(commandLineBlock, verticalChunks(1))
+  }
+
+  // Render the StreetView tab content
+  def renderStreetViewTab(f: Frame, area: Rect): Unit = {
+    val streetViewBlock = BlockWidget(
+      title = Some(Spans.nostyle("Street View")),
+      borders = Borders.ALL,
+      style = Style(bg = Some(Color.Black), fg = Some(Color.Cyan))
+    )
+    f.renderWidget(streetViewBlock, area)
+
+    val SurroundingBlock = BlockWidget(
+      borders = Borders.ALL,
+      title = Some(Spans.nostyle("StreetView")),
+      titleAlignment = Alignment.Center,
+      borderType = BlockWidget.BorderType.Rounded
+    )
+    f.renderWidget(SurroundingBlock, f.size)
+  }
+
+
+
+  // Render the Help tab content
+  def renderHelpTab(f: Frame, area: Rect): Unit = {
+    // Split the help area into a header and content
+    val helpChunks = Layout(
+      direction = Direction.Vertical,
+      constraints = Array(
+        Constraint.Length(3),
+        Constraint.Min(0)
+      )
+    ).split(area)
+
+    val helpHeaderBlock = BlockWidget(
+      title = Some(Spans.nostyle("Help")),
+      borders = Borders.ALL,
+      style = Style(bg = Some(Color.Black), fg = Some(Color.Magenta))
+    )
+    f.renderWidget(helpHeaderBlock, helpChunks(0))
+
+    val helpContentBlock = BlockWidget(
+      title = Some(Spans.nostyle("Instructions")),
+      borders = Borders.ALL,
+      style = Style(bg = Some(Color.Black), fg = Some(Color.White))
+    )
+    f.renderWidget(helpContentBlock, helpChunks(1))
+  }
+
+
 }
