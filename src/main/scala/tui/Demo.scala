@@ -127,7 +127,7 @@ object TabsExample {
     // Render different content based on the selected tab
     app.index match {
       case 0 => renderConfigTab(f, chunks(1), app)
-      case 1 => renderStreetViewTab(f, chunks(1))
+      case 1 => renderStreetViewTab(f, chunks(1), app)
       case 2 => renderHelpTab(f, chunks(1))
       case _ => sys.error("unreachable")
     }
@@ -139,9 +139,9 @@ object TabsExample {
     val verticalChunks = Layout(
       direction = Direction.Vertical,
       constraints = Array(
-        Constraint.Percentage(70),
-        Constraint.Percentage(10),
-        Constraint.Percentage(20)
+        Constraint.Percentage(80),
+        Constraint.Percentage(5),
+        Constraint.Percentage(15)
       )
     ).split(area)
 
@@ -234,20 +234,27 @@ object TabsExample {
   }
 
   // Render the StreetView tab content
-  def renderStreetViewTab(f: Frame, area: Rect): Unit = {
+  def renderStreetViewTab(f: Frame, area: Rect, app: App): Unit = {
     val verticalChunks = Layout(
       direction = Direction.Vertical,
       constraints = Array(
-        Constraint.Percentage(80),
+        Constraint.Percentage(75),
+        Constraint.Percentage(5),
         Constraint.Percentage(20)
       )
     ).split(area)
 
-    val horizontalChunks = Layout(
+    val horizontalChunksMid = Layout(
       direction = Direction.Horizontal,
       constraints = Array(Constraint.Percentage(50), Constraint.Percentage(50))
     )
       .split(verticalChunks(1))
+
+    val horizontalChunksBottom = Layout(
+      direction = Direction.Horizontal,
+      constraints = Array(Constraint.Percentage(50), Constraint.Percentage(50))
+    )
+      .split(verticalChunks(2))
 
     val SurroundingBlock = BlockWidget(
       borders = Borders.ALL,
@@ -269,14 +276,53 @@ object TabsExample {
       borders = Borders.ALL,
       style = Style(bg = Some(Color.Black), fg = Some(Color.Green))
     )
-    f.renderWidget(possibleInputBlock, horizontalChunks(0))
+    f.renderWidget(possibleInputBlock, horizontalChunksBottom(0))
 
-    val coordinatesBlock = BlockWidget(
-      title = Some(Spans.nostyle("Coordinates & geolocation")),
-      borders = Borders.ALL,
-      style = Style(bg = Some(Color.Black), fg = Some(Color.Green))
+    //INPUT COMMENT
+    val (msg, style) = app.input_mode match {
+      case InputMode.Normal =>
+        (
+          Text.from(
+            Span.nostyle("Press "),
+            Span.styled("q", Style.DEFAULT.addModifier(Modifier.BOLD)),
+            Span.nostyle(" to exit, "),
+            Span.styled("e", Style.DEFAULT.addModifier(Modifier.BOLD)),
+            Span.nostyle(" to start editing.")
+          ),
+          Style.DEFAULT.addModifier(Modifier.RAPID_BLINK)
+        )
+      case InputMode.Editing =>
+        (
+          Text.from(
+            Span.nostyle("Press "),
+            Span.styled("Esc", Style.DEFAULT.addModifier(Modifier.BOLD)),
+            Span.nostyle(" to stop editing, "),
+            Span.styled("Enter", Style.DEFAULT.addModifier(Modifier.BOLD)),
+            Span.nostyle(" to record the message")
+          ),
+          Style.DEFAULT
+        )
+    }
+    val text = msg.overwrittenStyle(style)
+
+    val help_message = ParagraphWidget(text = text)
+    f.renderWidget(help_message, horizontalChunksMid(1))
+
+    //INPUT
+    val input = ParagraphWidget(
+      text = Text.nostyle(app.input),
+      block = Some(
+        BlockWidget(
+          borders = Borders.ALL,
+          title = Some(Spans.nostyle("Coordinates & geolocation"))
+        )
+      ),
+      style = app.input_mode match {
+        case InputMode.Normal  => Style.DEFAULT
+        case InputMode.Editing => Style.DEFAULT.fg(Color.Yellow)
+      }
     )
-    f.renderWidget(coordinatesBlock, horizontalChunks(1))
+    f.renderWidget(input, horizontalChunksBottom(1))
   }
 
   // Render the Help tab content
