@@ -2,27 +2,27 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "2.13.16"
 
-val catsVersion = "2.13.0"
+val catsVersion       = "2.13.0"
 val catsEffectVersion = "3.5.7"
-val http4sVersion = "0.23.30"
-val logbackVersion = "1.5.17"
-val fs2Version = "3.11.0"
+val http4sVersion     = "0.23.30"
+val logbackVersion    = "1.5.17"
+val fs2Version        = "3.11.0"
 
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % catsVersion,
-  "org.typelevel" %% "cats-effect" % catsEffectVersion,
-  "org.http4s" %% "http4s-dsl" % http4sVersion,
-  "org.http4s" %% "http4s-ember-server" % http4sVersion,
-  "org.http4s" %% "http4s-ember-client" % http4sVersion,
-  "org.http4s" %% "http4s-circe" % http4sVersion,
-  "io.circe" %% "circe-generic" % "0.14.10",
-  "io.circe" %% "circe-parser" % "0.14.10",
-  "ch.qos.logback" % "logback-classic" % logbackVersion,
-  "com.olvind.tui" %% "tui" % "0.0.7",
-  "co.fs2" %% "fs2-core" % fs2Version,
-  "co.fs2" %% "fs2-io" % fs2Version,
-  "co.fs2" %% "fs2-reactive-streams" % fs2Version,
-  "co.fs2" %% "fs2-scodec" % fs2Version
+  "org.typelevel"  %% "cats-core"            % catsVersion,
+  "org.typelevel"  %% "cats-effect"          % catsEffectVersion,
+  "org.http4s"     %% "http4s-dsl"           % http4sVersion,
+  "org.http4s"     %% "http4s-ember-server"  % http4sVersion,
+  "org.http4s"     %% "http4s-ember-client"  % http4sVersion,
+  "org.http4s"     %% "http4s-circe"         % http4sVersion,
+  "io.circe"       %% "circe-generic"        % "0.14.10",
+  "io.circe"       %% "circe-parser"         % "0.14.10",
+  "ch.qos.logback"  % "logback-classic"      % logbackVersion,
+  "com.olvind.tui" %% "tui"                  % "0.0.7",
+  "co.fs2"         %% "fs2-core"             % fs2Version,
+  "co.fs2"         %% "fs2-io"               % fs2Version,
+  "co.fs2"         %% "fs2-reactive-streams" % fs2Version,
+  "co.fs2"         %% "fs2-scodec"           % fs2Version
 )
 
 // Compiler options
@@ -37,7 +37,7 @@ scalacOptions ++= Seq(
   "-Wunused:imports",
   "-language:implicitConversions",
   "-Wnonunit-statement"
-  //"-Xfatal-warnings"
+  // "-Xfatal-warnings"
 )
 
 lazy val root = (project in file("."))

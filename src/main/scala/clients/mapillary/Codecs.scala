@@ -13,9 +13,9 @@ object Codecs {
   implicit val mapillaryImageDetailsDecoder: Decoder[MapillaryImageDetails] =
     Decoder.instance { c =>
       for {
-        id <- c.get[String]("id")
-        sequenceId <- c.get[String]("sequence")
-        thumb2048Url <- c.get[Option[String]]("thumb_2048_url")
+        id               <- c.get[String]("id")
+        sequenceId       <- c.get[String]("sequence")
+        thumb2048Url     <- c.get[Option[String]]("thumb_2048_url")
         thumbOriginalUrl <- c.get[Option[String]]("thumb_original_url")
       } yield MapillaryImageDetails(
         id = id,
