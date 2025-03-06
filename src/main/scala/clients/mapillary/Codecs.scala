@@ -2,7 +2,8 @@ package clients.mapillary
 
 import cats.effect.IO
 import clients.mapillary.Models._
-import io.circe.Decoder
+import common.Models.Coordinates
+import io.circe.{Decoder, HCursor}
 import io.circe.generic.semiauto.deriveDecoder
 import org.http4s.EntityDecoder
 import org.http4s.circe.jsonOf
@@ -27,24 +28,27 @@ object Codecs {
       : EntityDecoder[IO, MapillaryImageDetails] =
     jsonOf[IO, MapillaryImageDetails]
 
-  implicit val imageDataDecoder: Decoder[ImageData] = deriveDecoder[ImageData]
   implicit val imagesResponseDecoder: Decoder[ImagesResponse] =
     deriveDecoder[ImagesResponse]
   implicit val responseEntityDecoder: EntityDecoder[IO, ImagesResponse] =
     jsonOf[IO, ImagesResponse]
 
+  implicit val imageDataDecoder: Decoder[ImageData] = (c: HCursor) => {
+    for {
+      id <- c.downField("id").as[String]
+      // Navigate to the coordinates array in the geometry object
+      coordsArray <- c
+        .downField("geometry")
+        .downField("coordinates")
+        .as[List[Double]]
+      // GeoJSON uses [longitude, latitude] order, so we need to swap
+    } yield ImageData(
+      MapillaryImageId(id),
+      Coordinates.unsafeCreate(lat = coordsArray(1), lng = coordsArray.head)
+    )
+  }
+
   // Add the necessary decoders
   implicit val mapillaryImageIdDecoder: Decoder[MapillaryImageId] =
     Decoder.instance { c => c.get[String]("id").map(MapillaryImageId) }
-
-  implicit val mapillaryImagesResponseDecoder
-      : Decoder[MapillaryImageSequenceIDsResponse] =
-    Decoder.instance { c =>
-      c.get[List[MapillaryImageId]]("data")
-        .map(MapillaryImageSequenceIDsResponse)
-    }
-
-  implicit val mapillaryImageSequenceIDsResponseEntityDecoder
-      : EntityDecoder[IO, MapillaryImageSequenceIDsResponse] =
-    jsonOf[IO, MapillaryImageSequenceIDsResponse]
 }

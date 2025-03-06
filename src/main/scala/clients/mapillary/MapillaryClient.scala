@@ -15,30 +15,24 @@ import org.typelevel.ci.CIString
 /** Client for interacting with the Mapillary API.
   */
 trait MapillaryClient {
-
-  /** Retrieves an image by its ID.
-    *
-    * @param imageId The ID of the image to retrieve
-    * @param apiKey The API key for authentication
-    * @return The image bytes wrapped in an EitherT
-    */
   def getImage(
       imageId: String,
-      apiKey: ApiKey
+      fields: List[RequestField] = List(
+        RequestField.ID,
+        RequestField.Sequence,
+        RequestField.Thumb2048Url,
+        RequestField.ThumbOriginalUrl
+      )
   ): EitherT[IO, MapillaryError, Array[Byte]]
 
-  /** Retrieves image IDs by location within a radius.
-    *
-    * @param coordinates The center coordinates (latitude, longitude)
-    * @param radiusMeters The radius in meters to search
-    * @param apiKey The API key for authentication
-    * @return A list of image IDs wrapped in an EitherT
-    */
-  def getImageIdsByLocation(
+  def getImagesInfoByLocation(
       coordinates: Coordinates,
       radiusMeters: Radius,
-      apiKey: ApiKey
-  ): EitherT[IO, MapillaryError, List[String]]
+      fields: List[RequestField] = List(
+        RequestField.ID,
+        RequestField.Geometry
+      )
+  ): EitherT[IO, MapillaryError, ImagesResponse]
 }
 
 object MapillaryClient {
@@ -47,10 +41,10 @@ object MapillaryClient {
     *
     * @return A Resource containing the MapillaryClient
     */
-  def make(): Resource[IO, MapillaryClient] =
-    EmberClientBuilder.default[IO].build.map(new MapillaryClientImpl(_))
+  def make(apiKey: ApiKey): Resource[IO, MapillaryClient] =
+    EmberClientBuilder.default[IO].build.map(new MapillaryClientImpl(_, apiKey))
 
-  private final class MapillaryClientImpl(client: Client[IO])
+  private final class MapillaryClientImpl(client: Client[IO], apiKey: ApiKey)
       extends MapillaryClient {
 
     private val baseUri = Uri.unsafeFromString("https://graph.mapillary.com")
@@ -58,10 +52,9 @@ object MapillaryClient {
     /** Creates an authenticated request with the OAuth header.
       *
       * @param uri The URI for the request
-      * @param apiKey The API key for authentication
       * @return A Request with authentication header
       */
-    private def authenticatedRequest(uri: Uri, apiKey: ApiKey): Request[IO] = {
+    private def authenticatedRequest(uri: Uri): Request[IO] = {
       Request[IO](
         method = GET,
         uri = uri
@@ -158,45 +151,15 @@ object MapillaryClient {
       */
     private def getImageDetails(
         imageId: String,
-        apiKey: ApiKey
+        fields: List[RequestField]
     ): EitherT[IO, MapillaryError, MapillaryImageDetails] = {
-      val fields = List(
-        "id",
-        "sequence",
-        "thumb_2048_url",
-        "thumb_original_url"
-      ).mkString(",")
-
       val imageUri = baseUri
         .addPath(imageId)
-        .withQueryParam("fields", fields)
+        .withQueryParam("fields", fields.map(_.value).mkString(","))
 
-      val request = authenticatedRequest(imageUri, apiKey)
+      val request = authenticatedRequest(imageUri)
 
       EitherT(handleErrors(client.expect[MapillaryImageDetails](request)))
-    }
-
-    /** Retrieves image IDs for a specific sequence.
-      */
-    // TODO: expose through interface
-    private def getImageSequence(
-        sequenceId: String,
-        apiKey: ApiKey
-    ): EitherT[IO, MapillaryError, List[String]] = {
-      val imageUri = baseUri
-        .addPath("images")
-        .withQueryParam("sequence_ids", sequenceId)
-        .withQueryParam("fields", "id") // Explicitly request only ID field
-
-      val request = authenticatedRequest(imageUri, apiKey)
-
-      EitherT(
-        handleErrors(
-          client
-            .expect[MapillaryImageSequenceIDsResponse](request)
-            .map(response => response.data.map(_.id))
-        )
-      )
     }
 
     /** Downloads an image from a URL.
@@ -217,10 +180,10 @@ object MapillaryClient {
       */
     override def getImage(
         imageId: String,
-        apiKey: ApiKey
+        fields: List[RequestField]
     ): EitherT[IO, MapillaryError, Array[Byte]] = {
       for {
-        details <- getImageDetails(imageId, apiKey)
+        details <- getImageDetails(imageId, fields)
 
         imageUrl <- details.thumbOriginalUrl match {
           case Some(url) => EitherT.rightT[IO, MapillaryError](url)
@@ -262,27 +225,26 @@ object MapillaryClient {
 
     /** Retrieves image IDs by location within a radius.
       */
-    override def getImageIdsByLocation(
+    override def getImagesInfoByLocation(
         coordinates: Coordinates,
         radiusMeters: Radius,
-        apiKey: ApiKey
-    ): EitherT[IO, MapillaryError, List[String]] = {
+        fields: List[RequestField]
+    ): EitherT[IO, MapillaryError, ImagesResponse] = {
       // Calculate the bounding box
       val bbox = calculateBoundingBox(coordinates, radiusMeters)
 
       // Construct the request URI
       val uri = baseUri
         .addPath("images")
-        .withQueryParam("fields", "id")
+        .withQueryParam("fields", fields.map(_.value).mkString(","))
         .withQueryParam("bbox", bbox)
 
-      val request = authenticatedRequest(uri, apiKey)
+      val request = authenticatedRequest(uri)
 
       EitherT(
         handleErrors(
           client
             .expect[ImagesResponse](request)
-            .map(response => response.data.map(_.id))
         )
       )
     }

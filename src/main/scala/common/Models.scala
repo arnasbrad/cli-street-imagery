@@ -4,8 +4,8 @@ import common.Errors._
 
 object Models {
   // Coordinates with direct validation
-  class Coordinates private (val lat: Double, val lng: Double)
-  object Coordinates {
+  case class Coordinates private (lat: Double, lng: Double)
+  case object Coordinates {
     def create(
         lat: Double,
         lng: Double
@@ -32,8 +32,8 @@ object Models {
   }
 
   // Coordinates with direct validation
-  class Radius private (val value: Int)
-  object Radius {
+  case class Radius private (value: Int)
+  case object Radius {
     def create(v: Int): Either[ValidationError, Radius] = {
       Either.cond(v >= 0, new Radius(v), NegativeRadiusError(v))
     }

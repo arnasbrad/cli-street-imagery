@@ -11,8 +11,8 @@ object GetImage extends IOApp.Simple {
   private val apiKey =
     ApiKey.unsafeCreate("Enter your api key here for testing")
 
-  val run: IO[Unit] = MapillaryClient.make().use { client =>
-    client.getImage("2966993343542765", apiKey).value.flatMap {
+  val run: IO[Unit] = MapillaryClient.make(apiKey).use { client =>
+    client.getImage("2966993343542765").value.flatMap {
       // Handle the Either result
       case Right(imageBytes) =>
         // Success path - do what you were doing before
@@ -40,12 +40,11 @@ object GetImageIdsByLocation extends IOApp.Simple {
     ApiKey.unsafeCreate("Enter your api key here for testing")
 
   val run: IO[Unit] =
-    MapillaryClient.make().use { client =>
+    MapillaryClient.make(apiKey).use { client =>
       client
-        .getImageIdsByLocation(
+        .getImagesInfoByLocation(
           Coordinates.unsafeCreate(55.597, 12.967),
-          Radius.unsafeCreate(50),
-          apiKey
+          Radius.unsafeCreate(50)
         )
         .value
         .flatMap {
