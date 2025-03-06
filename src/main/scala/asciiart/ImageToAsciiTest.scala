@@ -1,4 +1,4 @@
-package common
+package asciiart
 
 import java.io.{File, PrintWriter}
 import scala.io.Source
@@ -15,7 +15,9 @@ object ImageToAsciiTest {
 
   def sampleVertically(lines: List[String], vertical: Int): List[String] = {
     if (vertical <= 0) {
-      throw new IllegalArgumentException("Vertical sampling parameter must be positive")
+      throw new IllegalArgumentException(
+        "Vertical sampling parameter must be positive"
+      )
     }
 
     if (vertical == 1) {
@@ -32,24 +34,30 @@ object ImageToAsciiTest {
   def convertToGrayscale(lines: List[String]): List[String] = {
     lines.flatMap { line =>
       line.split(",").map(_.trim).filter(_.startsWith("0x")).map { hexStr =>
-        val rgbValue = java.lang.Long.parseLong(hexStr.substring(2), 16)
-        val r = (rgbValue >> 16) & 0xFF
-        val g = (rgbValue >> 8) & 0xFF
-        val b = rgbValue & 0xFF
+        val rgbValue  = java.lang.Long.parseLong(hexStr.substring(2), 16)
+        val r         = (rgbValue >> 16) & 0xff
+        val g         = (rgbValue >> 8) & 0xff
+        val b         = rgbValue & 0xff
         val grayscale = (0.299 * r + 0.587 * g + 0.114 * b).toInt
         f"0x${grayscale}%08x"
       }
     }
   }
 
-  def grayscaleHexToAscii(grayscaleHexValues: List[String], width: Int, height: Int, charset: String): String = {
+  def grayscaleHexToAscii(
+      grayscaleHexValues: List[String],
+      width: Int,
+      height: Int,
+      charset: String
+  ): String = {
     // Make sure the charset is from darkest to brightest
     val asciiChars = charset.reverse
 
     // Map each grayscale hex value to an ASCII character
     val asciiPixels = grayscaleHexValues.map { hexStr =>
       // Extract the grayscale value from the hex string (last two digits)
-      val grayscaleValue = Integer.parseInt(hexStr.substring(hexStr.length - 2), 16)
+      val grayscaleValue =
+        Integer.parseInt(hexStr.substring(hexStr.length - 2), 16)
 
       // Map to ASCII character
       val index = ((grayscaleValue * (asciiChars.length - 1)) / 255.0).toInt
@@ -62,11 +70,13 @@ object ImageToAsciiTest {
     val asciiImage = (0 until height)
       .map { y =>
         val startIndex = y * width
-        val endIndex = startIndex + width
+        val endIndex   = startIndex + width
 
         // Check if we have enough pixels for this row
         if (startIndex < asciiPixels.length) {
-          asciiPixels.slice(startIndex, math.min(endIndex, asciiPixels.length)).mkString
+          asciiPixels
+            .slice(startIndex, math.min(endIndex, asciiPixels.length))
+            .mkString
         } else {
           ""
         }
@@ -85,23 +95,31 @@ object ImageToAsciiTest {
   }
 
   def main(args: Array[String]): Unit = {
-    val filename = "C:\\Users\\ignsu\\OneDrive\\Documents\\GitHub\\cli-street-imagery\\src\\main\\scala\\common/testImage"
+    val filename =
+      "C:\\Users\\ignsu\\OneDrive\\Documents\\GitHub\\cli-street-imagery\\src\\main\\scala\\asciiart/testImage"
 
-    val originalWidth = 1931
-    val originalHeight = 700
+    val originalWidth    = 1931
+    val originalHeight   = 700
     val verticalSampling = 2
 
     val sampledHeight = originalHeight / verticalSampling
-    val characters = ".:-=+*#%@" // From darkest to brightest (or configure as needed)
-    val characters2 = " .'`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+    val characters =
+      ".:-=+*#%@" // From darkest to brightest (or configure as needed)
+    val characters2 =
+      " .'`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 
-    val rgbValues = readFileLines(filename)
+    val rgbValues    = readFileLines(filename)
     val sampledInput = sampleVertically(rgbValues, verticalSampling)
 
     val grayscaleValues = convertToGrayscale(sampledInput)
 
     // Convert grayscale hex values to ASCII art
-    val asciiArt = grayscaleHexToAscii(grayscaleValues, originalWidth, sampledHeight, characters)
+    val asciiArt = grayscaleHexToAscii(
+      grayscaleValues,
+      originalWidth,
+      sampledHeight,
+      characters
+    )
 
     printAsciiToFile(asciiArt)
   }
