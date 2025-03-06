@@ -2,9 +2,30 @@ package ui
 
 import tui._
 import tui.widgets.{BlockWidget, ParagraphWidget}
-import ui.TabsExample.App
 
 object Models {
+  // Immutable model
+  case class App(
+      titles: Array[String],
+      inputMode: InputMode = InputMode.Normal,
+      input: String = "",
+      messages: Array[String] = Array.empty,
+      currentState: Tab = StreetViewTab,
+      pastState: Tab = StreetViewTab
+  )
+
+  // Actions to modify the app state
+  sealed trait Action
+  object Action {
+    case class ChangeTab(nextTab: Tab)       extends Action
+    case class SwapTabs()                    extends Action
+    case class SetInputMode(mode: InputMode) extends Action
+    case class UpdateInput(newInput: String) extends Action
+    case class AddMessage(message: String)   extends Action
+    case object Exit                         extends Action
+    case object NoOp                         extends Action
+  }
+
   sealed trait InputMode
   object InputMode {
     case object Normal  extends InputMode
@@ -16,6 +37,7 @@ object Models {
     def index: Int
     def render(f: Frame, area: Rect, app: App): Unit
   }
+
   case object ConfigTab extends Tab {
     def name  = "Config"
     def index = 0
@@ -23,12 +45,14 @@ object Models {
     def render(f: Frame, area: Rect, app: App): Unit =
       renderConfigTab(f, area, app)
   }
+
   case object StreetViewTab extends Tab {
     def name  = "StreetView"
     def index = 1
     def render(f: Frame, area: Rect, app: App): Unit =
       renderStreetViewTab(f, area, app)
   }
+
   case object HelpTab extends Tab {
     def name  = "Help"
     def index = 2
@@ -77,7 +101,7 @@ object Models {
     f.renderWidget(imageGenerationSettingsBlock, horizontalChunks(1))
 
     // INPUT FIELD HELP COMMENT
-    val (msg, style) = app.input_mode match {
+    val (msg, style) = app.inputMode match {
       case InputMode.Normal =>
         (
           Text.from(
@@ -115,14 +139,14 @@ object Models {
           title = Some(Spans.nostyle("Input"))
         )
       ),
-      style = app.input_mode match {
+      style = app.inputMode match {
         case InputMode.Normal  => Style.DEFAULT
         case InputMode.Editing => Style.DEFAULT.fg(Color.Yellow)
       }
     )
     f.renderWidget(input, verticalChunks(2))
 
-    app.input_mode match {
+    app.inputMode match {
       case InputMode.Normal =>
         // Hide the cursor. `Frame` does this by default, so we don't need to do anything here
         ()
@@ -183,7 +207,7 @@ object Models {
     f.renderWidget(possibleInputBlock, horizontalChunksBottom(0))
 
     // INPUT COMMENT
-    val (msg, style) = app.input_mode match {
+    val (msg, style) = app.inputMode match {
       case InputMode.Normal =>
         (
           Text.from(
@@ -221,7 +245,7 @@ object Models {
           title = Some(Spans.nostyle("Coordinates & geolocation"))
         )
       ),
-      style = app.input_mode match {
+      style = app.inputMode match {
         case InputMode.Normal  => Style.DEFAULT
         case InputMode.Editing => Style.DEFAULT.fg(Color.Yellow)
       }
