@@ -16,6 +16,7 @@ object Models {
     def index: Int
     def render(f: Frame, area: Rect, app: App): Unit
   }
+
   case object ConfigTab extends Tab {
     def name  = "Config"
     def index = 0
@@ -23,12 +24,14 @@ object Models {
     def render(f: Frame, area: Rect, app: App): Unit =
       renderConfigTab(f, area, app)
   }
+
   case object StreetViewTab extends Tab {
     def name  = "StreetView"
     def index = 1
     def render(f: Frame, area: Rect, app: App): Unit =
       renderStreetViewTab(f, area, app)
   }
+
   case object HelpTab extends Tab {
     def name  = "Help"
     def index = 2
@@ -77,7 +80,7 @@ object Models {
     f.renderWidget(imageGenerationSettingsBlock, horizontalChunks(1))
 
     // INPUT FIELD HELP COMMENT
-    val (msg, style) = app.input_mode match {
+    val (msg, style) = app.inputMode match {
       case InputMode.Normal =>
         (
           Text.from(
@@ -115,14 +118,14 @@ object Models {
           title = Some(Spans.nostyle("Input"))
         )
       ),
-      style = app.input_mode match {
+      style = app.inputMode match {
         case InputMode.Normal  => Style.DEFAULT
         case InputMode.Editing => Style.DEFAULT.fg(Color.Yellow)
       }
     )
     f.renderWidget(input, verticalChunks(2))
 
-    app.input_mode match {
+    app.inputMode match {
       case InputMode.Normal =>
         // Hide the cursor. `Frame` does this by default, so we don't need to do anything here
         ()
@@ -183,7 +186,7 @@ object Models {
     f.renderWidget(possibleInputBlock, horizontalChunksBottom(0))
 
     // INPUT COMMENT
-    val (msg, style) = app.input_mode match {
+    val (msg, style) = app.inputMode match {
       case InputMode.Normal =>
         (
           Text.from(
@@ -221,7 +224,7 @@ object Models {
           title = Some(Spans.nostyle("Coordinates & geolocation"))
         )
       ),
-      style = app.input_mode match {
+      style = app.inputMode match {
         case InputMode.Normal  => Style.DEFAULT
         case InputMode.Editing => Style.DEFAULT.fg(Color.Yellow)
       }
