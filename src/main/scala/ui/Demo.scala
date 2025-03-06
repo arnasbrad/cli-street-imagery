@@ -8,28 +8,6 @@ import tui.widgets.tabs.TabsWidget
 import ui.Models._
 
 object TabsExample extends IOApp.Simple {
-  // Immutable model
-  case class App(
-      titles: Array[String],
-      inputMode: InputMode = InputMode.Normal,
-      input: String = "",
-      messages: Array[String] = Array.empty,
-      currentState: Tab = StreetViewTab,
-      pastState: Tab = StreetViewTab
-  )
-
-  // Actions to modify the app state
-  sealed trait Action
-  object Action {
-    case class ChangeTab(nextTab: Tab)       extends Action
-    case class SwapTabs()                    extends Action
-    case class SetInputMode(mode: InputMode) extends Action
-    case class UpdateInput(newInput: String) extends Action
-    case class AddMessage(message: String)   extends Action
-    case object Exit                         extends Action
-    case object NoOp                         extends Action
-  }
-
   // Main entry point
   def run: IO[Unit] = {
     val initialApp =
