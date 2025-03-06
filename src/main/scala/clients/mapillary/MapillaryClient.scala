@@ -39,7 +39,8 @@ object MapillaryClient {
 
   /** Creates a new MapillaryClient instance.
     *
-    * @return A Resource containing the MapillaryClient
+    * @return
+    *   A Resource containing the MapillaryClient
     */
   def make(apiKey: ApiKey): Resource[IO, MapillaryClient] =
     EmberClientBuilder.default[IO].build.map(new MapillaryClientImpl(_, apiKey))
@@ -51,8 +52,10 @@ object MapillaryClient {
 
     /** Creates an authenticated request with the OAuth header.
       *
-      * @param uri The URI for the request
-      * @return A Request with authentication header
+      * @param uri
+      *   The URI for the request
+      * @return
+      *   A Request with authentication header
       */
     private def authenticatedRequest(uri: Uri): Request[IO] = {
       Request[IO](
@@ -65,8 +68,10 @@ object MapillaryClient {
 
     /** Enhanced error handler for HTTP requests and IO operations.
       *
-      * @param attempt The attempted IO operation
-      * @return An IO containing either a MapillaryError or the successful result
+      * @param attempt
+      *   The attempted IO operation
+      * @return
+      *   An IO containing either a MapillaryError or the successful result
       */
     private def handleErrors[A](
         attempt: IO[A]

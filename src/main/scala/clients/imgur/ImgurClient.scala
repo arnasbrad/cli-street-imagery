@@ -22,8 +22,10 @@ trait ImgurClient {
 
   /** Uploads an image to Imgur.
     *
-    * @param imageBytes The raw image bytes to upload
-    * @return Either an ImgurError or a successful ImgurResponse
+    * @param imageBytes
+    *   The raw image bytes to upload
+    * @return
+    *   Either an ImgurError or a successful ImgurResponse
     */
   def uploadImage(
       imageBytes: Array[Byte]
@@ -39,8 +41,10 @@ object ImgurClient {
 
     /** Enhanced error handler for HTTP requests and IO operations.
       *
-      * @param attempt The attempted IO operation
-      * @return An IO containing either an ImgurError or the successful result
+      * @param attempt
+      *   The attempted IO operation
+      * @return
+      *   An IO containing either an ImgurError or the successful result
       */
     private def handleErrors[A](
         attempt: IO[A]

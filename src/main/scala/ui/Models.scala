@@ -7,7 +7,7 @@ import ui.TabsExample.App
 object Models {
   sealed trait InputMode
   object InputMode {
-    case object Normal extends InputMode
+    case object Normal  extends InputMode
     case object Editing extends InputMode
   }
 
@@ -17,20 +17,20 @@ object Models {
     def render(f: Frame, area: Rect, app: App): Unit
   }
   case object ConfigTab extends Tab {
-    def name = "Config"
+    def name  = "Config"
     def index = 0
     // Render the Config tab content
     def render(f: Frame, area: Rect, app: App): Unit =
       renderConfigTab(f, area, app)
   }
   case object StreetViewTab extends Tab {
-    def name = "StreetView"
+    def name  = "StreetView"
     def index = 1
     def render(f: Frame, area: Rect, app: App): Unit =
       renderStreetViewTab(f, area, app)
   }
   case object HelpTab extends Tab {
-    def name = "Help"
+    def name  = "Help"
     def index = 2
     def render(f: Frame, area: Rect, app: App): Unit =
       renderHelpTab(f, area, app)
@@ -76,7 +76,7 @@ object Models {
     )
     f.renderWidget(imageGenerationSettingsBlock, horizontalChunks(1))
 
-    //INPUT FIELD HELP COMMENT
+    // INPUT FIELD HELP COMMENT
     val (msg, style) = app.input_mode match {
       case InputMode.Normal =>
         (
@@ -106,7 +106,7 @@ object Models {
     val help_message = ParagraphWidget(text = text)
     f.renderWidget(help_message, verticalChunks(1))
 
-    //INPUT FIELD
+    // INPUT FIELD
     val input = ParagraphWidget(
       text = Text.nostyle(app.input),
       block = Some(
@@ -182,7 +182,7 @@ object Models {
     )
     f.renderWidget(possibleInputBlock, horizontalChunksBottom(0))
 
-    //INPUT COMMENT
+    // INPUT COMMENT
     val (msg, style) = app.input_mode match {
       case InputMode.Normal =>
         (
@@ -212,7 +212,7 @@ object Models {
     val help_message = ParagraphWidget(text = text)
     f.renderWidget(help_message, horizontalChunksMid(1))
 
-    //INPUT
+    // INPUT
     val input = ParagraphWidget(
       text = Text.nostyle(app.input),
       block = Some(

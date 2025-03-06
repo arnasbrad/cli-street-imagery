@@ -68,8 +68,8 @@ object Navigation {
     ): Double = {
       val earthRadius = 6371000 // Earth radius in meters
 
-      val lat1Rad = Math.toRadians(coord1.lat)
-      val lat2Rad = Math.toRadians(coord2.lat)
+      val lat1Rad    = Math.toRadians(coord1.lat)
+      val lat2Rad    = Math.toRadians(coord2.lat)
       val latDiffRad = Math.toRadians(coord2.lat - coord1.lat)
       val lngDiffRad = Math.toRadians(coord2.lng - coord1.lng)
 
