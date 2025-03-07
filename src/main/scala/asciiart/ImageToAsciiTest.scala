@@ -3,6 +3,23 @@ package asciiart
 import scala.util.Try
 
 object ImageToAsciiTest {
+  def sampleHorizontally(
+      image: List[List[Int]],
+      downsampleFactor: Int
+  ): List[List[Int]] = {
+    // Ensure downsample factor is at least 1
+    val safeFactor = math.max(1, downsampleFactor)
+
+    // For each row (vertical pixel), select columns at regular intervals
+    image.map { row =>
+      val rowLength    = row.length
+      val newRowLength = (rowLength + safeFactor - 1) / safeFactor
+      (0 until newRowLength).map { i =>
+        row(i * safeFactor)
+      }.toList
+    }
+  }
+
   def sampleVertically(
       lines: List[List[Int]],
       vertical: Int
