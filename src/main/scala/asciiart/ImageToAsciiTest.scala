@@ -3,7 +3,10 @@ package asciiart
 import scala.util.Try
 
 object ImageToAsciiTest {
-  def sampleVertically(lines: List[String], vertical: Int): List[String] = {
+  def sampleVertically(
+      lines: List[List[Int]],
+      vertical: Int
+  ): List[List[Int]] = {
     // Use max to ensure vertical is at least 1
     val safeVertical = Math.max(1, vertical)
 
@@ -20,49 +23,31 @@ object ImageToAsciiTest {
     }
   }
 
-  def convertToGrayscale(lines: List[String]): List[String] = {
-    def hexToRgbValue(hex: String): Either[Throwable, Long] =
-      Try(java.lang.Long.parseLong(hex.substring(2), 16)).toEither
+  def convertToGrayscale(lines: List[List[Int]]): List[List[Int]] = {
+    lines.map { line =>
+      line.map { rgbValue =>
+        // The values are already parsed integers, no need to handle "0x" prefix
+        val r         = (rgbValue >> 16) & 0xff
+        val g         = (rgbValue >> 8) & 0xff
+        val b         = rgbValue & 0xff
+        val grayscale = (0.299 * r + 0.587 * g + 0.114 * b).toInt
 
-    val result = for {
-      line <- lines
-      hexStr <- Try(line.split(",").toList)
-        .getOrElse(List.empty)
-        .map(_.trim)
-        .filter(_.startsWith("0x"))
-    } yield {
-      hexToRgbValue(hexStr) match {
-        case Right(rgbValue) =>
-          val r         = (rgbValue >> 16) & 0xff
-          val g         = (rgbValue >> 8) & 0xff
-          val b         = rgbValue & 0xff
-          val grayscale = (0.299 * r + 0.587 * g + 0.114 * b).toInt
-          f"0x${grayscale}%08x"
-        case Left(_) =>
-          "0x00000000" // Default for unparseable values
+        // Return grayscale as an RGB value where R=G=B=grayscale
+        (grayscale << 16) | (grayscale << 8) | grayscale
       }
     }
-
-    result
   }
 
   def grayscaleHexToAscii(
-      grayscaleHexValues: List[String],
+      grayscaleValues: List[List[Int]],
       width: Int,
       height: Int,
       charset: Charset
   ): String = {
-    // Map each grayscale hex value to an ASCII character
-    val asciiPixels = grayscaleHexValues.map { hexStr =>
-      // Extract the grayscale value from the hex string (last two digits)
-      val grayscaleValue =
-        Try(
-          Integer
-            .parseInt(
-              hexStr.substring(hexStr.length - 2),
-              16
-            )
-        ).getOrElse(0)
+    // Flatten the nested lists and map each grayscale value to an ASCII character
+    val asciiPixels = grayscaleValues.flatten.map { rgbValue =>
+      // Extract the grayscale value (since R=G=B in our grayscale RGB, we can use any channel)
+      val grayscaleValue = rgbValue & 0xff // Blue channel
 
       // Map to ASCII character
       val index = ((grayscaleValue * (charset.value.length - 1)) / 255.0).toInt
