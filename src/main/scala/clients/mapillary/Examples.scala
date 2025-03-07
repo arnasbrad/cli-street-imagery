@@ -1,7 +1,7 @@
 package clients.mapillary
 
 import cats.effect.{IO, IOApp}
-import clients.mapillary.Models.ApiKey
+import clients.mapillary.Models.{ApiKey, MapillaryImageId}
 import common.Models.{Coordinates, Radius}
 
 import java.nio.file.{Files, Paths}
@@ -12,26 +12,29 @@ object GetImage extends IOApp.Simple {
     ApiKey.unsafeCreate("Enter your api key here for testing")
 
   val run: IO[Unit] = MapillaryClient.make(apiKey).use { client =>
-    client.getImage("2966993343542765").value.flatMap {
-      // Handle the Either result
-      case Right(imageBytes) =>
-        // Success path - do what you were doing before
-        for {
-          _ <- IO.println(
-            s"Successfully retrieved image. Size: ${imageBytes.length} bytes"
-          )
+    client
+      .getImage(MapillaryImageId("2966993343542765"))
+      .value
+      .flatMap {
+        // Handle the Either result
+        case Right(imageBytes) =>
+          // Success path - do what you were doing before
+          for {
+            _ <- IO.println(
+              s"Successfully retrieved image. Size: ${imageBytes.length} bytes"
+            )
 
-          _ <- IO.blocking {
-            val outputPath = Paths.get("mapillary_image.jpg")
-            Files.write(outputPath, imageBytes)
-          }
+            _ <- IO.blocking {
+              val outputPath = Paths.get("mapillary_image.jpg")
+              Files.write(outputPath, imageBytes)
+            }
 
-          _ <- IO.println(s"Image saved to mapillary_image.jpg")
-        } yield ()
+            _ <- IO.println(s"Image saved to mapillary_image.jpg")
+          } yield ()
 
-      case Left(error) =>
-        IO.println(error)
-    }
+        case Left(error) =>
+          IO.println(error)
+      }
   }
 }
 

@@ -16,7 +16,7 @@ import org.typelevel.ci.CIString
   */
 trait MapillaryClient {
   def getImage(
-      imageId: String,
+      imageId: MapillaryImageId,
       fields: List[RequestField] = List(
         RequestField.ID,
         RequestField.Sequence,
@@ -155,11 +155,11 @@ object MapillaryClient {
     /** Retrieves image details for a specific image ID.
       */
     private def getImageDetails(
-        imageId: String,
+        imageId: MapillaryImageId,
         fields: List[RequestField]
     ): EitherT[IO, MapillaryError, MapillaryImageDetails] = {
       val imageUri = baseUri
-        .addPath(imageId)
+        .addPath(imageId.id)
         .withQueryParam("fields", fields.map(_.value).mkString(","))
 
       val request = authenticatedRequest(imageUri)
@@ -184,7 +184,7 @@ object MapillaryClient {
     /** Retrieves an image by its ID.
       */
     override def getImage(
-        imageId: String,
+        imageId: MapillaryImageId,
         fields: List[RequestField]
     ): EitherT[IO, MapillaryError, Array[Byte]] = {
       for {
