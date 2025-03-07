@@ -55,13 +55,15 @@ object Examples {
   def main(args: Array[String]): Unit = {
     val filePath = Paths.get("src/main/scala/asciiart/testImage")
 
-    val originalWidth    = 1931
-    val originalHeight   = 700
+    val rgbValues = readFile(filePath)
+
+    val originalWidth  = if (rgbValues.nonEmpty) rgbValues.head.length else 0
+    val originalHeight = rgbValues.length
+
     val verticalSampling = 2
 
     val sampledHeight = originalHeight / verticalSampling
 
-    val rgbValues    = readFile(filePath)
     val sampledInput = sampleVertically(rgbValues, verticalSampling)
 
     val grayscaleValues = convertToGrayscale(sampledInput)
@@ -71,7 +73,7 @@ object Examples {
       grayscaleValues,
       originalWidth,
       sampledHeight,
-      Charset.Default
+      Charset.Braille
     )
 
     printAsciiToFile(asciiArt)

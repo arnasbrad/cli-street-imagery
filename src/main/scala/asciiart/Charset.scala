@@ -13,4 +13,9 @@ object Charset {
     def value =
       " .'`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
   }
+
+  case object Braille extends Charset {
+    def value =
+      "⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿"
+  }
 }
