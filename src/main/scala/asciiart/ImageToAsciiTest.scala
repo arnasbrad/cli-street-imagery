@@ -3,6 +3,35 @@ package asciiart
 import scala.util.Try
 
 object ImageToAsciiTest {
+
+  def sampleHorizontally(
+      hexStrings: List[String],
+      sampleRate: Int
+  ): List[String] = {
+    // Input validation
+    if (hexStrings == null || hexStrings.isEmpty) {
+      return List.empty[String]
+    }
+
+    if (sampleRate < 1) {
+      return hexStrings // Return original if invalid sample rate
+    }
+
+    // Process each string in the list
+    hexStrings.map { hexString =>
+      // Split the input string by commas and trim whitespace
+      val hexValues = hexString.split(",").map(_.trim)
+
+      // Sample every nth value (where n is sampleRate)
+      val sampledValues = hexValues.zipWithIndex
+        .filter { case (_, index) => index % sampleRate == 0 }
+        .map { case (value, _) => value }
+
+      // Join the sampled values back into a comma-separated string
+      sampledValues.mkString(", ")
+    }
+  }
+
   def sampleVertically(lines: List[String], vertical: Int): List[String] = {
     // Use max to ensure vertical is at least 1
     val safeVertical = Math.max(1, vertical)
