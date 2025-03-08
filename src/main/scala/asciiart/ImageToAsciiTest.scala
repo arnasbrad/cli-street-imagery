@@ -57,39 +57,27 @@ object ImageToAsciiTest {
 
   def grayscaleHexToAscii(
       grayscaleValues: List[List[Int]],
-      width: Int,
-      height: Int,
       charset: Charset
   ): String = {
-    // Flatten the nested lists and map each grayscale value to an ASCII character
-    val asciiPixels = grayscaleValues.flatten.map { rgbValue =>
-      // Extract the grayscale value (since R=G=B in our grayscale RGB, we can use any channel)
-      val grayscaleValue = rgbValue & 0xff // Blue channel
+    // Calculate the actual dimensions from the processed data
+    val height = grayscaleValues.length
+    val width  = if (height > 0) grayscaleValues.head.length else 0
 
-      // Map to ASCII character
-      val index = ((grayscaleValue * (charset.value.length - 1)) / 255.0).toInt
-      // Clamp the index to prevent out of bounds issues
-      val safeIndex = math.min(math.max(index, 0), charset.value.length - 1)
-      charset.value(safeIndex)
-    }
-
-    // Build the ASCII image by converting the 1D array to 2D with proper line breaks
-    val asciiImage = (0 until height)
+    // Convert each row to a string of ASCII characters and join with newlines
+    grayscaleValues
       .map { row =>
-        val startIndex = row * width
-        val endIndex   = startIndex + width
+        row.map { rgbValue =>
+          // Extract the grayscale value (since R=G=B in our grayscale RGB, we can use any channel)
+          val grayscaleValue = rgbValue & 0xff // Blue channel
 
-        // Check if we have enough pixels for this row
-        if (startIndex < asciiPixels.length) {
-          asciiPixels
-            .slice(startIndex, math.min(endIndex, asciiPixels.length))
-            .mkString
-        } else {
-          ""
-        }
+          // Map to ASCII character
+          val index =
+            ((grayscaleValue * (charset.value.length - 1)) / 255.0).toInt
+          // Clamp the index to prevent out of bounds issues
+          val safeIndex = math.min(math.max(index, 0), charset.value.length - 1)
+          charset.value(safeIndex)
+        }.mkString
       }
       .mkString("\n")
-
-    asciiImage
   }
 }
