@@ -58,19 +58,17 @@ object Examples {
 
     val rgbValues = readFile(filePath)
 
-    val originalWidth  = if (rgbValues.nonEmpty) rgbValues.head.length else 0
-    val originalHeight = rgbValues.length
-
     // Vertical sampling NEEDS to be 2x of horizontal one
-    val horizontalSampling = 2
+    val horizontalSampling = 5
     val verticalSampling   = horizontalSampling * 2
 
     val rgbValueSampledHorizontally =
       sampleHorizontally(rgbValues, horizontalSampling)
-    // val rgbValueSampledHorizontallyAndVertically = sampleVertically(rgbValues, verticalSampling)
+    val rgbValueSampledHorizontallyAndVertically =
+      sampleVertically(rgbValueSampledHorizontally, verticalSampling)
 
     val grayscaleValues = convertToGrayscale(
-      rgbValues
+      rgbValueSampledHorizontallyAndVertically
     )
 
     // Convert grayscale hex values to ASCII art
