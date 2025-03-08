@@ -2,8 +2,8 @@ package asciiart
 
 import asciiart.ImageToAsciiTest.{
   convertToGrayscale,
-  grayscaleHexToAscii,
-  grayscaleHexToAsciiWithEdges,
+  edgeDetectionAlgorithm,
+  luminanceAlgorithm,
   sampleHorizontally,
   sampleVertically
 }
@@ -13,6 +13,10 @@ import java.nio.file.{Path, Paths}
 import scala.io.Source
 
 object Examples {
+  sealed trait Algorithm
+  case object Luminance     extends Algorithm
+  case object EdgeDetection extends Algorithm
+
   private def readFile(path: Path): List[List[Int]] = {
     val source = Source.fromFile(path.toFile)
     try {
@@ -46,6 +50,21 @@ object Examples {
     }
   }
 
+  private def imageDataTransformations(
+      horizontalSampling: Int,
+      verticalSampling: Int,
+      rgbValues: List[List[Int]]
+  ): List[List[Int]] = {
+    val rgbValueSampledHorizontally =
+      sampleHorizontally(rgbValues, horizontalSampling)
+    val rgbValueSampledHorizontallyAndVertically =
+      sampleVertically(rgbValueSampledHorizontally, verticalSampling)
+
+    convertToGrayscale(
+      rgbValueSampledHorizontallyAndVertically
+    )
+  }
+
   private def printAsciiToFile(asciiArt: String): Unit = {
     new PrintWriter(new File("ascii_image.txt")) {
       write(asciiArt);
@@ -62,22 +81,23 @@ object Examples {
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 1
     val verticalSampling   = horizontalSampling * 2
+    val algorithm          = "edge"
+    val charset            = Charset.Extended
 
-    val rgbValueSampledHorizontally =
-      sampleHorizontally(rgbValues, horizontalSampling)
-    val rgbValueSampledHorizontallyAndVertically =
-      sampleVertically(rgbValueSampledHorizontally, verticalSampling)
+    val grayscaleValues =
+      imageDataTransformations(horizontalSampling, verticalSampling, rgbValues)
 
-    val grayscaleValues = convertToGrayscale(
-      rgbValueSampledHorizontallyAndVertically
-    )
+    val settings = algorithm match {
+      case "edge" => EdgeDetection
+      case _      => Luminance // Default to luminance
+    }
 
-    // Convert grayscale hex values to ASCII art
-    val asciiArt = grayscaleHexToAsciiWithEdges(
-      grayscaleValues,
-      Charset.Extended,
-      true
-    )
+    val asciiArt = settings match {
+      case Luminance =>
+        luminanceAlgorithm(grayscaleValues, charset)
+      case EdgeDetection =>
+        edgeDetectionAlgorithm(grayscaleValues, charset, false)
+    }
 
     printAsciiToFile(asciiArt)
 

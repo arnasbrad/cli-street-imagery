@@ -55,7 +55,7 @@ object ImageToAsciiTest {
     }
   }
 
-  def grayscaleHexToAscii(
+  def luminanceAlgorithm(
       grayscaleValues: List[List[Int]],
       charset: Charset
   ): String = {
@@ -81,7 +81,10 @@ object ImageToAsciiTest {
       .mkString("\n")
   }
 
-  def detectEdges(grayscaleValues: List[List[Int]]): List[List[Int]] = {
+  def detectEdges(
+      grayscaleValues: List[List[Int]],
+      invert: Boolean = true
+  ): List[List[Int]] = {
     val height = grayscaleValues.length
     val width  = if (height > 0) grayscaleValues.head.length else 0
 
@@ -101,8 +104,8 @@ object ImageToAsciiTest {
       List(1, 2, 1)
     )
 
-    // Create output matrix (smaller by 2 in each dimension due to border)
-    val output = Array.ofDim[Int](height - 2, width - 2)
+    // Create output matrix
+    val edges = Array.ofDim[Int](height - 2, width - 2)
 
     // Apply Sobel operators
     for (y <- 1 until height - 1) {
@@ -119,52 +122,33 @@ object ImageToAsciiTest {
           }
         }
 
-        // Calculate magnitude and normalize to 0-255
+        // Calculate magnitude
         val magnitude = math.min(255, math.sqrt(gx * gx + gy * gy).toInt)
 
-        // Store as grayscale RGB value (same format as input)
-        output(y - 1)(x - 1) = (magnitude << 16) | (magnitude << 8) | magnitude
+        // Invert if requested
+        val value = if (invert) 255 - magnitude else magnitude
+
+        edges(y - 1)(x - 1) = value
       }
     }
 
-    // Convert Array to List for compatibility
-    output.map(_.toList).toList
+    // Convert Array to List
+    edges.map(_.toList).toList
   }
 
-  def grayscaleHexToAsciiWithEdges(
+  def edgeDetectionAlgorithm(
       grayscaleValues: List[List[Int]],
       charset: Charset,
-      useEdgeDetection: Boolean = false
+      invert: Boolean = true
   ): String = {
-    // Apply edge detection if requested
-    val processedValues = if (useEdgeDetection) {
-      // Edge detection
-      val edges = detectEdges(grayscaleValues)
-
-      // Optional: Invert edges (uncomment if you want edges to be dark)
-      edges.map(row =>
-        row.map(pixel => {
-          val value = 255 - (pixel & 0xff)
-          (value << 16) | (value << 8) | value
-        })
-      )
-
-      edges
-    } else {
-      grayscaleValues
-    }
-
-    // Get actual dimensions from processed data
-    val actualHeight = processedValues.length
-    val actualWidth  = if (actualHeight > 0) processedValues.head.length else 0
+    // Detect edges
+    val edgeValues = detectEdges(grayscaleValues, invert)
 
     // Convert to ASCII
-    processedValues
+    edgeValues
       .map { row =>
-        row.map { rgbValue =>
-          val grayscaleValue = rgbValue & 0xff
-          val index =
-            ((grayscaleValue * (charset.value.length - 1)) / 255.0).toInt
+        row.map { value =>
+          val index     = ((value * (charset.value.length - 1)) / 255.0).toInt
           val safeIndex = math.min(math.max(index, 0), charset.value.length - 1)
           charset.value(safeIndex)
         }.mkString
