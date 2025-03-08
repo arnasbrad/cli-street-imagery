@@ -155,4 +155,94 @@ object ImageToAsciiTest {
       }
       .mkString("\n")
   }
+
+  def createBraillePattern(
+      grayscaleValues: List[List[Int]],
+      startX: Int,
+      startY: Int,
+      width: Int,
+      height: Int,
+      threshold: Int
+  ): Int = {
+    var dotPattern = 0
+
+    // Dot mapping in Braille:
+    // 0 3
+    // 1 4
+    // 2 5
+    // 6 7
+    val dotPositions = List(
+      (0, 0, 0x01), // top-left
+      (0, 1, 0x02), // middle-left
+      (0, 2, 0x04), // bottom-left
+      (1, 0, 0x08), // top-right
+      (1, 1, 0x10), // middle-right
+      (1, 2, 0x20), // bottom-right
+      (0, 3, 0x40), // lower-left
+      (1, 3, 0x80)  // lower-right
+    )
+
+    // Check each dot position
+    for ((dx, dy, value) <- dotPositions) {
+      val x = startX + dx
+      val y = startY + dy
+
+      if (x < width && y < height) {
+        // Extract grayscale value
+        val pixelValue = grayscaleValues(y)(x) & 0xff
+
+        // Set dot if pixel is darker than threshold
+        if (pixelValue < threshold) {
+          dotPattern |= value
+        }
+      }
+    }
+
+    dotPattern
+  }
+
+  def brailleAlgorithm(
+      grayscaleValues: List[List[Int]],
+      charset: Charset,
+      threshold: Int = 118
+  ): String = {
+    val height = grayscaleValues.length
+    val width  = if (height > 0) grayscaleValues.head.length else 0
+
+    // Return empty string for invalid input
+    if (height == 0 || width == 0) return ""
+
+    // Calculate dimensions of Braille grid
+    val brailleWidth  = (width + 1) / 2
+    val brailleHeight = (height + 3) / 4
+
+    // Build Braille representation
+    val result = new StringBuilder()
+
+    for (by <- 0 until brailleHeight) {
+      for (bx <- 0 until brailleWidth) {
+        // Get precise dot pattern for this 2×4 grid
+        val startX = bx * 2
+        val startY = by * 4
+        val patternIndex = createBraillePattern(
+          grayscaleValues,
+          startX,
+          startY,
+          width,
+          height,
+          threshold
+        )
+
+        // Get the corresponding Braille character from the charset
+        // The charset should contain all 256 patterns in order
+        result.append(charset.value(patternIndex))
+      }
+
+      if (by < brailleHeight - 1) {
+        result.append('\n')
+      }
+    }
+
+    result.toString
+  }
 }

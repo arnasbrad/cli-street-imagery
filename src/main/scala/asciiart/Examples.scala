@@ -1,6 +1,7 @@
 package asciiart
 
 import asciiart.ImageToAsciiTest.{
+  brailleAlgorithm,
   convertToGrayscale,
   edgeDetectionAlgorithm,
   luminanceAlgorithm,
@@ -16,6 +17,7 @@ object Examples {
   sealed trait Algorithm
   case object Luminance     extends Algorithm
   case object EdgeDetection extends Algorithm
+  case object Braille       extends Algorithm
 
   private def readFile(path: Path): List[List[Int]] = {
     val source = Source.fromFile(path.toFile)
@@ -81,15 +83,16 @@ object Examples {
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 1
     val verticalSampling   = horizontalSampling * 2
-    val algorithm          = "edge"
+    val algorithm          = "braille"
     val charset            = Charset.Extended
 
     val grayscaleValues =
       imageDataTransformations(horizontalSampling, verticalSampling, rgbValues)
 
     val settings = algorithm match {
-      case "edge" => EdgeDetection
-      case _      => Luminance // Default to luminance
+      case "edge"    => EdgeDetection
+      case "braille" => Braille
+      case _         => Luminance // Default to luminance
     }
 
     val asciiArt = settings match {
@@ -97,27 +100,10 @@ object Examples {
         luminanceAlgorithm(grayscaleValues, charset)
       case EdgeDetection =>
         edgeDetectionAlgorithm(grayscaleValues, charset, false)
+      case Braille =>
+        brailleAlgorithm(grayscaleValues, Charset.BraillePatterns)
     }
 
     printAsciiToFile(asciiArt)
-
-    /*val originalImage = List(
-      List(1, 2, 3, 4, 5, 6),
-      List(7, 8, 9, 10, 11, 12),
-      List(2, 2, 4, 4, 8, 6),
-      List(7, 8, 9, 10, 11, 12)
-    )
-
-    val rgbValueSampledHorizontally = sampleHorizontally(rgbValues, 3)
-    val rgbValueSampledHorizontallyAndVertically =
-      sampleVertically(rgbValueSampledHorizontally, 2)
-    val a = convertToGrayscale(rgbValueSampledHorizontallyAndVertically)
-    val asciiArt = grayscaleHexToAscii(
-      a,
-      Charset.Default
-    )
-
-    print(asciiArt)
-    printAsciiToFile(asciiArt)*/
   }
 }
