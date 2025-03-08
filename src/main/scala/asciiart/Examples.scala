@@ -3,6 +3,7 @@ package asciiart
 import asciiart.ImageToAsciiTest.{
   convertToGrayscale,
   grayscaleHexToAscii,
+  grayscaleHexToAsciiWithEdges,
   sampleHorizontally,
   sampleVertically
 }
@@ -59,7 +60,7 @@ object Examples {
     val rgbValues = readFile(filePath)
 
     // Vertical sampling NEEDS to be 2x of horizontal one
-    val horizontalSampling = 5
+    val horizontalSampling = 1
     val verticalSampling   = horizontalSampling * 2
 
     val rgbValueSampledHorizontally =
@@ -72,9 +73,10 @@ object Examples {
     )
 
     // Convert grayscale hex values to ASCII art
-    val asciiArt = grayscaleHexToAscii(
+    val asciiArt = grayscaleHexToAsciiWithEdges(
       grayscaleValues,
-      Charset.Default
+      Charset.Extended,
+      true
     )
 
     printAsciiToFile(asciiArt)

@@ -80,4 +80,95 @@ object ImageToAsciiTest {
       }
       .mkString("\n")
   }
+
+  def detectEdges(grayscaleValues: List[List[Int]]): List[List[Int]] = {
+    val height = grayscaleValues.length
+    val width  = if (height > 0) grayscaleValues.head.length else 0
+
+    // Return original image if too small for edge detection
+    if (height < 3 || width < 3) return grayscaleValues
+
+    // Sobel operators
+    val sobelX = List(
+      List(-1, 0, 1),
+      List(-2, 0, 2),
+      List(-1, 0, 1)
+    )
+
+    val sobelY = List(
+      List(-1, -2, -1),
+      List(0, 0, 0),
+      List(1, 2, 1)
+    )
+
+    // Create output matrix (smaller by 2 in each dimension due to border)
+    val output = Array.ofDim[Int](height - 2, width - 2)
+
+    // Apply Sobel operators
+    for (y <- 1 until height - 1) {
+      for (x <- 1 until width - 1) {
+        var gx = 0
+        var gy = 0
+
+        // Apply convolution with Sobel kernels
+        for (ky <- 0 until 3) {
+          for (kx <- 0 until 3) {
+            val pixelValue = grayscaleValues(y - 1 + ky)(x - 1 + kx) & 0xff
+            gx += pixelValue * sobelX(ky)(kx)
+            gy += pixelValue * sobelY(ky)(kx)
+          }
+        }
+
+        // Calculate magnitude and normalize to 0-255
+        val magnitude = math.min(255, math.sqrt(gx * gx + gy * gy).toInt)
+
+        // Store as grayscale RGB value (same format as input)
+        output(y - 1)(x - 1) = (magnitude << 16) | (magnitude << 8) | magnitude
+      }
+    }
+
+    // Convert Array to List for compatibility
+    output.map(_.toList).toList
+  }
+
+  def grayscaleHexToAsciiWithEdges(
+      grayscaleValues: List[List[Int]],
+      charset: Charset,
+      useEdgeDetection: Boolean = false
+  ): String = {
+    // Apply edge detection if requested
+    val processedValues = if (useEdgeDetection) {
+      // Edge detection
+      val edges = detectEdges(grayscaleValues)
+
+      // Optional: Invert edges (uncomment if you want edges to be dark)
+      edges.map(row =>
+        row.map(pixel => {
+          val value = 255 - (pixel & 0xff)
+          (value << 16) | (value << 8) | value
+        })
+      )
+
+      edges
+    } else {
+      grayscaleValues
+    }
+
+    // Get actual dimensions from processed data
+    val actualHeight = processedValues.length
+    val actualWidth  = if (actualHeight > 0) processedValues.head.length else 0
+
+    // Convert to ASCII
+    processedValues
+      .map { row =>
+        row.map { rgbValue =>
+          val grayscaleValue = rgbValue & 0xff
+          val index =
+            ((grayscaleValue * (charset.value.length - 1)) / 255.0).toInt
+          val safeIndex = math.min(math.max(index, 0), charset.value.length - 1)
+          charset.value(safeIndex)
+        }.mkString
+      }
+      .mkString("\n")
+  }
 }
