@@ -1,7 +1,5 @@
 package asciiart
 
-import scala.util.Try
-
 object ImageToAsciiTest {
   def sampleHorizontally(
       image: List[List[Int]],
@@ -59,10 +57,6 @@ object ImageToAsciiTest {
       grayscaleValues: List[List[Int]],
       charset: Charset
   ): String = {
-    // Calculate the actual dimensions from the processed data
-    val height = grayscaleValues.length
-    val width  = if (height > 0) grayscaleValues.head.length else 0
-
     // Convert each row to a string of ASCII characters and join with newlines
     grayscaleValues
       .map { row =>
@@ -86,7 +80,7 @@ object ImageToAsciiTest {
       invert: Boolean = true
   ): List[List[Int]] = {
     val height = grayscaleValues.length
-    val width  = if (height > 0) grayscaleValues.head.length else 0
+    val width  = grayscaleValues.headOption.map(_.length).getOrElse(0)
 
     // Return original image if too small for edge detection
     if (height < 3 || width < 3) return grayscaleValues
@@ -104,36 +98,51 @@ object ImageToAsciiTest {
       List(1, 2, 1)
     )
 
-    // Create output matrix
-    val edges = Array.ofDim[Int](height - 2, width - 2)
-
-    // Apply Sobel operators
-    for (y <- 1 until height - 1) {
-      for (x <- 1 until width - 1) {
-        var gx = 0
-        var gy = 0
-
-        // Apply convolution with Sobel kernels
-        for (ky <- 0 until 3) {
-          for (kx <- 0 until 3) {
-            val pixelValue = grayscaleValues(y - 1 + ky)(x - 1 + kx) & 0xff
-            gx += pixelValue * sobelX(ky)(kx)
-            gy += pixelValue * sobelY(ky)(kx)
-          }
-        }
-
-        // Calculate magnitude
-        val magnitude = math.min(255, math.sqrt(gx * gx + gy * gy).toInt)
-
-        // Invert if requested
-        val value = if (invert) 255 - magnitude else magnitude
-
-        edges(y - 1)(x - 1) = value
+    // Generate coordinates for the pixels we'll process
+    val coordinates = (1 until height - 1).toList.flatMap { y =>
+      (1 until width - 1).toList.map { x =>
+        (y, x)
       }
     }
 
-    // Convert Array to List
-    edges.map(_.toList).toList
+    // Create output matrix using functional operations
+    coordinates
+      .groupBy(_._1) // Group by y-coordinate
+      .toList
+      .sortBy(_._1) // Sort by y-coordinate
+      .map { case (y, pixelsInRow) =>
+        pixelsInRow
+          .sortBy(_._2) // Sort by x-coordinate
+          .map { case (_, x) =>
+            // Extract 3x3 window around the pixel
+            val window = (0 until 3)
+              .map(ky =>
+                (0 until 3)
+                  .map(kx => grayscaleValues(y - 1 + ky)(x - 1 + kx) & 0xff)
+                  .toList
+              )
+              .toList
+
+            // Apply Sobel operators through fold operations
+            val gx = (0 until 3).foldLeft(0)((acc, ky) =>
+              acc + (0 until 3).foldLeft(0)((innerAcc, kx) =>
+                innerAcc + window(ky)(kx) * sobelX(ky)(kx)
+              )
+            )
+
+            val gy = (0 until 3).foldLeft(0)((acc, ky) =>
+              acc + (0 until 3).foldLeft(0)((innerAcc, kx) =>
+                innerAcc + window(ky)(kx) * sobelY(ky)(kx)
+              )
+            )
+
+            // Calculate magnitude
+            val magnitude = math.min(255, math.sqrt(gx * gx + gy * gy).toInt)
+
+            // Invert if requested
+            if (invert) 255 - magnitude else magnitude
+          }
+      }
   }
 
   def edgeDetectionAlgorithm(
@@ -164,8 +173,6 @@ object ImageToAsciiTest {
       height: Int,
       threshold: Int
   ): Int = {
-    var dotPattern = 0
-
     // Dot mapping in Braille:
     // 0 3
     // 1 4
@@ -182,23 +189,21 @@ object ImageToAsciiTest {
       (1, 3, 0x80)  // lower-right
     )
 
-    // Check each dot position
-    for ((dx, dy, value) <- dotPositions) {
+    dotPositions.foldLeft(0) { case (pattern, (dx, dy, value)) =>
       val x = startX + dx
       val y = startY + dy
 
-      if (x < width && y < height) {
-        // Extract grayscale value
-        val pixelValue = grayscaleValues(y)(x) & 0xff
-
-        // Set dot if pixel is darker than threshold
-        if (pixelValue < threshold) {
-          dotPattern |= value
-        }
+      // Check if position is within bounds and darker than threshold
+      if (
+        x < width && y < height && (grayscaleValues(y)(x) & 0xff) < threshold
+      ) {
+        // Set the bit in the pattern
+        pattern | value
+      } else {
+        // Keep the pattern unchanged
+        pattern
       }
     }
-
-    dotPattern
   }
 
   def brailleAlgorithm(
@@ -207,42 +212,34 @@ object ImageToAsciiTest {
       threshold: Int = 118
   ): String = {
     val height = grayscaleValues.length
-    val width  = if (height > 0) grayscaleValues.head.length else 0
+    val width  = grayscaleValues.headOption.map(_.length).getOrElse(0)
 
-    // Return empty string for invalid input
-    if (height == 0 || width == 0) return ""
+    Option
+      .when(height > 0 && width > 0) {
+        // Calculate dimensions of Braille grid
+        val brailleWidth  = (width + 1) / 2
+        val brailleHeight = (height + 3) / 4
 
-    // Calculate dimensions of Braille grid
-    val brailleWidth  = (width + 1) / 2
-    val brailleHeight = (height + 3) / 4
+        val brailleRows = (0 until brailleHeight).map { by =>
+          val rowChars = (0 until brailleWidth).map { bx =>
+            val startX = bx * 2
+            val startY = by * 4
+            val patternIndex = createBraillePattern(
+              grayscaleValues,
+              startX,
+              startY,
+              width,
+              height,
+              threshold
+            )
+            charset.value(patternIndex)
+          }
+          rowChars.mkString
+        }
 
-    // Build Braille representation
-    val result = new StringBuilder()
-
-    for (by <- 0 until brailleHeight) {
-      for (bx <- 0 until brailleWidth) {
-        // Get precise dot pattern for this 2×4 grid
-        val startX = bx * 2
-        val startY = by * 4
-        val patternIndex = createBraillePattern(
-          grayscaleValues,
-          startX,
-          startY,
-          width,
-          height,
-          threshold
-        )
-
-        // Get the corresponding Braille character from the charset
-        // The charset should contain all 256 patterns in order
-        result.append(charset.value(patternIndex))
+        // Join the rows with newlines
+        brailleRows.mkString("\n")
       }
-
-      if (by < brailleHeight - 1) {
-        result.append('\n')
-      }
-    }
-
-    result.toString
+      .getOrElse("")
   }
 }
