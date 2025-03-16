@@ -14,3 +14,6 @@
 
 #set heading(numbering: "1.1")
 #include "sections/testtext.typ"
+
+#include "sections/whyScala.typ"
+
