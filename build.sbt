@@ -24,7 +24,9 @@ libraryDependencies ++= Seq(
   "co.fs2"         %% "fs2-reactive-streams" % fs2Version,
   "co.fs2"         %% "fs2-scodec"           % fs2Version,
   "org.scalactic"  %% "scalactic"            % "3.2.19",
-  "org.scalatest"  %% "scalatest"            % "3.2.19" % "test"
+  "org.scalatest"  %% "scalatest"            % "3.2.19" % "test",
+  "org.scalamock"  %% "scalamock"            % "6.2.0"  % Test,
+  "org.scalatest"  %% "scalatest"            % "3.2.19" % Test
 )
 
 // Compiler options
