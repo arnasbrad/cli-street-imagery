@@ -140,13 +140,13 @@ Programavimo kalbos paprastai yra skirstomos į 2 pagrindinius tipus priklausoma
 kaip jų kodas yra paleidžiamas:
 
 - Kompiliuojamos kalbos - programinis kodas yra paverčiamas mašininiu (arba kokiu nors
-tarpiniu kodu, kuris po to verčiamas mašininiu, kaip „Java Virtual Machine“).
-To rezultatas - ilgesnis programos paleidimas programuojant, bet greitesnis veikimas,
-nes kompiliatorius gali optimizuoti mašininį kodą prieš jo įvykdymą. Taip pat dauguma
-sintaksės ar kitokių klaidų aptinkama prieš programos paleidimą, kompiliavimo metu.
+  tarpiniu kodu, kuris po to verčiamas mašininiu, kaip „Java Virtual Machine“).
+  To rezultatas - ilgesnis programos paleidimas programuojant, bet greitesnis veikimas,
+  nes kompiliatorius gali optimizuoti mašininį kodą prieš jo įvykdymą. Taip pat dauguma
+  sintaksės ar kitokių klaidų aptinkama prieš programos paleidimą, kompiliavimo metu.
 - Interpretuojamos kalbos - programinis kodas yra vykdomas eilutė po eilutės, iš eilės,
-nėra jokio tarpinio žingsnio tarp kodo parašymo ir paleidimo. Tai puikiai tinka
-įvairiems scenarijams (angl. _scripts_), tačiau stipriai nukenčia programos greitąveika.
+  nėra jokio tarpinio žingsnio tarp kodo parašymo ir paleidimo. Tai puikiai tinka
+  įvairiems scenarijams (angl. _scripts_), tačiau stipriai nukenčia programos greitąveika.
 
 Siekdami neprarasti per daug programos veikimo spartumo, nusprendėme pasirinkti
 kompiliuojąmą programavimo kalbą.
