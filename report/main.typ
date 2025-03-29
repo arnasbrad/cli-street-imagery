@@ -16,4 +16,5 @@
 #include "sections/testtext.typ"
 
 #include "sections/whyScala.typ"
+#include "sections/fpWithScala.typ"
 #include "sections/ASCII.typ"
