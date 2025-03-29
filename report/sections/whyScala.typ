@@ -249,3 +249,36 @@ be reikšmių keitimo ne tik padeda išvengti sudėtingo bei klaidingo kodo, bet
 ir padeda tą pačią problemą išspręsti greičiau ir suprantamiau. Dėl šios priežasties
 savo programai kurti pasirinkome funkcinio stiliaus kalbą. Detaliau apie funkcinį
 programavimą ir jo privalumus kalbėsime tolimesniuose skyriuose.
+
+=== Programavimo kalba 
+
+Po šios nuoseklios analizės mes turime bendrą idėją, ko tikimės iš pasirinktos
+programavimo kalbos:
+
+- sąlyginai aukšto abstrakcijos lygio;
+- galimybės kodą kompiliuoti;
+- griežtų statinių tipų;
+- funkcinio programavimo stiliaus;
+
+Yra daugybė pasirinkimų, atitinkančių šiuos kriterijus, kaip „Haskell“, „Clojure“,
+„Scala“, „F\#“, „OCaml“ bei daugybė kitų. Visos šios kalbos yra plačiai naudojamos
+didelėse įmonėse ir yra puikiai tinkamos spręsti įvairiausioms problemoms, taip pat
+ir mūsų projektui:
+
+- „Facebook“, socialinės medijos platforma, naudoja „Haskell“ programavimo
+  kalbą siekiant kovoti su šlamštu savo
+  platformoje (citata https://engineering.fb.com/2015/06/26/security/fighting-spam-with-haskell/)
+- „Walmart“, JAV mažmeninės prekybos centras, naudoja „Clojure“ savo duomenų
+  valdymo sistemai (citata https://clojure.org/community/success_stories)
+- „X“ (anksčiau buvusi „Twitter“ socialinės medijos platforma), plačiai naudoja „Scala“.
+- „Microsoft“, JAV programinės ir techninės įrangos gamintojas, sukūrė ir naudoja
+  „F\#“ įvairioms paslaugoms (citata https://learn.microsoft.com/en-us/dotnet/fsharp/).
+- „Jane Street“, JAV patentuota prekybos įmonė, naudoja
+  „OCaml“ prekybos sistemoms ir finansinei analizei
+  (citata https://blog.janestreet.com/why-ocaml/).
+
+Žinodami, jog beveik visas programavimo kalbas galima vienaip ar kitaip panaudoti,
+sprendžiant pačias įvairiausias problemas, galutiniame kalbos pasirinkime labiausiai
+vadovavomės esama pažintimi su kalba. Pasirinkę kalbą, kurios pagrindus jau žinome,
+galime sutelkti daugiau dėmesio pačiam programos veikimui. Šitaip mąstant, prieš
+akis iškyla pagrindinis favoritas - „Scala“.
