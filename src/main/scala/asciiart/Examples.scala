@@ -1,24 +1,14 @@
 package asciiart
 
-import asciiart.ImageToAsciiTest.{
-  brailleAlgorithm,
-  convertToGrayscale,
-  edgeDetectionAlgorithm,
-  luminanceAlgorithm,
-  sampleHorizontally,
-  sampleVertically
-}
+import asciiart.Algorithms._
+import asciiart.Conversions._
+import asciiart.Models._
 
 import java.io.{File, PrintWriter}
 import java.nio.file.{Path, Paths}
 import scala.io.Source
 
 object Examples {
-  sealed trait Algorithm
-  case object Luminance     extends Algorithm
-  case object EdgeDetection extends Algorithm
-  case object Braille       extends Algorithm
-
   private def readFile(path: Path): List[List[Int]] = {
     val source = Source.fromFile(path.toFile)
     try {
@@ -61,7 +51,6 @@ object Examples {
       sampleHorizontally(rgbValues, horizontalSampling)
     val rgbValueSampledHorizontallyAndVertically =
       sampleVertically(rgbValueSampledHorizontally, verticalSampling)
-
     convertToGrayscale(
       rgbValueSampledHorizontallyAndVertically
     )
@@ -83,25 +72,29 @@ object Examples {
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 1
     val verticalSampling   = horizontalSampling * 2
-    val algorithm          = "braille"
+    val algorithm          = "edge"
     val charset            = Charset.Extended
 
     val grayscaleValues =
       imageDataTransformations(horizontalSampling, verticalSampling, rgbValues)
 
     val settings = algorithm match {
-      case "edge"    => EdgeDetection
-      case "braille" => Braille
-      case _         => Luminance // Default to luminance
+      case "edge"    => EdgeDetectionAlgorithm
+      case "braille" => BrailleAlgorithm
+      case _         => LuminanceAlgorithm // Default to luminance
     }
 
     val asciiArt = settings match {
-      case Luminance =>
-        luminanceAlgorithm(grayscaleValues, charset)
-      case EdgeDetection =>
-        edgeDetectionAlgorithm(grayscaleValues, charset, false)
-      case Braille =>
-        brailleAlgorithm(grayscaleValues, Charset.BraillePatterns)
+      case LuminanceAlgorithm =>
+        LuminanceAlgorithm.generate(LuminanceConfig(grayscaleValues, charset))
+      case EdgeDetectionAlgorithm =>
+        EdgeDetectionAlgorithm.generate(
+          EdgeDetectionConfig(grayscaleValues, charset, invert = false)
+        )
+      case BrailleAlgorithm =>
+        BrailleAlgorithm.generate(
+          BrailleConfig(grayscaleValues, Charset.BraillePatterns)
+        )
     }
 
     printAsciiToFile(asciiArt)
