@@ -20,7 +20,7 @@ trait MapillaryClient {
       fields: List[RequestField] = List(
         RequestField.ID,
         RequestField.Sequence,
-        RequestField.Thumb2048Url,
+        RequestField.Thumb1024Url,
         RequestField.ThumbOriginalUrl
       )
   ): EitherT[IO, MapillaryError, Array[Byte]]

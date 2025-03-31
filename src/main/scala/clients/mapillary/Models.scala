@@ -40,8 +40,8 @@ object Models {
     case object Sequence extends RequestField {
       def value = "sequence"
     }
-    case object Thumb2048Url extends RequestField {
-      def value = "thumb_2048_url"
+    case object Thumb1024Url extends RequestField {
+      def value = "thumb_1024_url"
     }
     case object ThumbOriginalUrl extends RequestField {
       def value = "thumb_original_url"

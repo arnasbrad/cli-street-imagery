@@ -3,7 +3,9 @@ package clients.mapillary
 import cats.effect.{IO, IOApp}
 import clients.mapillary.Models.{ApiKey, MapillaryImageId}
 import common.Models.{Coordinates, Radius}
+import scodec.bits._
 
+import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
 object GetImage extends IOApp.Simple {
@@ -23,10 +25,17 @@ object GetImage extends IOApp.Simple {
             _ <- IO.println(
               s"Successfully retrieved image. Size: ${imageBytes.length} bytes"
             )
+            bits    = BitVector(imageBytes)
+            chunks  = bits.grouped(32).toSeq
+            hexList = chunks.map(_.toHex).toList
 
             _ <- IO.blocking {
-              val outputPath = Paths.get("mapillary_image.jpg")
-              Files.write(outputPath, imageBytes)
+              val outputPath = Paths.get("testBytesForIgnelis.txt")
+              Files.writeString(
+                outputPath,
+                hexList.mkString(", "),
+                StandardCharsets.UTF_8
+              )
             }
 
             _ <- IO.println(s"Image saved to mapillary_image.jpg")
