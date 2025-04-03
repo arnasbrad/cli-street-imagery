@@ -15,7 +15,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           {
             "id": "123456789",
             "sequence": "seq123456",
-            "thumb_2048_url": "https://images.mapillary.com/123456789/thumb-2048.jpg",
+            "thumb_1024_url": "https://images.mapillary.com/123456789/thumb-1024.jpg",
             "thumb_original_url": "https://images.mapillary.com/123456789/thumb-original.jpg"
           }
         """
@@ -27,8 +27,8 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
         imageDetails.id shouldBe "123456789"
         imageDetails.sequenceId shouldBe "seq123456"
-        imageDetails.thumb2048Url shouldBe Some(
-          "https://images.mapillary.com/123456789/thumb-2048.jpg"
+        imageDetails.thumb1024Url shouldBe Some(
+          "https://images.mapillary.com/123456789/thumb-1024.jpg"
         )
         imageDetails.thumbOriginalUrl shouldBe Some(
           "https://images.mapillary.com/123456789/thumb-original.jpg"
@@ -51,7 +51,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
         imageDetails.id shouldBe "123456789"
         imageDetails.sequenceId shouldBe "seq123456"
-        imageDetails.thumb2048Url shouldBe None
+        imageDetails.thumb1024Url shouldBe None
         imageDetails.thumbOriginalUrl shouldBe None
       }
 
@@ -60,7 +60,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           """
           {
             "sequence": "seq123456",
-            "thumb_2048_url": "https://images.mapillary.com/123456789/thumb-2048.jpg",
+            "thumb_1024_url": "https://images.mapillary.com/123456789/thumb-1024.jpg",
             "thumb_original_url": "https://images.mapillary.com/123456789/thumb-original.jpg"
           }
         """
@@ -69,7 +69,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           """
           {
             "id": "123456789",
-            "thumb_2048_url": "https://images.mapillary.com/123456789/thumb-2048.jpg",
+            "thumb_1024_url": "https://images.mapillary.com/123456789/thumb-1024.jpg",
             "thumb_original_url": "https://images.mapillary.com/123456789/thumb-original.jpg"
           }
         """
@@ -84,7 +84,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           {
             "id": "123456789",
             "sequence": "seq123456",
-            "thumb_2048_url": "https://images.mapillary.com/123456789/thumb-2048.jpg",
+            "thumb_1024_url": "https://images.mapillary.com/123456789/thumb-1024.jpg",
             "thumb_original_url": "https://images.mapillary.com/123456789/thumb-original.jpg",
             "extra_field": "this should be ignored",
             "another_extra": 42
@@ -98,8 +98,8 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
         imageDetails.id shouldBe "123456789"
         imageDetails.sequenceId shouldBe "seq123456"
-        imageDetails.thumb2048Url shouldBe Some(
-          "https://images.mapillary.com/123456789/thumb-2048.jpg"
+        imageDetails.thumb1024Url shouldBe Some(
+          "https://images.mapillary.com/123456789/thumb-1024.jpg"
         )
         imageDetails.thumbOriginalUrl shouldBe Some(
           "https://images.mapillary.com/123456789/thumb-original.jpg"

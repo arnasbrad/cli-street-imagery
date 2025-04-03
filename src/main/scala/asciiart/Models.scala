@@ -19,4 +19,14 @@ object Models {
       charset: Charset,
       threshold: Int = 118
   ) extends AlgorithmConfig
+
+  case class ImageWidth(value: Int)
+
+  case class ImageHeight(value: Int)
+
+  case class HexImage(
+      hexStrings: Array[String],
+      width: ImageWidth,
+      height: ImageHeight
+  )
 }

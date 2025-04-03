@@ -26,8 +26,7 @@ libraryDependencies ++= Seq(
   "org.scalactic"  %% "scalactic"            % "3.2.19",
   "org.scalatest"  %% "scalatest"            % "3.2.19" % "test",
   "org.scalamock"  %% "scalamock"            % "6.2.0"  % Test,
-  "org.scalatest"  %% "scalatest"            % "3.2.19" % Test,
-  "org.scodec"     %% "scodec-bits"          % "1.2.1"
+  "org.scalatest"  %% "scalatest"            % "3.2.19" % Test
 )
 
 // Compiler options
@@ -49,3 +48,9 @@ lazy val root = (project in file("."))
   .settings(
     name := "cli-street-imagery"
   )
+
+Test / scalacOptions ++= Seq(
+  // Allow using -Wnonunit-statement to find bugs in tests without exploding from scalatest assertions
+  "-Wconf:msg=unused value of type org.scalatest.Assertion:s",
+  "-Wconf:msg=unused value of type org.scalamock:s"
+)

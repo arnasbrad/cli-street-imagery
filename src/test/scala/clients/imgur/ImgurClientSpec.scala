@@ -194,7 +194,7 @@ class ImgurClientSpec extends AnyFunSpec with Matchers {
       // Verify Content-Type header
       val contentTypeHeader = request.headers.get(ci"Content-Type")
       contentTypeHeader.isDefined shouldBe true
-      contentTypeHeader.get.head.value shouldBe "image/jpeg"
+      contentTypeHeader.get.head.value shouldBe "application/octet-stream"
 
       // Verify the entity body (this is a bit trickier since it's wrapped in an EntityBody)
       // We'll just check that it exists
