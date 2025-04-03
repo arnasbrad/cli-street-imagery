@@ -54,9 +54,13 @@ object Examples {
     )
   }
 
-  private def printAsciiToFile(asciiArt: String): Unit = {
+  private def printAsciiToFile(asciiArt: List[String]): Unit = {
     new PrintWriter(new File("ascii_image.txt")) {
-      write(asciiArt);
+      // Write each string from the list on its own line
+      asciiArt.foreach { line =>
+        write(line)
+        write("\n") // Add a newline after each line
+      }
       close()
     }
     println("\nASCII art has been saved to 'ascii_image.txt'")
@@ -64,7 +68,7 @@ object Examples {
 
   def main(args: Array[String]): Unit = {
     val filePath  = "testBytesForIgnelis.txt"
-    val lineWidth = 1024
+    val lineWidth = 819
 
     val rgbValues = readHexValues(filePath)
 
@@ -74,7 +78,7 @@ object Examples {
     val horizontalSampling = 1
     val verticalSampling   = horizontalSampling * 2
     val algorithm          = "edge"
-    val charset            = Charset.Extended
+    val charset            = Charset.Default
 
     val grayscaleValues =
       imageDataTransformations(
@@ -84,7 +88,13 @@ object Examples {
         lineWidth
       )
 
-    println(grayscaleValues(0)(0))
+    println(grayscaleValues(0)(1))
+
+    val ascii =
+      LuminanceAlgorithm.generate(LuminanceConfig(grayscaleValues, charset))
+
+    val done = charsToStringList(ascii)
+    printAsciiToFile(done)
 
     /*val settings = algorithm match {
       case "edge"    => EdgeDetectionAlgorithm

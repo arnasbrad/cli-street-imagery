@@ -19,6 +19,14 @@ object Conversions {
     array.grouped(innerLength).toArray
   }
 
+  def charsToStringList(chars: Array[Array[Char]]): List[String] = {
+    // Convert each row of chars to a string and collect into a List
+    chars.map { row =>
+      // Join the characters in the row into a single string
+      row.mkString
+    }.toList
+  }
+
   def sampleHorizontally(
       image: Array[Array[String]],
       downsampleFactor: Int
@@ -73,8 +81,8 @@ object Conversions {
         // Create new RGB where R=G=B=grayscale
         val newRgbValue = (grayscale << 16) | (grayscale << 8) | grayscale
 
-        // Convert back to hex string format (without "0x" prefix)
-        f"$newRgbValue%x"
+        // Convert back to decimal string format (not hex)
+        newRgbValue.toString
       }
     }
   }

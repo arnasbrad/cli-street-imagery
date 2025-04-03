@@ -9,38 +9,52 @@ import asciiart.Models.{
 
 object Algorithms {
   trait AsciiAlgorithm[T <: AlgorithmConfig] {
-    def generate(config: T): String
+    def generate(config: T): Array[Array[Char]]
   }
 
   case object LuminanceAlgorithm extends AsciiAlgorithm[LuminanceConfig] {
-    override def generate(config: LuminanceConfig): String =
+    override def generate(config: LuminanceConfig): Array[Array[Char]] =
       luminanceAlgorithm(config.input, config.charset)
 
     private def luminanceAlgorithm(
-        grayscaleValues: List[List[Int]],
+        grayscaleValues: Array[Array[String]],
         charset: Charset
-    ): String = {
-      // Convert each row to a string of ASCII characters and join with newlines
-      grayscaleValues
-        .map { row =>
-          row.map { rgbValue =>
-            // Extract the grayscale value (since R=G=B in our grayscale RGB, we can use any channel)
-            val grayscaleValue = rgbValue & 0xff // Blue channel
+    ): Array[Array[Char]] = {
+      grayscaleValues.map { row =>
+        row.map { grayscaleString =>
+          try {
+            // Parse the string to an integer
+            val rgbValue = grayscaleString.toInt
+
+            // In grayscale RGB, all channels should be the same, so we can extract any
+            // If these are already single-channel values, use them directly
+            val grayscaleValue = if (rgbValue > 255) {
+              // This is a packed RGB value, extract one channel
+              (rgbValue & 0xff)
+            } else {
+              // This is already a grayscale value
+              rgbValue
+            }
 
             // Map to ASCII character
             val index =
               ((grayscaleValue * (charset.value.length - 1)) / 255.0).toInt
-            // Clamp the index to prevent out of bounds issues
+
+            // Clamp the index to prevent out of bounds
             val safeIndex =
               math.min(math.max(index, 0), charset.value.length - 1)
             charset.value(safeIndex)
-          }.mkString
+          } catch {
+            case e: Exception =>
+              // Fallback character if parsing fails
+              charset.value(0)
+          }
         }
-        .mkString("\n")
+      }
     }
   }
 
-  case object EdgeDetectionAlgorithm
+  /*case object EdgeDetectionAlgorithm
       extends AsciiAlgorithm[EdgeDetectionConfig] {
     override def generate(config: EdgeDetectionConfig): String =
       edgeDetectionAlgorithm(config.input, config.charset, config.invert)
@@ -218,5 +232,5 @@ object Algorithms {
         }
         .getOrElse("")
     }
-  }
+  }*/
 }
