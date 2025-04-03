@@ -4,8 +4,10 @@ import asciiart.Algorithms._
 import asciiart.Conversions._
 import asciiart.Models._
 
+import java.awt.image.BufferedImage
 import java.io.{File, PrintWriter}
 import java.nio.file.{Path, Paths}
+import javax.imageio.ImageIO
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
@@ -68,7 +70,7 @@ object Examples {
 
   def main(args: Array[String]): Unit = {
     val filePath  = "testBytesForIgnelis.txt"
-    val lineWidth = 819
+    val lineWidth = 1024
 
     val rgbValues = readHexValues(filePath)
 
@@ -96,6 +98,11 @@ object Examples {
     val done = charsToStringList(ascii)
     printAsciiToFile(done)
 
+    /*val file                 = new File("mapillary_image.jpg")
+    val image: BufferedImage = ImageIO.read(file)
+
+    val rgbBytes = convertImageToRGBArray(image)
+    println(rgbBytes(1))*/
     /*val settings = algorithm match {
       case "edge"    => EdgeDetectionAlgorithm
       case "braille" => BrailleAlgorithm
