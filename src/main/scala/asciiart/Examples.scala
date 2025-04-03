@@ -6,49 +6,47 @@ import asciiart.Models._
 
 import java.io.{File, PrintWriter}
 import java.nio.file.{Path, Paths}
+import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
 object Examples {
-  private def readFile(path: Path): List[List[Int]] = {
-    val source = Source.fromFile(path.toFile)
+  def readHexValues(filePath: String): Array[String] = {
+    val buffer         = new ArrayBuffer[String]()
+    var source: Source = null
+
     try {
-      source
-        .getLines()
-        .map { line =>
-          // Split by comma and trim whitespace
-          line
-            .split(",")
-            .map(_.trim)
-            .filter(_.nonEmpty) // Filter out empty strings
-            .map { hex =>
-              if (hex.startsWith("0x")) {
-                // Remove the "0x" prefix and parse as hexadecimal
-                Integer.parseInt(hex.substring(2), 16)
-              } else {
-                // Try to parse as is (might be a plain hex number without prefix)
-                try {
-                  Integer.parseInt(hex, 16)
-                } catch {
-                  case _: NumberFormatException =>
-                    0 // Default value for invalid input
-                }
-              }
-            }
-            .toList
-        }
-        .toList
+      source = Source.fromFile(filePath)
+
+      // Process the file content using functional approach
+      val content = source.mkString
+
+      // Split by comma and trim each value
+      buffer ++= content
+        .split(",")
+        .map(_.trim)
+        .filter(_.nonEmpty)
+
+      buffer.toArray
+    } catch {
+      case e: Exception =>
+        println(s"Error reading file: ${e.getMessage}")
+        Array.empty[String]
     } finally {
-      source.close()
+      if (source != null) {
+        source.close()
+      }
     }
   }
 
   private def imageDataTransformations(
       horizontalSampling: Int,
       verticalSampling: Int,
-      rgbValues: List[List[Int]]
-  ): List[List[Int]] = {
+      rgbValues: Array[String],
+      lineWidth: Int
+  ): Array[Array[String]] = {
+    val twoDimentionalArray = convertTo2DArray(rgbValues, lineWidth)
     val rgbValueSampledHorizontally =
-      sampleHorizontally(rgbValues, horizontalSampling)
+      sampleHorizontally(twoDimentionalArray, horizontalSampling)
     val rgbValueSampledHorizontallyAndVertically =
       sampleVertically(rgbValueSampledHorizontally, verticalSampling)
     convertToGrayscale(
@@ -65,9 +63,12 @@ object Examples {
   }
 
   def main(args: Array[String]): Unit = {
-    val filePath = Paths.get("src/main/scala/asciiart/testImage")
+    val filePath  = "testBytesForIgnelis.txt"
+    val lineWidth = 1024
 
-    val rgbValues = readFile(filePath)
+    val rgbValues = readHexValues(filePath)
+
+    // println(rgbValues(1))
 
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 1
@@ -76,9 +77,16 @@ object Examples {
     val charset            = Charset.Extended
 
     val grayscaleValues =
-      imageDataTransformations(horizontalSampling, verticalSampling, rgbValues)
+      imageDataTransformations(
+        horizontalSampling,
+        verticalSampling,
+        rgbValues,
+        lineWidth
+      )
 
-    val settings = algorithm match {
+    println(grayscaleValues(0)(0))
+
+    /*val settings = algorithm match {
       case "edge"    => EdgeDetectionAlgorithm
       case "braille" => BrailleAlgorithm
       case _         => LuminanceAlgorithm // Default to luminance
@@ -97,6 +105,6 @@ object Examples {
         )
     }
 
-    printAsciiToFile(asciiArt)
+    printAsciiToFile(asciiArt)*/
   }
 }

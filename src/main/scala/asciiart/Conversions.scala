@@ -7,10 +7,22 @@ import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
 object Conversions {
+  def convertTo2DArray(
+      array: Array[String],
+      innerLength: Int
+  ): Array[Array[String]] = {
+    if (innerLength <= 0) {
+      throw new IllegalArgumentException("Inner array length must be positive")
+    }
+
+    // Use the grouped method to split the array into chunks of innerLength
+    array.grouped(innerLength).toArray
+  }
+
   def sampleHorizontally(
-      image: List[List[Int]],
+      image: Array[Array[String]],
       downsampleFactor: Int
-  ): List[List[Int]] = {
+  ): Array[Array[String]] = {
     // Ensure downsample factor is at least 1
     val safeFactor = math.max(1, downsampleFactor)
 
@@ -19,15 +31,16 @@ object Conversions {
       val rowLength    = row.length
       val newRowLength = (rowLength + safeFactor - 1) / safeFactor
       (0 until newRowLength).map { i =>
-        row(i * safeFactor)
-      }.toList
+        val index = i * safeFactor
+        if (index < rowLength) row(index) else ""
+      }.toArray
     }
   }
 
   def sampleVertically(
-      lines: List[List[Int]],
+      lines: Array[Array[String]],
       vertical: Int
-  ): List[List[Int]] = {
+  ): Array[Array[String]] = {
     // Use max to ensure vertical is at least 1
     val safeVertical = Math.max(1, vertical)
 
@@ -38,23 +51,30 @@ object Conversions {
       // Keep only indices that are multiples of the vertical parameter
       lines.zipWithIndex
         .filter { case (_, index) => index % safeVertical == 0 }
-        .map { case (line, _) =>
-          line
-        }
+        .map { case (line, _) => line }
+        .toArray
     }
   }
 
-  def convertToGrayscale(lines: List[List[Int]]): List[List[Int]] = {
+  def convertToGrayscale(lines: Array[Array[String]]): Array[Array[String]] = {
     lines.map { line =>
-      line.map { rgbValue =>
-        // The values are already parsed integers, no need to handle "0x" prefix
-        val r         = (rgbValue >> 16) & 0xff
-        val g         = (rgbValue >> 8) & 0xff
-        val b         = rgbValue & 0xff
+      line.map { hexString =>
+        // Parse the hex string to an integer
+        val rgbValue = java.lang.Long.parseLong(hexString, 16).toInt
+
+        // Extract RGB components
+        val r = (rgbValue >> 16) & 0xff
+        val g = (rgbValue >> 8) & 0xff
+        val b = rgbValue & 0xff
+
+        // Calculate grayscale using the same formula
         val grayscale = (0.299 * r + 0.587 * g + 0.114 * b).toInt
 
-        // Return grayscale as an RGB value where R=G=B=grayscale
-        (grayscale << 16) | (grayscale << 8) | grayscale
+        // Create new RGB where R=G=B=grayscale
+        val newRgbValue = (grayscale << 16) | (grayscale << 8) | grayscale
+
+        // Convert back to hex string format (without "0x" prefix)
+        f"$newRgbValue%x"
       }
     }
   }
