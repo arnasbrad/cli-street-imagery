@@ -190,7 +190,7 @@ object MapillaryClient {
       for {
         details <- getImageDetails(imageId, fields)
 
-        imageUrl <- details.thumbOriginalUrl match {
+        imageUrl <- details.thumb1024Url match {
           case Some(url) => EitherT.rightT[IO, MapillaryError](url)
           case None =>
             EitherT.leftT[IO, String](

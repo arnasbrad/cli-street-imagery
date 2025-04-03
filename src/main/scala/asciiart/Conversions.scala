@@ -1,5 +1,11 @@
 package asciiart
 
+import asciiart.Models.{HexImage, ImageHeight, ImageWidth}
+import cats.effect.{IO, Resource}
+
+import java.io.ByteArrayInputStream
+import javax.imageio.ImageIO
+
 object Conversions {
   def sampleHorizontally(
       image: List[List[Int]],
@@ -51,5 +57,44 @@ object Conversions {
         (grayscale << 16) | (grayscale << 8) | grayscale
       }
     }
+  }
+
+  def convertBytesToHexImage(imageBytes: Array[Byte]): IO[HexImage] = {
+    // Load the image
+    Resource
+      .make(IO(new ByteArrayInputStream(imageBytes)))(s => IO(s.close()))
+      .use { stream =>
+        IO(ImageIO.read(stream))
+      }
+      .map { image =>
+        val width  = image.getWidth
+        val height = image.getHeight
+
+        // Create an array to hold all RGB values
+        val rgbArray = new Array[Int](width * height)
+
+        // Read RGB values from the image
+        var index = 0
+        for (y <- 0 until height) {
+          for (x <- 0 until width) {
+            val rgb = image.getRGB(x, y)
+            // Convert ARGB to RGB (remove alpha channel)
+            val rgbValue = rgb & 0x00ffffff
+            rgbArray(index) = rgbValue
+            index += 1
+          }
+        }
+
+        HexImage(
+          hexStrings = rgbArray.map(rgbToHex),
+          width = ImageWidth(width),
+          height = ImageHeight(height)
+        )
+      }
+  }
+
+  private def rgbToHex(rgb: Int): String = {
+    // Format as 0x00RRGGBB
+    f"00$rgb%06X"
   }
 }

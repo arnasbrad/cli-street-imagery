@@ -26,8 +26,7 @@ libraryDependencies ++= Seq(
   "org.scalactic"  %% "scalactic"            % "3.2.19",
   "org.scalatest"  %% "scalatest"            % "3.2.19" % "test",
   "org.scalamock"  %% "scalamock"            % "6.2.0"  % Test,
-  "org.scalatest"  %% "scalatest"            % "3.2.19" % Test,
-  "org.scodec"     %% "scodec-bits"          % "1.2.1"
+  "org.scalatest"  %% "scalatest"            % "3.2.19" % Test
 )
 
 // Compiler options

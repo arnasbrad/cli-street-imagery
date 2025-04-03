@@ -1,5 +1,7 @@
 package runner
 
+import asciiart.Conversions.convertBytesToHexImage
+import asciiart.Models.HexImage
 import cats.data.EitherT
 import cats.effect.IO
 import clients.imgur.{Errors, ImgurClient}
@@ -8,14 +10,13 @@ import clients.mapillary.MapillaryClient
 import clients.mapillary.Models.MapillaryImageId
 import common.Models.{Coordinates, Radius}
 import navigation.Navigation
-import scodec.bits.BitVector
 import socialmedia.SocialMedia
 
 sealed trait Runner {
   def getHexStringsFromLocation(
       coordinates: Coordinates,
       radius: Radius = Radius.unsafeCreate(3)
-  ): EitherT[IO, MapillaryError, Array[String]]
+  ): EitherT[IO, MapillaryError, HexImage]
 
   def getNeighborImageIds(
       currentImageId: MapillaryImageId,
@@ -49,8 +50,8 @@ object Runner {
     def getHexStringsFromLocation(
         coordinates: Coordinates,
         radius: Radius
-    ): EitherT[IO, MapillaryError, Array[String]] = {
-      val imageBytes = for {
+    ): EitherT[IO, MapillaryError, HexImage] = {
+      for {
         imagesInfoResp <- mapillaryClient.getImagesInfoByLocation(
           coordinates,
           radius
@@ -69,9 +70,8 @@ object Runner {
         )
 
         imageByteArray <- mapillaryClient.getImage(imageId)
-      } yield imageByteArray
-
-      imageBytes.map(BitVector(_).grouped(32).map(_.toHex).toArray)
+        hex            <- EitherT.liftF(convertBytesToHexImage(imageByteArray))
+      } yield hex
     }
 
     def getNeighborImageIds(
