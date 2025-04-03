@@ -49,3 +49,9 @@ lazy val root = (project in file("."))
   .settings(
     name := "cli-street-imagery"
   )
+
+Test / scalacOptions ++= Seq(
+  // Allow using -Wnonunit-statement to find bugs in tests without exploding from scalatest assertions
+  "-Wconf:msg=unused value of type org.scalatest.Assertion:s",
+  "-Wconf:msg=unused value of type org.scalamock:s"
+)
