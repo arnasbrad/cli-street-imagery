@@ -22,5 +22,8 @@ jobs:
           distribution: 'oracle'
           java-version: '17'
 
+      - name: Setup SBT
+        uses: sbt/setup-sbt@v1
+
       - name: Run tests
         run: sbt test
