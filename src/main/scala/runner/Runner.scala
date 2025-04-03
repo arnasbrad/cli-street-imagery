@@ -8,13 +8,14 @@ import clients.mapillary.MapillaryClient
 import clients.mapillary.Models.MapillaryImageId
 import common.Models.{Coordinates, Radius}
 import navigation.Navigation
+import scodec.bits.BitVector
 import socialmedia.SocialMedia
 
 sealed trait Runner {
-  def getImageBytesFromLocation(
+  def getHexStringsFromLocation(
       coordinates: Coordinates,
       radius: Radius = Radius.unsafeCreate(3)
-  ): EitherT[IO, MapillaryError, Array[Byte]]
+  ): EitherT[IO, MapillaryError, Array[String]]
 
   def getNeighborImageIds(
       currentImageId: MapillaryImageId,
@@ -45,11 +46,11 @@ object Runner {
       mapillaryClient: MapillaryClient,
       imgurClient: ImgurClient
   ) extends Runner {
-    def getImageBytesFromLocation(
+    def getHexStringsFromLocation(
         coordinates: Coordinates,
         radius: Radius
-    ): EitherT[IO, MapillaryError, Array[Byte]] = {
-      for {
+    ): EitherT[IO, MapillaryError, Array[String]] = {
+      val imageBytes = for {
         imagesInfoResp <- mapillaryClient.getImagesInfoByLocation(
           coordinates,
           radius
@@ -61,7 +62,7 @@ object Runner {
               .map(_.id)
               .toRight(
                 MapillaryError.NotFoundError(
-                  s"No images found for coordinates = $coordinates, radius = $radius m. Try a different location or increasin the radius."
+                  s"No images found for coordinates = $coordinates, radius = $radius m. Try a different location or increasing the radius."
                 )
               )
           )
@@ -69,6 +70,8 @@ object Runner {
 
         imageByteArray <- mapillaryClient.getImage(imageId)
       } yield imageByteArray
+
+      imageBytes.map(BitVector(_).grouped(32).map(_.toHex).toArray)
     }
 
     def getNeighborImageIds(
