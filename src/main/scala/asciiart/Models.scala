@@ -11,7 +11,7 @@ object Models {
   case class EdgeDetectionConfig(
       input: Array[Array[String]],
       charset: Charset,
-      invert: Boolean = true
+      invert: Boolean = false
   ) extends AlgorithmConfig
 
   case class BrailleConfig(

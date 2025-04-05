@@ -93,7 +93,9 @@ object Examples {
     println(grayscaleValues(0)(1))
 
     val ascii =
-      LuminanceAlgorithm.generate(LuminanceConfig(grayscaleValues, charset))
+      EdgeDetectionAlgorithm.generate(
+        EdgeDetectionConfig(grayscaleValues, charset)
+      )
 
     val done = charsToStringList(ascii)
     printAsciiToFile(done)
