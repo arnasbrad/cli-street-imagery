@@ -31,15 +31,11 @@ sealed trait Conversions {
 
 object Conversions {
   def convertTo2DArray(
-      array: Array[String],
-      innerLength: Int
+      hexImage: HexImage
   ): Array[Array[String]] = {
-    if (innerLength <= 0) {
-      throw new IllegalArgumentException("Inner array length must be positive")
-    }
 
     // Use the grouped method to split the array into chunks of innerLength
-    array.grouped(innerLength).toArray
+    hexImage.hexStrings.grouped(hexImage.width.value).toArray
   }
 
   def charsToStringList(chars: Array[Array[Char]]): List[String] = {

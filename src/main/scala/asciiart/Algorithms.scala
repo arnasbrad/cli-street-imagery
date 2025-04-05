@@ -7,6 +7,8 @@ import asciiart.Models.{
   LuminanceConfig
 }
 
+import scala.util.{Failure, Success, Try}
+
 object Algorithms {
   trait AsciiAlgorithm[T <: AlgorithmConfig] {
     def generate(config: T): Array[Array[Char]]
@@ -22,7 +24,7 @@ object Algorithms {
     ): Array[Array[Char]] = {
       grayscaleValues.map { row =>
         row.map { grayscaleString =>
-          try {
+          Try {
             // Parse the string to an integer
             val rgbValue = grayscaleString.toInt
 
@@ -44,9 +46,10 @@ object Algorithms {
             val safeIndex =
               math.min(math.max(index, 0), charset.value.length - 1)
             charset.value(safeIndex)
-          } catch {
-            case e: Exception =>
-              // Fallback character if parsing fails
+          } match {
+            case Success(c) => c
+            case Failure(e) =>
+              println(e.getMessage)
               charset.value(0)
           }
         }
@@ -102,10 +105,11 @@ object Algorithms {
               val window = (0 until 3).map { ky =>
                 (0 until 3).map { kx =>
                   // Parse string to int, with fallback to 0 if parsing fails
-                  try {
+                  Try {
                     grayscaleValues(y - 1 + ky)(x - 1 + kx).toInt & 0xff
-                  } catch {
-                    case _: NumberFormatException => 0
+                  } match {
+                    case Success(res) => res
+                    case Failure(_)   => 0
                   }
                 }.toArray
               }.toArray
@@ -145,15 +149,15 @@ object Algorithms {
       // Convert to ASCII chars
       edgeValues.map { row =>
         row.map { value =>
-          try {
+          Try {
             val intValue = value.toInt
             val index = ((intValue * (charset.value.length - 1)) / 255.0).toInt
             val safeIndex =
               math.min(math.max(index, 0), charset.value.length - 1)
             charset.value(safeIndex)
-          } catch {
-            case _: NumberFormatException =>
-              charset.value.head // Default to first character if parsing fails
+          } match {
+            case Success(res) => res
+            case Failure(e)   => charset.value.head
           }
         }
       }

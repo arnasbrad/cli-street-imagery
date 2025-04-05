@@ -46,7 +46,9 @@ object Examples {
       rgbValues: Array[String],
       lineWidth: Int
   ): Array[Array[String]] = {
-    val twoDimentionalArray = convertTo2DArray(rgbValues, lineWidth)
+    val hexImage =
+      HexImage(rgbValues, ImageWidth(lineWidth), ImageHeight(64665))
+    val twoDimentionalArray = convertTo2DArray(hexImage)
     val rgbValueSampledHorizontally =
       sampleHorizontally(twoDimentionalArray, horizontalSampling)
     val rgbValueSampledHorizontallyAndVertically =
@@ -76,8 +78,8 @@ object Examples {
 
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 1
-    val verticalSampling   = horizontalSampling
-    val algorithm          = "braille"
+    val verticalSampling   = horizontalSampling * 2
+    val algorithm          = "a"
     val charset            = Charset.Braille
 
     val grayscaleValues =
