@@ -74,12 +74,10 @@ object Examples {
 
     val rgbValues = readHexValues(filePath)
 
-    // println(rgbValues(1))
-
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 1
     val verticalSampling   = horizontalSampling * 2
-    val algorithm          = "edge"
+    val algorithm          = "aw"
     val charset            = Charset.Default
 
     val grayscaleValues =
@@ -90,25 +88,10 @@ object Examples {
         lineWidth
       )
 
-    println(grayscaleValues(0)(1))
-
-    val ascii =
-      EdgeDetectionAlgorithm.generate(
-        EdgeDetectionConfig(grayscaleValues, charset)
-      )
-
-    val done = charsToStringList(ascii)
-    printAsciiToFile(done)
-
-    /*val file                 = new File("mapillary_image.jpg")
-    val image: BufferedImage = ImageIO.read(file)
-
-    val rgbBytes = convertImageToRGBArray(image)
-    println(rgbBytes(1))*/
-    /*val settings = algorithm match {
-      case "edge"    => EdgeDetectionAlgorithm
-      case "braille" => BrailleAlgorithm
-      case _         => LuminanceAlgorithm // Default to luminance
+    val settings = algorithm match {
+      case "edge" => EdgeDetectionAlgorithm
+      // case "braille" => BrailleAlgorithm
+      case _ => LuminanceAlgorithm // Default to luminance
     }
 
     val asciiArt = settings match {
@@ -118,12 +101,13 @@ object Examples {
         EdgeDetectionAlgorithm.generate(
           EdgeDetectionConfig(grayscaleValues, charset, invert = false)
         )
-      case BrailleAlgorithm =>
+      /*case BrailleAlgorithm =>
         BrailleAlgorithm.generate(
           BrailleConfig(grayscaleValues, Charset.BraillePatterns)
-        )
+        )*/
     }
 
-    printAsciiToFile(asciiArt)*/
+    val formatForPrinting = charsToStringList(asciiArt)
+    printAsciiToFile(formatForPrinting)
   }
 }
