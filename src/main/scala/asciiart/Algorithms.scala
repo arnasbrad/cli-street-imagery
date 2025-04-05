@@ -158,13 +158,14 @@ object Algorithms {
         }
       }
     }
+  }
 
-    /*case object BrailleAlgorithm extends AsciiAlgorithm[BrailleConfig] {
-    override def generate(config: BrailleConfig): String =
+  case object BrailleAlgorithm extends AsciiAlgorithm[BrailleConfig] {
+    override def generate(config: BrailleConfig): Array[Array[Char]] =
       brailleAlgorithm(config.input, config.charset, config.threshold)
 
     private def createBraillePattern(
-        grayscaleValues: List[List[Int]],
+        grayscaleValues: Array[Array[String]],
         startX: Int,
         startY: Int,
         width: Int,
@@ -193,7 +194,9 @@ object Algorithms {
 
         // Check if position is within bounds and darker than threshold
         if (
-          x < width && y < height && (grayscaleValues(y)(x) & 0xff) < threshold
+          x < width && y < height &&
+          y >= 0 && x >= 0 && // Additional bounds check
+          (grayscaleValues(y)(x).toInt & 0xff) < threshold
         ) {
           // Set the bit in the pattern
           pattern | value
@@ -205,41 +208,49 @@ object Algorithms {
     }
 
     private def brailleAlgorithm(
-        grayscaleValues: List[List[Int]],
+        grayscaleValues: Array[Array[String]],
         charset: Charset,
         threshold: Int = 118
-    ): String = {
+    ): Array[Array[Char]] = {
       val height = grayscaleValues.length
-      val width  = grayscaleValues.headOption.map(_.length).getOrElse(0)
+      val width  = if (height > 0) grayscaleValues(0).length else 0
 
-      Option
-        .when(height > 0 && width > 0) {
-          // Calculate dimensions of Braille grid
-          val brailleWidth  = (width + 1) / 2
-          val brailleHeight = (height + 3) / 4
+      if (height <= 0 || width <= 0) {
+        // Return a properly structured empty result
+        return Array(Array.empty[Char])
+      }
 
-          val brailleRows = (0 until brailleHeight).map { by =>
-            val rowChars = (0 until brailleWidth).map { bx =>
-              val startX = bx * 2
-              val startY = by * 4
-              val patternIndex = createBraillePattern(
-                grayscaleValues,
-                startX,
-                startY,
-                width,
-                height,
-                threshold
-              )
-              charset.value(patternIndex)
-            }
-            rowChars.mkString
+      // Calculate dimensions of Braille grid
+      val brailleWidth  = (width + 1) / 2
+      val brailleHeight = (height + 3) / 4
+
+      try {
+        // Pre-allocate the entire array with the exact dimensions
+        val result = Array.fill(brailleHeight)(Array.fill(brailleWidth)(' '))
+
+        // Populate the array cell by cell
+        for (by <- 0 until brailleHeight) {
+          for (bx <- 0 until brailleWidth) {
+            val startX = bx * 2
+            val startY = by * 4
+            val patternIndex = createBraillePattern(
+              grayscaleValues,
+              startX,
+              startY,
+              width,
+              height,
+              threshold
+            )
+            result(by)(bx) = charset.value(patternIndex)
           }
-
-          // Join the rows with newlines
-          brailleRows.mkString("\n")
         }
-        .getOrElse("")
+
+        result
+      } catch {
+        case e: Exception =>
+          // If any error occurs, return a consistent array structure
+          Array.fill(brailleHeight)(Array.fill(brailleWidth)(' '))
+      }
     }
-  }*/
   }
 }

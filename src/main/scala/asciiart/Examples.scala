@@ -76,9 +76,9 @@ object Examples {
 
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 1
-    val verticalSampling   = horizontalSampling * 2
-    val algorithm          = "aw"
-    val charset            = Charset.Default
+    val verticalSampling   = horizontalSampling
+    val algorithm          = "braille"
+    val charset            = Charset.Braille
 
     val grayscaleValues =
       imageDataTransformations(
@@ -89,9 +89,9 @@ object Examples {
       )
 
     val settings = algorithm match {
-      case "edge" => EdgeDetectionAlgorithm
-      // case "braille" => BrailleAlgorithm
-      case _ => LuminanceAlgorithm // Default to luminance
+      case "edge"    => EdgeDetectionAlgorithm
+      case "braille" => BrailleAlgorithm
+      case _         => LuminanceAlgorithm // Default to luminance
     }
 
     val asciiArt = settings match {
@@ -101,10 +101,10 @@ object Examples {
         EdgeDetectionAlgorithm.generate(
           EdgeDetectionConfig(grayscaleValues, charset, invert = false)
         )
-      /*case BrailleAlgorithm =>
+      case BrailleAlgorithm =>
         BrailleAlgorithm.generate(
           BrailleConfig(grayscaleValues, Charset.BraillePatterns)
-        )*/
+        )
     }
 
     val formatForPrinting = charsToStringList(asciiArt)

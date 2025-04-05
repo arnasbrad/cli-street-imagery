@@ -6,6 +6,29 @@ import cats.effect.{IO, Resource}
 import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
+sealed trait Conversions {
+  def convertTo2DArray(
+      array: Array[String],
+      innerLength: Int
+  ): Array[Array[String]]
+
+  def charsToStringList(chars: Array[Array[Char]]): List[String]
+
+  def sampleHorizontally(
+      image: Array[Array[String]],
+      downsampleFactor: Int
+  ): Array[Array[String]]
+
+  def sampleVertically(
+      lines: Array[Array[String]],
+      vertical: Int
+  ): Array[Array[String]]
+
+  def convertToGrayscale(lines: Array[Array[String]]): Array[Array[String]]
+
+  def convertBytesToHexImage(imageBytes: Array[Byte]): IO[HexImage]
+}
+
 object Conversions {
   def convertTo2DArray(
       array: Array[String],
