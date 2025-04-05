@@ -4,8 +4,8 @@ import cats.effect.{IO, IOApp}
 import clients.traveltime.Models._
 
 object GeocodingSearch extends IOApp.Simple {
-  private val appId  = AppId.unsafeCreate("b29821a7")
-  private val apiKey = ApiKey.unsafeCreate("b708d7215a458ae453789a7b596d51a5")
+  private val appId  = AppId.unsafeCreate("yourid")
+  private val apiKey = ApiKey.unsafeCreate("yourkey")
 
   val run: IO[Unit] = TravelTimeClient.make(appId, apiKey).use { client =>
     for {
