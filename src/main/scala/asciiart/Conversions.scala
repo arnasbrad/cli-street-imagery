@@ -6,10 +6,9 @@ import cats.effect.{IO, Resource}
 import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
-sealed trait Conversions {
+trait Conversions {
   def convertTo2DArray(
-      array: Array[String],
-      innerLength: Int
+      hexImage: HexImage
   ): Array[Array[String]]
 
   def charsToStringList(chars: Array[Array[Char]]): List[String]
@@ -29,7 +28,7 @@ sealed trait Conversions {
   def convertBytesToHexImage(imageBytes: Array[Byte]): IO[HexImage]
 }
 
-object Conversions {
+object Conversions extends Conversions {
   def convertTo2DArray(
       hexImage: HexImage
   ): Array[Array[String]] = {
@@ -79,7 +78,6 @@ object Conversions {
       lines.zipWithIndex
         .filter { case (_, index) => index % safeVertical == 0 }
         .map { case (line, _) => line }
-        .toArray
     }
   }
 

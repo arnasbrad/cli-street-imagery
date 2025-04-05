@@ -36,7 +36,7 @@ object ImgurClient {
   def make(): Resource[IO, ImgurClient] =
     EmberClientBuilder.default[IO].build.map(new ImgurClientImpl(_))
 
-  def makeRequest(uri: Uri, imageBytes: Array[Byte]) = {
+  def makeRequest(uri: Uri, imageBytes: Array[Byte]): Request[IO]#Self = {
     Request[IO](
       method = Method.POST,
       uri = uri,

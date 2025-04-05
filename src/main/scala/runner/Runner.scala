@@ -1,6 +1,6 @@
 package runner
 
-import asciiart.Conversions.convertBytesToHexImage
+import asciiart.Conversions
 import asciiart.Models.HexImage
 import cats.data.EitherT
 import cats.effect.IO
@@ -34,9 +34,11 @@ sealed trait Runner {
 object Runner {
   def make(
       mapillaryClient: MapillaryClient,
-      imgurClient: ImgurClient
+      imgurClient: ImgurClient,
+      conversions: Conversions = Conversions
   ): Runner = {
     new RunnerImpl()(
+      conversionLogic = conversions,
       mapillaryClient = mapillaryClient,
       imgurClient = imgurClient
     )
@@ -44,6 +46,7 @@ object Runner {
 
   private class RunnerImpl(
   )(implicit
+      conversionLogic: Conversions,
       mapillaryClient: MapillaryClient,
       imgurClient: ImgurClient
   ) extends Runner {
@@ -70,7 +73,9 @@ object Runner {
         )
 
         imageByteArray <- mapillaryClient.getImage(imageId)
-        hex            <- EitherT.liftF(convertBytesToHexImage(imageByteArray))
+        hex <- EitherT.liftF(
+          conversionLogic.convertBytesToHexImage(imageByteArray)
+        )
       } yield hex
     }
 
