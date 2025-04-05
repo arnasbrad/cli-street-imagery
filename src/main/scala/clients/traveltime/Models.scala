@@ -9,7 +9,15 @@ object Models {
       name: Option[String],
       city: Option[String],
       country: Option[String]
-  )
+  ) {
+    def prettyString(): String = {
+      val locationCity    = city.getOrElse("Unknown city")
+      val locationCountry = country.getOrElse("Unknown country")
+      val coords          = s"${coordinates.lat}, ${coordinates.lng}"
+
+      s"$coords, $locationCity, $locationCountry"
+    }
+  }
   case class TravelTimeGeocodingResponse(
       features: List[TravelTimeGeocodingResult]
   )

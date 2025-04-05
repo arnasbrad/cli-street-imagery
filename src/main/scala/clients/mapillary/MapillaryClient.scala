@@ -45,6 +45,92 @@ object MapillaryClient {
   def make(apiKey: ApiKey): Resource[IO, MapillaryClient] =
     EmberClientBuilder.default[IO].build.map(new MapillaryClientImpl(_, apiKey))
 
+  /** Enhanced error handler for HTTP requests and IO operations.
+    *
+    * @param attempt
+    *   The attempted IO operation
+    * @return
+    *   An IO containing either a MapillaryError or the successful result
+    */
+  def handleErrors[A](
+      attempt: IO[A]
+  ): IO[Either[MapillaryError, A]] = {
+    attempt.attempt.map {
+      case Right(result) => Right(result)
+
+      // JSON decoding errors
+      case Left(error: InvalidMessageBodyFailure) =>
+        Left(
+          MapillaryError.JsonDecodingError(
+            s"Failed to decode response: ${error.getMessage}"
+          )
+        )
+
+      // HTTP status errors
+      case Left(error: UnexpectedStatus) =>
+        error.status match {
+          case Status.Unauthorized | Status.Forbidden =>
+            Left(
+              MapillaryError.AuthenticationError(
+                s"Authentication failed with status ${error.status.code}: ${error.status.reason}"
+              )
+            )
+          case Status.TooManyRequests =>
+            Left(
+              MapillaryError.RateLimitError(
+                s"Rate limit exceeded: ${error.status.reason}"
+              )
+            )
+          case Status.NotFound =>
+            Left(
+              MapillaryError.NotFoundError(
+                s"Resource not found: ${error.status.reason}"
+              )
+            )
+          case Status.BadRequest =>
+            Left(
+              MapillaryError.ValidationError(
+                s"Bad request: ${error.status.reason}"
+              )
+            )
+          case _ =>
+            Left(
+              MapillaryError.ApiError(
+                s"API returned unexpected status: ${error.status.code} - ${error.status.reason}"
+              )
+            )
+        }
+
+      // Network-specific errors
+      case Left(error: java.net.ConnectException) =>
+        Left(
+          MapillaryError.NetworkError(
+            s"Failed to connect to server: ${error.getMessage}"
+          )
+        )
+      case Left(error: java.net.SocketTimeoutException) =>
+        Left(
+          MapillaryError.NetworkError(
+            s"Connection to server timed out: ${error.getMessage}"
+          )
+        )
+      case Left(error: java.io.IOException) =>
+        Left(
+          MapillaryError.NetworkError(
+            s"I/O error during request: ${error.getMessage}"
+          )
+        )
+
+      // Fallback for other errors
+      case Left(error) =>
+        Left(
+          MapillaryError.UnknownError(
+            s"Unexpected error: ${error.getMessage}"
+          )
+        )
+    }
+  }
+
   private final class MapillaryClientImpl(client: Client[IO], apiKey: ApiKey)
       extends MapillaryClient {
 
@@ -64,92 +150,6 @@ object MapillaryClient {
       ).withHeaders(
         Header.Raw(CIString("Authorization"), s"OAuth ${apiKey.value}")
       )
-    }
-
-    /** Enhanced error handler for HTTP requests and IO operations.
-      *
-      * @param attempt
-      *   The attempted IO operation
-      * @return
-      *   An IO containing either a MapillaryError or the successful result
-      */
-    private def handleErrors[A](
-        attempt: IO[A]
-    ): IO[Either[MapillaryError, A]] = {
-      attempt.attempt.map {
-        case Right(result) => Right(result)
-
-        // JSON decoding errors
-        case Left(error: InvalidMessageBodyFailure) =>
-          Left(
-            MapillaryError.JsonDecodingError(
-              s"Failed to decode response: ${error.getMessage}"
-            )
-          )
-
-        // HTTP status errors
-        case Left(error: UnexpectedStatus) =>
-          error.status match {
-            case Status.Unauthorized | Status.Forbidden =>
-              Left(
-                MapillaryError.AuthenticationError(
-                  s"Authentication failed with status ${error.status.code}: ${error.status.reason}"
-                )
-              )
-            case Status.TooManyRequests =>
-              Left(
-                MapillaryError.RateLimitError(
-                  s"Rate limit exceeded: ${error.status.reason}"
-                )
-              )
-            case Status.NotFound =>
-              Left(
-                MapillaryError.NotFoundError(
-                  s"Resource not found: ${error.status.reason}"
-                )
-              )
-            case Status.BadRequest =>
-              Left(
-                MapillaryError.ValidationError(
-                  s"Bad request: ${error.status.reason}"
-                )
-              )
-            case _ =>
-              Left(
-                MapillaryError.ApiError(
-                  s"API returned unexpected status: ${error.status.code} - ${error.status.reason}"
-                )
-              )
-          }
-
-        // Network-specific errors
-        case Left(error: java.net.ConnectException) =>
-          Left(
-            MapillaryError.NetworkError(
-              s"Failed to connect to server: ${error.getMessage}"
-            )
-          )
-        case Left(error: java.net.SocketTimeoutException) =>
-          Left(
-            MapillaryError.NetworkError(
-              s"Connection to server timed out: ${error.getMessage}"
-            )
-          )
-        case Left(error: java.io.IOException) =>
-          Left(
-            MapillaryError.NetworkError(
-              s"I/O error during request: ${error.getMessage}"
-            )
-          )
-
-        // Fallback for other errors
-        case Left(error) =>
-          Left(
-            MapillaryError.UnknownError(
-              s"Unexpected error: ${error.getMessage}"
-            )
-          )
-      }
     }
 
     /** Retrieves image details for a specific image ID.
