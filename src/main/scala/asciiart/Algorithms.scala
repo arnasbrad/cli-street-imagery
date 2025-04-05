@@ -7,48 +7,65 @@ import asciiart.Models.{
   LuminanceConfig
 }
 
+import scala.util.{Failure, Success, Try}
+
 object Algorithms {
   trait AsciiAlgorithm[T <: AlgorithmConfig] {
-    def generate(config: T): String
+    def generate(config: T): Array[Array[Char]]
   }
 
   case object LuminanceAlgorithm extends AsciiAlgorithm[LuminanceConfig] {
-    override def generate(config: LuminanceConfig): String =
+    override def generate(config: LuminanceConfig): Array[Array[Char]] =
       luminanceAlgorithm(config.input, config.charset)
 
     private def luminanceAlgorithm(
-        grayscaleValues: List[List[Int]],
+        grayscaleValues: Array[Array[String]],
         charset: Charset
-    ): String = {
-      // Convert each row to a string of ASCII characters and join with newlines
-      grayscaleValues
-        .map { row =>
-          row.map { rgbValue =>
-            // Extract the grayscale value (since R=G=B in our grayscale RGB, we can use any channel)
-            val grayscaleValue = rgbValue & 0xff // Blue channel
+    ): Array[Array[Char]] = {
+      grayscaleValues.map { row =>
+        row.map { grayscaleString =>
+          Try {
+            // Parse the string to an integer
+            val rgbValue = grayscaleString.toInt
+
+            // In grayscale RGB, all channels should be the same, so we can extract any
+            // If these are already single-channel values, use them directly
+            val grayscaleValue = if (rgbValue > 255) {
+              // This is a packed RGB value, extract one channel
+              (rgbValue & 0xff)
+            } else {
+              // This is already a grayscale value
+              rgbValue
+            }
 
             // Map to ASCII character
             val index =
               ((grayscaleValue * (charset.value.length - 1)) / 255.0).toInt
-            // Clamp the index to prevent out of bounds issues
+
+            // Clamp the index to prevent out of bounds
             val safeIndex =
               math.min(math.max(index, 0), charset.value.length - 1)
             charset.value(safeIndex)
-          }.mkString
+          } match {
+            case Success(c) => c
+            case Failure(e) =>
+              println(e.getMessage)
+              charset.value(0)
+          }
         }
-        .mkString("\n")
+      }
     }
   }
 
   case object EdgeDetectionAlgorithm
       extends AsciiAlgorithm[EdgeDetectionConfig] {
-    override def generate(config: EdgeDetectionConfig): String =
+    override def generate(config: EdgeDetectionConfig): Array[Array[Char]] =
       edgeDetectionAlgorithm(config.input, config.charset, config.invert)
 
     private def detectEdges(
-        grayscaleValues: List[List[Int]],
+        grayscaleValues: Array[Array[String]],
         invert: Boolean = true
-    ): List[List[Int]] = {
+    ): Array[Array[String]] = {
       val height = grayscaleValues.length
       val width  = grayscaleValues.headOption.map(_.length).getOrElse(0)
 
@@ -56,93 +73,103 @@ object Algorithms {
       if (height < 3 || width < 3) return grayscaleValues
 
       // Sobel operators
-      val sobelX = List(
-        List(-1, 0, 1),
-        List(-2, 0, 2),
-        List(-1, 0, 1)
+      val sobelX = Array(
+        Array(-1, 0, 1),
+        Array(-2, 0, 2),
+        Array(-1, 0, 1)
       )
 
-      val sobelY = List(
-        List(-1, -2, -1),
-        List(0, 0, 0),
-        List(1, 2, 1)
+      val sobelY = Array(
+        Array(-1, -2, -1),
+        Array(0, 0, 0),
+        Array(1, 2, 1)
       )
 
       // Generate coordinates for the pixels we'll process
-      val coordinates = (1 until height - 1).toList.flatMap { y =>
-        (1 until width - 1).toList.map { x =>
+      val coordinates = (1 until height - 1).flatMap { y =>
+        (1 until width - 1).map { x =>
           (y, x)
         }
-      }
+      }.toArray
 
-      // Create output matrix using functional operations
-      coordinates
-        .groupBy(_._1) // Group by y-coordinate
-        .toList
-        .sortBy(_._1) // Sort by y-coordinate
+      // Group coordinates by y-value to form rows
+      val edgeValues = coordinates
+        .groupBy(_._1)
+        .toArray
+        .sortBy(_._1)
         .map { case (y, pixelsInRow) =>
           pixelsInRow
-            .sortBy(_._2) // Sort by x-coordinate
+            .sortBy(_._2)
             .map { case (_, x) =>
-              // Extract 3x3 window around the pixel
-              val window = (0 until 3)
-                .map(ky =>
-                  (0 until 3)
-                    .map(kx => grayscaleValues(y - 1 + ky)(x - 1 + kx) & 0xff)
-                    .toList
-                )
-                .toList
+              // Extract 3x3 window around the pixel and convert strings to integers
+              val window = (0 until 3).map { ky =>
+                (0 until 3).map { kx =>
+                  // Parse string to int, with fallback to 0 if parsing fails
+                  Try {
+                    grayscaleValues(y - 1 + ky)(x - 1 + kx).toInt & 0xff
+                  } match {
+                    case Success(res) => res
+                    case Failure(_)   => 0
+                  }
+                }.toArray
+              }.toArray
 
-              // Apply Sobel operators through fold operations
-              val gx = (0 until 3).foldLeft(0)((acc, ky) =>
-                acc + (0 until 3).foldLeft(0)((innerAcc, kx) =>
+              // Apply Sobel operators using fold
+              val gx = (0 until 3).foldLeft(0) { (acc, ky) =>
+                acc + (0 until 3).foldLeft(0) { (innerAcc, kx) =>
                   innerAcc + window(ky)(kx) * sobelX(ky)(kx)
-                )
-              )
+                }
+              }
 
-              val gy = (0 until 3).foldLeft(0)((acc, ky) =>
-                acc + (0 until 3).foldLeft(0)((innerAcc, kx) =>
+              val gy = (0 until 3).foldLeft(0) { (acc, ky) =>
+                acc + (0 until 3).foldLeft(0) { (innerAcc, kx) =>
                   innerAcc + window(ky)(kx) * sobelY(ky)(kx)
-                )
-              )
+                }
+              }
 
               // Calculate magnitude
               val magnitude = math.min(255, math.sqrt(gx * gx + gy * gy).toInt)
 
-              // Invert if requested
-              if (invert) 255 - magnitude else magnitude
+              // Invert if requested and convert back to string
+              if (invert) (255 - magnitude).toString else magnitude.toString
             }
         }
+
+      edgeValues
     }
 
     private def edgeDetectionAlgorithm(
-        grayscaleValues: List[List[Int]],
+        grayscaleValues: Array[Array[String]],
         charset: Charset,
         invert: Boolean
-    ): String = {
+    ): Array[Array[Char]] = {
       // Detect edges
       val edgeValues = detectEdges(grayscaleValues, invert)
 
-      // Convert to ASCII
-      edgeValues
-        .map { row =>
-          row.map { value =>
-            val index = ((value * (charset.value.length - 1)) / 255.0).toInt
+      // Convert to ASCII chars
+      edgeValues.map { row =>
+        row.map { value =>
+          Try {
+            val intValue = value.toInt
+            val index = ((intValue * (charset.value.length - 1)) / 255.0).toInt
             val safeIndex =
               math.min(math.max(index, 0), charset.value.length - 1)
             charset.value(safeIndex)
-          }.mkString
+          } match {
+            case Success(res) => res
+            case Failure(e)   => charset.value.head
+          }
         }
-        .mkString("\n")
+      }
     }
   }
 
   case object BrailleAlgorithm extends AsciiAlgorithm[BrailleConfig] {
-    override def generate(config: BrailleConfig): String =
+    override def generate(config: BrailleConfig): Array[Array[Char]] =
       brailleAlgorithm(config.input, config.charset, config.threshold)
 
     private def createBraillePattern(
-        grayscaleValues: List[List[Int]],
+        grayscaleValues: Array[Array[String]],
         startX: Int,
         startY: Int,
         width: Int,
@@ -171,7 +198,9 @@ object Algorithms {
 
         // Check if position is within bounds and darker than threshold
         if (
-          x < width && y < height && (grayscaleValues(y)(x) & 0xff) < threshold
+          x < width && y < height &&
+          y >= 0 && x >= 0 && // Additional bounds check
+          (grayscaleValues(y)(x).toInt & 0xff) < threshold
         ) {
           // Set the bit in the pattern
           pattern | value
@@ -183,40 +212,49 @@ object Algorithms {
     }
 
     private def brailleAlgorithm(
-        grayscaleValues: List[List[Int]],
+        grayscaleValues: Array[Array[String]],
         charset: Charset,
         threshold: Int = 118
-    ): String = {
+    ): Array[Array[Char]] = {
       val height = grayscaleValues.length
-      val width  = grayscaleValues.headOption.map(_.length).getOrElse(0)
+      val width  = if (height > 0) grayscaleValues(0).length else 0
 
-      Option
-        .when(height > 0 && width > 0) {
-          // Calculate dimensions of Braille grid
-          val brailleWidth  = (width + 1) / 2
-          val brailleHeight = (height + 3) / 4
+      if (height <= 0 || width <= 0) {
+        // Return a properly structured empty result
+        return Array(Array.empty[Char])
+      }
 
-          val brailleRows = (0 until brailleHeight).map { by =>
-            val rowChars = (0 until brailleWidth).map { bx =>
-              val startX = bx * 2
-              val startY = by * 4
-              val patternIndex = createBraillePattern(
-                grayscaleValues,
-                startX,
-                startY,
-                width,
-                height,
-                threshold
-              )
-              charset.value(patternIndex)
-            }
-            rowChars.mkString
+      // Calculate dimensions of Braille grid
+      val brailleWidth  = (width + 1) / 2
+      val brailleHeight = (height + 3) / 4
+
+      try {
+        // Pre-allocate the entire array with the exact dimensions
+        val result = Array.fill(brailleHeight)(Array.fill(brailleWidth)(' '))
+
+        // Populate the array cell by cell
+        for (by <- 0 until brailleHeight) {
+          for (bx <- 0 until brailleWidth) {
+            val startX = bx * 2
+            val startY = by * 4
+            val patternIndex = createBraillePattern(
+              grayscaleValues,
+              startX,
+              startY,
+              width,
+              height,
+              threshold
+            )
+            result(by)(bx) = charset.value(patternIndex)
           }
-
-          // Join the rows with newlines
-          brailleRows.mkString("\n")
         }
-        .getOrElse("")
+
+        result
+      } catch {
+        case e: Exception =>
+          // If any error occurs, return a consistent array structure
+          Array.fill(brailleHeight)(Array.fill(brailleWidth)(' '))
+      }
     }
   }
 }
