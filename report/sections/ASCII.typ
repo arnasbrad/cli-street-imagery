@@ -75,12 +75,46 @@ turėsime kiekvieną nuotraukos pikselį, tai atlikti galima pasitelkus viena i�
 
 - Svertinis vidurkis – remiasi žmogaus akies jautrumu skirtingoms spalvoms. Kadangi žalia spalva žmogaus akiai atrodo
   šviesiausia, jos koeficientas yra didžiausias. Toliau mažėjimo tvarka seka raudona ir galiausiai mėlyna spalvos.
-Y=0.299×R+0.587×G+0.114×B
+#align(center)[Y=0.299×R+0.587×G+0.114×B]
 - Vidurkis – ši formulė yra pati paprasčiausia. Visos spalvos turi vienodą svorį skaičiuojant pilkos spalvos reikšmę.
-Y=(R+G+B)/3
+#align(center)[Y=(R+G+B)/3]
 - Reliatyvus šviesumas - naujesnė svertinio vidurkio formulės atmaina. Kaip ir ankstesnėje formulėje, koeficientai
   apskaičiuoti remiantis akies jautrumu šviesai. Tačiau šįkart atsižvelgiama į modernių vaizduoklių ir ekranų technologijas
   bei naujus tyrimus apie akies šviesos suvokimą.
-Y=0.2126×R+0.7152G+0.0722B
+#align(center)[Y=0.2126×R+0.7152G+0.0722B]
 
-Čia R – raudonos RGB spalvos reikšmė, G - žalios spalvos reikšmė, o B - mėlynos. 
+Čia R – raudonos RGB spalvos reikšmė, G - žalios spalvos reikšmė, o B - mėlynos.
+
+== ASCII simbolių rinkinio pasirinkimas
+Tinkamo simbolių rinkinio pasirinkimas yra vienas iš svarbiausių ASCII meno kūrimo etapų. Šis pasirinkimas daro įtaką galutinio
+rezultato detalumui, kontrasto intervalui bei įtakoja žmogaus galimybę atpažinti vaizduojamus objektus. ASCII mene šviesumą
+reprezentuoti naudojamas simbolių tankis. Jei ASCII meno fonas yra juodas, o simboliai balti, tai simboliai užimantys mažai
+vietos reprezentuos tamsias nuotraukos vietas. Tuo tarpu simboliai užimantys didžiąją simboliui leistiną vietą vaizduos
+šviesiasias nuotraukos dalis:
+
+- Tarpo simbolis „ “, tankis 0%
+- Taškas „=“, tankis apie 25%
+- Solidus blokas „█“, tankis 100%
+
+Vienos simbolių aibės tinkančios kiekvienai nuotraukai atvaizduoti nėra. Šis pasirinkimas dažniausiai bus įtakojamas objektų,
+kuriuos yra siekiama atvaizduoti. Kuo didesnė ši aibė, tuo detalesnius objektus bus galima atvaizduoti. Šiame projekte
+dažnu atveju teks atvaizduoti medžius, todėl detalūs simbolių rinkiniai bus naudojami siekiant kuo detalesnio rezultato.
+Pateiktuose pavyzdžiuose bus naudojami šie, paprastas ir išplėstas, simbolių rinkiniai:
+
+//#align(center)[„.:-=+\*\#\%\@“]
+//#align(center)[„ .\'\`^\",:;Il!i~+\_-?][}{1)(|\\*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#M\W&8\%B\@\$“]
+
+#grid(
+  columns: (1fr, 1fr),
+  image("/images/small_charset_example1.png", width: 100%),
+  image("/images/big_charset_example1.png", width: 100%)
+)
+
+= Nuotraukų konvertavimo į ASCII meną algoritmai
+
+== Įvadas
+
+== Algoritmai
+=== Šviesumo algorimtas (angl. _luminance_)
+
+=== Kraštų atpažinimo algoritmas (angl. _edge detection_)
