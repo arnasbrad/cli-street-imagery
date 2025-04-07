@@ -255,7 +255,7 @@ object Algorithms {
     ): Array[Array[Char]] = {
       val height     = grayscaleValues.length
       val width      = if (height > 0) grayscaleValues(0).length else 0
-      val brightness = calculateAverageBrightness(grayscaleValues) - 50
+      val brightness = calculateAverageBrightness(grayscaleValues) - 55
 
       if (height <= 0 || width <= 0) {
         // Return a properly structured empty result

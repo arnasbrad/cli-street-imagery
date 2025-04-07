@@ -107,9 +107,9 @@ object Examples {
       )
 
     val settings = algorithm match {
-      case "edge" => EdgeDetectionAlgorithm
-      // case "braille" => BrailleAlgorithm
-      case _ => LuminanceAlgorithm // Default to luminance
+      case "edge"    => EdgeDetectionAlgorithm
+      case "braille" => BrailleAlgorithm
+      case _         => LuminanceAlgorithm // Default to luminance
     }
 
     val asciiArt = settings match {
@@ -125,15 +125,14 @@ object Examples {
             invert = false
           )
         )
-      /*
       case BrailleAlgorithm =>
         BrailleAlgorithm.generate(
           BrailleConfig(
-            grayscaleValues,
+            grayscaleValues.grayscaleDecimals,
             Charset.BraillePatterns
           )
         )
-       */
+
     }
 
     val formatForPrinting = charsToStringList(asciiArt)
