@@ -16,8 +16,7 @@ object Models {
 
   case class BrailleConfig(
       input: Array[Array[String]],
-      charset: Charset,
-      threshold: Int = 118
+      charset: Charset
   ) extends AlgorithmConfig
 
   case class ImageWidth(value: Int)

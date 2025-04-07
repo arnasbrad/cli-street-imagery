@@ -7,6 +7,7 @@ import asciiart.Models._
 import java.io.{File, PrintWriter}
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
+import scala.util.{Failure, Success, Try}
 
 object Examples {
   def readHexValues(filePath: String): Array[String] = {
@@ -58,7 +59,7 @@ object Examples {
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 1
     val verticalSampling   = horizontalSampling * 2
-    val algorithm          = "a"
+    val algorithm          = "braille"
     val charset            = Charset.Braille
 
     val grayscaleValues =
@@ -70,9 +71,9 @@ object Examples {
       )
 
     val settings = algorithm match {
-      case "edge" => EdgeDetectionAlgorithm
-      // case "braille" => BrailleAlgorithm
-      case _ => LuminanceAlgorithm // Default to luminance
+      case "edge"    => EdgeDetectionAlgorithm
+      case "braille" => BrailleAlgorithm
+      case _         => LuminanceAlgorithm // Default to luminance
     }
 
     val asciiArt = settings match {
@@ -88,12 +89,14 @@ object Examples {
             invert = false
           )
         )
-      /*
       case BrailleAlgorithm =>
         BrailleAlgorithm.generate(
-          BrailleConfig(grayscaleValues, Charset.BraillePatterns)
+          BrailleConfig(
+            grayscaleValues.grayscaleDecimals,
+            Charset.BraillePatterns
+          )
         )
-       */
+
     }
 
     val formatForPrinting = charsToStringList(asciiArt)
