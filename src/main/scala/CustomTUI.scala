@@ -1,5 +1,5 @@
 import asciiart.Algorithms.LuminanceAlgorithm
-import asciiart.Models.LuminanceConfig
+import asciiart.Models.{ColoredPixels, LuminanceConfig, RGB}
 import asciiart.{Charset, Conversions}
 import cats.effect.unsafe.implicits.global
 import clients.mapillary.MapillaryClient
@@ -137,17 +137,14 @@ object CustomTUI {
     println()
   }
 
-  /** Prints a grid of colored characters
-    * @param grid
-    *   2D array of character and RGB tuples
-    */
   def printColorGrid[T](
-      grid: Array[Array[(Char, T)]]
-  )(colorFn: T => (Int, Int, Int)): Unit = {
-    for (line <- grid) {
-      val coloredLine = line.map { case (char, colorData) =>
-        val (r, g, b) = colorFn(colorData)
-        safeColorize(char.toString, r, g, b)
+      chars: Array[Array[Char]],
+      colors: Array[Array[RGB]]
+  ): Unit = {
+    for ((line, lineIndex) <- chars.zipWithIndex) {
+      val coloredLine = line.zipWithIndex.map { case (char, charIndex) =>
+        val rgb = colors(lineIndex)(charIndex)
+        safeColorize(char.toString, rgb.r, rgb.g, rgb.b)
       }.mkString
 
       // Make sure the line ends with reset and flush the buffer
@@ -189,13 +186,16 @@ object CustomTUI {
     println()
 
     // Example of printColorGrid with RGB case class
-    case class RGB(r: Int, g: Int, b: Int)
-    val sampleGrid = Array(
-      Array(('H', RGB(255, 0, 0)), ('e', RGB(255, 127, 0))),
-      Array(('i', RGB(0, 255, 0)), ('!', RGB(0, 0, 255)))
+    val sampleChars = Array(
+      Array('H', 'e'),
+      Array('i', '!')
+    )
+    val sampleColors = Array(
+      Array(RGB(255, 0, 0), RGB(255, 127, 0)),
+      Array(RGB(0, 255, 0), RGB(0, 0, 255))
     )
 
-    printColorGrid(sampleGrid)(rgb => (rgb.r, rgb.g, rgb.b))
+    printColorGrid(sampleChars, sampleColors)
   }
 }
 
@@ -239,14 +239,12 @@ object TestShit {
 
       asciiWithColors = LuminanceAlgorithm
         .generate(
-          LuminanceConfig(greyscale, charset)
+          LuminanceConfig(greyscale.grayscaleDecimals, charset)
         )
 
       _ = {
         // Use CustomTUI.printColorGrid to print the ASCII art with colors
-        CustomTUI.printColorGrid(asciiWithColors)(color =>
-          (color.r, color.g, color.b)
-        )
+        CustomTUI.printColorGrid(asciiWithColors, greyscale.colors)
 
         // Optional: Print summary info
         println(s"ASCII art rendered: ${asciiWithColors.length} lines")

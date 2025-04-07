@@ -1,6 +1,6 @@
 package asciiart
 
-import asciiart.Models.{HexImage, ImageHeight, ImageWidth, RGB}
+import asciiart.Models.{ColoredPixels, HexImage, ImageHeight, ImageWidth, RGB}
 import cats.effect.{IO, Resource}
 
 import java.io.ByteArrayInputStream
@@ -12,7 +12,7 @@ trait Conversions {
       verticalSampling: Int,
       rgbValues: Array[String],
       lineWidth: Int
-  ): Array[Array[(String, RGB)]]
+  ): ColoredPixels
 
   def convertBytesToHexImage(imageBytes: Array[Byte]): IO[HexImage]
 }
@@ -23,7 +23,7 @@ object Conversions extends Conversions {
       verticalSampling: Int,
       rgbValues: Array[String],
       lineWidth: Int
-  ): Array[Array[(String, RGB)]] = {
+  ): ColoredPixels = {
     val hexImage =
       HexImage(rgbValues, ImageWidth(lineWidth), ImageHeight(64665))
     val twoDimentionalArray = convertTo2DArray(hexImage)
@@ -44,11 +44,11 @@ object Conversions extends Conversions {
     hexImage.hexStrings.grouped(hexImage.width.value).toArray
   }
 
-  def charsToStringList(chars: Array[Array[(Char, RGB)]]): List[String] = {
+  def charsToStringList(chars: Array[Array[Char]]): List[String] = {
     // Convert each row of chars to a string and collect into a List
     chars.map { row =>
       // Extract just the character from each tuple and join into a single string
-      row.map(_._1).mkString
+      row.mkString
     }.toList
   }
 
@@ -90,9 +90,19 @@ object Conversions extends Conversions {
 
   private def convertToGrayscale(
       lines: Array[Array[String]]
-  ): Array[Array[(String, RGB)]] = {
-    lines.map { line =>
-      line.map { hexString =>
+  ): ColoredPixels = {
+    // Pre-allocate arrays for the grayscale values and colors
+    val height = lines.length
+    val width  = if (height > 0) lines(0).length else 0
+
+    val grayscaleValues = Array.ofDim[String](height, width)
+    val colorValues     = Array.ofDim[RGB](height, width)
+
+    // Fill arrays in a single pass
+    for (y <- 0 until height) {
+      for (x <- 0 until width) {
+        val hexString = lines(y)(x)
+
         // Parse the hex string to an integer
         val rgbValue = java.lang.Long.parseLong(hexString, 16).toInt
 
@@ -107,13 +117,13 @@ object Conversions extends Conversions {
         // Create new RGB where R=G=B=grayscale
         val grayScaleRgbValue = (grayscale << 16) | (grayscale << 8) | grayscale
 
-        // Convert back to decimal string format (not hex)
-        (
-          grayScaleRgbValue.toString,
-          RGB(r, g, b)
-        )
+        // Store values directly in the respective arrays
+        grayscaleValues(y)(x) = grayScaleRgbValue.toString
+        colorValues(y)(x) = RGB(r, g, b)
       }
     }
+
+    ColoredPixels(grayscaleValues, colorValues)
   }
 
   def convertBytesToHexImage(imageBytes: Array[Byte]): IO[HexImage] = {

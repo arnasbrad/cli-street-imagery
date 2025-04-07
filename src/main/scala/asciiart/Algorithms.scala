@@ -1,31 +1,26 @@
 package asciiart
 
-import asciiart.Models.{
-  AlgorithmConfig,
-  EdgeDetectionConfig,
-  LuminanceConfig,
-  RGB
-}
+import asciiart.Models.{AlgorithmConfig, EdgeDetectionConfig, LuminanceConfig}
 
 import scala.util.{Failure, Success, Try}
 
 object Algorithms {
   trait AsciiAlgorithm[T <: AlgorithmConfig] {
-    def generate(config: T): Array[Array[(Char, RGB)]]
+    def generate(config: T): Array[Array[Char]]
   }
 
   case object LuminanceAlgorithm extends AsciiAlgorithm[LuminanceConfig] {
     override def generate(
         config: LuminanceConfig
-    ): Array[Array[(Char, RGB)]] =
+    ): Array[Array[Char]] =
       luminanceAlgorithm(config.input, config.charset)
 
     private def luminanceAlgorithm(
-        grayscaleValues: Array[Array[(String, RGB)]],
+        grayscaleValues: Array[Array[String]],
         charset: Charset
-    ): Array[Array[(Char, RGB)]] = {
+    ): Array[Array[Char]] = {
       grayscaleValues.map { row =>
-        row.map { case (str, rgb) =>
+        row.map { str =>
           Try {
             // Parse the string to an integer
             val rgbValue = str.toInt
@@ -47,12 +42,12 @@ object Algorithms {
             // Clamp the index to prevent out of bounds
             val safeIndex =
               math.min(math.max(index, 0), charset.value.length - 1)
-            (charset.value(safeIndex), rgb)
+            charset.value(safeIndex)
           } match {
             case Success(c) => c
             case Failure(e) =>
               println(e.getMessage)
-              (charset.value(0), rgb)
+              charset.value(0)
           }
         }
       }
@@ -63,13 +58,13 @@ object Algorithms {
       extends AsciiAlgorithm[EdgeDetectionConfig] {
     override def generate(
         config: EdgeDetectionConfig
-    ): Array[Array[(Char, RGB)]] =
+    ): Array[Array[Char]] =
       edgeDetectionAlgorithm(config.input, config.charset, config.invert)
 
     private def detectEdges(
-        grayscaleValues: Array[Array[(String, RGB)]],
+        grayscaleValues: Array[Array[String]],
         invert: Boolean = true
-    ): Array[Array[(String, RGB)]] = {
+    ): Array[Array[String]] = {
       val height = grayscaleValues.length
       val width  = grayscaleValues.headOption.map(_.length).getOrElse(0)
 
@@ -103,7 +98,7 @@ object Algorithms {
           (0 until 3).map { kx =>
             // Parse string to int, with fallback to 0 if parsing fails
             Try {
-              grayscaleValues(y - 1 + ky)(x - 1 + kx)._1.toInt & 0xff
+              grayscaleValues(y - 1 + ky)(x - 1 + kx).toInt & 0xff
             } match {
               case Success(res) => res
               case Failure(_)   => 0
@@ -130,7 +125,7 @@ object Algorithms {
         // Invert if requested and create result tuple with original color
         val edgeValue =
           if (invert) (255 - magnitude).toString else magnitude.toString
-        ((y, x), (edgeValue, grayscaleValues(y)(x)._2))
+        ((y, x), edgeValue)
       }.toMap
 
       // Create the result array by copying original values and applying processed ones
@@ -142,25 +137,25 @@ object Algorithms {
     }
 
     private def edgeDetectionAlgorithm(
-        grayscaleValues: Array[Array[(String, RGB)]],
+        grayscaleValues: Array[Array[String]],
         charset: Charset,
         invert: Boolean
-    ): Array[Array[(Char, RGB)]] = {
+    ): Array[Array[Char]] = {
       // Detect edges
       val edgeValues = detectEdges(grayscaleValues, invert)
 
       // Convert to ASCII chars
       edgeValues.map { row =>
-        row.map { case (str, rgb) =>
+        row.map { str =>
           Try {
             val intValue = str.toInt
             val index = ((intValue * (charset.value.length - 1)) / 255.0).toInt
             val safeIndex =
               math.min(math.max(index, 0), charset.value.length - 1)
-            (charset.value(safeIndex), rgb)
+            charset.value(safeIndex)
           } match {
             case Success(res) => res
-            case Failure(e)   => (charset.value.head, RGB(0, 0, 0))
+            case Failure(e)   => charset.value.head
           }
         }
       }
