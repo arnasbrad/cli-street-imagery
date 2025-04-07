@@ -50,42 +50,6 @@ object Examples {
     println("\nASCII art has been saved to 'ascii_image.txt'")
   }
 
-  private def calculateAverageBrightness(
-      packedRgbArray: Array[Array[String]]
-  ): Int = {
-    if (packedRgbArray.isEmpty || packedRgbArray.forall(_.isEmpty)) {
-      return 0
-    }
-    println("aaa")
-    // Calculate grayscale for a single RGB value
-    def calculateBrightness(packedRgb: String): Int = {
-      Try {
-        val rgbValue = packedRgb.toDouble
-
-        // Extract only the red component since R=G=B in this case
-        val r = ((rgbValue / 65536) % 256).toInt
-        println("bbb")
-        // Return red value directly without the weighted calculation
-        r.toInt
-      } match {
-        case Success(res) => res
-        case Failure(e)   => 0
-      }
-    }
-
-    // Flatten array, filter out nulls and empty strings, calculate grayscales
-    val grayscaleValues = packedRgbArray.flatten
-      .filter(rgb => rgb != null && rgb.nonEmpty)
-      .map(a => calculateBrightness(a))
-
-    // Calculate average if we have values, otherwise return 0.0
-    if (grayscaleValues.nonEmpty) {
-      (grayscaleValues.sum / grayscaleValues.length).toInt
-    } else {
-      0
-    }
-  }
-
   def main(args: Array[String]): Unit = {
     val filePath  = "testBytesForIgnelis.txt"
     val lineWidth = 1024

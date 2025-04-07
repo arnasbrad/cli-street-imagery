@@ -266,7 +266,7 @@ object Algorithms {
       val brailleWidth  = (width + 1) / 2
       val brailleHeight = (height + 3) / 4
 
-      try {
+      Try {
         // Pre-allocate the entire array with the exact dimensions
         val result =
           (0 until brailleHeight).map { by =>
@@ -286,9 +286,9 @@ object Algorithms {
           }.toArray
 
         result
-      } catch {
-        case e: Exception =>
-          // If any error occurs, return a consistent array structure
+      } match {
+        case Success(res) => res
+        case Failure(e) =>
           Array.fill(brailleHeight)(Array.fill(brailleWidth)(' '))
       }
     }
