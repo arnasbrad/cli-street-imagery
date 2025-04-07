@@ -165,7 +165,43 @@ object Algorithms {
   /*
   case object BrailleAlgorithm extends AsciiAlgorithm[BrailleConfig] {
     override def generate(config: BrailleConfig): Array[Array[Char]] =
-      brailleAlgorithm(config.input, config.charset, config.threshold)
+      brailleAlgorithm(config.input, config.charset)
+
+    private def calculateAverageBrightness(
+        packedRgbArray: Array[Array[String]]
+    ): Int = {
+      if (packedRgbArray.isEmpty || packedRgbArray.forall(_.isEmpty)) {
+        return 0
+      }
+
+      // Calculate grayscale for a single RGB value
+      def calculateBrightness(packedRgb: String): Int = {
+        Try {
+          val rgbValue = packedRgb.toDouble
+
+          // Extract only the red component since R=G=B in this case
+          val r = ((rgbValue / 65536) % 256).toInt
+
+          // Return red value directly without the weighted calculation
+          r.toInt
+        } match {
+          case Success(res) => res
+          case Failure(e)   => 0
+        }
+      }
+
+      // Flatten array, filter out nulls and empty strings, calculate grayscales
+      val grayscaleValues = packedRgbArray.flatten
+        .filter(rgb => rgb != null && rgb.nonEmpty)
+        .map(a => calculateBrightness(a))
+
+      // Calculate average if we have values, otherwise return 0.0
+      if (grayscaleValues.nonEmpty) {
+        (grayscaleValues.sum / grayscaleValues.length).toInt
+      } else {
+        0
+      }
+    }
 
     private def createBraillePattern(
         grayscaleValues: Array[Array[String]],
@@ -212,11 +248,11 @@ object Algorithms {
 
     private def brailleAlgorithm(
         grayscaleValues: Array[Array[String]],
-        charset: Charset,
-        threshold: Int = 118
+        charset: Charset
     ): Array[Array[Char]] = {
-      val height = grayscaleValues.length
-      val width  = if (height > 0) grayscaleValues(0).length else 0
+      val height     = grayscaleValues.length
+      val width      = if (height > 0) grayscaleValues(0).length else 0
+      val brightness = calculateAverageBrightness(grayscaleValues) - 50
 
       if (height <= 0 || width <= 0) {
         // Return a properly structured empty result
@@ -242,7 +278,7 @@ object Algorithms {
               startY,
               width,
               height,
-              threshold
+              brightness
             )
             result(by)(bx) = charset.value(patternIndex)
           }
