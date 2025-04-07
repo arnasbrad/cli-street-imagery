@@ -4,10 +4,7 @@ import asciiart.Algorithms._
 import asciiart.Conversions._
 import asciiart.Models._
 
-import java.awt.image.BufferedImage
 import java.io.{File, PrintWriter}
-import java.nio.file.{Path, Paths}
-import javax.imageio.ImageIO
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
@@ -40,24 +37,6 @@ object Examples {
     }
   }
 
-  private def imageDataTransformations(
-      horizontalSampling: Int,
-      verticalSampling: Int,
-      rgbValues: Array[String],
-      lineWidth: Int
-  ): Array[Array[String]] = {
-    val hexImage =
-      HexImage(rgbValues, ImageWidth(lineWidth), ImageHeight(64665))
-    val twoDimentionalArray = convertTo2DArray(hexImage)
-    val rgbValueSampledHorizontally =
-      sampleHorizontally(twoDimentionalArray, horizontalSampling)
-    val rgbValueSampledHorizontallyAndVertically =
-      sampleVertically(rgbValueSampledHorizontally, verticalSampling)
-    convertToGrayscale(
-      rgbValueSampledHorizontallyAndVertically
-    )
-  }
-
   private def printAsciiToFile(asciiArt: List[String]): Unit = {
     new PrintWriter(new File("ascii_image.txt")) {
       // Write each string from the list on its own line
@@ -83,7 +62,7 @@ object Examples {
     val charset            = Charset.Braille
 
     val grayscaleValues =
-      imageDataTransformations(
+      hexStringsToSampledGreyscaleDecimal(
         horizontalSampling,
         verticalSampling,
         rgbValues,
@@ -91,9 +70,9 @@ object Examples {
       )
 
     val settings = algorithm match {
-      case "edge"    => EdgeDetectionAlgorithm
-      case "braille" => BrailleAlgorithm
-      case _         => LuminanceAlgorithm // Default to luminance
+      case "edge" => EdgeDetectionAlgorithm
+      // case "braille" => BrailleAlgorithm
+      case _ => LuminanceAlgorithm // Default to luminance
     }
 
     val asciiArt = settings match {
@@ -103,10 +82,12 @@ object Examples {
         EdgeDetectionAlgorithm.generate(
           EdgeDetectionConfig(grayscaleValues, charset, invert = false)
         )
+      /*
       case BrailleAlgorithm =>
         BrailleAlgorithm.generate(
           BrailleConfig(grayscaleValues, Charset.BraillePatterns)
         )
+       */
     }
 
     val formatForPrinting = charsToStringList(asciiArt)

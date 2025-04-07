@@ -2,37 +2,39 @@ package asciiart
 
 import asciiart.Models.{
   AlgorithmConfig,
-  BrailleConfig,
   EdgeDetectionConfig,
-  LuminanceConfig
+  LuminanceConfig,
+  RGB
 }
 
 import scala.util.{Failure, Success, Try}
 
 object Algorithms {
   trait AsciiAlgorithm[T <: AlgorithmConfig] {
-    def generate(config: T): Array[Array[Char]]
+    def generate(config: T): Array[Array[(Char, RGB)]]
   }
 
   case object LuminanceAlgorithm extends AsciiAlgorithm[LuminanceConfig] {
-    override def generate(config: LuminanceConfig): Array[Array[Char]] =
+    override def generate(
+        config: LuminanceConfig
+    ): Array[Array[(Char, RGB)]] =
       luminanceAlgorithm(config.input, config.charset)
 
     private def luminanceAlgorithm(
-        grayscaleValues: Array[Array[String]],
+        grayscaleValues: Array[Array[(String, RGB)]],
         charset: Charset
-    ): Array[Array[Char]] = {
+    ): Array[Array[(Char, RGB)]] = {
       grayscaleValues.map { row =>
-        row.map { grayscaleString =>
+        row.map { case (str, rgb) =>
           Try {
             // Parse the string to an integer
-            val rgbValue = grayscaleString.toInt
+            val rgbValue = str.toInt
 
             // In grayscale RGB, all channels should be the same, so we can extract any
             // If these are already single-channel values, use them directly
             val grayscaleValue = if (rgbValue > 255) {
               // This is a packed RGB value, extract one channel
-              (rgbValue & 0xff)
+              rgbValue & 0xff
             } else {
               // This is already a grayscale value
               rgbValue
@@ -45,12 +47,12 @@ object Algorithms {
             // Clamp the index to prevent out of bounds
             val safeIndex =
               math.min(math.max(index, 0), charset.value.length - 1)
-            charset.value(safeIndex)
+            (charset.value(safeIndex), rgb)
           } match {
             case Success(c) => c
             case Failure(e) =>
               println(e.getMessage)
-              charset.value(0)
+              (charset.value(0), rgb)
           }
         }
       }
@@ -59,13 +61,15 @@ object Algorithms {
 
   case object EdgeDetectionAlgorithm
       extends AsciiAlgorithm[EdgeDetectionConfig] {
-    override def generate(config: EdgeDetectionConfig): Array[Array[Char]] =
+    override def generate(
+        config: EdgeDetectionConfig
+    ): Array[Array[(Char, RGB)]] =
       edgeDetectionAlgorithm(config.input, config.charset, config.invert)
 
     private def detectEdges(
-        grayscaleValues: Array[Array[String]],
+        grayscaleValues: Array[Array[(String, RGB)]],
         invert: Boolean = true
-    ): Array[Array[String]] = {
+    ): Array[Array[(String, RGB)]] = {
       val height = grayscaleValues.length
       val width  = grayscaleValues.headOption.map(_.length).getOrElse(0)
 
@@ -85,85 +89,85 @@ object Algorithms {
         Array(1, 2, 1)
       )
 
-      // Generate coordinates for the pixels we'll process
+      // Generate coordinates for the pixels we'll process (inner pixels only)
       val coordinates = (1 until height - 1).flatMap { y =>
         (1 until width - 1).map { x =>
           (y, x)
         }
       }.toArray
 
-      // Group coordinates by y-value to form rows
-      val edgeValues = coordinates
-        .groupBy(_._1)
-        .toArray
-        .sortBy(_._1)
-        .map { case (y, pixelsInRow) =>
-          pixelsInRow
-            .sortBy(_._2)
-            .map { case (_, x) =>
-              // Extract 3x3 window around the pixel and convert strings to integers
-              val window = (0 until 3).map { ky =>
-                (0 until 3).map { kx =>
-                  // Parse string to int, with fallback to 0 if parsing fails
-                  Try {
-                    grayscaleValues(y - 1 + ky)(x - 1 + kx).toInt & 0xff
-                  } match {
-                    case Success(res) => res
-                    case Failure(_)   => 0
-                  }
-                }.toArray
-              }.toArray
-
-              // Apply Sobel operators using fold
-              val gx = (0 until 3).foldLeft(0) { (acc, ky) =>
-                acc + (0 until 3).foldLeft(0) { (innerAcc, kx) =>
-                  innerAcc + window(ky)(kx) * sobelX(ky)(kx)
-                }
-              }
-
-              val gy = (0 until 3).foldLeft(0) { (acc, ky) =>
-                acc + (0 until 3).foldLeft(0) { (innerAcc, kx) =>
-                  innerAcc + window(ky)(kx) * sobelY(ky)(kx)
-                }
-              }
-
-              // Calculate magnitude
-              val magnitude = math.min(255, math.sqrt(gx * gx + gy * gy).toInt)
-
-              // Invert if requested and convert back to string
-              if (invert) (255 - magnitude).toString else magnitude.toString
+      // Process the inner pixels
+      val processedCoordinates = coordinates.map { case (y, x) =>
+        // Extract 3x3 window around the pixel and convert strings to integers
+        val window = (0 until 3).map { ky =>
+          (0 until 3).map { kx =>
+            // Parse string to int, with fallback to 0 if parsing fails
+            Try {
+              grayscaleValues(y - 1 + ky)(x - 1 + kx)._1.toInt & 0xff
+            } match {
+              case Success(res) => res
+              case Failure(_)   => 0
             }
+          }.toArray
+        }.toArray
+
+        // Apply Sobel operators using fold
+        val gx = (0 until 3).foldLeft(0) { (acc, ky) =>
+          acc + (0 until 3).foldLeft(0) { (innerAcc, kx) =>
+            innerAcc + window(ky)(kx) * sobelX(ky)(kx)
+          }
         }
 
-      edgeValues
+        val gy = (0 until 3).foldLeft(0) { (acc, ky) =>
+          acc + (0 until 3).foldLeft(0) { (innerAcc, kx) =>
+            innerAcc + window(ky)(kx) * sobelY(ky)(kx)
+          }
+        }
+
+        // Calculate magnitude
+        val magnitude = math.min(255, math.sqrt(gx * gx + gy * gy).toInt)
+
+        // Invert if requested and create result tuple with original color
+        val edgeValue =
+          if (invert) (255 - magnitude).toString else magnitude.toString
+        ((y, x), (edgeValue, grayscaleValues(y)(x)._2))
+      }.toMap
+
+      // Create the result array by copying original values and applying processed ones
+      grayscaleValues.zipWithIndex.map { case (row, y) =>
+        row.zipWithIndex.map { case (originalValue, x) =>
+          processedCoordinates.getOrElse((y, x), originalValue)
+        }
+      }
     }
 
     private def edgeDetectionAlgorithm(
-        grayscaleValues: Array[Array[String]],
+        grayscaleValues: Array[Array[(String, RGB)]],
         charset: Charset,
         invert: Boolean
-    ): Array[Array[Char]] = {
+    ): Array[Array[(Char, RGB)]] = {
       // Detect edges
       val edgeValues = detectEdges(grayscaleValues, invert)
 
       // Convert to ASCII chars
       edgeValues.map { row =>
-        row.map { value =>
+        row.map { case (str, rgb) =>
           Try {
-            val intValue = value.toInt
+            val intValue = str.toInt
             val index = ((intValue * (charset.value.length - 1)) / 255.0).toInt
             val safeIndex =
               math.min(math.max(index, 0), charset.value.length - 1)
-            charset.value(safeIndex)
+            (charset.value(safeIndex), rgb)
           } match {
             case Success(res) => res
-            case Failure(e)   => charset.value.head
+            case Failure(e)   => (charset.value.head, RGB(0, 0, 0))
           }
         }
       }
     }
   }
 
+  /*
   case object BrailleAlgorithm extends AsciiAlgorithm[BrailleConfig] {
     override def generate(config: BrailleConfig): Array[Array[Char]] =
       brailleAlgorithm(config.input, config.charset, config.threshold)
@@ -257,4 +261,5 @@ object Algorithms {
       }
     }
   }
+   */
 }
