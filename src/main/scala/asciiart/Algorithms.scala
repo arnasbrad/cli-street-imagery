@@ -1,6 +1,11 @@
 package asciiart
 
-import asciiart.Models.{AlgorithmConfig, EdgeDetectionConfig, LuminanceConfig}
+import asciiart.Models.{
+  AlgorithmConfig,
+  BrailleConfig,
+  EdgeDetectionConfig,
+  LuminanceConfig
+}
 
 import scala.util.{Failure, Success, Try}
 
@@ -162,7 +167,6 @@ object Algorithms {
     }
   }
 
-  /*
   case object BrailleAlgorithm extends AsciiAlgorithm[BrailleConfig] {
     override def generate(config: BrailleConfig): Array[Array[Char]] =
       brailleAlgorithm(config.input, config.charset)
@@ -192,7 +196,6 @@ object Algorithms {
 
       // Flatten array, filter out nulls and empty strings, calculate grayscales
       val grayscaleValues = packedRgbArray.flatten
-        .filter(rgb => rgb != null && rgb.nonEmpty)
         .map(a => calculateBrightness(a))
 
       // Calculate average if we have values, otherwise return 0.0
@@ -265,24 +268,22 @@ object Algorithms {
 
       try {
         // Pre-allocate the entire array with the exact dimensions
-        val result = Array.fill(brailleHeight)(Array.fill(brailleWidth)(' '))
-
-        // Populate the array cell by cell
-        for (by <- 0 until brailleHeight) {
-          for (bx <- 0 until brailleWidth) {
-            val startX = bx * 2
-            val startY = by * 4
-            val patternIndex = createBraillePattern(
-              grayscaleValues,
-              startX,
-              startY,
-              width,
-              height,
-              brightness
-            )
-            result(by)(bx) = charset.value(patternIndex)
-          }
-        }
+        val result =
+          (0 until brailleHeight).map { by =>
+            (0 until brailleWidth).map { bx =>
+              val startX = bx * 2
+              val startY = by * 4
+              val patternIndex = createBraillePattern(
+                grayscaleValues,
+                startX,
+                startY,
+                width,
+                height,
+                brightness
+              )
+              charset.value(patternIndex)
+            }.toArray
+          }.toArray
 
         result
       } catch {
@@ -292,5 +293,4 @@ object Algorithms {
       }
     }
   }
-   */
 }
