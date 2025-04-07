@@ -4,18 +4,18 @@ object Models {
   sealed trait AlgorithmConfig
 
   case class LuminanceConfig(
-      input: Array[Array[String]],
+      input: Array[Array[(String, RGB)]],
       charset: Charset
   ) extends AlgorithmConfig
 
   case class EdgeDetectionConfig(
-      input: Array[Array[String]],
+      input: Array[Array[(String, RGB)]],
       charset: Charset,
       invert: Boolean = false
   ) extends AlgorithmConfig
 
   case class BrailleConfig(
-      input: Array[Array[String]],
+      input: Array[Array[(String, RGB)]],
       charset: Charset,
       threshold: Int = 118
   ) extends AlgorithmConfig
@@ -29,4 +29,6 @@ object Models {
       width: ImageWidth,
       height: ImageHeight
   )
+
+  case class RGB(r: Int, g: Int, b: Int)
 }

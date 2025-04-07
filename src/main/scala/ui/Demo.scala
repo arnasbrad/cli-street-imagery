@@ -33,7 +33,7 @@ object TabsExample extends IOApp.Simple {
         jni.enableRawMode()
         jni.execute(
           new Command.EnterAlternateScreen(),
-          new Command.EnableMouseCapture()
+          new Command.DisableMouseCapture()
         )
 
         val backend  = new CrosstermBackend(jni)

@@ -1,35 +1,42 @@
 package asciiart
 
-import asciiart.Models.{HexImage, ImageHeight, ImageWidth}
+import asciiart.Models.{HexImage, ImageHeight, ImageWidth, RGB}
 import cats.effect.{IO, Resource}
 
 import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
 trait Conversions {
-  def convertTo2DArray(
-      hexImage: HexImage
-  ): Array[Array[String]]
-
-  def charsToStringList(chars: Array[Array[Char]]): List[String]
-
-  def sampleHorizontally(
-      image: Array[Array[String]],
-      downsampleFactor: Int
-  ): Array[Array[String]]
-
-  def sampleVertically(
-      lines: Array[Array[String]],
-      vertical: Int
-  ): Array[Array[String]]
-
-  def convertToGrayscale(lines: Array[Array[String]]): Array[Array[String]]
+  def hexStringsToSampledGreyscaleDecimal(
+      horizontalSampling: Int,
+      verticalSampling: Int,
+      rgbValues: Array[String],
+      lineWidth: Int
+  ): Array[Array[(String, RGB)]]
 
   def convertBytesToHexImage(imageBytes: Array[Byte]): IO[HexImage]
 }
 
 object Conversions extends Conversions {
-  def convertTo2DArray(
+  def hexStringsToSampledGreyscaleDecimal(
+      horizontalSampling: Int,
+      verticalSampling: Int,
+      rgbValues: Array[String],
+      lineWidth: Int
+  ): Array[Array[(String, RGB)]] = {
+    val hexImage =
+      HexImage(rgbValues, ImageWidth(lineWidth), ImageHeight(64665))
+    val twoDimentionalArray = convertTo2DArray(hexImage)
+    val rgbValueSampledHorizontally =
+      sampleHorizontally(twoDimentionalArray, horizontalSampling)
+    val rgbValueSampledHorizontallyAndVertically =
+      sampleVertically(rgbValueSampledHorizontally, verticalSampling)
+    convertToGrayscale(
+      rgbValueSampledHorizontallyAndVertically
+    )
+  }
+
+  private def convertTo2DArray(
       hexImage: HexImage
   ): Array[Array[String]] = {
 
@@ -37,15 +44,15 @@ object Conversions extends Conversions {
     hexImage.hexStrings.grouped(hexImage.width.value).toArray
   }
 
-  def charsToStringList(chars: Array[Array[Char]]): List[String] = {
+  def charsToStringList(chars: Array[Array[(Char, RGB)]]): List[String] = {
     // Convert each row of chars to a string and collect into a List
     chars.map { row =>
-      // Join the characters in the row into a single string
-      row.mkString
+      // Extract just the character from each tuple and join into a single string
+      row.map(_._1).mkString
     }.toList
   }
 
-  def sampleHorizontally(
+  private def sampleHorizontally(
       image: Array[Array[String]],
       downsampleFactor: Int
   ): Array[Array[String]] = {
@@ -63,7 +70,7 @@ object Conversions extends Conversions {
     }
   }
 
-  def sampleVertically(
+  private def sampleVertically(
       lines: Array[Array[String]],
       vertical: Int
   ): Array[Array[String]] = {
@@ -81,7 +88,9 @@ object Conversions extends Conversions {
     }
   }
 
-  def convertToGrayscale(lines: Array[Array[String]]): Array[Array[String]] = {
+  private def convertToGrayscale(
+      lines: Array[Array[String]]
+  ): Array[Array[(String, RGB)]] = {
     lines.map { line =>
       line.map { hexString =>
         // Parse the hex string to an integer
@@ -96,10 +105,13 @@ object Conversions extends Conversions {
         val grayscale = (0.299 * r + 0.587 * g + 0.114 * b).toInt
 
         // Create new RGB where R=G=B=grayscale
-        val newRgbValue = (grayscale << 16) | (grayscale << 8) | grayscale
+        val grayScaleRgbValue = (grayscale << 16) | (grayscale << 8) | grayscale
 
         // Convert back to decimal string format (not hex)
-        newRgbValue.toString
+        (
+          grayScaleRgbValue.toString,
+          RGB(r, g, b)
+        )
       }
     }
   }
