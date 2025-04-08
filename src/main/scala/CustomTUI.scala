@@ -1,24 +1,26 @@
 import asciiart.Algorithms.LuminanceAlgorithm
-import asciiart.Models.{ColoredPixels, LuminanceConfig, RGB}
+import asciiart.Models.{LuminanceConfig, RGB}
 import asciiart.{Charset, Conversions}
 import cats.effect.unsafe.implicits.global
+import cats.effect.{ExitCode, IO, IOApp, Resource}
 import clients.mapillary.MapillaryClient
 import clients.mapillary.Models.ApiKey
 import common.Models.Coordinates
+import org.jline.terminal.{Terminal, TerminalBuilder}
+import org.jline.utils.InfoCmp
 import runner.Runner
 
-object CustomTUI {
-  // ANSI escape character and reset code
-  val ESC   = '\u001B'
-  val RESET = s"$ESC[0m"
+import java.io.{BufferedWriter, OutputStreamWriter}
+import scala.util.{Failure, Success, Try}
 
-  // Check if terminal supports colors
-  def supportsColors(): Boolean = {
-    Option(System.getenv("TERM")).exists(term =>
-      term.contains("color") || term.contains("xterm") || term.contains("256")
-    ) ||
-    Option(System.getenv("COLORTERM")).isDefined
-  }
+object FunctionalTUI extends IOApp {
+  // ANSI escape character and reset code
+  private val ESC: Char     = '\u001B'
+  private val RESET: String = s"$ESC[0m"
+
+  // Pure function to clamp values to valid range
+  private def clamp(value: Int, min: Int = 0, max: Int = 255): Int =
+    math.max(min, math.min(max, value))
 
   /** Generates ANSI 24-bit true color escape sequence for the given RGB values
     * @param r
@@ -31,37 +33,11 @@ object CustomTUI {
     *   ANSI escape sequence for the RGB color
     */
   def rgb(r: Int, g: Int, b: Int): String = {
-    if (!supportsColors()) return ""
+    val red   = clamp(r)
+    val green = clamp(g)
+    val blue  = clamp(b)
 
-    // Clamp values to valid range
-    val red   = Math.max(0, Math.min(255, r))
-    val green = Math.max(0, Math.min(255, g))
-    val blue  = Math.max(0, Math.min(255, b))
-
-    // Use explicit concatenation to avoid string interpolation issues
-    ESC.toString + "[38;2;" + red + ";" + green + ";" + blue + "m"
-  }
-
-  /** Generates ANSI 24-bit true color background escape sequence
-    * @param r
-    *   Red component (0-255)
-    * @param g
-    *   Green component (0-255)
-    * @param b
-    *   Blue component (0-255)
-    * @return
-    *   ANSI escape sequence for the RGB background color
-    */
-  def rgbBackground(r: Int, g: Int, b: Int): String = {
-    if (!supportsColors()) return ""
-
-    // Clamp values to valid range
-    val red   = Math.max(0, Math.min(255, r))
-    val green = Math.max(0, Math.min(255, g))
-    val blue  = Math.max(0, Math.min(255, b))
-
-    // Use explicit concatenation to avoid string interpolation issues
-    ESC.toString + "[48;2;" + red + ";" + green + ";" + blue + "m"
+    s"$ESC[38;2;$red;$green;${blue}m"
   }
 
   /** Colors a string with the given RGB values
@@ -76,126 +52,164 @@ object CustomTUI {
     * @return
     *   Colored string that resets after the text
     */
-  def colorize(text: String, r: Int, g: Int, b: Int): String = {
-    if (text.isEmpty || !supportsColors()) return text
-    val colorCode = rgb(r, g, b)
-    colorCode + text + RESET
-  }
+  def colorize(text: String, r: Int, g: Int, b: Int): String =
+    rgb(r, g, b) + text + RESET
 
-  /** Colors a string's background with the given RGB values
-    * @param text
-    *   Text to highlight
-    * @param r
-    *   Red component (0-255)
-    * @param g
-    *   Green component (0-255)
-    * @param b
-    *   Blue component (0-255)
-    * @return
-    *   String with colored background that resets after the text
-    */
-  def highlight(text: String, r: Int, g: Int, b: Int): String = {
-    if (text.isEmpty || !supportsColors()) return text
-    val bgCode = rgbBackground(r, g, b)
-    bgCode + text + RESET
-  }
+  /** Check if terminal supports colors */
+  private def supportsColors: Boolean =
+    Option(System.getenv("TERM")).exists(term =>
+      term.contains("color") || term.contains("xterm") || term.contains("256")
+    ) ||
+      Option(System.getenv("COLORTERM")).isDefined
 
-  /** Safe version of colorize that ensures complete ANSI sequences
-    * @param text
-    *   Text to color
-    * @param r
-    *   Red component (0-255)
-    * @param g
-    *   Green component (0-255)
-    * @param b
-    *   Blue component (0-255)
-    * @return
-    *   Colored string that resets after the text
-    */
-  def safeColorize(text: String, r: Int, g: Int, b: Int): String = {
-    if (text.isEmpty || !supportsColors()) return text
-
-    try {
-      val colorCode = rgb(r, g, b)
-      // Ensure we have a complete escape sequence
-      if (!colorCode.startsWith(ESC.toString + "[")) {
-        return text // Fallback to plain text if escape sequence is malformed
+  /** Safely colorize text with fallbacks */
+  private def safeColorize(text: String, r: Int, g: Int, b: Int): String =
+    if (text.isEmpty || !supportsColors) text
+    else {
+      Try {
+        val colorCode = rgb(r, g, b)
+        // Ensure we have a complete escape sequence
+        if (!colorCode.startsWith(s"$ESC[")) {
+          text // Fallback to plain text if escape sequence is malformed
+        } else {
+          colorCode + text + RESET
+        }
+      } match {
+        case Success(formedStr) => formedStr
+        case Failure(_)         => text
       }
-      colorCode + text + RESET
-    } catch {
-      case _: Exception => text // Return plain text on any error
     }
-  }
 
-  /** Safely print a colored line with proper flushing
-    * @param line
-    *   The line to print
-    */
-  def printColoredLine(line: String): Unit = {
-    print(line + RESET)
-    System.out.flush()
-    println()
-  }
+  /** Resource for managing a JLine Terminal */
+  def terminalResource: Resource[IO, Terminal] =
+    Resource.make(
+      IO.blocking {
+        val terminal = TerminalBuilder
+          .builder()
+          .system(true)
+          .build()
 
-  def printColorGrid[T](
+        terminal.enterRawMode()
+        terminal.puts(InfoCmp.Capability.clear_screen)
+        terminal.flush()
+        terminal
+      }
+    )(terminal => IO.blocking(terminal.close()).handleErrorWith(_ => IO.unit))
+
+  /** Resource for managing a BufferedWriter for the terminal */
+  private def writerResource(terminal: Terminal): Resource[IO, BufferedWriter] =
+    Resource.make(
+      IO.blocking(new BufferedWriter(new OutputStreamWriter(terminal.output())))
+    )(writer => IO.blocking(writer.close()).handleErrorWith(_ => IO.unit))
+
+  /** Read a key from the terminal */
+  private def readKey(terminal: Terminal): IO[Int] =
+    IO.blocking(terminal.reader().read())
+
+  /** Clear the terminal screen */
+  private def clearScreen(terminal: Terminal): IO[Unit] =
+    IO.blocking {
+      terminal.puts(InfoCmp.Capability.clear_screen)
+      terminal.flush()
+    }
+
+  /** Print a color grid to the terminal in a functional way */
+  private def printColorGrid(
+      writer: BufferedWriter,
       chars: Array[Array[Char]],
       colors: Array[Array[RGB]]
-  ): Unit = {
-    for ((line, lineIndex) <- chars.zipWithIndex) {
-      val coloredLine = line.zipWithIndex.map { case (char, charIndex) =>
-        val rgb = colors(lineIndex)(charIndex)
-        safeColorize(char.toString, rgb.r, rgb.g, rgb.b)
-      }.mkString
+  ): IO[Unit] = {
+    IO.blocking {
+      val sb = new StringBuilder()
 
-      // Make sure the line ends with reset and flush the buffer
-      print(coloredLine + RESET)
-      System.out.flush()
-      println()
+      for ((line, lineIndex) <- chars.zipWithIndex) {
+        if (lineIndex > 0) {
+          sb.append("\n")
+        }
+
+        for ((char, charIndex) <- line.zipWithIndex) {
+          val rgb         = colors(lineIndex)(charIndex)
+          val coloredChar = safeColorize(char.toString, rgb.r, rgb.g, rgb.b)
+          sb.append(coloredChar)
+        }
+      }
+
+      writer.write(sb.toString + RESET)
+      writer.flush()
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    // Check if terminal supports colors
-    println(s"Terminal supports colors: ${supportsColors()}")
+  /** Run a program with a managed terminal and writer */
+  private def withTerminal[A](
+      program: (Terminal, BufferedWriter) => IO[A]
+  ): IO[A] = {
+    val resources: Resource[IO, (Terminal, BufferedWriter)] = for {
+      terminal <- terminalResource
+      writer   <- writerResource(terminal)
+    } yield (terminal, writer)
 
-    // Example usage
-    println(safeColorize("This is custom red text", 255, 0, 0))
-    println(safeColorize("This is orange text", 255, 165, 0))
-    println(safeColorize("This is custom blue text", 0, 0, 255))
-
-    // Gradient example
-    println("Color gradient:")
-    for (i <- 0 to 255 by 25) {
-      print(safeColorize("■", i, 255 - i, 128))
+    resources.use { case (terminal, writer) =>
+      program(terminal, writer)
     }
-    System.out.flush()
-    println()
+  }
 
-    // Background example
-    println(highlight("This has a yellow background", 255, 255, 0))
+  /** Main application logic with key handling for ASCII art */
+  def terminalApp(
+      chars: Array[Array[Char]],
+      colors: Array[Array[RGB]]
+  ): IO[ExitCode] = {
+    withTerminal { (terminal, writer) =>
+      // Helper function to render the ASCII art
+      def renderAscii: IO[Unit] =
+        printColorGrid(writer, chars, colors)
 
-    // Combining foreground and background
-    print(
-      rgb(255, 255, 255) + rgbBackground(
-        0,
-        0,
-        128
-      ) + "White text on blue background" + RESET
-    )
-    System.out.flush()
-    println()
+      def loop: IO[ExitCode] = {
+        readKey(terminal).flatMap {
+          case 'q' => IO(ExitCode.Success)          // Quit
+          case 'c' => clearScreen(terminal) >> loop // Clear and continue
+          case 'r' =>
+            clearScreen(
+              terminal
+            ) >> renderAscii >> loop // Re-render and continue
+          case _ => loop // Ignore and continue
+        }
+      }
 
-    // Example of printColorGrid with RGB case class
+      renderAscii >> loop
+    }
+  }
+
+  /** Entry point when used as a library */
+  def main(chars: Array[Array[Char]], colors: Array[Array[RGB]]): IO[ExitCode] =
+    terminalApp(chars, colors)
+
+  /** Entry point when used as an application */
+  def run(args: List[String]): IO[ExitCode] = {
+    // Sample ASCII art data for demonstration
     val sampleChars = Array(
-      Array('H', 'e'),
-      Array('i', '!')
-    )
-    val sampleColors = Array(
-      Array(RGB(255, 0, 0), RGB(255, 127, 0)),
-      Array(RGB(0, 255, 0), RGB(0, 0, 255))
+      Array('H', 'e', 'l', 'l', 'o'),
+      Array('W', 'o', 'r', 'l', 'd')
     )
 
-    printColorGrid(sampleChars, sampleColors)
+    val sampleColors = Array(
+      Array(
+        RGB(255, 0, 0),
+        RGB(255, 165, 0),
+        RGB(255, 255, 0),
+        RGB(0, 255, 0),
+        RGB(0, 0, 255)
+      ),
+      Array(
+        RGB(128, 0, 128),
+        RGB(255, 192, 203),
+        RGB(255, 255, 255),
+        RGB(128, 128, 128),
+        RGB(0, 0, 0)
+      )
+    )
+
+    // Run the app with sample data
+    terminalApp(sampleChars, sampleColors)
   }
 }
 
@@ -242,14 +256,8 @@ object TestShit {
           LuminanceConfig(greyscale.grayscaleDecimals, charset)
         )
 
-      _ = {
-        // Use CustomTUI.printColorGrid to print the ASCII art with colors
-        CustomTUI.printColorGrid(asciiWithColors, greyscale.colors)
-
-        // Optional: Print summary info
-        println(s"ASCII art rendered: ${asciiWithColors.length} lines")
-      }
-    } yield ()
+      exitCode <- FunctionalTUI.terminalApp(asciiWithColors, greyscale.colors)
+    } yield exitCode
 
     x.unsafeRunSync()
   }
