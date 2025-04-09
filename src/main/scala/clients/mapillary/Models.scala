@@ -7,6 +7,7 @@ object Models {
   case class MapillaryImageDetails(
       id: String,
       sequenceId: String,
+      coordinates: Coordinates,
       thumb1024Url: Option[String],
       thumbOriginalUrl: Option[String]
   )

@@ -1,7 +1,7 @@
 package runner
 
 import asciiart.Conversions
-import asciiart.Models.{HexImage, ImageHeight, ImageWidth}
+import asciiart.Models.{HexImage, ImageHeight, ImageInfo, ImageWidth}
 import cats.data.EitherT
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
@@ -15,7 +15,7 @@ import org.scalatest.matchers.should.Matchers
 import socialmedia.SocialMedia
 
 class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
-  "Runner.getHexStringsFromLocation" should "return hex image when images are found" in {
+  "Runner.getHexStringsFromLocation" should "return imageInfo when images are found" in {
     // Setup test data
     val coordinates = Coordinates.unsafeCreate(51.5074, -0.1278) // London
     val radius      = Radius.unsafeCreate(3)
@@ -43,6 +43,8 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
 
     // Create the HexImage instance
     val hexImage = HexImage(hexStrings, testWidth, testHeight)
+    val imageInfo =
+      ImageInfo(hexImage, imageId, Coordinates.unsafeCreate(50, 50))
 
     // Create mocks
     val mockMapillaryClient = mock[MapillaryClient]
@@ -69,7 +71,9 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
         _: List[clients.mapillary.Models.RequestField]
       ))
       .expects(imageId, *)
-      .returning(EitherT.rightT(imageByteArray))
+      .returning(
+        EitherT.rightT(imageByteArray, Coordinates.unsafeCreate(50, 50))
+      )
 
     // Mock the conversion function to return our test hex image
     // Create an instance of Runner with mocked dependencies
@@ -84,7 +88,7 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
 
     // Assertions
     result.isRight shouldBe true
-    result.getOrElse(fail("Expected Right but got Left")) shouldBe hexImage
+    result.getOrElse(fail("Expected Right but got Left")) shouldBe imageInfo
   }
 
   "Runner.getNeighborImageIds" should "return list of neighbor image IDs" in {

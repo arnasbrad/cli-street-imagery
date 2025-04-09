@@ -20,10 +20,11 @@ trait MapillaryClient {
       fields: List[RequestField] = List(
         RequestField.ID,
         RequestField.Sequence,
+        RequestField.Geometry,
         RequestField.Thumb1024Url,
         RequestField.ThumbOriginalUrl
       )
-  ): EitherT[IO, MapillaryError, Array[Byte]]
+  ): EitherT[IO, MapillaryError, (Array[Byte], Coordinates)]
 
   def getImagesInfoByLocation(
       coordinates: Coordinates,
@@ -186,7 +187,7 @@ object MapillaryClient {
     override def getImage(
         imageId: MapillaryImageId,
         fields: List[RequestField]
-    ): EitherT[IO, MapillaryError, Array[Byte]] = {
+    ): EitherT[IO, MapillaryError, (Array[Byte], Coordinates)] = {
       for {
         details <- getImageDetails(imageId, fields)
 
@@ -201,7 +202,7 @@ object MapillaryClient {
         }
 
         imageBytes <- getImageFromUrl(imageUrl)
-      } yield imageBytes
+      } yield (imageBytes, details.coordinates)
     }
 
     /** Calculates a bounding box around coordinates within a radius.

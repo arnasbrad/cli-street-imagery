@@ -17,7 +17,7 @@ object GetImage extends IOApp.Simple {
       .value
       .flatMap {
         // Handle the Either result
-        case Right(imageBytes) =>
+        case Right((imageBytes, _)) =>
           // Success path - do what you were doing before
           for {
             _ <- IO.println(

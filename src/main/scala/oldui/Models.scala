@@ -1,4 +1,4 @@
-package ui
+package oldui
 
 import tui._
 import tui.widgets.{BlockWidget, ParagraphWidget}

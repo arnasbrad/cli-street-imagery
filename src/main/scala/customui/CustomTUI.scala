@@ -1,12 +1,16 @@
-import asciiart.Models.RGB
-import cats.effect.{ExitCode, IO, IOApp, Resource}
+package customui
+
+import asciiart.Models.{ImageInfo, RGB}
+import cats.effect.{ExitCode, IO, Resource}
+import common.Models.Radius
 import org.jline.terminal.{Terminal, TerminalBuilder}
 import org.jline.utils.InfoCmp
+import runner.Runner
 
 import java.io.{BufferedWriter, OutputStreamWriter}
 import scala.util.{Failure, Success, Try}
 
-object FunctionalTUI extends IOApp {
+object CustomTUI {
   // ANSI escape character and reset code
   private val ESC: Char     = '\u001B'
   private val RESET: String = s"$ESC[0m"
@@ -132,6 +136,36 @@ object FunctionalTUI extends IOApp {
     }
   }
 
+  private def printPossibleNavigationOptions(
+      runner: Runner,
+      imageInfo: ImageInfo,
+      writer: BufferedWriter
+  ): IO[Unit] = {
+    for {
+      either <- runner
+        .getNeighborImageIds(
+          currentImageId = imageInfo.imageId,
+          currentCoordinates = imageInfo.coordinates,
+          radius = Radius.unsafeCreate(15),
+          maxAmount = 5
+        )
+        .value
+
+      _ <- either match {
+        case Right(newImageIds) =>
+          IO.blocking {
+            writer.write(newImageIds.toString)
+            writer.flush()
+          }
+        case Left(_) =>
+          IO.blocking {
+            writer.write("something failed")
+            writer.flush()
+          }
+      }
+    } yield ()
+  }
+
   /** Run a program with a managed terminal and writer */
   private def withTerminal[A](
       program: (Terminal, BufferedWriter) => IO[A]
@@ -148,38 +182,94 @@ object FunctionalTUI extends IOApp {
 
   /** Main application logic with key handling for ASCII art */
   def terminalApp(
-      chars: Array[Array[Char]],
-      colors: Array[Array[RGB]]
+      initialChars: Array[Array[Char]],
+      initialColors: Array[Array[RGB]],
+      runner: Runner,
+      initialImageInfo: ImageInfo
   ): IO[ExitCode] = {
     withTerminal { (terminal, writer) =>
-      // Helper function to render the ASCII art
-      def renderAscii: IO[Unit] =
-        printColorGrid(writer, chars, colors)
+      def loop(
+          chars: Array[Array[Char]],
+          colors: Array[Array[RGB]],
+          imageInfo: ImageInfo
+      ): IO[ExitCode] = {
+        for {
+          key <- readKey(terminal)
+          exitCode <- key match {
+            case 'q' =>
+              IO.pure(ExitCode.Success) // Quit
 
-      def loop: IO[ExitCode] = {
-        readKey(terminal).flatMap {
-          case 'q' => IO(ExitCode.Success)          // Quit
-          case 'c' => clearScreen(terminal) >> loop // Clear and continue
-          case 'r' =>
-            clearScreen(
-              terminal
-            ) >> renderAscii >> loop // Re-render and continue
-          case _ => loop // Ignore and continue
-        }
+            case 'c' =>
+              for {
+                _    <- clearScreen(terminal)
+                code <- loop(chars, colors, imageInfo)
+              } yield code
+
+            case 'r' =>
+              for {
+                _    <- clearScreen(terminal)
+                _    <- printColorGrid(writer, chars, colors)
+                code <- loop(chars, colors, imageInfo)
+              } yield code
+
+            case 'n' =>
+              for {
+                _ <- clearScreen(terminal)
+                _ <- printPossibleNavigationOptions(runner, imageInfo, writer)
+                navKey <- readKey(terminal)
+                code <- navKey match {
+                  case '1' =>
+                    for {
+                      _   <- clearScreen(terminal)
+                      res <- runner.getHexStringsFromId(imageInfo.imageId).value
+                      code <- res match {
+                        case Right(imageInfo) =>
+                          for {
+                            _ <- IO.blocking {
+                              writer.write(imageInfo.imageId.id)
+                              writer.flush()
+                            }
+                            /*
+                            _ <- printColorGrid(
+                              writer,
+                              imageInfo.hexImage.,
+                              initialColors
+                            )
+                             */
+                            code <- loop(
+                              initialChars,
+                              initialColors,
+                              initialImageInfo
+                            )
+                          } yield code
+                        case Left(err) =>
+                          IO.blocking {
+                            writer.write("something failed AAA")
+                            writer.flush()
+                          }.as(ExitCode.Error)
+                      }
+                    } yield code
+                  case _ =>
+                    loop(chars, colors, imageInfo)
+                }
+              } yield code
+
+            case _ =>
+              loop(chars, colors, imageInfo) // Ignore and continue
+          }
+        } yield exitCode
       }
 
-      renderAscii >> loop
+      printColorGrid(writer, initialChars, initialColors) >> loop(
+        initialChars,
+        initialColors,
+        initialImageInfo
+      )
     }
   }
 
-  /** Entry point when used as a library */
-  def main(
-      chars: Array[Array[Char]],
-      colors: Array[Array[RGB]]
-  ): IO[ExitCode] =
-    terminalApp(chars, colors)
-
   /** Entry point when used as an application */
+  /*
   def run(args: List[String]): IO[ExitCode] = {
     // Sample ASCII art data for demonstration
     val sampleChars = Array(
@@ -205,6 +295,7 @@ object FunctionalTUI extends IOApp {
     )
 
     // Run the app with sample data
-    terminalApp(sampleChars, sampleColors)
+    terminalApp(sampleChars, sampleColors, runner, imageInfo)
   }
+   */
 }
