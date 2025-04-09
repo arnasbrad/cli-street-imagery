@@ -4,18 +4,27 @@
 clear
 
 # ASCII Art header
-echo ""
-echo "█▀ ▀█▀ █▀█ █▀▀ █▀▀ ▀█▀   █▀█ █▀ █▀▀ █ █" | gum style --foreground 212 --align center --width 70
+echo "█▀ ▀█▀ █▀█ █▀▀ █▀▀ ▀█▀   █▀█ █▀ █▀▀ █ █" | gum style --foreground 212 --align center --width 70 --margin "1 0 0 0"
 echo "▄█ ░█░ █▀▄ ██▄ ██▄ ░█░   █▀█ ▄█ █▄▄ █ █" | gum style --foreground 212 --align center --width 70
 
 # Get Mapillary API Key
 echo "Enter your Mapillary API Key:" | gum style --padding "1 2" --width 50
-while [ -z "$mapillaryKey" ]; do
+while [ -z "$mapillaryKey" ] || ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z0-9_-]{16}\|[a-zA-Z0-9_-]{32}$"; do
+  # Clear previous key if invalid format
+  if [ ! -z "$mapillaryKey" ] && ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z0-9_-]{16}\|[a-zA-Z0-9_-]{32}$"; then
+    echo "Invalid API key format! Please try again." | gum style --foreground 196
+    mapillaryKey=""
+  fi
+
+  # Prompt for input
   mapillaryKey=$(gum input --placeholder.foreground 240 --width 50 --password --placeholder "Enter the Mapillary API key (press [ENTER] for hint)")
+
+  # Show hint if empty
   if [ -z "$mapillaryKey" ]; then
-    echo "Expected format: MLY|*****************|**********************" | gum style --foreground 208
+    echo "Expected format: MLY|****************|********************************" | gum style --foreground 208
   fi
 done
+
 clear
 
 # Algorithm selection
@@ -43,11 +52,22 @@ algorithm=$(gum choose --cursor.foreground 212 --selected.foreground 212 --heigh
 clear
 
 # Charset selection
-echo "Select the ASCII charset:" | gum style --padding "1 2" --width 50
-charset=$(gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 \
-  "Default (.:-=+*#%@)" \
-  "Extended (\\.'\`^\\\",;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$)" \
-  "Braille (⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿)")
+# Charset selection - skip if Braille is selected
+if [ "$algorithm" = "Braille" ]; then
+  # Set charset to braille constant without asking
+  charset="BraillePatterns"
+
+  # Show a notification that charset was auto-selected
+  echo "Braille algorithm selected - using braille charset automatically" | gum style --padding "1 2" --width 60 --foreground 212
+  sleep 2.5
+else
+  # Only show charset selection for non-Braille algorithms
+  echo "Select the ASCII charset:" | gum style --padding "1 2" --width 50
+  charset=$(gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 \
+    "Default (.:-=+*#%@)" \
+    "Extended (\\.'\`^\\\",;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$)" \
+    "Braille (⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿)")
+fi
 clear
 
 charset=$(echo "$charset" | cut -d' ' -f1)
@@ -66,9 +86,9 @@ clear
 echo "Configuration Summary:" | gum style --padding "1 2" --width 50
 {
   # Create formatted summary text
-  summary="$(echo "🔑 API key:" | gum style --foreground 212) ${mapillaryKey:0:10}...${mapillaryKey: -10}
+  summary="$(echo "🔑 API key:" | gum style --foreground 212) ${mapillaryKey:0:4}...${mapillaryKey: -3}
 $(echo "🧮 Algorithm:" | gum style --foreground 212) $algorithm
-$(echo "🔤 Charset:" | gum style --foreground 212) ${charset:0:20}...
+$(echo "🔤 Charset:" | gum style --foreground 212) ${charset:0:20}
 $(echo "⚙️ Down sampling rate:" | gum style --foreground 212) $downSampling"
 
   # Display summary with styling
