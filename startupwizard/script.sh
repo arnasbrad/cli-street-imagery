@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Clear the terminal
 clear
