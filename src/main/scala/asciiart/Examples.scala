@@ -7,7 +7,6 @@ import asciiart.Models._
 import java.io.{File, PrintWriter}
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
-import scala.util.{Failure, Success, Try}
 
 object Examples {
   def readHexValues(filePath: String): Array[String] = {
