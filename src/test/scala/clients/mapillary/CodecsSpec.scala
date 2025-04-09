@@ -5,6 +5,7 @@ import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import Codecs._
 import clients.mapillary.Models._
+import common.Models.Coordinates
 
 class CodecsSpec extends AnyFunSpec with Matchers {
   describe("Mapillary Codecs") {
@@ -15,6 +16,9 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           {
             "id": "123456789",
             "sequence": "seq123456",
+            "geometry": {
+              "coordinates": [10.123, 59.456]
+            },
             "thumb_1024_url": "https://images.mapillary.com/123456789/thumb-1024.jpg",
             "thumb_original_url": "https://images.mapillary.com/123456789/thumb-original.jpg"
           }
@@ -27,6 +31,10 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
         imageDetails.id shouldBe "123456789"
         imageDetails.sequenceId shouldBe "seq123456"
+        imageDetails.coordinates shouldBe Coordinates.unsafeCreate(
+          59.456,
+          10.123
+        )
         imageDetails.thumb1024Url shouldBe Some(
           "https://images.mapillary.com/123456789/thumb-1024.jpg"
         )
@@ -40,7 +48,10 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           """
           {
             "id": "123456789",
-            "sequence": "seq123456"
+            "sequence": "seq123456",
+            "geometry": {
+              "coordinates": [10.123, 59.456]
+            }
           }
         """
 
@@ -51,6 +62,10 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
         imageDetails.id shouldBe "123456789"
         imageDetails.sequenceId shouldBe "seq123456"
+        imageDetails.coordinates shouldBe Coordinates.unsafeCreate(
+          59.456,
+          10.123
+        )
         imageDetails.thumb1024Url shouldBe None
         imageDetails.thumbOriginalUrl shouldBe None
       }
@@ -84,6 +99,9 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           {
             "id": "123456789",
             "sequence": "seq123456",
+            "geometry": {
+              "coordinates": [10.123, 59.456]
+            },
             "thumb_1024_url": "https://images.mapillary.com/123456789/thumb-1024.jpg",
             "thumb_original_url": "https://images.mapillary.com/123456789/thumb-original.jpg",
             "extra_field": "this should be ignored",
@@ -98,6 +116,10 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
         imageDetails.id shouldBe "123456789"
         imageDetails.sequenceId shouldBe "seq123456"
+        imageDetails.coordinates shouldBe Coordinates.unsafeCreate(
+          59.456,
+          10.123
+        )
         imageDetails.thumb1024Url shouldBe Some(
           "https://images.mapillary.com/123456789/thumb-1024.jpg"
         )
