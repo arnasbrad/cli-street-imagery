@@ -1,5 +1,8 @@
 package asciiart
 
+import clients.mapillary.Models.MapillaryImageId
+import common.Models.Coordinates
+
 object Models {
   sealed trait AlgorithmConfig
 
@@ -27,6 +30,12 @@ object Models {
       hexStrings: Array[String],
       width: ImageWidth,
       height: ImageHeight
+  )
+
+  case class ImageInfo(
+      hexImage: HexImage,
+      imageId: MapillaryImageId,
+      coordinates: Coordinates
   )
 
   case class RGB(r: Int, g: Int, b: Int)

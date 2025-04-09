@@ -1,11 +1,11 @@
-package ui
+package oldui
 
 import cats.effect._
 import tui._
 import tui.crossterm.{Command, CrosstermJni}
 import tui.widgets.BlockWidget
 import tui.widgets.tabs.TabsWidget
-import ui.Models._
+import oldui.Models._
 
 object TabsExample extends IOApp.Simple {
   // Main entry point

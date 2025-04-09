@@ -13,13 +13,19 @@ object Codecs {
   implicit val mapillaryImageDetailsDecoder: Decoder[MapillaryImageDetails] =
     Decoder.instance { c =>
       for {
-        id               <- c.get[String]("id")
-        sequenceId       <- c.get[String]("sequence")
+        id         <- c.get[String]("id")
+        sequenceId <- c.get[String]("sequence")
+        coordsArray <- c
+          .downField("geometry")
+          .downField("coordinates")
+          .as[List[Double]]
         thumb1024Url     <- c.get[Option[String]]("thumb_1024_url")
         thumbOriginalUrl <- c.get[Option[String]]("thumb_original_url")
       } yield MapillaryImageDetails(
         id = id,
         sequenceId = sequenceId,
+        coordinates =
+          Coordinates.unsafeCreate(coordsArray(1), coordsArray.head),
         thumb1024Url = thumb1024Url,
         thumbOriginalUrl = thumbOriginalUrl
       )

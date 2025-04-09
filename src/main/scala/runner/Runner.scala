@@ -1,7 +1,7 @@
 package runner
 
 import asciiart.Conversions
-import asciiart.Models.HexImage
+import asciiart.Models.ImageInfo
 import cats.data.EitherT
 import cats.effect.IO
 import clients.imgur.{Errors, ImgurClient}
@@ -16,7 +16,11 @@ sealed trait Runner {
   def getHexStringsFromLocation(
       coordinates: Coordinates,
       radius: Radius = Radius.unsafeCreate(3)
-  ): EitherT[IO, MapillaryError, HexImage]
+  ): EitherT[IO, MapillaryError, ImageInfo]
+
+  def getHexStringsFromId(
+      imageId: MapillaryImageId
+  ): EitherT[IO, MapillaryError, ImageInfo]
 
   def getNeighborImageIds(
       currentImageId: MapillaryImageId,
@@ -50,10 +54,23 @@ object Runner {
       mapillaryClient: MapillaryClient,
       imgurClient: ImgurClient
   ) extends Runner {
+    def getHexStringsFromId(
+        imageId: MapillaryImageId
+    ): EitherT[IO, MapillaryError, ImageInfo] = {
+      for {
+        res <- mapillaryClient.getImage(imageId)
+        (byteArray, coordinates) = res
+
+        hex <- EitherT.liftF(
+          conversionLogic.convertBytesToHexImage(byteArray)
+        )
+      } yield ImageInfo(hex, imageId, coordinates)
+    }
+
     def getHexStringsFromLocation(
         coordinates: Coordinates,
         radius: Radius
-    ): EitherT[IO, MapillaryError, HexImage] = {
+    ): EitherT[IO, MapillaryError, ImageInfo] = {
       for {
         imagesInfoResp <- mapillaryClient.getImagesInfoByLocation(
           coordinates,
@@ -72,11 +89,12 @@ object Runner {
           )
         )
 
-        imageByteArray <- mapillaryClient.getImage(imageId)
+        res <- mapillaryClient.getImage(imageId)
+        (imageByteArray, newCoordinates) = res
         hex <- EitherT.liftF(
           conversionLogic.convertBytesToHexImage(imageByteArray)
         )
-      } yield hex
+      } yield ImageInfo(hex, imageId, newCoordinates)
     }
 
     def getNeighborImageIds(
