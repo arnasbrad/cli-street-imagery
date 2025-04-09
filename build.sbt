@@ -56,3 +56,13 @@ Test / scalacOptions ++= Seq(
   "-Wconf:msg=unused value of type org.scalatest.Assertion:s",
   "-Wconf:msg=unused value of type org.scalamock:s"
 )
+
+// without this sbt assembly contains about duplicate module-info.class files
+assembly / assemblyMergeStrategy := {
+  case PathList("module-info.class") => MergeStrategy.discard
+  case PathList("META-INF", "versions", "9", "module-info.class") =>
+    MergeStrategy.discard
+  case x =>
+    val oldStrategy = (assembly / assemblyMergeStrategy).value
+    oldStrategy(x)
+}

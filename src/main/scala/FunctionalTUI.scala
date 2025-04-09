@@ -1,14 +1,7 @@
-import asciiart.Algorithms.LuminanceAlgorithm
-import asciiart.Models.{LuminanceConfig, RGB}
-import asciiart.{Charset, Conversions}
-import cats.effect.unsafe.implicits.global
+import asciiart.Models.RGB
 import cats.effect.{ExitCode, IO, IOApp, Resource}
-import clients.mapillary.MapillaryClient
-import clients.mapillary.Models.ApiKey
-import common.Models.Coordinates
 import org.jline.terminal.{Terminal, TerminalBuilder}
 import org.jline.utils.InfoCmp
-import runner.Runner
 
 import java.io.{BufferedWriter, OutputStreamWriter}
 import scala.util.{Failure, Success, Try}
@@ -180,7 +173,10 @@ object FunctionalTUI extends IOApp {
   }
 
   /** Entry point when used as a library */
-  def main(chars: Array[Array[Char]], colors: Array[Array[RGB]]): IO[ExitCode] =
+  def main(
+      chars: Array[Array[Char]],
+      colors: Array[Array[RGB]]
+  ): IO[ExitCode] =
     terminalApp(chars, colors)
 
   /** Entry point when used as an application */
@@ -210,55 +206,5 @@ object FunctionalTUI extends IOApp {
 
     // Run the app with sample data
     terminalApp(sampleChars, sampleColors)
-  }
-}
-
-object TestShit {
-  private def initClients() = {
-    for {
-      mapillaryClient <- MapillaryClient.make(
-        ApiKey.unsafeCreate(
-          "key"
-        )
-      )
-    } yield Runner.make(mapillaryClient, null)
-  }
-
-  def main(args: Array[String]): Unit = {
-    val x = for {
-      // Create initial app state
-      hexStrings <- initClients().use { runner =>
-        runner
-          .getHexStringsFromLocation(
-            Coordinates(50.978828194603636, 9.472298538718276)
-          )
-          .value
-      }
-
-      image = hexStrings match {
-        case Right(img) => img
-        case Left(e)    => throw new Exception("as gejus")
-      }
-
-      horizontalSampling = 3
-      verticalSampling   = horizontalSampling * 2
-      charset            = Charset.Extended
-
-      greyscale = Conversions.hexStringsToSampledGreyscaleDecimal(
-        horizontalSampling,
-        verticalSampling,
-        image.hexStrings,
-        image.width.value
-      )
-
-      asciiWithColors = LuminanceAlgorithm
-        .generate(
-          LuminanceConfig(greyscale.grayscaleDecimals, charset)
-        )
-
-      exitCode <- FunctionalTUI.terminalApp(asciiWithColors, greyscale.colors)
-    } yield exitCode
-
-    x.unsafeRunSync()
   }
 }
