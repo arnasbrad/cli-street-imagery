@@ -12,6 +12,9 @@ echo "Enter your Mapillary API Key:" | gum style --padding "1 2" --width 50
 while [ -z "$mapillaryKey" ] || ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z0-9_-]{16}\|[a-zA-Z0-9_-]{32}$"; do
   # Clear previous key if invalid format
   if [ ! -z "$mapillaryKey" ] && ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z0-9_-]{16}\|[a-zA-Z0-9_-]{32}$"; then
+    # Clear screen and re-display prompt before showing error
+    clear
+    echo "Enter your Mapillary API Key:" | gum style --padding "1 2" --width 50
     echo "Invalid API key format! Please try again." | gum style --foreground 196
     mapillaryKey=""
   fi
@@ -21,10 +24,12 @@ while [ -z "$mapillaryKey" ] || ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z
 
   # Show hint if empty
   if [ -z "$mapillaryKey" ]; then
+    # Clear screen and re-display prompt before showing hint
+    clear
+    echo "Enter your Mapillary API Key:" | gum style --padding "1 2" --width 50
     echo "Expected format: MLY|****************|********************************" | gum style --foreground 208
   fi
 done
-
 clear
 
 # Algorithm selection
@@ -40,7 +45,6 @@ if gum confirm "Show algorithm details?"; then
   read
   clear
 fi
-
 clear
 
 # Then show the selection
@@ -51,7 +55,6 @@ algorithm=$(gum choose --cursor.foreground 212 --selected.foreground 212 --heigh
   "Braille")
 clear
 
-# Charset selection
 # Charset selection - skip if Braille is selected
 if [ "$algorithm" = "Braille" ]; then
   # Set charset to braille constant without asking
@@ -74,10 +77,32 @@ charset=$(echo "$charset" | cut -d' ' -f1)
 
 # Down sampling rate
 echo "Set the down sampling rate:" | gum style --padding "1 2" --width 50
-while [ -z "$downSampling" ]; do
+downSampling=""
+while [ -z "$downSampling" ] || ! [[ "$downSampling" =~ ^[0-9]+$ ]] || [ "$downSampling" -lt 1 ] || [ "$downSampling" -gt 20 ]; do
+  # If previous input was invalid but not empty, show error message
+  if [ ! -z "$downSampling" ]; then
+    # Clear previous error messages
+    clear
+    echo "Set the down sampling rate:" | gum style --padding "1 2" --width 50
+
+    # Show appropriate error
+    if ! [[ "$downSampling" =~ ^[0-9]+$ ]]; then
+      echo "Invalid input! Please enter a number." | gum style --foreground 196
+    elif [ "$downSampling" -lt 1 ] || [ "$downSampling" -gt 20 ]; then
+      echo "Value must be between 1 and 20." | gum style --foreground 196
+    fi
+    # Reset the value
+    downSampling=""
+  fi
+
+  # Get input
   downSampling=$(gum input --placeholder.foreground 240 --width 50 --placeholder "Enter the down sampling rate (press [ENTER] for hint)")
+
+  # Show hint if empty (with clear to prevent stacking)
   if [ -z "$downSampling" ]; then
-    echo "Please enter a number (1-10 recommended)" | gum style --foreground 208
+    clear
+    echo "Set the down sampling rate:" | gum style --padding "1 2" --width 50
+    echo "Please enter a number between 1 and 20" | gum style --foreground 208
   fi
 done
 clear
@@ -97,13 +122,31 @@ $(echo "⚙️ Down sampling rate:" | gum style --foreground 212) $downSampling"
 
 # Ask for config file location
 echo "Where would you like to save the configuration file?" | gum style --padding "1 2" --width 60
-configPath=$(gum input --placeholder.foreground 240 --width 60 --placeholder "./image_converter.conf")
-# Use default if empty
-if [ -z "$configPath" ]; then
-  configPath="./image_converter.conf"
-fi
+
+configPath=""
+while [ -z "$configPath" ] || ! [[ "$configPath" =~ \.conf$ ]]; do
+  # Show error if path doesn't end with .conf (but not empty)
+  if [ ! -z "$configPath" ] && ! [[ "$configPath" =~ \.conf$ ]]; then
+    # Clear screen and re-display prompt before showing error
+    clear
+    echo "Where would you like to save the configuration file?" | gum style --padding "1 2" --width 60
+    echo "File must have a .conf extension. Please try again." | gum style --foreground 196
+    configPath=""
+  fi
+
+  # Get input
+  configPath=$(gum input --placeholder.foreground 240 --width 60 --placeholder "./streetascii.conf")
+
+  # Use default if empty
+  if [ -z "$configPath" ]; then
+    configPath="./streetascii.conf"
+    break
+  fi
+done
+clear
 
 # Write config and show spinner
+echo ""
 gum confirm "Ready to proceed and save configuration?" && {
   # Create directory if it doesn't exist
   mkdir -p "$(dirname "$configPath")"
