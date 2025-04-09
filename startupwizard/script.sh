@@ -11,7 +11,7 @@ echo "▄█ ░█░ █▀▄ ██▄ ██▄ ░█░   █▀█ ▄�
 echo "Enter your Mapillary API Key:" | gum style --padding "1 2" --width 50
 while [ -z "$mapillaryKey" ] || ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z0-9_-]{16}\|[a-zA-Z0-9_-]{32}$"; do
   # Clear previous key if invalid format
-  if [ ! -z "$mapillaryKey" ] && ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z0-9_-]{16}\|[a-zA-Z0-9_-]{32}$"; then
+  if [ -n "$mapillaryKey" ] && ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z0-9_-]{16}\|[a-zA-Z0-9_-]{32}$"; then
     # Clear screen and re-display prompt before showing error
     clear
     echo "Enter your Mapillary API Key:" | gum style --padding "1 2" --width 50
@@ -42,7 +42,7 @@ if gum confirm "Show algorithm details?"; then
   echo "Edge detection 📐: Highlights borders between contrasting areas" | gum style --margin "0 2 1 2"
   echo "Braille ⠃⠗⠁⠊⠇⠇⠑: Represents the image using braille characters" | gum style --margin "0 2 1 2"
   echo "Press Enter to continue..." | gum style --foreground 240
-  read
+  read -r
   clear
 fi
 clear
@@ -80,7 +80,7 @@ echo "Set the down sampling rate:" | gum style --padding "1 2" --width 50
 downSampling=""
 while [ -z "$downSampling" ] || ! [[ "$downSampling" =~ ^[0-9]+$ ]] || [ "$downSampling" -lt 1 ] || [ "$downSampling" -gt 20 ]; do
   # If previous input was invalid but not empty, show error message
-  if [ ! -z "$downSampling" ]; then
+  if [ -n "$downSampling" ]; then
     # Clear previous error messages
     clear
     echo "Set the down sampling rate:" | gum style --padding "1 2" --width 50
@@ -126,7 +126,7 @@ echo "Where would you like to save the configuration file?" | gum style --paddin
 configPath=""
 while [ -z "$configPath" ] || ! [[ "$configPath" =~ \.conf$ ]]; do
   # Show error if path doesn't end with .conf (but not empty)
-  if [ ! -z "$configPath" ] && ! [[ "$configPath" =~ \.conf$ ]]; then
+  if [ -n "$configPath" ] && ! [[ "$configPath" =~ \.conf$ ]]; then
     # Clear screen and re-display prompt before showing error
     clear
     echo "Where would you like to save the configuration file?" | gum style --padding "1 2" --width 60
@@ -175,5 +175,5 @@ echo "Configuration saved to: $configPath" | gum style --foreground 212 --align 
 
 # Option to view the config file
 if gum confirm "Would you like to view the configuration file?"; then
-  gum pager < $configPath
+  gum pager < "$configPath"
 fi
