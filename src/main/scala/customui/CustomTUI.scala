@@ -1,7 +1,7 @@
 package customui
 
 import asciiart.Models.{ImageInfo, RGB}
-import cats.effect.{ExitCode, IO, IOApp, Resource}
+import cats.effect.{ExitCode, IO, Resource}
 import common.Models.Radius
 import org.jline.terminal.{Terminal, TerminalBuilder}
 import org.jline.utils.InfoCmp
