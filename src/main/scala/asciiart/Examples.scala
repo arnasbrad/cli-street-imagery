@@ -78,22 +78,18 @@ object Examples {
     val asciiArt = settings match {
       case LuminanceAlgorithm =>
         LuminanceAlgorithm.generate(
-          LuminanceConfig(grayscaleValues.grayscaleDecimals, charset)
+          charset,
+          grayscaleValues.grayscaleDecimals
         )
       case EdgeDetectionAlgorithm =>
         EdgeDetectionAlgorithm.generate(
-          EdgeDetectionConfig(
-            grayscaleValues.grayscaleDecimals,
-            charset,
-            invert = false
-          )
+          charset,
+          grayscaleValues.grayscaleDecimals
         )
       case BrailleAlgorithm =>
         BrailleAlgorithm.generate(
-          BrailleConfig(
-            grayscaleValues.grayscaleDecimals,
-            Charset.BraillePatterns
-          )
+          Charset.BraillePatterns,
+          grayscaleValues.grayscaleDecimals
         )
 
     }

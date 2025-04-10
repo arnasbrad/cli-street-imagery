@@ -1,24 +1,21 @@
 package asciiart
 
-import asciiart.Models.{
-  AlgorithmConfig,
-  BrailleConfig,
-  EdgeDetectionConfig,
-  LuminanceConfig
-}
-
 import scala.util.{Failure, Success, Try}
 
 object Algorithms {
-  trait AsciiAlgorithm[T <: AlgorithmConfig] {
-    def generate(config: T): Array[Array[Char]]
+  trait AsciiAlgorithm {
+    def generate(
+        charset: Charset,
+        input: Array[Array[String]]
+    ): Array[Array[Char]]
   }
 
-  case object LuminanceAlgorithm extends AsciiAlgorithm[LuminanceConfig] {
+  case object LuminanceAlgorithm extends AsciiAlgorithm {
     override def generate(
-        config: LuminanceConfig
+        charset: Charset,
+        input: Array[Array[String]]
     ): Array[Array[Char]] =
-      luminanceAlgorithm(config.input, config.charset)
+      luminanceAlgorithm(input, charset)
 
     private def luminanceAlgorithm(
         grayscaleValues: Array[Array[String]],
@@ -59,12 +56,12 @@ object Algorithms {
     }
   }
 
-  case object EdgeDetectionAlgorithm
-      extends AsciiAlgorithm[EdgeDetectionConfig] {
+  case object EdgeDetectionAlgorithm extends AsciiAlgorithm {
     override def generate(
-        config: EdgeDetectionConfig
+        charset: Charset,
+        input: Array[Array[String]]
     ): Array[Array[Char]] =
-      edgeDetectionAlgorithm(config.input, config.charset, config.invert)
+      edgeDetectionAlgorithm(input, charset, false)
 
     private def detectEdges(
         grayscaleValues: Array[Array[String]],
@@ -167,9 +164,12 @@ object Algorithms {
     }
   }
 
-  case object BrailleAlgorithm extends AsciiAlgorithm[BrailleConfig] {
-    override def generate(config: BrailleConfig): Array[Array[Char]] =
-      brailleAlgorithm(config.input, config.charset)
+  case object BrailleAlgorithm extends AsciiAlgorithm {
+    override def generate(
+        charset: Charset,
+        input: Array[Array[String]]
+    ): Array[Array[Char]] =
+      brailleAlgorithm(input, charset)
 
     private def calculateAverageBrightness(
         packedRgbArray: Array[Array[String]]

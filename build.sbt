@@ -9,26 +9,27 @@ val logbackVersion    = "1.5.17"
 val fs2Version        = "3.11.0"
 
 libraryDependencies ++= Seq(
-  "org.typelevel"  %% "cats-core"            % catsVersion,
-  "org.typelevel"  %% "cats-effect"          % catsEffectVersion,
-  "org.http4s"     %% "http4s-dsl"           % http4sVersion,
-  "org.http4s"     %% "http4s-ember-server"  % http4sVersion,
-  "org.http4s"     %% "http4s-ember-client"  % http4sVersion,
-  "org.http4s"     %% "http4s-circe"         % http4sVersion,
-  "io.circe"       %% "circe-generic"        % "0.14.10",
-  "io.circe"       %% "circe-parser"         % "0.14.10",
-  "ch.qos.logback"  % "logback-classic"      % logbackVersion,
-  "com.olvind.tui" %% "tui"                  % "0.0.7",
-  "co.fs2"         %% "fs2-core"             % fs2Version,
-  "co.fs2"         %% "fs2-io"               % fs2Version,
-  "co.fs2"         %% "fs2-reactive-streams" % fs2Version,
-  "co.fs2"         %% "fs2-scodec"           % fs2Version,
-  "org.scalactic"  %% "scalactic"            % "3.2.19",
-  "org.scalatest"  %% "scalatest"            % "3.2.19" % "test",
-  "org.scalamock"  %% "scalamock"            % "6.2.0"  % Test,
-  "org.scalatest"  %% "scalatest"            % "3.2.19" % Test,
-  "org.jline"       % "jline"                % "3.29.0",
-  "org.jline"       % "jline-terminal-jansi" % "3.29.0"
+  "org.typelevel"         %% "cats-core"            % catsVersion,
+  "org.typelevel"         %% "cats-effect"          % catsEffectVersion,
+  "org.http4s"            %% "http4s-dsl"           % http4sVersion,
+  "org.http4s"            %% "http4s-ember-server"  % http4sVersion,
+  "org.http4s"            %% "http4s-ember-client"  % http4sVersion,
+  "org.http4s"            %% "http4s-circe"         % http4sVersion,
+  "io.circe"              %% "circe-generic"        % "0.14.10",
+  "io.circe"              %% "circe-parser"         % "0.14.10",
+  "ch.qos.logback"         % "logback-classic"      % logbackVersion,
+  "com.olvind.tui"        %% "tui"                  % "0.0.7",
+  "co.fs2"                %% "fs2-core"             % fs2Version,
+  "co.fs2"                %% "fs2-io"               % fs2Version,
+  "co.fs2"                %% "fs2-reactive-streams" % fs2Version,
+  "co.fs2"                %% "fs2-scodec"           % fs2Version,
+  "org.scalactic"         %% "scalactic"            % "3.2.19",
+  "org.scalatest"         %% "scalatest"            % "3.2.19" % "test",
+  "org.scalamock"         %% "scalamock"            % "6.2.0"  % Test,
+  "org.scalatest"         %% "scalatest"            % "3.2.19" % Test,
+  "org.jline"              % "jline"                % "3.29.0",
+  "org.jline"              % "jline-terminal-jansi" % "3.29.0",
+  "com.github.pureconfig" %% "pureconfig"           % "0.17.8"
 )
 
 // Compiler options
