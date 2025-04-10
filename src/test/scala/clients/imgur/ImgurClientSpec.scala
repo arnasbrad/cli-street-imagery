@@ -2,7 +2,8 @@ package clients.imgur
 
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import clients.imgur.Errors.ImgurError
+import com.streetascii.clients.imgur.Errors.ImgurError
+import com.streetascii.clients.imgur.ImgurClient
 import org.http4s.client.UnexpectedStatus
 import org.http4s.{Method, Status, Uri}
 import org.scalatest.funspec.AnyFunSpec

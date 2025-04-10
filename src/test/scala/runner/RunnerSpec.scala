@@ -1,18 +1,30 @@
 package runner
 
-import asciiart.Conversions
-import asciiart.Models.{HexImage, ImageHeight, ImageInfo, ImageWidth}
+import com.streetascii.asciiart.Conversions
+import com.streetascii.asciiart.Models.{
+  HexImage,
+  ImageHeight,
+  ImageInfo,
+  ImageWidth
+}
 import cats.data.EitherT
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import clients.imgur.ImgurClient
-import clients.mapillary.MapillaryClient
-import clients.mapillary.Models.{ImageData, ImagesResponse, MapillaryImageId}
-import common.Models.{Coordinates, Radius}
+import com.streetascii.asciiart.Conversions
+import com.streetascii.clients.imgur
+import com.streetascii.clients.mapillary.Models.{
+  ImageData,
+  ImagesResponse,
+  MapillaryImageId
+}
+import com.streetascii.clients.imgur.ImgurClient
+import com.streetascii.clients.mapillary.{MapillaryClient, Models}
+import com.streetascii.runner.Runner
+import com.streetascii.common.Models.{Coordinates, Radius}
+import com.streetascii.socialmedia.SocialMedia
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import socialmedia.SocialMedia
 
 class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
   "Runner.getHexStringsFromLocation" should "return imageInfo when images are found" in {
@@ -60,7 +72,7 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
       .getImagesInfoByLocation(
         _: Coordinates,
         _: Radius,
-        _: List[clients.mapillary.Models.RequestField]
+        _: List[Models.RequestField]
       ))
       .expects(coordinates, radius, *)
       .returning(EitherT.rightT(imagesResponse))
@@ -68,7 +80,7 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
     (mockMapillaryClient
       .getImage(
         _: MapillaryImageId,
-        _: List[clients.mapillary.Models.RequestField]
+        _: List[Models.RequestField]
       ))
       .expects(imageId, *)
       .returning(
@@ -121,7 +133,7 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
       .getImagesInfoByLocation(
         _: Coordinates,
         _: Radius,
-        _: List[clients.mapillary.Models.RequestField]
+        _: List[Models.RequestField]
       ))
       .expects(currentCoords, radius, *)
       .returning(EitherT.rightT(imagesResponse))
@@ -151,12 +163,12 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
     val imageBytes = Array[Byte](1, 2, 3, 4)
 
     val imgurLink = "https://imgur.com/test-image"
-    val imgurData = clients.imgur.Models.ImgurData(
+    val imgurData = imgur.Models.ImgurData(
       link = imgurLink,
       deletehash = "test-delete-hash",
       id = "test-id"
     )
-    val imgurResponse = clients.imgur.Models.ImgurResponse(
+    val imgurResponse = imgur.Models.ImgurResponse(
       data = imgurData,
       success = true,
       status = 200

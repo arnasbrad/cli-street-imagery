@@ -2,7 +2,8 @@ package clients.traveltime
 
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import clients.traveltime.Errors.TravelTimeError
+import com.streetascii.clients.traveltime.Errors.TravelTimeError
+import com.streetascii.clients.traveltime.TravelTimeClient
 import org.http4s.client.UnexpectedStatus
 import org.http4s.{Method, Status, Uri}
 import org.scalatest.funspec.AnyFunSpec
