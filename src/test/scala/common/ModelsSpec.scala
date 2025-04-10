@@ -1,7 +1,7 @@
 package common
 
-import common.Errors._
-import common.Models._
+import com.streetascii.common.Errors._
+import com.streetascii.common.Models._
 import org.scalatest.EitherValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

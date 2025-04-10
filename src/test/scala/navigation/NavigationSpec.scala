@@ -3,15 +3,16 @@ package navigation
 import cats.data.EitherT
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
-import clients.mapillary.Errors.MapillaryError
-import clients.mapillary.MapillaryClient
-import clients.mapillary.Models.{
+import com.streetascii.clients.mapillary.Errors.MapillaryError
+import com.streetascii.clients.mapillary.Models.{
   ImageData,
   ImagesResponse,
   MapillaryImageId,
   RequestField
 }
-import common.Models.{Coordinates, Radius}
+import com.streetascii.clients.mapillary.MapillaryClient
+import com.streetascii.navigation.Navigation
+import com.streetascii.common.Models.{Coordinates, Radius}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

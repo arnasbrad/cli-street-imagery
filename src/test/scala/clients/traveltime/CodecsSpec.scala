@@ -3,9 +3,9 @@ package clients.traveltime
 import io.circe.parser._
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
-import Codecs._
-import clients.traveltime.Models._
-import common.Models.Coordinates
+import com.streetascii.clients.traveltime.Codecs._
+import com.streetascii.clients.traveltime.Models._
+import com.streetascii.common.Models.Coordinates
 
 class CodecsSpec extends AnyFunSpec with Matchers {
   describe("TravelTime Codecs") {

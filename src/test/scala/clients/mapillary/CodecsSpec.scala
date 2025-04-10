@@ -3,9 +3,9 @@ package clients.mapillary
 import io.circe.parser._
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
-import Codecs._
-import clients.mapillary.Models._
-import common.Models.Coordinates
+import com.streetascii.clients.mapillary.Codecs._
+import com.streetascii.clients.mapillary.Models._
+import com.streetascii.common.Models.Coordinates
 
 class CodecsSpec extends AnyFunSpec with Matchers {
   describe("Mapillary Codecs") {

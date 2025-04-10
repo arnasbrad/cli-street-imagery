@@ -1,5 +1,6 @@
 package socialmedia
 
+import com.streetascii.socialmedia.SocialMedia
 import org.http4s.Uri
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

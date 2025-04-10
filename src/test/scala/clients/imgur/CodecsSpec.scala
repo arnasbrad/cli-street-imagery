@@ -3,7 +3,8 @@ package clients.imgur
 import io.circe.parser._
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
-import Codecs._
+import com.streetascii.clients.imgur.Codecs._
+import com.streetascii.clients.imgur.Models
 
 class CodecsSpec extends AnyFunSpec with Matchers {
   describe("Imgur Codecs") {
