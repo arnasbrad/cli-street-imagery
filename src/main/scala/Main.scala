@@ -1,5 +1,4 @@
 import asciiart.Algorithms.LuminanceAlgorithm
-import asciiart.Models.LuminanceConfig
 import asciiart.{Charset, Conversions}
 import cats.effect.{ExitCode, IO, IOApp}
 import clients.imgur.ImgurClient
@@ -50,7 +49,8 @@ object Main extends IOApp {
 
             val asciiWithColors = LuminanceAlgorithm
               .generate(
-                LuminanceConfig(greyscale.grayscaleDecimals, charset)
+                charset,
+                greyscale.grayscaleDecimals
               )
 
             CustomTUI.terminalApp(

@@ -1,27 +1,10 @@
 package asciiart
 
+import asciiart.Algorithms.AsciiAlgorithm
 import clients.mapillary.Models.MapillaryImageId
 import common.Models.Coordinates
 
 object Models {
-  sealed trait AlgorithmConfig
-
-  case class LuminanceConfig(
-      input: Array[Array[String]],
-      charset: Charset
-  ) extends AlgorithmConfig
-
-  case class EdgeDetectionConfig(
-      input: Array[Array[String]],
-      charset: Charset,
-      invert: Boolean = false
-  ) extends AlgorithmConfig
-
-  case class BrailleConfig(
-      input: Array[Array[String]],
-      charset: Charset
-  ) extends AlgorithmConfig
-
   case class ImageWidth(value: Int)
 
   case class ImageHeight(value: Int)

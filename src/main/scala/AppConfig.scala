@@ -1,4 +1,5 @@
 import AppConfig.{ApiConfig, ProcessingConfig}
+import asciiart.Charset
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 import cats.implicits.toBifunctorOps
