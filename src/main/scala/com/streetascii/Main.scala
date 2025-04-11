@@ -2,10 +2,7 @@ package com.streetascii
 
 import cats.effect.{ExitCode, IO, IOApp}
 import com.streetascii.AppConfig.{ApiConfig, ProcessingConfig}
-import com.streetascii.asciiart.Algorithms.{
-  BrailleAlgorithm,
-  LuminanceAlgorithm
-}
+import com.streetascii.asciiart.Algorithms.LuminanceAlgorithm
 import com.streetascii.asciiart.{Charset, Conversions}
 import com.streetascii.clients.imgur.ImgurClient
 import com.streetascii.clients.mapillary.MapillaryClient
@@ -28,7 +25,7 @@ object Main extends IOApp {
     processing = ProcessingConfig(
       algorithm = LuminanceAlgorithm,
       charset = Charset.Braille,
-      downSamplingRate = 3
+      downSamplingRate = 4
     )
   )
 
@@ -44,6 +41,8 @@ object Main extends IOApp {
     initClients().use { runner =>
       for {
         imageInfo <- runner
+          // for when bbox aint working
+          // .getHexStringsFromId(MapillaryImageId("3024381137696154"))
           .getHexStringsFromLocation(
             Coordinates(51.501001738896115, -0.12600535355615777)
           )
@@ -73,9 +72,9 @@ object Main extends IOApp {
             )
 
           case Left(error) =>
-            logger
-              .error(s"Origin image parsing failed with error: $error")
-              .as(ExitCode.Error)
+            IO.println(
+              s"Origin image parsing failed with error: ${error.message}"
+            ).as(ExitCode.Error)
         }
       } yield exitCode
 

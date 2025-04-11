@@ -2,8 +2,10 @@ package com.streetascii.customui
 
 import cats.effect.{ExitCode, IO, Resource}
 import com.streetascii.AppConfig
+import com.streetascii.Main.logger
 import com.streetascii.asciiart.Conversions
-import com.streetascii.asciiart.Models.{ImageInfo, RGB}
+import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
+import com.streetascii.clients.mapillary.Models.MapillaryImageId
 import com.streetascii.common.Models.Radius
 import com.streetascii.runner.Runner
 import org.jline.terminal.{Terminal, TerminalBuilder}
@@ -138,6 +140,27 @@ object CustomTUI {
     }
   }
 
+  private def getAsciiConversionResult(
+      imageInfo: ImageInfo,
+      appConfig: AppConfig
+  ): (ColoredPixels, Array[Array[Char]]) = {
+    val greyscale =
+      Conversions
+        .hexStringsToSampledGreyscaleDecimal(
+          appConfig.processing.downSamplingRate,
+          appConfig.processing.verticalSampling,
+          imageInfo.hexImage.hexStrings,
+          imageInfo.hexImage.width.value
+        )
+
+    val asciiWithColors = appConfig.processing.algorithm
+      .generate(
+        appConfig.processing.charset,
+        greyscale.grayscaleDecimals
+      )
+    (greyscale, asciiWithColors)
+  }
+
   /** Run a program with a managed terminal and writer */
   private def withTerminal[A](
       program: (Terminal, BufferedWriter) => IO[A]
@@ -186,89 +209,112 @@ object CustomTUI {
               } yield code
 
             case 'n' =>
-              for {
-                _ <- clearScreen(terminal)
-
-                navOptsEither <- runner
-                  .getNeighborImageIds(
-                    currentImageId = imageInfo.imageId,
-                    currentCoordinates = imageInfo.coordinates,
-                    radius = Radius.unsafeCreate(15),
-                    maxAmount = 5
-                  )
-                  .value
-
-                code <- navOptsEither match {
-                  case Right(newImageIds) =>
-                    for {
-                      _ <- IO.blocking {
-                        writer.write(newImageIds.toString)
-                        writer.flush()
-                      }
-
-                      navKey <- readKey(terminal)
-                      code <- navKey match {
-                        case '1' =>
-                          for {
-                            _ <- clearScreen(terminal)
-                            res <- runner
-                              .getHexStringsFromId(newImageIds.last)
-                              .value
-                            code <- res match {
-                              case Right(imageInfo) =>
-                                val greyscale =
-                                  Conversions
-                                    .hexStringsToSampledGreyscaleDecimal(
-                                      appConfig.processing.downSamplingRate,
-                                      appConfig.processing.verticalSampling,
-                                      imageInfo.hexImage.hexStrings,
-                                      imageInfo.hexImage.width.value
-                                    )
-
-                                val asciiWithColors =
-                                  appConfig.processing.algorithm
-                                    .generate(
-                                      appConfig.processing.charset,
-                                      greyscale.grayscaleDecimals
-                                    )
-                                for {
-                                  _ <- printColorGrid(
-                                    writer,
-                                    asciiWithColors,
-                                    initialColors
-                                  )
-                                  code <- loop(
-                                    asciiWithColors,
-                                    greyscale.colors,
-                                    imageInfo
-                                  )
-                                } yield code
-                              case Left(err) =>
-                                IO.blocking {
-                                  writer.write("something failed AAA")
-                                  writer.flush()
-                                }.as(ExitCode.Error)
-                            }
-                          } yield code
-                        case _ =>
-                          loop(chars, colors, imageInfo)
-                      }
-                    } yield code
-
-                  case Left(_) =>
-                    IO.blocking {
-                      writer.write("something failed")
-                      writer.flush()
-                    }.as(ExitCode.Error)
-                }
-
-              } yield code
+              navigationLogic(imageInfo)
 
             case _ =>
               loop(chars, colors, imageInfo) // Ignore and continue
           }
         } yield exitCode
       }
+
+      def navigationLogic(
+          imageInfo: ImageInfo
+      ) =
+        for {
+          _ <- clearScreen(terminal)
+
+          navOptsEither <- runner
+            .getNeighborImageIds(
+              currentImageId = imageInfo.imageId,
+              currentCoordinates = imageInfo.coordinates,
+              radius = Radius.unsafeCreate(15),
+              maxAmount = 5
+            )
+            .value
+
+          // for when bbox aint working
+          /*
+          navOptsEither: Either[MapillaryError, List[MapillaryImageId]] =
+            (List(MapillaryImageId("4169705706383182")))
+              .asRight[MapillaryError]
+           */
+
+          code <- navOptsEither match {
+            case Right(newImageIds) =>
+              for {
+                _ <- IO.blocking {
+                  writer.write(newImageIds.toString)
+                  writer.flush()
+                }
+
+                code <- readNavigationChoice(newImageIds)
+              } yield code
+
+            case Left(_) =>
+              IO.blocking {
+                writer.write("something failed")
+                writer.flush()
+              }.as(ExitCode.Error)
+          }
+
+        } yield code
+
+      def navigateToPickedLocation(
+          imageId: MapillaryImageId
+      ) = {
+        for {
+          _ <- logger.info("NAVIGATING")
+          _ <- clearScreen(terminal)
+          res <- runner
+            .getHexStringsFromId(imageId)
+            .value
+          _ <- logger.info(s"got hex ${res.isRight}")
+          code <- res match {
+            case Right(imageInfo) =>
+              val (greyscale, asciiWithColors) =
+                getAsciiConversionResult(imageInfo, appConfig)
+              for {
+                _ <- logger.info(s"got the good stuff ${imageInfo.imageId}")
+                _ <- clearScreen(terminal)
+                _ <- logger.info(s"cleared")
+                _ <- printColorGrid(
+                  writer,
+                  asciiWithColors,
+                  greyscale.colors
+                )
+                _ <- logger.info(s"printed")
+                code <- loop(
+                  asciiWithColors,
+                  greyscale.colors,
+                  imageInfo
+                )
+              } yield code
+            case Left(err) =>
+              logger.info(s"error form mapillary : ${err.message}") >> IO {
+                writer.write("something failed AAA")
+                writer.flush()
+              }.as(ExitCode.Error)
+          }
+        } yield code
+      }
+
+      def readNavigationChoice(
+          newImageIds: List[MapillaryImageId]
+      ): IO[ExitCode] =
+        for {
+          navKey <- readKey(terminal)
+          code <- navKey match {
+            case k if k >= '1' && k <= ('0' + newImageIds.length) =>
+              val index = k - '1' // Convert ASCII value to 0-based index
+              navigateToPickedLocation(newImageIds(index))
+            case 'q' =>
+              IO.pure(ExitCode.Success) // Quit
+            case _ =>
+              for {
+                code <- readNavigationChoice(newImageIds)
+              } yield code
+          }
+        } yield code
 
       printColorGrid(writer, initialChars, initialColors) >> loop(
         initialChars,
