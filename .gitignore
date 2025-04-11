@@ -16,3 +16,4 @@ build/
 
 logs/
 *.conf
+ascii_image.txt

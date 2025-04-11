@@ -52,9 +52,10 @@ object AppConfig {
 
   private implicit val algortihmReader: ConfigReader[AsciiAlgorithm] =
     ConfigReader.fromString {
-      case "Luminance"     => Right(Algorithms.LuminanceAlgorithm)
-      case "EdgeDetection" => Right(Algorithms.EdgeDetectionAlgorithm)
-      case "Braille"       => Right(Algorithms.BrailleAlgorithm)
+      case "Luminance"          => Right(Algorithms.LuminanceAlgorithm)
+      case "EdgeDetectionSobel" => Right(Algorithms.EdgeDetectionSobelAlgorithm)
+      case "EdgeDetectionCanny" => Right(Algorithms.EdgeDetectionCannyAlgorithm)
+      case "Braille"            => Right(Algorithms.BrailleAlgorithm)
       case other =>
         Left(CannotConvert(other, "Algorithm", "Algorithm is unrecognized"))
     }

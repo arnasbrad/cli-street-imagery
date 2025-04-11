@@ -56,7 +56,7 @@ object Algorithms {
     }
   }
 
-  case object EdgeDetectionAlgorithm extends AsciiAlgorithm {
+  case object EdgeDetectionSobelAlgorithm extends AsciiAlgorithm {
     override def generate(
         charset: Charset,
         input: Array[Array[String]]
@@ -158,6 +158,304 @@ object Algorithms {
           } match {
             case Success(res) => res
             case Failure(e)   => charset.value.head
+          }
+        }
+      }
+    }
+  }
+
+  case object EdgeDetectionCannyAlgorithm extends AsciiAlgorithm {
+    override def generate(
+        charset: Charset,
+        input: Array[Array[String]]
+    ): Array[Array[Char]] =
+      edgeDetectionAlgorithm(input, charset, false)
+
+    private def detectEdges(
+        grayscaleValues: Array[Array[String]],
+        invert: Boolean = true
+    ): (Array[Array[String]], Array[Array[Int]]) = {
+      val height = grayscaleValues.length
+      val width  = grayscaleValues.headOption.map(_.length).getOrElse(0)
+
+      // Return original image if too small for edge detection
+      if (height < 5 || width < 5)
+        return (grayscaleValues, Array.ofDim[Int](height, width))
+
+      // Convert string values to integers
+      val image =
+        grayscaleValues.map(_.map(v => Try(v.toInt & 0xff).getOrElse(0)))
+
+      // Step 1: Apply Gaussian blur to reduce noise
+      val blurred = applyGaussianBlur(image)
+
+      // Step 2: Compute gradients using Sobel operators
+      val (gradientMagnitudes, gradientDirections) = computeGradients(blurred)
+
+      // Step 3: Apply non-maximum suppression
+      val suppressed =
+        applyNonMaximumSuppression(gradientMagnitudes, gradientDirections)
+
+      // Step 4: Apply hysteresis thresholding
+      val edges = applyHysteresisThresholding(suppressed)
+
+      // Invert if requested and convert back to string array
+      val stringEdges = edges.map(_.map { value =>
+        val finalValue = if (invert) 255 - value else value
+        finalValue.toString
+      })
+
+      // Return both the edge values and the directions
+      (stringEdges, gradientDirections)
+    }
+
+    // Gaussian blur to reduce noise (5x5 kernel)
+    private def applyGaussianBlur(
+        image: Array[Array[Int]]
+    ): Array[Array[Int]] = {
+      val height = image.length
+      val width  = image.headOption.map(_.length).getOrElse(0)
+      val result = Array.ofDim[Int](height, width)
+
+      // 5x5 Gaussian kernel (sigma ≈ 1.0)
+      val kernel = Array(
+        Array(2, 4, 5, 4, 2),
+        Array(4, 9, 12, 9, 4),
+        Array(5, 12, 15, 12, 5),
+        Array(4, 9, 12, 9, 4),
+        Array(2, 4, 5, 4, 2)
+      )
+      val kernelSum = 159 // Sum of all elements for normalization
+
+      // Apply kernel to each pixel
+      for (y <- 2 until height - 2; x <- 2 until width - 2) {
+        var sum = 0
+        for (ky <- 0 until 5; kx <- 0 until 5) {
+          sum += image(y - 2 + ky)(x - 2 + kx) * kernel(ky)(kx)
+        }
+        result(y)(x) = sum / kernelSum
+      }
+
+      // Copy border pixels (unchanged)
+      for (y <- 0 until height; x <- 0 until width) {
+        if (y < 2 || y >= height - 2 || x < 2 || x >= width - 2) {
+          result(y)(x) = image(y)(x)
+        }
+      }
+
+      result
+    }
+
+    // Compute gradient magnitudes and directions using Sobel
+    private def computeGradients(
+        image: Array[Array[Int]]
+    ): (Array[Array[Int]], Array[Array[Int]]) = {
+      val height     = image.length
+      val width      = image.headOption.map(_.length).getOrElse(0)
+      val magnitudes = Array.ofDim[Int](height, width)
+      val directions =
+        Array.ofDim[Int](height, width) // 0, 45, 90, 135 degrees (quantized)
+
+      // Sobel operators
+      val sobelX = Array(
+        Array(-1, 0, 1),
+        Array(-2, 0, 2),
+        Array(-1, 0, 1)
+      )
+
+      val sobelY = Array(
+        Array(-1, -2, -1),
+        Array(0, 0, 0),
+        Array(1, 2, 1)
+      )
+
+      for (y <- 1 until height - 1; x <- 1 until width - 1) {
+        var gx = 0
+        var gy = 0
+
+        for (ky <- 0 until 3; kx <- 0 until 3) {
+          val pixelValue = image(y - 1 + ky)(x - 1 + kx)
+          gx += pixelValue * sobelX(ky)(kx)
+          gy += pixelValue * sobelY(ky)(kx)
+        }
+
+        // Calculate magnitude
+        val magnitude = math.min(255, math.sqrt(gx * gx + gy * gy).toInt)
+        magnitudes(y)(x) = magnitude
+
+        // Calculate direction (angle) and quantize to 0, 45, 90, or 135 degrees
+        val angle = math.atan2(gy.toDouble, gx.toDouble) * 180 / math.Pi
+        val direction = ((angle + 180) % 180) match {
+          case a if a < 22.5 || a >= 157.5 => 0   // horizontal (0 degrees)
+          case a if a < 67.5               => 45  // diagonal (45 degrees)
+          case a if a < 112.5              => 90  // vertical (90 degrees)
+          case _                           => 135 // diagonal (135 degrees)
+        }
+        directions(y)(x) = direction
+      }
+
+      (magnitudes, directions)
+    }
+
+    // Apply non-maximum suppression to thin edges
+    private def applyNonMaximumSuppression(
+        magnitudes: Array[Array[Int]],
+        directions: Array[Array[Int]]
+    ): Array[Array[Int]] = {
+      val height = magnitudes.length
+      val width  = magnitudes.headOption.map(_.length).getOrElse(0)
+      val result = Array.ofDim[Int](height, width)
+
+      for (y <- 1 until height - 1; x <- 1 until width - 1) {
+        val dir = directions(y)(x)
+        val mag = magnitudes(y)(x)
+
+        // Check if the current pixel is a local maximum in the gradient direction
+        val isLocalMax = dir match {
+          case 0 =>
+            mag >= magnitudes(y)(x - 1) && mag >= magnitudes(y)(
+              x + 1
+            ) // horizontal
+          case 45 =>
+            mag >= magnitudes(y - 1)(x + 1) && mag >= magnitudes(y + 1)(
+              x - 1
+            ) // diagonal
+          case 90 =>
+            mag >= magnitudes(y - 1)(x) && mag >= magnitudes(y + 1)(
+              x
+            ) // vertical
+          case 135 =>
+            mag >= magnitudes(y - 1)(x - 1) && mag >= magnitudes(y + 1)(
+              x + 1
+            ) // diagonal
+          case _ => false
+        }
+
+        result(y)(x) = if (isLocalMax) mag else 0
+      }
+
+      result
+    }
+
+    // Apply hysteresis thresholding
+    private def applyHysteresisThresholding(
+        suppressed: Array[Array[Int]]
+    ): Array[Array[Int]] = {
+      val height = suppressed.length
+      val width  = suppressed.headOption.map(_.length).getOrElse(0)
+      val result = Array.ofDim[Int](height, width)
+
+      // Define high and low thresholds
+      val highThreshold = 70 // Adjust these thresholds based on your needs
+      val lowThreshold  = 30 // Typically highThreshold = 2-3 * lowThreshold
+
+      // First pass: mark strong and weak edges
+      for (y <- 0 until height; x <- 0 until width) {
+        val value = suppressed(y)(x)
+        if (value >= highThreshold) {
+          result(y)(x) = 255 // Strong edge
+        } else if (value >= lowThreshold) {
+          result(y)(x) = 25 // Weak edge (temporary value)
+        } else {
+          result(y)(x) = 0 // Non-edge
+        }
+      }
+
+      // Second pass: trace weak edges connected to strong edges
+      var changed = true
+      while (changed) {
+        changed = false
+        for (y <- 1 until height - 1; x <- 1 until width - 1) {
+          if (result(y)(x) == 25) { // Weak edge
+            // Check 8-connected neighbors for strong edges
+            val hasStrongNeighbor = (0 until 3).exists { ky =>
+              (0 until 3).exists { kx =>
+                val ny = y - 1 + ky
+                val nx = x - 1 + kx
+                result(ny)(nx) == 255
+              }
+            }
+
+            if (hasStrongNeighbor) {
+              result(y)(x) = 255 // Upgrade to strong edge
+              changed = true
+            }
+          }
+        }
+      }
+
+      // Final pass: keep only strong edges
+      for (y <- 0 until height; x <- 0 until width) {
+        if (result(y)(x) == 25) {
+          result(y)(x) =
+            0 // Remove weak edges that weren't connected to strong ones
+        }
+      }
+
+      result
+    }
+
+    // New method to map edge direction to appropriate characters
+    private def mapDirectionToChar(
+        direction: Int,
+        intensity: Int,
+        charset: Charset
+    ): Char = {
+      if (intensity == 0) return charset.value.head // Non-edge pixel
+
+      // Get a set of directional characters based on the direction
+      val directionalChar = direction match {
+        case 0   => '-'  // Horizontal edge
+        case 45  => '/'  // Diagonal (45 degrees)
+        case 90  => '|'  // Vertical edge
+        case 135 => '\\' // Diagonal (135 degrees)
+        case _   => '+'  // Fallback or junction
+      }
+
+      // For very strong edges, we might want to use stronger visual characters
+      if (intensity > 200) {
+        direction match {
+          case 0   => '═' // Strong horizontal
+          case 45  => '╱' // Strong diagonal
+          case 90  => '║' // Strong vertical
+          case 135 => '╲' // Strong diagonal
+          case _   => '╬' // Strong junction
+        }
+      } else {
+        directionalChar
+      }
+    }
+
+    // Modified edge detection algorithm to use directional characters
+    private def edgeDetectionAlgorithm(
+        grayscaleValues: Array[Array[String]],
+        charset: Charset,
+        invert: Boolean
+    ): Array[Array[Char]] = {
+      // Detect edges and get directions
+      val (edgeValues, directions) = detectEdges(grayscaleValues, invert)
+
+      // Convert to directional ASCII chars
+      edgeValues.zipWithIndex.map { case (row, y) =>
+        row.zipWithIndex.map { case (str, x) =>
+          Try {
+            val intValue = str.toInt
+
+            // If this is an edge pixel, use directional character
+            if (intValue > 50) { // Threshold to determine if it's an edge
+              val direction = directions(y)(x)
+              mapDirectionToChar(direction, intValue, charset)
+            } else {
+              // For non-edge pixels, use the regular charset mapping
+              val index =
+                ((intValue * (charset.value.length - 1)) / 255.0).toInt
+              val safeIndex =
+                math.min(math.max(index, 0), charset.value.length - 1)
+              charset.value(safeIndex)
+            }
+          } match {
+            case Success(res) => res
+            case Failure(_)   => charset.value.head
           }
         }
       }
