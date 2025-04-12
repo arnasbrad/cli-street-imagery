@@ -10,6 +10,20 @@ object Algorithms {
     ): Array[Array[Char]]
   }
 
+  case object BlankFilledAlgorithm extends AsciiAlgorithm {
+    override def generate(
+        charset: Charset,
+        input: Array[Array[String]]
+    ): Array[Array[Char]] = {
+      // Get dimensions from input
+      val height = input.length
+      val width  = if (height > 0) input(0).length else 0
+
+      // Create new 2D array with same dimensions as input
+      Array.fill(height, width)(charset.value.head)
+    }
+  }
+
   case object LuminanceAlgorithm extends AsciiAlgorithm {
     override def generate(
         charset: Charset,
@@ -215,7 +229,6 @@ object Algorithms {
     ): Array[Array[Int]] = {
       val height = image.length
       val width  = image.headOption.map(_.length).getOrElse(0)
-      val result = Array.ofDim[Int](height, width)
 
       // 5x5 Gaussian kernel (sigma ≈ 1.0)
       val kernel = Array(
@@ -227,34 +240,37 @@ object Algorithms {
       )
       val kernelSum = 159 // Sum of all elements for normalization
 
-      // Apply kernel to each pixel
-      for (y <- 2 until height - 2; x <- 2 until width - 2) {
-        var sum = 0
-        for (ky <- 0 until 5; kx <- 0 until 5) {
-          sum += image(y - 2 + ky)(x - 2 + kx) * kernel(ky)(kx)
-        }
-        result(y)(x) = sum / kernelSum
-      }
+      // Create indices without for-comprehension
+      val indices =
+        (0 until height).flatMap(y => (0 until width).map(x => (y, x)))
 
-      // Copy border pixels (unchanged)
-      for (y <- 0 until height; x <- 0 until width) {
-        if (y < 2 || y >= height - 2 || x < 2 || x >= width - 2) {
-          result(y)(x) = image(y)(x)
-        }
-      }
+      // Map over all pixel positions
+      indices.foldLeft(Array.ofDim[Int](height, width)) {
+        case (result, (y, x)) =>
+          if (y < 2 || y >= height - 2 || x < 2 || x >= width - 2) {
+            // Border pixels remain unchanged
+            result(y)(x) = image(y)(x)
+          } else {
+            // Apply kernel to interior pixels without for loops
+            val sum = (0 until 5)
+              .flatMap(ky =>
+                (0 until 5)
+                  .map(kx => image(y - 2 + ky)(x - 2 + kx) * kernel(ky)(kx))
+              )
+              .sum
 
-      result
+            result(y)(x) = sum / kernelSum
+          }
+          result
+      }
     }
 
     // Compute gradient magnitudes and directions using Sobel
     private def computeGradients(
         image: Array[Array[Int]]
     ): (Array[Array[Int]], Array[Array[Int]]) = {
-      val height     = image.length
-      val width      = image.headOption.map(_.length).getOrElse(0)
-      val magnitudes = Array.ofDim[Int](height, width)
-      val directions =
-        Array.ofDim[Int](height, width) // 0, 45, 90, 135 degrees (quantized)
+      val height = image.length
+      val width  = image.headOption.map(_.length).getOrElse(0)
 
       // Sobel operators
       val sobelX = Array(
@@ -269,32 +285,53 @@ object Algorithms {
         Array(1, 2, 1)
       )
 
-      for (y <- 1 until height - 1; x <- 1 until width - 1) {
-        var gx = 0
-        var gy = 0
+      // Generate all pixel coordinates
+      val indices =
+        (0 until height).flatMap(y => (0 until width).map(x => (y, x)))
 
-        for (ky <- 0 until 3; kx <- 0 until 3) {
-          val pixelValue = image(y - 1 + ky)(x - 1 + kx)
-          gx += pixelValue * sobelX(ky)(kx)
-          gy += pixelValue * sobelY(ky)(kx)
-        }
+      // Process each pixel
+      val emptyMagnitudes = Array.ofDim[Int](height, width)
+      val emptyDirections = Array.ofDim[Int](height, width)
 
-        // Calculate magnitude
-        val magnitude = math.min(255, math.sqrt(gx * gx + gy * gy).toInt)
-        magnitudes(y)(x) = magnitude
+      // Fold over all coordinates to build result arrays
+      indices.foldLeft((emptyMagnitudes, emptyDirections)) {
+        case ((mags, dirs), (y, x)) =>
+          if (y <= 0 || y >= height - 1 || x <= 0 || x >= width - 1) {
+            // Skip border pixels
+            (mags, dirs)
+          } else {
+            // Calculate gradients functionally
+            val gx = (0 until 3)
+              .flatMap(ky =>
+                (0 until 3)
+                  .map(kx => image(y - 1 + ky)(x - 1 + kx) * sobelX(ky)(kx))
+              )
+              .sum
 
-        // Calculate direction (angle) and quantize to 0, 45, 90, or 135 degrees
-        val angle = math.atan2(gy.toDouble, gx.toDouble) * 180 / math.Pi
-        val direction = ((angle + 180) % 180) match {
-          case a if a < 22.5 || a >= 157.5 => 0   // horizontal (0 degrees)
-          case a if a < 67.5               => 45  // diagonal (45 degrees)
-          case a if a < 112.5              => 90  // vertical (90 degrees)
-          case _                           => 135 // diagonal (135 degrees)
-        }
-        directions(y)(x) = direction
+            val gy = (0 until 3)
+              .flatMap(ky =>
+                (0 until 3)
+                  .map(kx => image(y - 1 + ky)(x - 1 + kx) * sobelY(ky)(kx))
+              )
+              .sum
+
+            // Calculate magnitude
+            val magnitude = math.min(255, math.sqrt(gx * gx + gy * gy).toInt)
+            mags(y)(x) = magnitude
+
+            // Calculate direction and quantize
+            val angle = math.atan2(gy.toDouble, gx.toDouble) * 180 / math.Pi
+            val direction = ((angle + 180) % 180) match {
+              case a if a < 22.5 || a >= 157.5 => 0   // horizontal (0 degrees)
+              case a if a < 67.5               => 45  // diagonal (45 degrees)
+              case a if a < 112.5              => 90  // vertical (90 degrees)
+              case _                           => 135 // diagonal (135 degrees)
+            }
+            dirs(y)(x) = direction
+
+            (mags, dirs)
+          }
       }
-
-      (magnitudes, directions)
     }
 
     // Apply non-maximum suppression to thin edges
@@ -304,37 +341,46 @@ object Algorithms {
     ): Array[Array[Int]] = {
       val height = magnitudes.length
       val width  = magnitudes.headOption.map(_.length).getOrElse(0)
-      val result = Array.ofDim[Int](height, width)
 
-      for (y <- 1 until height - 1; x <- 1 until width - 1) {
-        val dir = directions(y)(x)
-        val mag = magnitudes(y)(x)
+      // Generate all pixel coordinates
+      val indices =
+        (0 until height).flatMap(y => (0 until width).map(x => (y, x)))
 
-        // Check if the current pixel is a local maximum in the gradient direction
-        val isLocalMax = dir match {
-          case 0 =>
-            mag >= magnitudes(y)(x - 1) && mag >= magnitudes(y)(
-              x + 1
-            ) // horizontal
-          case 45 =>
-            mag >= magnitudes(y - 1)(x + 1) && mag >= magnitudes(y + 1)(
-              x - 1
-            ) // diagonal
-          case 90 =>
-            mag >= magnitudes(y - 1)(x) && mag >= magnitudes(y + 1)(
-              x
-            ) // vertical
-          case 135 =>
-            mag >= magnitudes(y - 1)(x - 1) && mag >= magnitudes(y + 1)(
-              x + 1
-            ) // diagonal
-          case _ => false
-        }
+      // Process all pixels using foldLeft
+      indices.foldLeft(Array.ofDim[Int](height, width)) {
+        case (result, (y, x)) =>
+          if (y <= 0 || y >= height - 1 || x <= 0 || x >= width - 1) {
+            // Skip border pixels
+            result
+          } else {
+            val dir = directions(y)(x)
+            val mag = magnitudes(y)(x)
 
-        result(y)(x) = if (isLocalMax) mag else 0
+            // Check if the current pixel is a local maximum in the gradient direction
+            val isLocalMax = dir match {
+              case 0 =>
+                mag >= magnitudes(y)(x - 1) && mag >= magnitudes(y)(
+                  x + 1
+                ) // horizontal
+              case 45 =>
+                mag >= magnitudes(y - 1)(x + 1) && mag >= magnitudes(y + 1)(
+                  x - 1
+                ) // diagonal
+              case 90 =>
+                mag >= magnitudes(y - 1)(x) && mag >= magnitudes(y + 1)(
+                  x
+                ) // vertical
+              case 135 =>
+                mag >= magnitudes(y - 1)(x - 1) && mag >= magnitudes(y + 1)(
+                  x + 1
+                ) // diagonal
+              case _ => false
+            }
+
+            result(y)(x) = if (isLocalMax) mag else 0
+            result
+          }
       }
-
-      result
     }
 
     // Apply hysteresis thresholding
@@ -343,56 +389,68 @@ object Algorithms {
     ): Array[Array[Int]] = {
       val height = suppressed.length
       val width  = suppressed.headOption.map(_.length).getOrElse(0)
-      val result = Array.ofDim[Int](height, width)
 
       // Define high and low thresholds
       val highThreshold = 70 // Adjust these thresholds based on your needs
       val lowThreshold  = 30 // Typically highThreshold = 2-3 * lowThreshold
 
+      // Generate all pixel coordinates
+      val indices =
+        (0 until height).flatMap(y => (0 until width).map(x => (y, x)))
+
       // First pass: mark strong and weak edges
-      for (y <- 0 until height; x <- 0 until width) {
-        val value = suppressed(y)(x)
-        if (value >= highThreshold) {
-          result(y)(x) = 255 // Strong edge
-        } else if (value >= lowThreshold) {
-          result(y)(x) = 25 // Weak edge (temporary value)
-        } else {
-          result(y)(x) = 0 // Non-edge
-        }
+      val initialResult = indices.foldLeft(Array.ofDim[Int](height, width)) {
+        case (result, (y, x)) =>
+          val value = suppressed(y)(x)
+          result(y)(x) =
+            if (value >= highThreshold) 255    // Strong edge
+            else if (value >= lowThreshold) 25 // Weak edge (temporary value)
+            else 0                             // Non-edge
+          result
       }
 
       // Second pass: trace weak edges connected to strong edges
-      var changed = true
-      while (changed) {
-        changed = false
-        for (y <- 1 until height - 1; x <- 1 until width - 1) {
-          if (result(y)(x) == 25) { // Weak edge
-            // Check 8-connected neighbors for strong edges
-            val hasStrongNeighbor = (0 until 3).exists { ky =>
-              (0 until 3).exists { kx =>
-                val ny = y - 1 + ky
-                val nx = x - 1 + kx
-                result(ny)(nx) == 255
-              }
-            }
+      // We need a recursive function to handle the iterative process
+      def connectWeakEdges(current: Array[Array[Int]]): Array[Array[Int]] = {
+        val interiorIndices = (1 until height - 1).flatMap(y =>
+          (1 until width - 1).map(x => (y, x))
+        )
 
-            if (hasStrongNeighbor) {
+        // Find weak edges that have strong neighbors and mark them for upgrade
+        val upgrades = interiorIndices.filter { case (y, x) =>
+          current(y)(x) == 25 && // Is a weak edge
+          (0 until 3).exists(ky =>
+            (0 until 3).exists(kx =>
+              current(y - 1 + ky)(x - 1 + kx) == 255 // Has strong neighbor
+            )
+          )
+        }
+
+        if (upgrades.isEmpty) {
+          // No more changes, we're done
+          current
+        } else {
+          // Upgrade weak edges to strong and continue
+          val updated = upgrades.foldLeft(current.map(_.clone())) {
+            case (result, (y, x)) =>
               result(y)(x) = 255 // Upgrade to strong edge
-              changed = true
-            }
+              result
           }
+          connectWeakEdges(updated) // Recursive call to continue process
         }
       }
 
+      // Apply the recursive weak edge connection
+      val connected = connectWeakEdges(initialResult)
+
       // Final pass: keep only strong edges
-      for (y <- 0 until height; x <- 0 until width) {
+      indices.foldLeft(connected.map(_.clone())) { case (result, (y, x)) =>
         if (result(y)(x) == 25) {
           result(y)(x) =
             0 // Remove weak edges that weren't connected to strong ones
         }
+        result
       }
-
-      result
     }
 
     // New method to map edge direction to appropriate characters

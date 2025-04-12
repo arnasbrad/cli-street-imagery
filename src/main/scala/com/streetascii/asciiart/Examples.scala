@@ -1,6 +1,7 @@
 package com.streetascii.asciiart
 
 import com.streetascii.asciiart.Algorithms.{
+  BlankFilledAlgorithm,
   BrailleAlgorithm,
   EdgeDetectionCannyAlgorithm,
   EdgeDetectionSobelAlgorithm,
@@ -65,8 +66,8 @@ object Examples {
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 1
     val verticalSampling   = horizontalSampling * 2
-    val algorithm          = "cny"
-    val charset            = Charset.Blocks
+    val algorithm          = "blank"
+    val charset            = Charset.Extended
 
     val grayscaleValues =
       hexStringsToSampledGreyscaleDecimal(
@@ -80,6 +81,7 @@ object Examples {
       case "sobel"   => EdgeDetectionSobelAlgorithm
       case "canny"   => EdgeDetectionCannyAlgorithm
       case "braille" => BrailleAlgorithm
+      case "blank"   => BlankFilledAlgorithm
       case _         => LuminanceAlgorithm // Default to luminance
     }
 
@@ -102,6 +104,11 @@ object Examples {
       case BrailleAlgorithm =>
         BrailleAlgorithm.generate(
           Charset.BraillePatterns,
+          grayscaleValues.grayscaleDecimals
+        )
+      case BlankFilledAlgorithm =>
+        BlankFilledAlgorithm.generate(
+          Charset.Blank,
           grayscaleValues.grayscaleDecimals
         )
     }

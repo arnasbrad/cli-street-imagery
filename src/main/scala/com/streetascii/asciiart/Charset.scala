@@ -27,6 +27,11 @@ object Charset {
       "⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿"
   }
 
+  case object Blank extends Charset {
+    def value =
+      "█"
+  }
+
   case object BraillePatterns extends Charset {
     def value: String = {
       // Generate all 256 possible Braille patterns (2^8 combinations)
