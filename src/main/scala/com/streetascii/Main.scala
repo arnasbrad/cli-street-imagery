@@ -16,7 +16,7 @@ import org.typelevel.log4cats.slf4j.Slf4jLogger
 object Main extends IOApp {
   implicit def logger: SelfAwareStructuredLogger[IO] = Slf4jLogger.getLogger[IO]
 
-  val appConfig = AppConfig(
+  val appConfig: AppConfig = AppConfig(
     api = ApiConfig(mapillaryKey =
       ApiKey.unsafeCreate(
         "key"
@@ -25,7 +25,7 @@ object Main extends IOApp {
     processing = ProcessingConfig(
       algorithm = LuminanceAlgorithm,
       charset = Charset.Braille,
-      navigationType = NavigationType.RadiusBased,
+      navigationType = NavigationType.SequenceBased,
       downSamplingRate = 4
     )
   )
