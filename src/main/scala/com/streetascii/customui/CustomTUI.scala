@@ -6,7 +6,12 @@ import com.streetascii.Main.logger
 import com.streetascii.asciiart.Conversions
 import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
 import com.streetascii.clients.mapillary.Models.MapillaryImageId
-import com.streetascii.colorfilters.ColorConversions.enhanceContrast
+import com.streetascii.colorfilters.ColorConversions.{
+  correctForDeuteranopia,
+  correctForProtanopia,
+  correctForTritanopia,
+  enhanceContrast
+}
 import com.streetascii.common.Models.Radius
 import com.streetascii.navigation.Models.NavigationType.{
   RadiusBased,
@@ -131,7 +136,7 @@ object CustomTUI {
     IO.blocking {
       val sb = new StringBuilder()
 
-      val editedColors = enhanceContrast(colors, 1.5)
+      val editedColors = correctForTritanopia(colors, 1.5)
 
       for ((line, lineIndex) <- chars.zipWithIndex) {
         if (lineIndex > 0) {
@@ -139,7 +144,7 @@ object CustomTUI {
         }
 
         for ((char, charIndex) <- line.zipWithIndex) {
-          val rgb         = editedColors(lineIndex)(charIndex)
+          val rgb         = colors(lineIndex)(charIndex)
           val coloredChar = safeColorize(char.toString, rgb.r, rgb.g, rgb.b)
           sb.append(coloredChar)
         }
