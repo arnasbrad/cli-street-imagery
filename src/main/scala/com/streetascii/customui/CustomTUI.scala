@@ -6,6 +6,7 @@ import com.streetascii.Main.logger
 import com.streetascii.asciiart.Conversions
 import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
 import com.streetascii.clients.mapillary.Models.MapillaryImageId
+import com.streetascii.colorfilters.ColorConversions.enhanceContrast
 import com.streetascii.common.Models.Radius
 import com.streetascii.navigation.Models.NavigationType.{
   RadiusBased,
@@ -130,13 +131,15 @@ object CustomTUI {
     IO.blocking {
       val sb = new StringBuilder()
 
+      val editedColors = enhanceContrast(colors, 1.5)
+
       for ((line, lineIndex) <- chars.zipWithIndex) {
         if (lineIndex > 0) {
           sb.append("\n")
         }
 
         for ((char, charIndex) <- line.zipWithIndex) {
-          val rgb         = colors(lineIndex)(charIndex)
+          val rgb         = editedColors(lineIndex)(charIndex)
           val coloredChar = safeColorize(char.toString, rgb.r, rgb.g, rgb.b)
           sb.append(coloredChar)
         }
