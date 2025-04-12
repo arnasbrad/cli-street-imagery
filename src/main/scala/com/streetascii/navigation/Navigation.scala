@@ -2,51 +2,68 @@ package com.streetascii.navigation
 
 import cats.data.EitherT
 import cats.effect.IO
-import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
+import com.streetascii.clients.mapillary.Models.{
+  ImageData,
+  MapillaryImageId,
+  MapillarySequenceId
+}
 import com.streetascii.clients.mapillary.{Errors, MapillaryClient}
 import com.streetascii.common.Models.{Coordinates, Radius}
 
-sealed trait Navigation {
-  def findNextImages()(implicit
-      mapillaryClient: MapillaryClient
-  ): EitherT[IO, Errors.MapillaryError, List[ImageData]]
-}
-
 object Navigation {
-  case class RadiusBased(
+  // given coordinates, find the closest surrounding images
+  def findNearbyImages(
       currentImageId: MapillaryImageId,
       currentCoordinates: Coordinates,
       radius: Radius,
       maxAmount: Int
-  ) extends Navigation {
-    // given coordinates, find the closest surrounding images
-    def findNextImages()(implicit
-        mapillaryClient: MapillaryClient
-    ): EitherT[IO, Errors.MapillaryError, List[ImageData]] = {
-      for {
-        imagesResponse <- mapillaryClient.getImagesInfoByLocation(
-          currentCoordinates,
-          radius
+  )(implicit
+      mapillaryClient: MapillaryClient
+  ): EitherT[IO, Errors.MapillaryError, List[ImageData]] = {
+    for {
+      imagesResponse <- mapillaryClient.getImagesInfoByLocation(
+        currentCoordinates,
+        radius
+      )
+
+      otherImages = imagesResponse.data.filter(_.id != currentImageId)
+
+      imagesWithDistance = otherImages.map { imageData =>
+        (
+          imageData,
+          calculateDistance(currentCoordinates, imageData.coordinates)
         )
+      }
 
-        otherImages = imagesResponse.data.filter(_.id != currentImageId)
+      // Sort by distance and take top maxAmount
+      closestImages = imagesWithDistance
+        .sortBy(_._2) // Sort by distance (second element of tuple)
+        .take(maxAmount)
+        .map(_._1) // Extract just the ImageData
 
-        imagesWithDistance = otherImages.map { imageData =>
-          (
-            imageData,
-            calculateDistance(currentCoordinates, imageData.coordinates)
-          )
-        }
+    } yield closestImages
+  }
 
-        // Sort by distance and take top maxAmount
-        closestImages = imagesWithDistance
-          .sortBy(_._2) // Sort by distance (second element of tuple)
-          .take(maxAmount)
-          .map(_._1) // Extract just the ImageData
+  // given coordinates, find the closest surrounding images
+  def findSequenceNeighbors(
+      currentImageId: MapillaryImageId,
+      sequenceId: MapillarySequenceId
+  )(implicit
+      mapillaryClient: MapillaryClient
+  ): EitherT[
+    IO,
+    Errors.MapillaryError,
+    (Option[MapillaryImageId], Option[MapillaryImageId])
+  ] = {
 
-      } yield closestImages
-    }
+    for {
+      imageIdsInSequence <- mapillaryClient.getImageIdsBySequence(sequenceId)
 
+      neighborTuple = listNeighbors(
+        imageIdsInSequence,
+        currentImageId
+      )
+    } yield neighborTuple
   }
 
   // Helper function to calculate distance between two coordinates using Haversine formula
@@ -68,5 +85,31 @@ object Navigation {
     val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
     earthRadius * c // Distance in meters
+  }
+
+  def listNeighbors(
+      list: List[MapillaryImageId],
+      target: MapillaryImageId
+  ): (Option[MapillaryImageId], Option[MapillaryImageId]) = {
+    list match {
+      case Nil => (None, None)
+
+      // If target is the first element
+      case `target` :: next :: _ => (None, Some(next))
+
+      // If target is somewhere in the middle or end
+      case _ =>
+        // Use zipWithIndex for better performance than separate indexOf
+        val withIndices = list.zipWithIndex
+
+        withIndices.find(_._1 == target) match {
+          case Some((_, idx)) =>
+            val prev = if (idx > 0) Some(list(idx - 1)) else None
+            val next =
+              if (idx < list.length - 1) Some(list(idx + 1)) else None
+            (prev, next)
+          case None => (None, None)
+        }
+    }
   }
 }

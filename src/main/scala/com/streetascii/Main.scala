@@ -8,7 +8,8 @@ import com.streetascii.clients.imgur.ImgurClient
 import com.streetascii.clients.mapillary.MapillaryClient
 import com.streetascii.clients.mapillary.Models.{ApiKey, MapillaryImageId}
 import com.streetascii.customui.CustomTUI
-import com.streetascii.runner.Runner
+import com.streetascii.navigation.Models.NavigationType
+import com.streetascii.runner.RunnerImpl
 import org.typelevel.log4cats.SelfAwareStructuredLogger
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 
@@ -24,6 +25,7 @@ object Main extends IOApp {
     processing = ProcessingConfig(
       algorithm = LuminanceAlgorithm,
       charset = Charset.Braille,
+      navigationType = NavigationType.RadiusBased,
       downSamplingRate = 4
     )
   )
@@ -33,7 +35,7 @@ object Main extends IOApp {
       mapillaryClient <- MapillaryClient.make(appConfig.api.mapillaryKey)
       imgurClient     <- ImgurClient.make()
 
-    } yield Runner.make(mapillaryClient, imgurClient)
+    } yield RunnerImpl(mapillaryClient, imgurClient)
   }
 
   override def run(args: List[String]): IO[ExitCode] = {

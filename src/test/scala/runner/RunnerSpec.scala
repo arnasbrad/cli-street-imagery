@@ -1,5 +1,8 @@
 package runner
 
+import cats.data.EitherT
+import cats.effect.IO
+import cats.effect.unsafe.implicits.global
 import com.streetascii.asciiart.Conversions
 import com.streetascii.asciiart.Models.{
   HexImage,
@@ -7,20 +10,12 @@ import com.streetascii.asciiart.Models.{
   ImageInfo,
   ImageWidth
 }
-import cats.data.EitherT
-import cats.effect.IO
-import cats.effect.unsafe.implicits.global
-import com.streetascii.asciiart.Conversions
 import com.streetascii.clients.imgur
-import com.streetascii.clients.mapillary.Models.{
-  ImageData,
-  ImagesResponse,
-  MapillaryImageId
-}
 import com.streetascii.clients.imgur.ImgurClient
+import com.streetascii.clients.mapillary.Models._
 import com.streetascii.clients.mapillary.{MapillaryClient, Models}
-import com.streetascii.runner.Runner
 import com.streetascii.common.Models.{Coordinates, Radius}
+import com.streetascii.runner.RunnerImpl
 import com.streetascii.socialmedia.SocialMedia
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.flatspec.AnyFlatSpec
@@ -32,7 +27,8 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
     val coordinates = Coordinates.unsafeCreate(51.5074, -0.1278) // London
     val radius      = Radius.unsafeCreate(3)
 
-    val imageId = MapillaryImageId("test-image-id")
+    val imageId    = MapillaryImageId("test-image-id")
+    val sequenceId = MapillarySequenceId("test-sequence-id")
     val imageData = ImageData(
       id = imageId,
       coordinates = coordinates
@@ -56,7 +52,7 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
     // Create the HexImage instance
     val hexImage = HexImage(hexStrings, testWidth, testHeight)
     val imageInfo =
-      ImageInfo(hexImage, imageId, Coordinates.unsafeCreate(50, 50))
+      ImageInfo(hexImage, imageId, sequenceId, Coordinates.unsafeCreate(50, 50))
 
     // Create mocks
     val mockMapillaryClient = mock[MapillaryClient]
@@ -84,13 +80,22 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
       ))
       .expects(imageId, *)
       .returning(
-        EitherT.rightT(imageByteArray, Coordinates.unsafeCreate(50, 50))
+        EitherT.rightT(
+          imageByteArray,
+          MapillaryImageDetails(
+            id = imageId,
+            sequenceId = sequenceId,
+            coordinates = Coordinates.unsafeCreate(50, 50),
+            thumb1024Url = Some("url"),
+            thumbOriginalUrl = Some("url")
+          )
+        )
       )
 
     // Mock the conversion function to return our test hex image
     // Create an instance of Runner with mocked dependencies
     val runner =
-      Runner.make(mockMapillaryClient, mockImgurClient, mockConversions)
+      RunnerImpl(mockMapillaryClient, mockImgurClient, mockConversions)
 
     // Call the method under test
     val result = runner
@@ -101,60 +106,6 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
     // Assertions
     result.isRight shouldBe true
     result.getOrElse(fail("Expected Right but got Left")) shouldBe imageInfo
-  }
-
-  "Runner.getNeighborImageIds" should "return list of neighbor image IDs" in {
-    // Setup test data
-    val currentImageId = MapillaryImageId("current-id")
-    val currentCoords  = Coordinates.unsafeCreate(51.5074, -0.1278)
-    val radius         = Radius.unsafeCreate(100)
-    val maxAmount      = 3
-
-    val neighbor1 = ImageData(
-      id = MapillaryImageId("neighbor-1"),
-      coordinates = Coordinates.unsafeCreate(51.5075, -0.1279)
-    )
-    val neighbor2 = ImageData(
-      id = MapillaryImageId("neighbor-2"),
-      coordinates = Coordinates.unsafeCreate(51.5076, -0.1280)
-    )
-    val currentImage =
-      ImageData(id = currentImageId, coordinates = currentCoords)
-
-    val imagesResponse =
-      ImagesResponse(data = List(currentImage, neighbor1, neighbor2))
-
-    // Create mocks
-    val mockMapillaryClient = mock[MapillaryClient]
-    val mockImgurClient     = mock[ImgurClient]
-
-    // Setup expectations - mock the getImagesInfoByLocation call that Navigation will make
-    (mockMapillaryClient
-      .getImagesInfoByLocation(
-        _: Coordinates,
-        _: Radius,
-        _: List[Models.RequestField]
-      ))
-      .expects(currentCoords, radius, *)
-      .returning(EitherT.rightT(imagesResponse))
-
-    // Create an instance of Runner with mocked dependencies
-    val runner = Runner.make(mockMapillaryClient, mockImgurClient)
-
-    // Call the method under test
-    val result = runner
-      .getNeighborImageIds(currentImageId, currentCoords, radius, maxAmount)
-      .value
-      .unsafeRunSync()
-
-    // Assertions
-    result.isRight shouldBe true
-    val ids = result.getOrElse(fail("Expected Right but got Left"))
-    ids should contain theSameElementsAs List(
-      MapillaryImageId("neighbor-1"),
-      MapillaryImageId("neighbor-2")
-    )
-    ids should not contain currentImageId
   }
 
   "Runner.generateSocialMediaLinks" should "return social media links with the uploaded image URL" in {
@@ -186,7 +137,7 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
       .returning(EitherT.rightT(imgurResponse))
 
     // Create an instance of Runner with mocked dependencies
-    val runner = Runner.make(mockMapillaryClient, mockImgurClient)
+    val runner = RunnerImpl(mockMapillaryClient, mockImgurClient)
 
     // Call the method under test
     val result =

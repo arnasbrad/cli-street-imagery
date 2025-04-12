@@ -1,6 +1,9 @@
 package com.streetascii.asciiart
 
-import com.streetascii.clients.mapillary.Models.MapillaryImageId
+import com.streetascii.clients.mapillary.Models.{
+  MapillaryImageId,
+  MapillarySequenceId
+}
 import com.streetascii.common.Models.Coordinates
 
 object Models {
@@ -17,6 +20,7 @@ object Models {
   case class ImageInfo(
       hexImage: HexImage,
       imageId: MapillaryImageId,
+      sequenceId: MapillarySequenceId,
       coordinates: Coordinates
   )
 

@@ -5,7 +5,9 @@ import com.streetascii.clients.mapillary.Models.{
   ImageData,
   ImagesResponse,
   MapillaryImageDetails,
-  MapillaryImageId
+  MapillaryImageId,
+  MapillarySequenceId,
+  SequenceImagesResponse
 }
 import com.streetascii.common.Models.Coordinates
 import io.circe.generic.semiauto.deriveDecoder
@@ -18,8 +20,8 @@ object Codecs {
   implicit val mapillaryImageDetailsDecoder: Decoder[MapillaryImageDetails] =
     Decoder.instance { c =>
       for {
-        id         <- c.get[String]("id")
-        sequenceId <- c.get[String]("sequence")
+        id         <- c.get[String]("id").map(MapillaryImageId)
+        sequenceId <- c.get[String]("sequence").map(MapillarySequenceId)
         coordsArray <- c
           .downField("geometry")
           .downField("coordinates")
@@ -38,6 +40,15 @@ object Codecs {
   implicit val mapillaryImageDetailsEntityDecoder
       : EntityDecoder[IO, MapillaryImageDetails] =
     jsonOf[IO, MapillaryImageDetails]
+
+  implicit val sequenceImagesResponseDecoder: Decoder[SequenceImagesResponse] =
+    (c: HCursor) => {
+      c.downField("data").as[List[MapillaryImageId]].map(SequenceImagesResponse)
+    }
+
+  implicit val sequenceImagesResponseEntityDecoder
+      : EntityDecoder[IO, SequenceImagesResponse] =
+    jsonOf[IO, SequenceImagesResponse]
 
   implicit val imagesResponseDecoder: Decoder[ImagesResponse] =
     deriveDecoder[ImagesResponse]

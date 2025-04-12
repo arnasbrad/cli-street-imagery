@@ -1,13 +1,18 @@
 package com.streetascii.customui
 
 import cats.effect.{ExitCode, IO, Resource}
-import com.streetascii.AppConfig
+import com.streetascii.{AppConfig, Main}
 import com.streetascii.Main.logger
 import com.streetascii.asciiart.Conversions
 import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
 import com.streetascii.clients.mapillary.Models.MapillaryImageId
 import com.streetascii.common.Models.Radius
-import com.streetascii.runner.Runner
+import com.streetascii.navigation.Models.NavigationType.{
+  RadiusBased,
+  SequenceBased
+}
+import com.streetascii.navigation.Navigation
+import com.streetascii.runner.{Runner, RunnerImpl}
 import org.jline.terminal.{Terminal, TerminalBuilder}
 import org.jline.utils.InfoCmp
 
@@ -179,7 +184,7 @@ object CustomTUI {
   def terminalApp(
       initialChars: Array[Array[Char]],
       initialColors: Array[Array[RGB]],
-      runner: Runner,
+      runner: RunnerImpl,
       initialImageInfo: ImageInfo,
       appConfig: AppConfig
   ): IO[ExitCode] = {
@@ -209,7 +214,10 @@ object CustomTUI {
               } yield code
 
             case 'n' =>
-              navigationLogic(imageInfo)
+              appConfig.processing.navigationType match {
+                case RadiusBased   => radiusNavigationLogic(imageInfo)
+                case SequenceBased => ???
+              }
 
             case _ =>
               loop(chars, colors, imageInfo) // Ignore and continue
@@ -217,20 +225,21 @@ object CustomTUI {
         } yield exitCode
       }
 
-      def navigationLogic(
+      def radiusNavigationLogic(
           imageInfo: ImageInfo
       ) =
         for {
           _ <- clearScreen(terminal)
 
-          navOptsEither <- runner
-            .getNeighborImageIds(
-              currentImageId = imageInfo.imageId,
-              currentCoordinates = imageInfo.coordinates,
-              radius = Radius.unsafeCreate(15),
-              maxAmount = 5
-            )
-            .value
+          navOptsEither <-
+            Navigation
+              .findNearbyImages(
+                currentImageId = imageInfo.imageId,
+                currentCoordinates = imageInfo.coordinates,
+                radius = Radius.unsafeCreate(15),
+                maxAmount = 5
+              )(runner.mapillaryClient)
+              .value
 
           // for when bbox aint working
           /*
@@ -247,7 +256,7 @@ object CustomTUI {
                   writer.flush()
                 }
 
-                code <- readNavigationChoice(newImageIds)
+                code <- readNavigationChoice(newImageIds.map(_.id))
               } yield code
 
             case Left(_) =>

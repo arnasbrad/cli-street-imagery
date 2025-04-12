@@ -7,6 +7,7 @@ import com.streetascii.AppConfig.{ApiConfig, ProcessingConfig}
 import com.streetascii.asciiart.Algorithms.{AsciiAlgorithm, BrailleAlgorithm}
 import com.streetascii.asciiart.{Algorithms, Charset}
 import com.streetascii.clients.mapillary.Models.ApiKey
+import com.streetascii.navigation.Models.NavigationType
 import pureconfig._
 import pureconfig.error.CannotConvert
 import pureconfig.generic.auto._
@@ -19,6 +20,8 @@ object AppConfig {
   case class ProcessingConfig(
       algorithm: AsciiAlgorithm,
       charset: Charset,
+      // TODO for Ignelis: implement nav type reading
+      navigationType: NavigationType,
       downSamplingRate: Int
   ) {
     val verticalSampling: Int = algorithm match {
