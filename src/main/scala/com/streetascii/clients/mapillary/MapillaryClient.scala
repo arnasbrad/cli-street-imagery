@@ -24,7 +24,7 @@ trait MapillaryClient {
         RequestField.Thumb1024Url,
         RequestField.ThumbOriginalUrl
       )
-  ): EitherT[IO, MapillaryError, (Array[Byte], Coordinates)]
+  ): EitherT[IO, MapillaryError, (Array[Byte], MapillaryImageDetails)]
 
   def getImagesInfoByLocation(
       coordinates: Coordinates,
@@ -34,6 +34,10 @@ trait MapillaryClient {
         RequestField.Geometry
       )
   ): EitherT[IO, MapillaryError, ImagesResponse]
+
+  def getImageIdsBySequence(
+      sequenceId: MapillarySequenceId
+  ): EitherT[IO, MapillaryError, List[MapillaryImageId]]
 }
 
 object MapillaryClient {
@@ -187,7 +191,7 @@ object MapillaryClient {
     override def getImage(
         imageId: MapillaryImageId,
         fields: List[RequestField]
-    ): EitherT[IO, MapillaryError, (Array[Byte], Coordinates)] = {
+    ): EitherT[IO, MapillaryError, (Array[Byte], MapillaryImageDetails)] = {
       for {
         details <- getImageDetails(imageId, fields)
 
@@ -202,7 +206,7 @@ object MapillaryClient {
         }
 
         imageBytes <- getImageFromUrl(imageUrl)
-      } yield (imageBytes, details.coordinates)
+      } yield (imageBytes, details)
     }
 
     /** Calculates a bounding box around coordinates within a radius.
@@ -251,6 +255,26 @@ object MapillaryClient {
         handleErrors(
           client
             .expect[ImagesResponse](request)
+        )
+      )
+    }
+    override def getImageIdsBySequence(
+        sequenceId: MapillarySequenceId
+    ): EitherT[IO, MapillaryError, List[MapillaryImageId]] = {
+      // Construct the request URI
+      val uri = baseUri
+        .addPath("image_ids")
+        .withQueryParam("sequence_id", sequenceId.id)
+
+      val request = authenticatedRequest(uri)
+
+      // The API likely returns an object with an array of image IDs
+      // Assuming we have a proper decoder for SequenceImagesResponse
+      EitherT(
+        handleErrors(
+          client
+            .expect[SequenceImagesResponse](request)
+            .map(response => response.data)
         )
       )
     }

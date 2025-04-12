@@ -5,17 +5,19 @@ import com.streetascii.common.Models._
 
 object Models {
   case class MapillaryImageDetails(
-      id: String,
-      sequenceId: String,
+      id: MapillaryImageId,
+      sequenceId: MapillarySequenceId,
       coordinates: Coordinates,
       thumb1024Url: Option[String],
       thumbOriginalUrl: Option[String]
   )
 
   case class ImagesResponse(data: List[ImageData])
+  case class SequenceImagesResponse(data: List[MapillaryImageId])
   case class ImageData(id: MapillaryImageId, coordinates: Coordinates)
 
   case class MapillaryImageId(id: String)
+  case class MapillarySequenceId(id: String)
 
   case class ApiKey private (value: String)
   case object ApiKey {

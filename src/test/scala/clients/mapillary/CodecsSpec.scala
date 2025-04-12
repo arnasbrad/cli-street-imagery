@@ -29,8 +29,8 @@ class CodecsSpec extends AnyFunSpec with Matchers {
 
         val imageDetails =
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
-        imageDetails.id shouldBe "123456789"
-        imageDetails.sequenceId shouldBe "seq123456"
+        imageDetails.id shouldBe MapillaryImageId("123456789")
+        imageDetails.sequenceId shouldBe MapillarySequenceId("seq123456")
         imageDetails.coordinates shouldBe Coordinates.unsafeCreate(
           59.456,
           10.123
@@ -60,8 +60,8 @@ class CodecsSpec extends AnyFunSpec with Matchers {
 
         val imageDetails =
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
-        imageDetails.id shouldBe "123456789"
-        imageDetails.sequenceId shouldBe "seq123456"
+        imageDetails.id shouldBe MapillaryImageId("123456789")
+        imageDetails.sequenceId shouldBe MapillarySequenceId("seq123456")
         imageDetails.coordinates shouldBe Coordinates.unsafeCreate(
           59.456,
           10.123
@@ -114,8 +114,8 @@ class CodecsSpec extends AnyFunSpec with Matchers {
 
         val imageDetails =
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
-        imageDetails.id shouldBe "123456789"
-        imageDetails.sequenceId shouldBe "seq123456"
+        imageDetails.id shouldBe MapillaryImageId("123456789")
+        imageDetails.sequenceId shouldBe MapillarySequenceId("seq123456")
         imageDetails.coordinates shouldBe Coordinates.unsafeCreate(
           59.456,
           10.123
@@ -276,6 +276,75 @@ class CodecsSpec extends AnyFunSpec with Matchers {
         """
 
         decode[MapillaryImageId](missingId).isLeft shouldBe true
+      }
+    }
+
+    describe("sequenceImagesResponseDecoder") {
+      it("should decode valid SequenceImagesResponse JSON") {
+        val json =
+          """
+      {
+        "data": [
+          {"id": "832054311207247"},
+          {"id": "3540820439482142"},
+          {"id": "1159410088278870"},
+          {"id": "204207022016727"}
+        ]
+      }
+      """
+
+        val result = decode[SequenceImagesResponse](json)
+        result.isRight shouldBe true
+
+        val response =
+          result.getOrElse(fail("Failed to decode SequenceImagesResponse"))
+        response.data.length shouldBe 4
+        response.data.head.id shouldBe "832054311207247"
+        response.data(1).id shouldBe "3540820439482142"
+        response.data(2).id shouldBe "1159410088278870"
+        response.data(3).id shouldBe "204207022016727"
+      }
+
+      it("should handle empty data array") {
+        val json =
+          """
+      {
+        "data": []
+      }
+      """
+
+        val result = decode[SequenceImagesResponse](json)
+        result.isRight shouldBe true
+
+        val response =
+          result.getOrElse(fail("Failed to decode SequenceImagesResponse"))
+        response.data.isEmpty shouldBe true
+      }
+
+      it("should fail if data field is missing") {
+        val missingData =
+          """
+      {
+        "other_field": "value"
+      }
+      """
+
+        decode[SequenceImagesResponse](missingData).isLeft shouldBe true
+      }
+
+      it("should fail if any id in the array is missing") {
+        val missingId =
+          """
+      {
+        "data": [
+          {"id": "832054311207247"},
+          {"other_field": "value"},
+          {"id": "1159410088278870"}
+        ]
+      }
+      """
+
+        decode[SequenceImagesResponse](missingId).isLeft shouldBe true
       }
     }
   }

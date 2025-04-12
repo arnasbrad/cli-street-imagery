@@ -6,17 +6,17 @@ import com.streetascii.asciiart.Algorithms.LuminanceAlgorithm
 import com.streetascii.asciiart.{Charset, Conversions}
 import com.streetascii.clients.imgur.ImgurClient
 import com.streetascii.clients.mapillary.MapillaryClient
-import com.streetascii.clients.mapillary.Models.ApiKey
-import com.streetascii.common.Models.Coordinates
+import com.streetascii.clients.mapillary.Models.{ApiKey, MapillaryImageId}
 import com.streetascii.customui.CustomTUI
-import com.streetascii.runner.Runner
+import com.streetascii.navigation.Models.NavigationType
+import com.streetascii.runner.RunnerImpl
 import org.typelevel.log4cats.SelfAwareStructuredLogger
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 
 object Main extends IOApp {
   implicit def logger: SelfAwareStructuredLogger[IO] = Slf4jLogger.getLogger[IO]
 
-  val appConfig = AppConfig(
+  val appConfig: AppConfig = AppConfig(
     api = ApiConfig(mapillaryKey =
       ApiKey.unsafeCreate(
         "key"
@@ -25,6 +25,7 @@ object Main extends IOApp {
     processing = ProcessingConfig(
       algorithm = LuminanceAlgorithm,
       charset = Charset.Braille,
+      navigationType = NavigationType.SequenceBased,
       downSamplingRate = 4
     )
   )
@@ -34,7 +35,7 @@ object Main extends IOApp {
       mapillaryClient <- MapillaryClient.make(appConfig.api.mapillaryKey)
       imgurClient     <- ImgurClient.make()
 
-    } yield Runner.make(mapillaryClient, imgurClient)
+    } yield RunnerImpl(mapillaryClient, imgurClient)
   }
 
   override def run(args: List[String]): IO[ExitCode] = {
@@ -42,10 +43,12 @@ object Main extends IOApp {
       for {
         imageInfo <- runner
           // for when bbox aint working
-          // .getHexStringsFromId(MapillaryImageId("3024381137696154"))
+          .getHexStringsFromId(MapillaryImageId("1159410088278870"))
+          /*
           .getHexStringsFromLocation(
             Coordinates(51.501001738896115, -0.12600535355615777)
           )
+           */
           .value
 
         exitCode <- imageInfo match {

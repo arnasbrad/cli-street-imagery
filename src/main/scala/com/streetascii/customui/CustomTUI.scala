@@ -7,7 +7,12 @@ import com.streetascii.asciiart.Conversions
 import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
 import com.streetascii.clients.mapillary.Models.MapillaryImageId
 import com.streetascii.common.Models.Radius
-import com.streetascii.runner.Runner
+import com.streetascii.navigation.Models.NavigationType.{
+  RadiusBased,
+  SequenceBased
+}
+import com.streetascii.navigation.Navigation
+import com.streetascii.runner.RunnerImpl
 import org.jline.terminal.{Terminal, TerminalBuilder}
 import org.jline.utils.InfoCmp
 
@@ -179,7 +184,7 @@ object CustomTUI {
   def terminalApp(
       initialChars: Array[Array[Char]],
       initialColors: Array[Array[RGB]],
-      runner: Runner,
+      runner: RunnerImpl,
       initialImageInfo: ImageInfo,
       appConfig: AppConfig
   ): IO[ExitCode] = {
@@ -209,7 +214,10 @@ object CustomTUI {
               } yield code
 
             case 'n' =>
-              navigationLogic(imageInfo)
+              appConfig.processing.navigationType match {
+                case RadiusBased   => radiusNavigationLogic(imageInfo)
+                case SequenceBased => sequenceNavigationLogic(imageInfo)
+              }
 
             case _ =>
               loop(chars, colors, imageInfo) // Ignore and continue
@@ -217,20 +225,39 @@ object CustomTUI {
         } yield exitCode
       }
 
-      def navigationLogic(
+      def radiusNavigationLogic(
           imageInfo: ImageInfo
-      ) =
+      ) = {
+        def readRadiusNavigationChoice(
+            newImageIds: List[MapillaryImageId]
+        ): IO[ExitCode] =
+          for {
+            navKey <- readKey(terminal)
+            code <- navKey match {
+              case k if k >= '1' && k <= ('0' + newImageIds.length) =>
+                val index = k - '1' // Convert ASCII value to 0-based index
+                navigateToPickedLocation(newImageIds(index))
+              case 'q' =>
+                IO.pure(ExitCode.Success) // Quit
+              case _ =>
+                for {
+                  code <- readRadiusNavigationChoice(newImageIds)
+                } yield code
+            }
+          } yield code
+
         for {
           _ <- clearScreen(terminal)
 
-          navOptsEither <- runner
-            .getNeighborImageIds(
-              currentImageId = imageInfo.imageId,
-              currentCoordinates = imageInfo.coordinates,
-              radius = Radius.unsafeCreate(15),
-              maxAmount = 5
-            )
-            .value
+          navOptsEither <-
+            Navigation
+              .findNearbyImages(
+                currentImageId = imageInfo.imageId,
+                currentCoordinates = imageInfo.coordinates,
+                radius = Radius.unsafeCreate(15),
+                maxAmount = 5
+              )(runner.mapillaryClient)
+              .value
 
           // for when bbox aint working
           /*
@@ -243,11 +270,11 @@ object CustomTUI {
             case Right(newImageIds) =>
               for {
                 _ <- IO.blocking {
-                  writer.write(newImageIds.toString)
+                  writer.write(newImageIds.map(_.id).toString)
                   writer.flush()
                 }
 
-                code <- readNavigationChoice(newImageIds)
+                code <- readRadiusNavigationChoice(newImageIds.map(_.id))
               } yield code
 
             case Left(_) =>
@@ -258,6 +285,72 @@ object CustomTUI {
           }
 
         } yield code
+      }
+
+      def sequenceNavigationLogic(
+          imageInfo: ImageInfo
+      ) = {
+        def readSequenceNavigationChoice(
+            backwardsOpt: Option[MapillaryImageId],
+            forwardsOpt: Option[MapillaryImageId]
+        ): IO[ExitCode] =
+          for {
+            navKey <- readKey(terminal)
+            code <- navKey match {
+              case 'b' =>
+                backwardsOpt match {
+                  case Some(backwards) => navigateToPickedLocation(backwards)
+                  case None =>
+                    readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
+                }
+
+              case 'f' =>
+                forwardsOpt match {
+                  case Some(forwards) => navigateToPickedLocation(forwards)
+                  case None =>
+                    readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
+                }
+              case _ =>
+                for {
+                  code <- readSequenceNavigationChoice(
+                    backwardsOpt,
+                    forwardsOpt
+                  )
+                } yield code
+            }
+          } yield code
+
+        for {
+          _ <- clearScreen(terminal)
+
+          navOptsEither <-
+            Navigation
+              .findSequenceNeighbors(
+                currentImageId = imageInfo.imageId,
+                sequenceId = imageInfo.sequenceId
+              )(runner.mapillaryClient)
+              .value
+
+          code <- navOptsEither match {
+            case Right((backwardsOpt, forwardsOpt)) =>
+              for {
+                _ <- IO.blocking {
+                  writer.write(s"Backwards: $backwardsOpt\n")
+                  writer.write(s"Forwards: $forwardsOpt")
+                  writer.flush()
+                }
+
+                code <- readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
+              } yield code
+
+            case Left(_) =>
+              IO.blocking {
+                writer.write("something failed")
+                writer.flush()
+              }.as(ExitCode.Error)
+          }
+        } yield code
+      }
 
       def navigateToPickedLocation(
           imageId: MapillaryImageId
@@ -297,24 +390,6 @@ object CustomTUI {
           }
         } yield code
       }
-
-      def readNavigationChoice(
-          newImageIds: List[MapillaryImageId]
-      ): IO[ExitCode] =
-        for {
-          navKey <- readKey(terminal)
-          code <- navKey match {
-            case k if k >= '1' && k <= ('0' + newImageIds.length) =>
-              val index = k - '1' // Convert ASCII value to 0-based index
-              navigateToPickedLocation(newImageIds(index))
-            case 'q' =>
-              IO.pure(ExitCode.Success) // Quit
-            case _ =>
-              for {
-                code <- readNavigationChoice(newImageIds)
-              } yield code
-          }
-        } yield code
 
       printColorGrid(writer, initialChars, initialColors) >> loop(
         initialChars,

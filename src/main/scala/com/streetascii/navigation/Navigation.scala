@@ -2,24 +2,17 @@ package com.streetascii.navigation
 
 import cats.data.EitherT
 import cats.effect.IO
-import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
+import com.streetascii.clients.mapillary.Models.{
+  ImageData,
+  MapillaryImageId,
+  MapillarySequenceId
+}
 import com.streetascii.clients.mapillary.{Errors, MapillaryClient}
 import com.streetascii.common.Models.{Coordinates, Radius}
 
-sealed trait Navigation {
-  def findPossibleNavigationOptions(
-      currentImageId: MapillaryImageId,
-      currentCoordinates: Coordinates,
-      radius: Radius,
-      maxAmount: Int
-  )(implicit
-      mapillaryClient: MapillaryClient
-  ): EitherT[IO, Errors.MapillaryError, List[ImageData]]
-}
-
-object Navigation extends Navigation {
+object Navigation {
   // given coordinates, find the closest surrounding images
-  def findPossibleNavigationOptions(
+  def findNearbyImages(
       currentImageId: MapillaryImageId,
       currentCoordinates: Coordinates,
       radius: Radius,
@@ -51,8 +44,30 @@ object Navigation extends Navigation {
     } yield closestImages
   }
 
+  // given coordinates, find the closest surrounding images
+  def findSequenceNeighbors(
+      currentImageId: MapillaryImageId,
+      sequenceId: MapillarySequenceId
+  )(implicit
+      mapillaryClient: MapillaryClient
+  ): EitherT[
+    IO,
+    Errors.MapillaryError,
+    (Option[MapillaryImageId], Option[MapillaryImageId])
+  ] = {
+
+    for {
+      imageIdsInSequence <- mapillaryClient.getImageIdsBySequence(sequenceId)
+
+      neighborTuple = listNeighbors(
+        imageIdsInSequence,
+        currentImageId
+      )
+    } yield neighborTuple
+  }
+
   // Helper function to calculate distance between two coordinates using Haversine formula
-  private def calculateDistance(
+  def calculateDistance(
       coord1: Coordinates,
       coord2: Coordinates
   ): Double = {
@@ -71,10 +86,30 @@ object Navigation extends Navigation {
 
     earthRadius * c // Distance in meters
   }
-}
 
-// TODO: maybe add more types, like sequence based. Currently my sequence logic was wrong, so I deleted it
-/*
-  private class SequenceBasedNavigation extends Navigation {
+  def listNeighbors(
+      list: List[MapillaryImageId],
+      target: MapillaryImageId
+  ): (Option[MapillaryImageId], Option[MapillaryImageId]) = {
+    list match {
+      case Nil => (None, None)
+
+      // If target is the first element
+      case `target` :: next :: _ => (None, Some(next))
+
+      // If target is somewhere in the middle or end
+      case _ =>
+        // Use zipWithIndex for better performance than separate indexOf
+        val withIndices = list.zipWithIndex
+
+        withIndices.find(_._1 == target) match {
+          case Some((_, idx)) =>
+            val prev = if (idx > 0) Some(list(idx - 1)) else None
+            val next =
+              if (idx < list.length - 1) Some(list(idx + 1)) else None
+            (prev, next)
+          case None => (None, None)
+        }
+    }
   }
- */
+}
