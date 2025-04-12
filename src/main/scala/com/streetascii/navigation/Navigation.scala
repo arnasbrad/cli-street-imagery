@@ -7,52 +7,50 @@ import com.streetascii.clients.mapillary.{Errors, MapillaryClient}
 import com.streetascii.common.Models.{Coordinates, Radius}
 
 sealed trait Navigation {
-  def findPossibleNavigationOptions(
-      currentImageId: MapillaryImageId,
-      currentCoordinates: Coordinates,
-      radius: Radius,
-      maxAmount: Int
-  )(implicit
+  def findNextImages()(implicit
       mapillaryClient: MapillaryClient
   ): EitherT[IO, Errors.MapillaryError, List[ImageData]]
 }
 
-object Navigation extends Navigation {
-  // given coordinates, find the closest surrounding images
-  def findPossibleNavigationOptions(
+object Navigation {
+  case class RadiusBased(
       currentImageId: MapillaryImageId,
       currentCoordinates: Coordinates,
       radius: Radius,
       maxAmount: Int
-  )(implicit
-      mapillaryClient: MapillaryClient
-  ): EitherT[IO, Errors.MapillaryError, List[ImageData]] = {
-    for {
-      imagesResponse <- mapillaryClient.getImagesInfoByLocation(
-        currentCoordinates,
-        radius
-      )
-
-      otherImages = imagesResponse.data.filter(_.id != currentImageId)
-
-      imagesWithDistance = otherImages.map { imageData =>
-        (
-          imageData,
-          calculateDistance(currentCoordinates, imageData.coordinates)
+  ) extends Navigation {
+    // given coordinates, find the closest surrounding images
+    def findNextImages()(implicit
+        mapillaryClient: MapillaryClient
+    ): EitherT[IO, Errors.MapillaryError, List[ImageData]] = {
+      for {
+        imagesResponse <- mapillaryClient.getImagesInfoByLocation(
+          currentCoordinates,
+          radius
         )
-      }
 
-      // Sort by distance and take top maxAmount
-      closestImages = imagesWithDistance
-        .sortBy(_._2) // Sort by distance (second element of tuple)
-        .take(maxAmount)
-        .map(_._1) // Extract just the ImageData
+        otherImages = imagesResponse.data.filter(_.id != currentImageId)
 
-    } yield closestImages
+        imagesWithDistance = otherImages.map { imageData =>
+          (
+            imageData,
+            calculateDistance(currentCoordinates, imageData.coordinates)
+          )
+        }
+
+        // Sort by distance and take top maxAmount
+        closestImages = imagesWithDistance
+          .sortBy(_._2) // Sort by distance (second element of tuple)
+          .take(maxAmount)
+          .map(_._1) // Extract just the ImageData
+
+      } yield closestImages
+    }
+
   }
 
   // Helper function to calculate distance between two coordinates using Haversine formula
-  private def calculateDistance(
+  def calculateDistance(
       coord1: Coordinates,
       coord2: Coordinates
   ): Double = {
@@ -72,9 +70,3 @@ object Navigation extends Navigation {
     earthRadius * c // Distance in meters
   }
 }
-
-// TODO: maybe add more types, like sequence based. Currently my sequence logic was wrong, so I deleted it
-/*
-  private class SequenceBasedNavigation extends Navigation {
-  }
- */

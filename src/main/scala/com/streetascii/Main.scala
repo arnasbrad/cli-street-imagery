@@ -6,8 +6,7 @@ import com.streetascii.asciiart.Algorithms.LuminanceAlgorithm
 import com.streetascii.asciiart.{Charset, Conversions}
 import com.streetascii.clients.imgur.ImgurClient
 import com.streetascii.clients.mapillary.MapillaryClient
-import com.streetascii.clients.mapillary.Models.ApiKey
-import com.streetascii.common.Models.Coordinates
+import com.streetascii.clients.mapillary.Models.{ApiKey, MapillaryImageId}
 import com.streetascii.customui.CustomTUI
 import com.streetascii.runner.Runner
 import org.typelevel.log4cats.SelfAwareStructuredLogger
@@ -42,10 +41,12 @@ object Main extends IOApp {
       for {
         imageInfo <- runner
           // for when bbox aint working
-          // .getHexStringsFromId(MapillaryImageId("3024381137696154"))
+          .getHexStringsFromId(MapillaryImageId("1159410088278870"))
+          /*
           .getHexStringsFromLocation(
             Coordinates(51.501001738896115, -0.12600535355615777)
           )
+           */
           .value
 
         exitCode <- imageInfo match {

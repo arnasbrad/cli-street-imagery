@@ -104,12 +104,14 @@ object Runner {
         maxAmount: Int
     ): EitherT[IO, MapillaryError, List[MapillaryImageId]] = {
       for {
-        neighborsData <- Navigation.findPossibleNavigationOptions(
-          currentImageId = currentImageId,
-          currentCoordinates = currentCoordinates,
-          radius = radius,
-          maxAmount = maxAmount
-        )
+        neighborsData <- Navigation
+          .RadiusBased(
+            currentImageId = currentImageId,
+            currentCoordinates = currentCoordinates,
+            radius = radius,
+            maxAmount = maxAmount
+          )
+          .findNextImages()
       } yield neighborsData.map(_.id)
     }
 

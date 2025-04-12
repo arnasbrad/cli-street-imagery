@@ -70,12 +70,13 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
 
     // Call the method under test
     val result = Navigation
-      .findPossibleNavigationOptions(
+      .RadiusBased(
         currentImageId,
         currentCoords,
         radius,
         maxAmount = 3
-      )(mockClient)
+      )
+      .findNextImages()(mockClient)
       .value
       .unsafeRunSync()
 
@@ -127,12 +128,13 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
 
     // Call the method with maxAmount = 2
     val result = Navigation
-      .findPossibleNavigationOptions(
+      .RadiusBased(
         currentImageId,
         currentCoords,
         radius,
         maxAmount = 2
-      )(mockClient)
+      )
+      .findNextImages()(mockClient)
       .value
       .unsafeRunSync()
 
@@ -176,12 +178,13 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
       .returning(EitherT.rightT[IO, MapillaryError](mockResponse))
 
     val result = Navigation
-      .findPossibleNavigationOptions(
+      .RadiusBased(
         currentImageId,
         currentCoords,
         radius,
         maxAmount = 3
-      )(mockClient)
+      )
+      .findNextImages()(mockClient)
       .value
       .unsafeRunSync()
 
@@ -223,12 +226,13 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
       .returning(EitherT.rightT[IO, MapillaryError](mockResponse))
 
     val result = Navigation
-      .findPossibleNavigationOptions(
+      .RadiusBased(
         currentImageId,
         currentCoords,
         radius,
         maxAmount = 3
-      )(mockClient)
+      )
+      .findNextImages()(mockClient)
       .value
       .unsafeRunSync()
 
@@ -264,12 +268,13 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
       .returning(EitherT.leftT[IO, ImagesResponse](apiError))
 
     val result = Navigation
-      .findPossibleNavigationOptions(
+      .RadiusBased(
         currentImageId,
         currentCoords,
         radius,
         maxAmount = 3
-      )(mockClient)
+      )
+      .findNextImages()(mockClient)
       .value
       .unsafeRunSync()
 
@@ -281,25 +286,16 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
   // This test verifies the distance calculation logic
   "Navigation.calculateDistance" should "correctly calculate distances between coordinates" in {
     // Access the private method via reflection
-    val calculateDistanceMethod = Navigation.getClass.getDeclaredMethod(
-      "calculateDistance",
-      classOf[Coordinates],
-      classOf[Coordinates]
-    )
-    calculateDistanceMethod.setAccessible(true)
 
     // Test with known coordinates and distances
     val london = Coordinates.unsafeCreate(51.5074, -0.1278)
     val paris  = Coordinates.unsafeCreate(48.8566, 2.3522)
 
     // Invoke the private method
-    val distance = calculateDistanceMethod
-      .invoke(
-        Navigation,
-        london,
-        paris
-      )
-      .asInstanceOf[Double]
+    val distance = Navigation.calculateDistance(
+      london,
+      paris
+    )
 
     // The distance between London and Paris should be approximately 344 km
     (distance / 1000).round shouldBe 344L

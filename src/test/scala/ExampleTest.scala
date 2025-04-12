@@ -1,6 +1,5 @@
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import cats.implicits._
 
 class ExampleTest extends AnyFlatSpec with Matchers {
   "something" should "do shit" in {
