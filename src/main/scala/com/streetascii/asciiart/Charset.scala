@@ -9,6 +9,14 @@ object Charset {
     def value = ".:-=+*#%@"
   }
 
+  case object Blocks extends Charset {
+    def value = " ░▒▓█"
+  }
+
+  case object BlocksExtended extends Charset {
+    def value = " ·░▒▓▄▌▐▀█"
+  }
+
   case object Extended extends Charset {
     def value =
       " .'`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
@@ -17,6 +25,11 @@ object Charset {
   case object Braille extends Charset {
     def value =
       "⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿"
+  }
+
+  case object Blank extends Charset {
+    def value =
+      "█"
   }
 
   case object BraillePatterns extends Charset {

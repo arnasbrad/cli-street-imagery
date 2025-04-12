@@ -1,8 +1,10 @@
 package com.streetascii.asciiart
 
 import com.streetascii.asciiart.Algorithms.{
+  BlankFilledAlgorithm,
   BrailleAlgorithm,
-  EdgeDetectionAlgorithm,
+  EdgeDetectionCannyAlgorithm,
+  EdgeDetectionSobelAlgorithm,
   LuminanceAlgorithm
 }
 import com.streetascii.asciiart.Conversions.{
@@ -64,8 +66,8 @@ object Examples {
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 1
     val verticalSampling   = horizontalSampling * 2
-    val algorithm          = "braille"
-    val charset            = Charset.Braille
+    val algorithm          = "blank"
+    val charset            = Charset.Extended
 
     val grayscaleValues =
       hexStringsToSampledGreyscaleDecimal(
@@ -76,8 +78,10 @@ object Examples {
       )
 
     val settings = algorithm match {
-      case "edge"    => EdgeDetectionAlgorithm
+      case "sobel"   => EdgeDetectionSobelAlgorithm
+      case "canny"   => EdgeDetectionCannyAlgorithm
       case "braille" => BrailleAlgorithm
+      case "blank"   => BlankFilledAlgorithm
       case _         => LuminanceAlgorithm // Default to luminance
     }
 
@@ -87,8 +91,13 @@ object Examples {
           charset,
           grayscaleValues.grayscaleDecimals
         )
-      case EdgeDetectionAlgorithm =>
-        EdgeDetectionAlgorithm.generate(
+      case EdgeDetectionSobelAlgorithm =>
+        EdgeDetectionSobelAlgorithm.generate(
+          charset,
+          grayscaleValues.grayscaleDecimals
+        )
+      case EdgeDetectionCannyAlgorithm =>
+        EdgeDetectionCannyAlgorithm.generate(
           charset,
           grayscaleValues.grayscaleDecimals
         )
@@ -97,7 +106,11 @@ object Examples {
           Charset.BraillePatterns,
           grayscaleValues.grayscaleDecimals
         )
-
+      case BlankFilledAlgorithm =>
+        BlankFilledAlgorithm.generate(
+          Charset.Blank,
+          grayscaleValues.grayscaleDecimals
+        )
     }
 
     val formatForPrinting = charsToStringList(asciiArt)
