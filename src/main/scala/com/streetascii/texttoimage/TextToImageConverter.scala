@@ -149,7 +149,7 @@ object TextToImageConverter extends IOApp {
     var y               = (height - totalTextHeight) / 2 + metrics.getAscent()
 
     // Left margin
-    val leftMargin = 50
+    val leftMargin = (width * 0.1).toInt
 
     // Draw each line separately
     lines.foreach { line =>
