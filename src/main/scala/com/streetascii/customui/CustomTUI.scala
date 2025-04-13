@@ -62,6 +62,7 @@ object CustomTUI {
     rgb(r, g, b) + text + RESET
 
   /** Check if terminal supports colors */
+  // only works for unix
   private def supportsColors: Boolean =
     Option(System.getenv("TERM")).exists(term =>
       term.contains("color") || term.contains("xterm") || term.contains("256")
@@ -70,7 +71,7 @@ object CustomTUI {
 
   /** Safely colorize text with fallbacks */
   private def safeColorize(text: String, r: Int, g: Int, b: Int): String =
-    if (text.isEmpty || !supportsColors) text
+    if (text.isEmpty) text
     else {
       Try {
         val colorCode = rgb(r, g, b)
