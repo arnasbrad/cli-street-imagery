@@ -13,19 +13,8 @@ object TextToImageConverter extends IOApp {
 
   // Main entry point
   override def run(args: List[String]): IO[ExitCode] = {
-    val text =
-      """--------------------------
-        |General inputs
-        |[q] - quit
-        |[n] - navigation
-        |--------------------------------
-        |-Sequence navigation inputs    -
-        |-[f] - move forwards           -
-        |-[b] - move backwards          -
-        |--------------------------------""".stripMargin
-
     for {
-      imageBytes <- createTextImage(text, 1000, 500)
+      imageBytes <- createTextImage(Constants.help, 1000, 500)
       _          <- saveImageToFile(imageBytes, "text_image.png")
       _          <- IO.println(s"Image byte array length: ${imageBytes.length}")
       _ <- IO.println(
