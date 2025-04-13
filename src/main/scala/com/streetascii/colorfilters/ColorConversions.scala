@@ -45,7 +45,6 @@ object ColorConversions {
         // Adjust error based on intensity
         val adjustedErrorR = errorR * intensity
         val adjustedErrorG = errorG * intensity
-        val adjustedErrorB = errorB * intensity
 
         // Apply corrections by redistributing the error to enhance color differences
         // Specifically emphasize red-green differences by shifting them to blue channel
@@ -87,7 +86,6 @@ object ColorConversions {
         // Adjust error based on intensity
         val adjustedErrorR = errorR * intensity
         val adjustedErrorG = errorG * intensity
-        val adjustedErrorB = errorB * intensity
 
         // Apply corrections by redistributing the error to enhance color differences
         // Emphasize red-green differences by shifting them to blue channel
@@ -127,8 +125,6 @@ object ColorConversions {
         val errorB = b - tb
 
         // Adjust error based on intensity
-        val adjustedErrorR = errorR * intensity
-        val adjustedErrorG = errorG * intensity
         val adjustedErrorB = errorB * intensity
 
         // Apply corrections by redistributing the error to enhance color differences
@@ -168,50 +164,35 @@ object ColorConversions {
     (clamped * 255).toInt
   }
 
-  /** Finds the minimum and maximum values for each RGB channel in the image
-    * @param image
-    *   The 2D array of RGB values
-    * @return
-    *   A tuple of (minR, maxR, minG, maxG, minB, maxB)
-    */
-  private def findMinMaxValues(
+  def findMinMaxValues(
       image: Array[Array[RGB]]
   ): (Int, Int, Int, Int, Int, Int) = {
-    // Start with extreme initial values
-    var minR = 255
-    var maxR = 0
-    var minG = 255
-    var maxG = 0
-    var minB = 255
-    var maxB = 0
+    // Flatten the 2D array into a sequence of pixels
+    val pixels = image.flatten
 
-    // Iterate through all pixels to find min and max values
-    for {
-      row   <- image
-      pixel <- row
-    } {
-      minR = math.min(minR, pixel.r)
-      maxR = math.max(maxR, pixel.r)
-      minG = math.min(minG, pixel.g)
-      maxG = math.max(maxG, pixel.g)
-      minB = math.min(minB, pixel.b)
-      maxB = math.max(maxB, pixel.b)
+    // Use foldLeft to accumulate min/max values
+    val initial =
+      (255, 0, 255, 0, 255, 0) // (minR, maxR, minG, maxG, minB, maxB)
+
+    pixels.foldLeft(initial) {
+      case ((minR, maxR, minG, maxG, minB, maxB), pixel) =>
+        (
+          math.min(minR, pixel.r),
+          math.max(maxR, pixel.r),
+          math.min(minG, pixel.g),
+          math.max(maxG, pixel.g),
+          math.min(minB, pixel.b),
+          math.max(maxB, pixel.b)
+        )
     }
-
-    (minR, maxR, minG, maxG, minB, maxB)
   }
 
-  /** Converts an sRGB value (0-255) to linear RGB color space (0.0-1.0) This is
-    * needed for accurate color transformations
-    */
   private def sRGBToLinear(srgb: Int): Double = {
     val v = srgb / 255.0
     if (v <= 0.04045) v / 12.92
     else math.pow((v + 0.055) / 1.055, 2.4)
   }
 
-  /** Converts a linear RGB value (0.0-1.0) back to sRGB color space (0-255)
-    */
   private def linearToSRGB(linear: Double): Int = {
     val v =
       if (linear <= 0.0031308) linear * 12.92

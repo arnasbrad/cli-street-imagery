@@ -24,7 +24,7 @@ object Main extends IOApp {
     ),
     processing = ProcessingConfig(
       algorithm = LuminanceAlgorithm,
-      charset = Charset.BlocksExtended,
+      charset = Charset.Braille,
       navigationType = NavigationType.SequenceBased,
       downSamplingRate = 4
     )

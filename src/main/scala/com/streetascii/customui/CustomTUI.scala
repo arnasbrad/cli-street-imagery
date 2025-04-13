@@ -136,8 +136,6 @@ object CustomTUI {
     IO.blocking {
       val sb = new StringBuilder()
 
-      val editedColors = correctForTritanopia(colors, 1.5)
-
       for ((line, lineIndex) <- chars.zipWithIndex) {
         if (lineIndex > 0) {
           sb.append("\n")
