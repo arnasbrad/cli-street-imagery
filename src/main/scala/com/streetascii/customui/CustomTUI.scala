@@ -13,6 +13,7 @@ import com.streetascii.navigation.Models.NavigationType.{
 }
 import com.streetascii.navigation.Navigation
 import com.streetascii.runner.RunnerImpl
+import com.streetascii.texttoimage.{Constants, TextToImageConverter}
 import org.jline.terminal.{Terminal, TerminalBuilder}
 import org.jline.utils.InfoCmp
 
@@ -195,6 +196,151 @@ object CustomTUI {
           colors: Array[Array[RGB]],
           imageInfo: ImageInfo
       ): IO[ExitCode] = {
+        def radiusNavigationLogic(
+            imageInfo: ImageInfo
+        ) = {
+          def readRadiusNavigationChoice(
+              newImageIds: List[MapillaryImageId]
+          ): IO[ExitCode] =
+            for {
+              navKey <- readKey(terminal)
+              code <- navKey match {
+                case k if k >= '1' && k <= ('0' + newImageIds.length) =>
+                  val index = k - '1' // Convert ASCII value to 0-based index
+                  navigateToPickedLocation(newImageIds(index))
+                case 'q' =>
+                  IO.pure(ExitCode.Success) // Quit
+                case 'h' =>
+                  for {
+                    _    <- printHelp(chars)
+                    code <- readRadiusNavigationChoice(newImageIds)
+                  } yield code
+                case _ =>
+                  for {
+                    code <- readRadiusNavigationChoice(newImageIds)
+                  } yield code
+              }
+            } yield code
+
+          for {
+            _ <- clearScreen(terminal)
+
+            navOptsEither <-
+              Navigation
+                .findNearbyImages(
+                  currentImageId = imageInfo.imageId,
+                  currentCoordinates = imageInfo.coordinates,
+                  radius = Radius.unsafeCreate(15),
+                  maxAmount = 5
+                )(runner.mapillaryClient)
+                .value
+
+            // for when bbox aint working
+            /*
+            navOptsEither: Either[MapillaryError, List[MapillaryImageId]] =
+              (List(MapillaryImageId("4169705706383182")))
+                .asRight[MapillaryError]
+             */
+
+            code <- navOptsEither match {
+              case Right(newImageIds) =>
+                for {
+                  _ <- IO.blocking {
+                    writer.write(newImageIds.map(_.id).toString)
+                    writer.flush()
+                  }
+
+                  code <- readRadiusNavigationChoice(newImageIds.map(_.id))
+                } yield code
+
+              case Left(_) =>
+                IO.blocking {
+                  writer.write("something failed")
+                  writer.flush()
+                }.as(ExitCode.Error)
+            }
+
+          } yield code
+        }
+
+        def sequenceNavigationLogic(
+            imageInfo: ImageInfo
+        ) = {
+          def readSequenceNavigationChoice(
+              backwardsOpt: Option[MapillaryImageId],
+              forwardsOpt: Option[MapillaryImageId]
+          ): IO[ExitCode] =
+            for {
+              navKey <- readKey(terminal)
+              code <- navKey match {
+                case 'b' =>
+                  backwardsOpt match {
+                    case Some(backwards) => navigateToPickedLocation(backwards)
+                    case None =>
+                      readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
+                  }
+
+                case 'f' =>
+                  forwardsOpt match {
+                    case Some(forwards) => navigateToPickedLocation(forwards)
+                    case None =>
+                      readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
+                  }
+
+                case 'h' =>
+                  for {
+                    _ <- printHelp(chars)
+                    code <- readSequenceNavigationChoice(
+                      backwardsOpt,
+                      forwardsOpt
+                    )
+                  } yield code
+
+                case _ =>
+                  for {
+                    code <- readSequenceNavigationChoice(
+                      backwardsOpt,
+                      forwardsOpt
+                    )
+                  } yield code
+              }
+            } yield code
+
+          for {
+            _ <- clearScreen(terminal)
+
+            navOptsEither <-
+              Navigation
+                .findSequenceNeighbors(
+                  currentImageId = imageInfo.imageId,
+                  sequenceId = imageInfo.sequenceId
+                )(runner.mapillaryClient)
+                .value
+
+            code <- navOptsEither match {
+              case Right((backwardsOpt, forwardsOpt)) =>
+                for {
+                  _ <- IO.blocking {
+                    writer.write(s"Backwards: $backwardsOpt\n")
+                    writer.write(s"Forwards: $forwardsOpt")
+                    writer.flush()
+                  }
+
+                  code <- readSequenceNavigationChoice(
+                    backwardsOpt,
+                    forwardsOpt
+                  )
+                } yield code
+
+              case Left(_) =>
+                IO.blocking {
+                  writer.write("something failed")
+                  writer.flush()
+                }.as(ExitCode.Error)
+            }
+          } yield code
+        }
+
         for {
           key <- readKey(terminal)
           exitCode <- key match {
@@ -220,137 +366,16 @@ object CustomTUI {
                 case SequenceBased => sequenceNavigationLogic(imageInfo)
               }
 
+            case 'h' =>
+              for {
+                _    <- printHelp(chars)
+                code <- loop(chars, colors, imageInfo)
+              } yield code
+
             case _ =>
               loop(chars, colors, imageInfo) // Ignore and continue
           }
         } yield exitCode
-      }
-
-      def radiusNavigationLogic(
-          imageInfo: ImageInfo
-      ) = {
-        def readRadiusNavigationChoice(
-            newImageIds: List[MapillaryImageId]
-        ): IO[ExitCode] =
-          for {
-            navKey <- readKey(terminal)
-            code <- navKey match {
-              case k if k >= '1' && k <= ('0' + newImageIds.length) =>
-                val index = k - '1' // Convert ASCII value to 0-based index
-                navigateToPickedLocation(newImageIds(index))
-              case 'q' =>
-                IO.pure(ExitCode.Success) // Quit
-              case _ =>
-                for {
-                  code <- readRadiusNavigationChoice(newImageIds)
-                } yield code
-            }
-          } yield code
-
-        for {
-          _ <- clearScreen(terminal)
-
-          navOptsEither <-
-            Navigation
-              .findNearbyImages(
-                currentImageId = imageInfo.imageId,
-                currentCoordinates = imageInfo.coordinates,
-                radius = Radius.unsafeCreate(15),
-                maxAmount = 5
-              )(runner.mapillaryClient)
-              .value
-
-          // for when bbox aint working
-          /*
-          navOptsEither: Either[MapillaryError, List[MapillaryImageId]] =
-            (List(MapillaryImageId("4169705706383182")))
-              .asRight[MapillaryError]
-           */
-
-          code <- navOptsEither match {
-            case Right(newImageIds) =>
-              for {
-                _ <- IO.blocking {
-                  writer.write(newImageIds.map(_.id).toString)
-                  writer.flush()
-                }
-
-                code <- readRadiusNavigationChoice(newImageIds.map(_.id))
-              } yield code
-
-            case Left(_) =>
-              IO.blocking {
-                writer.write("something failed")
-                writer.flush()
-              }.as(ExitCode.Error)
-          }
-
-        } yield code
-      }
-
-      def sequenceNavigationLogic(
-          imageInfo: ImageInfo
-      ) = {
-        def readSequenceNavigationChoice(
-            backwardsOpt: Option[MapillaryImageId],
-            forwardsOpt: Option[MapillaryImageId]
-        ): IO[ExitCode] =
-          for {
-            navKey <- readKey(terminal)
-            code <- navKey match {
-              case 'b' =>
-                backwardsOpt match {
-                  case Some(backwards) => navigateToPickedLocation(backwards)
-                  case None =>
-                    readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
-                }
-
-              case 'f' =>
-                forwardsOpt match {
-                  case Some(forwards) => navigateToPickedLocation(forwards)
-                  case None =>
-                    readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
-                }
-              case _ =>
-                for {
-                  code <- readSequenceNavigationChoice(
-                    backwardsOpt,
-                    forwardsOpt
-                  )
-                } yield code
-            }
-          } yield code
-
-        for {
-          _ <- clearScreen(terminal)
-
-          navOptsEither <-
-            Navigation
-              .findSequenceNeighbors(
-                currentImageId = imageInfo.imageId,
-                sequenceId = imageInfo.sequenceId
-              )(runner.mapillaryClient)
-              .value
-
-          code <- navOptsEither match {
-            case Right((backwardsOpt, forwardsOpt)) =>
-              for {
-                _ <- IO.blocking {
-                  writer.write(s"Backwards: $backwardsOpt\n")
-                  writer.write(s"Forwards: $forwardsOpt")
-                  writer.flush()
-                }
-
-                code <- readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
-              } yield code
-
-            case Left(_) =>
-              IO.blocking {
-                writer.write("something failed")
-                writer.flush()
-              }.as(ExitCode.Error)
-          }
-        } yield code
       }
 
       def navigateToPickedLocation(
@@ -390,6 +415,34 @@ object CustomTUI {
               }.as(ExitCode.Error)
           }
         } yield code
+      }
+
+      def printHelp(currChars: Array[Array[Char]]) = {
+        for {
+          _ <- clearScreen(terminal)
+
+          bytes <- TextToImageConverter.createTextImage(
+            Constants.help,
+            currChars.head.length,
+            currChars.length
+          )
+          helpImage <- Conversions.convertBytesToHexImage(bytes)
+
+          greyscale = Conversions.hexStringsToSampledGreyscaleDecimal(
+            1,
+            1,
+            helpImage.hexStrings,
+            helpImage.width.value
+          )
+
+          asciiWithColors = appConfig.processing.algorithm
+            .generate(
+              appConfig.processing.charset,
+              greyscale.grayscaleDecimals
+            )
+
+          _ <- printColorGrid(writer, asciiWithColors, greyscale.colors)
+        } yield ()
       }
 
       printColorGrid(writer, initialChars, initialColors) >> loop(
