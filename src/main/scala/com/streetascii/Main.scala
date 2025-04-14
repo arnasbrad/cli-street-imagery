@@ -7,6 +7,7 @@ import com.streetascii.asciiart.{Charset, Conversions}
 import com.streetascii.clients.imgur.ImgurClient
 import com.streetascii.clients.mapillary.MapillaryClient
 import com.streetascii.clients.mapillary.Models.{ApiKey, MapillaryImageId}
+import com.streetascii.colorfilters.ColorFilter
 import com.streetascii.customui.CustomTUI
 import com.streetascii.navigation.Models.NavigationType
 import com.streetascii.runner.RunnerImpl
@@ -26,7 +27,9 @@ object Main extends IOApp {
       algorithm = LuminanceAlgorithm,
       charset = Charset.Braille,
       navigationType = NavigationType.SequenceBased,
-      downSamplingRate = 4
+      downSamplingRate = 4,
+      color = true,
+      colorFilter = ColorFilter.EnhancedContrast
     )
   )
 

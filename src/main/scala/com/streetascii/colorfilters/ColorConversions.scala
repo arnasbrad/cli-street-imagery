@@ -2,188 +2,212 @@ package com.streetascii.colorfilters
 
 import com.streetascii.asciiart.Models.RGB
 
-object ColorConversions {
-  def enhanceContrast(
+trait ColorFilter {
+  def applyFilter(
       image: Array[Array[RGB]],
       intensity: Double
-  ): Array[Array[RGB]] = {
-    // Find the min and max values for each channel across the entire image
-    val (minR, maxR, minG, maxG, minB, maxB) = findMinMaxValues(image)
+  ): Array[Array[RGB]]
+}
 
-    // Create a new image with enhanced contrast
-    image.map(row =>
-      row.map(pixel => {
-        val newR = adjustChannel(pixel.r, minR, maxR, intensity)
-        val newG = adjustChannel(pixel.g, minG, maxG, intensity)
-        val newB = adjustChannel(pixel.b, minB, maxB, intensity)
-        RGB(newR, newG, newB)
-      })
-    )
+object ColorFilter {
+  case object EnhancedContrast extends ColorFilter {
+    def applyFilter(
+        image: Array[Array[RGB]],
+        intensity: Double
+    ): Array[Array[RGB]] = {
+      // Find the min and max values for each channel across the entire image
+      val (minR, maxR, minG, maxG, minB, maxB) = findMinMaxValues(image)
+
+      // Create a new image with enhanced contrast
+      image.map(row =>
+        row.map(pixel => {
+          val newR = adjustChannel(pixel.r, minR, maxR, intensity)
+          val newG = adjustChannel(pixel.g, minG, maxG, intensity)
+          val newB = adjustChannel(pixel.b, minB, maxB, intensity)
+          RGB(newR, newG, newB)
+        })
+      )
+    }
+
+    private def adjustChannel(
+        value: Int,
+        min: Int,
+        max: Int,
+        factor: Double
+    ): Int = {
+      // Convert to a value between 0 and 1
+      val normalized =
+        if (max > min) (value - min).toDouble / (max - min) else 0.5
+
+      // Apply contrast enhancement formula:
+      // Bring the value toward the middle for factor < 1 or away from the middle for factor > 1
+      val adjusted = 0.5 + factor * (normalized - 0.5)
+
+      // Clamp to 0-1 range
+      val clamped = math.min(1.0, math.max(0.0, adjusted))
+
+      // Convert back to 0-255 range and return as an Int
+      (clamped * 255).toInt
+    }
+
+    def findMinMaxValues(
+        image: Array[Array[RGB]]
+    ): (Int, Int, Int, Int, Int, Int) = {
+      // Flatten the 2D array into a sequence of pixels
+      val pixels = image.flatten
+
+      // Use foldLeft to accumulate min/max values
+      val initial =
+        (255, 0, 255, 0, 255, 0) // (minR, maxR, minG, maxG, minB, maxB)
+
+      pixels.foldLeft(initial) {
+        case ((minR, maxR, minG, maxG, minB, maxB), pixel) =>
+          (
+            math.min(minR, pixel.r),
+            math.max(maxR, pixel.r),
+            math.min(minG, pixel.g),
+            math.max(maxG, pixel.g),
+            math.min(minB, pixel.b),
+            math.max(maxB, pixel.b)
+          )
+      }
+    }
   }
 
-  def correctForDeuteranopia(
-      image: Array[Array[RGB]],
-      intensity: Double
-  ): Array[Array[RGB]] = {
-    image.map(row =>
-      row.map(pixel => {
-        // Convert to linear RGB for better color math
-        val r = sRGBToLinear(pixel.r)
-        val g = sRGBToLinear(pixel.g)
-        val b = sRGBToLinear(pixel.b)
+  case object Deuteranopia extends ColorFilter {
+    def applyFilter(
+        image: Array[Array[RGB]],
+        intensity: Double
+    ): Array[Array[RGB]] = {
+      image.map(row =>
+        row.map(pixel => {
+          // Convert to linear RGB for better color math
+          val r = sRGBToLinear(pixel.r)
+          val g = sRGBToLinear(pixel.g)
+          val b = sRGBToLinear(pixel.b)
 
-        // First, simulate how deuteranopes see this color
-        val dr = 0.625 * r + 0.375 * g + 0.0 * b
-        val dg = 0.7 * r + 0.3 * g + 0.0 * b
-        val db = 0.0 * r + 0.3 * g + 0.7 * b
+          // First, simulate how deuteranopes see this color
+          val dr = 0.625 * r + 0.375 * g + 0.0 * b
+          val dg = 0.7 * r + 0.3 * g + 0.0 * b
+          val db = 0.0 * r + 0.3 * g + 0.7 * b
 
-        // Calculate the error between original and deuteranope vision
-        val errorR = r - dr
-        val errorG = g - dg
-        val errorB = b - db
+          // Calculate the error between original and deuteranope vision
+          val errorR = r - dr
+          val errorG = g - dg
+          val errorB = b - db
 
-        // Adjust error based on intensity
-        val adjustedErrorR = errorR * intensity
-        val adjustedErrorG = errorG * intensity
+          // Adjust error based on intensity
+          val adjustedErrorR = errorR * intensity
+          val adjustedErrorG = errorG * intensity
 
-        // Apply corrections by redistributing the error to enhance color differences
-        // Specifically emphasize red-green differences by shifting them to blue channel
-        val correctedR = r
-        val correctedG = g
-        val correctedB = b + adjustedErrorR * 0.7 + adjustedErrorG * 0.7
+          // Apply corrections by redistributing the error to enhance color differences
+          // Specifically emphasize red-green differences by shifting them to blue channel
+          val correctedR = r
+          val correctedG = g
+          val correctedB = b + adjustedErrorR * 0.7 + adjustedErrorG * 0.7
 
-        // Ensure values stay in valid range
-        RGB(
-          linearToSRGB(math.min(1.0, math.max(0.0, correctedR))),
-          linearToSRGB(math.min(1.0, math.max(0.0, correctedG))),
-          linearToSRGB(math.min(1.0, math.max(0.0, correctedB)))
-        )
-      })
-    )
+          // Ensure values stay in valid range
+          RGB(
+            linearToSRGB(math.min(1.0, math.max(0.0, correctedR))),
+            linearToSRGB(math.min(1.0, math.max(0.0, correctedG))),
+            linearToSRGB(math.min(1.0, math.max(0.0, correctedB)))
+          )
+        })
+      )
+    }
   }
 
-  def correctForProtanopia(
-      image: Array[Array[RGB]],
-      intensity: Double
-  ): Array[Array[RGB]] = {
-    image.map(row =>
-      row.map(pixel => {
-        // Convert to linear RGB for better color math
-        val r = sRGBToLinear(pixel.r)
-        val g = sRGBToLinear(pixel.g)
-        val b = sRGBToLinear(pixel.b)
+  case object Protanopia extends ColorFilter {
+    def applyFilter(
+        image: Array[Array[RGB]],
+        intensity: Double
+    ): Array[Array[RGB]] = {
+      image.map(row =>
+        row.map(pixel => {
+          // Convert to linear RGB for better color math
+          val r = sRGBToLinear(pixel.r)
+          val g = sRGBToLinear(pixel.g)
+          val b = sRGBToLinear(pixel.b)
 
-        // First, simulate how protanopes see this color
-        val pr = 0.567 * r + 0.433 * g + 0.0 * b
-        val pg = 0.558 * r + 0.442 * g + 0.0 * b
-        val pb = 0.0 * r + 0.242 * g + 0.758 * b
+          // First, simulate how protanopes see this color
+          val pr = 0.567 * r + 0.433 * g + 0.0 * b
+          val pg = 0.558 * r + 0.442 * g + 0.0 * b
+          val pb = 0.0 * r + 0.242 * g + 0.758 * b
 
-        // Calculate the error between original and protanope vision
-        val errorR = r - pr
-        val errorG = g - pg
-        val errorB = b - pb
+          // Calculate the error between original and protanope vision
+          val errorR = r - pr
+          val errorG = g - pg
+          val errorB = b - pb
 
-        // Adjust error based on intensity
-        val adjustedErrorR = errorR * intensity
-        val adjustedErrorG = errorG * intensity
+          // Adjust error based on intensity
+          val adjustedErrorR = errorR * intensity
+          val adjustedErrorG = errorG * intensity
 
-        // Apply corrections by redistributing the error to enhance color differences
-        // Emphasize red-green differences by shifting them to blue channel
-        val correctedR = r
-        val correctedG = g
-        val correctedB = b + adjustedErrorR * 0.7 + adjustedErrorG * 0.7
+          // Apply corrections by redistributing the error to enhance color differences
+          // Emphasize red-green differences by shifting them to blue channel
+          val correctedR = r
+          val correctedG = g
+          val correctedB = b + adjustedErrorR * 0.7 + adjustedErrorG * 0.7
 
-        // Ensure values stay in valid range
-        RGB(
-          linearToSRGB(math.min(1.0, math.max(0.0, correctedR))),
-          linearToSRGB(math.min(1.0, math.max(0.0, correctedG))),
-          linearToSRGB(math.min(1.0, math.max(0.0, correctedB)))
-        )
-      })
-    )
+          // Ensure values stay in valid range
+          RGB(
+            linearToSRGB(math.min(1.0, math.max(0.0, correctedR))),
+            linearToSRGB(math.min(1.0, math.max(0.0, correctedG))),
+            linearToSRGB(math.min(1.0, math.max(0.0, correctedB)))
+          )
+        })
+      )
+    }
   }
 
-  def correctForTritanopia(
-      image: Array[Array[RGB]],
-      intensity: Double
-  ): Array[Array[RGB]] = {
-    image.map(row =>
-      row.map(pixel => {
-        // Convert to linear RGB for better color math
-        val r = sRGBToLinear(pixel.r)
-        val g = sRGBToLinear(pixel.g)
-        val b = sRGBToLinear(pixel.b)
+  case object Tritanopia extends ColorFilter {
+    def applyFilter(
+        image: Array[Array[RGB]],
+        intensity: Double
+    ): Array[Array[RGB]] = {
+      image.map(row =>
+        row.map(pixel => {
+          // Convert to linear RGB for better color math
+          val r = sRGBToLinear(pixel.r)
+          val g = sRGBToLinear(pixel.g)
+          val b = sRGBToLinear(pixel.b)
 
-        // First, simulate how tritanopes see this color
-        val tr = 0.95 * r + 0.05 * g + 0.0 * b
-        val tg = 0.0 * r + 0.433 * g + 0.567 * b
-        val tb = 0.0 * r + 0.475 * g + 0.525 * b
+          // First, simulate how tritanopes see this color
+          val tr = 0.95 * r + 0.05 * g + 0.0 * b
+          val tg = 0.0 * r + 0.433 * g + 0.567 * b
+          val tb = 0.0 * r + 0.475 * g + 0.525 * b
 
-        // Calculate the error between original and tritanope vision
-        val errorR = r - tr
-        val errorG = g - tg
-        val errorB = b - tb
+          // Calculate the error between original and tritanope vision
+          val errorR = r - tr
+          val errorG = g - tg
+          val errorB = b - tb
 
-        // Adjust error based on intensity
-        val adjustedErrorB = errorB * intensity
+          // Adjust error based on intensity
+          val adjustedErrorB = errorB * intensity
 
-        // Apply corrections by redistributing the error to enhance color differences
-        // For tritanopia, enhance the blue-yellow difference by primarily affecting red and green
-        val correctedR = r + adjustedErrorB * 0.7
-        val correctedG = g + adjustedErrorB * 0.7
-        val correctedB = b
+          // Apply corrections by redistributing the error to enhance color differences
+          // For tritanopia, enhance the blue-yellow difference by primarily affecting red and green
+          val correctedR = r + adjustedErrorB * 0.7
+          val correctedG = g + adjustedErrorB * 0.7
+          val correctedB = b
 
-        // Ensure values stay in valid range
-        RGB(
-          linearToSRGB(math.min(1.0, math.max(0.0, correctedR))),
-          linearToSRGB(math.min(1.0, math.max(0.0, correctedG))),
-          linearToSRGB(math.min(1.0, math.max(0.0, correctedB)))
-        )
-      })
-    )
+          // Ensure values stay in valid range
+          RGB(
+            linearToSRGB(math.min(1.0, math.max(0.0, correctedR))),
+            linearToSRGB(math.min(1.0, math.max(0.0, correctedG))),
+            linearToSRGB(math.min(1.0, math.max(0.0, correctedB)))
+          )
+        })
+      )
+    }
   }
 
-  private def adjustChannel(
-      value: Int,
-      min: Int,
-      max: Int,
-      factor: Double
-  ): Int = {
-    // Convert to a value between 0 and 1
-    val normalized =
-      if (max > min) (value - min).toDouble / (max - min) else 0.5
-
-    // Apply contrast enhancement formula:
-    // Bring the value toward the middle for factor < 1 or away from the middle for factor > 1
-    val adjusted = 0.5 + factor * (normalized - 0.5)
-
-    // Clamp to 0-1 range
-    val clamped = math.min(1.0, math.max(0.0, adjusted))
-
-    // Convert back to 0-255 range and return as an Int
-    (clamped * 255).toInt
-  }
-
-  def findMinMaxValues(
-      image: Array[Array[RGB]]
-  ): (Int, Int, Int, Int, Int, Int) = {
-    // Flatten the 2D array into a sequence of pixels
-    val pixels = image.flatten
-
-    // Use foldLeft to accumulate min/max values
-    val initial =
-      (255, 0, 255, 0, 255, 0) // (minR, maxR, minG, maxG, minB, maxB)
-
-    pixels.foldLeft(initial) {
-      case ((minR, maxR, minG, maxG, minB, maxB), pixel) =>
-        (
-          math.min(minR, pixel.r),
-          math.max(maxR, pixel.r),
-          math.min(minG, pixel.g),
-          math.max(maxG, pixel.g),
-          math.min(minB, pixel.b),
-          math.max(maxB, pixel.b)
-        )
+  case object NoFilter extends ColorFilter {
+    def applyFilter(
+        image: Array[Array[RGB]],
+        intensity: Double
+    ): Array[Array[RGB]] = {
+      image
     }
   }
 
@@ -212,7 +236,7 @@ object Example {
     )
 
     // Enhance contrast with a factor of 1.5 (increased contrast)
-    val enhancedImage = ColorConversions.enhanceContrast(image, 1.5)
+    val enhancedImage = ColorFilter.EnhancedContrast.applyFilter(image, 1.5)
 
     // Print original and enhanced images
     println("Original Image:")
@@ -223,9 +247,9 @@ object Example {
 
     // Apply corrective filters for each type of colorblindness
     val deuteranopiaCorrection =
-      ColorConversions.correctForDeuteranopia(image, 1.0)
-    val protanopiaCorrection = ColorConversions.correctForProtanopia(image, 1.0)
-    val tritanopiaCorrection = ColorConversions.correctForTritanopia(image, 1.0)
+      ColorFilter.Deuteranopia.applyFilter(image, 1.0)
+    val protanopiaCorrection = ColorFilter.Protanopia.applyFilter(image, 1.0)
+    val tritanopiaCorrection = ColorFilter.Tritanopia.applyFilter(image, 1.0)
 
     println("\nDeuteranopia Correction:")
     deuteranopiaCorrection.foreach(row => println(row.mkString(", ")))
@@ -238,7 +262,7 @@ object Example {
 
     // You can also adjust the intensity of the correction
     val mildDeuteranopiaCorrection =
-      ColorConversions.correctForDeuteranopia(image, 0.5)
+      ColorFilter.Deuteranopia.applyFilter(image, 0.5)
 
     println("\nMild Deuteranopia Correction (50% intensity):")
     mildDeuteranopiaCorrection.foreach(row => println(row.mkString(", ")))

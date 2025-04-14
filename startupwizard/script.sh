@@ -89,20 +89,20 @@ charset=$(echo "$charset" | cut -d' ' -f1)
 
 if [[ "$algorithm" == "Braille" ]]; then
   # Automatically set no colors for Braille
-  colors=False
+  colors=false
 elif [[ "$algorithm" == "No algorithm" ]]; then
   # Automatically set colors for "No algorithm"
-  colors=True
+  colors=true
 else
   # For any other algorithm, ask user to pick if they want colors
   if gum confirm "Do you want colors?"; then
-    colors=True
+    colors=true
   else
-    colors=False
+    colors=false
   fi
 fi
 
-if [[ "$colors" == "True" ]]; then
+if [[ "$colors" == "true" ]]; then
   echo "Select a color filter:" | gum style --padding "1 2" --width 50
   colorFilter=$(gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 \
     "Contrast filter" \
@@ -158,7 +158,7 @@ $(echo "🔤 Charset:" | gum style --foreground 212) ${charset:0:20}
 $(echo "⚙️ Down sampling rate:" | gum style --foreground 212) $downSampling"
 
   # Add color information conditionally
-  if [[ "$colors" == "True" ]]; then
+  if [[ "$colors" == "true" ]]; then
     summary+="
 $(echo "🎨 Colors:" | gum style --foreground 212) Enabled ($colorFilter)"
   else
