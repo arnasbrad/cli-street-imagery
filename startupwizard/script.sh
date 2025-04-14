@@ -32,6 +32,12 @@ while [ -z "$mapillaryKey" ] || ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z
 done
 clear
 
+echo "Select navigation mode:" | gum style --padding "1 2" --width 50
+  navigation=$(gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 \
+    "Sequence navigation" \
+    "Proximity navigation")
+  clear
+
 # Algorithm selection
 # First, show a help screen option
 echo "Do you want to see algorithm details before selecting?" | gum style --padding "1 2" --width 50
@@ -39,8 +45,10 @@ if gum confirm "Show algorithm details?"; then
   clear
   echo "ALGORITHM DETAILS:" | gum style --padding "1 2" --width 50 --foreground 212
   echo "Luminance 🌓: Converts image to grayscale based on pixel brightness" | gum style --margin "0 2 1 2"
-  echo "Edge detection 📐: Highlights borders between contrasting areas" | gum style --margin "0 2 1 2"
+  echo "Edge detection Sobel 📐: Highlights borders between contrasting areas using Sobel method" | gum style --margin "0 2 1 2"
+  echo "Edge detection Sobel 📐: Highlights borders between contrasting areas using Canny method" | gum style --margin "0 2 1 2"
   echo "Braille ⠃⠗⠁⠊⠇⠇⠑: Represents the image using braille characters" | gum style --margin "0 2 1 2"
+  echo "No algorithm : Represents the image using █ characters" | gum style --margin "0 2 1 2"
   echo "Press Enter to continue..." | gum style --foreground 240
   read -r
   clear
@@ -51,8 +59,10 @@ clear
 echo "Select an image conversion algorithm:" | gum style --padding "1 2" --width 50
 algorithm=$(gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 \
   "Luminance" \
-  "Edge detection" \
-  "Braille")
+  "Edge detection Sobel" \
+  "Edge detection Canny" \
+  "Braille" \
+  "No algorithm")
 clear
 
 # Charset selection - skip if Braille is selected
@@ -68,12 +78,42 @@ else
   echo "Select the ASCII charset:" | gum style --padding "1 2" --width 50
   charset=$(gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 \
     "Default (.:-=+*#%@)" \
-    "Extended (\\.'\`^\\\",;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$)" \
+    "Blocks ( ░▒▓█)" \
+    "BlocksExtended ( ·░▒▓▄▌▐▀█)" \
+    "Extended ( .'\`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$" \
     "Braille (⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿)")
 fi
 clear
 
 charset=$(echo "$charset" | cut -d' ' -f1)
+
+if [[ "$algorithm" == "Braille" ]]; then
+  # Automatically set no colors for Braille
+  colors=false
+elif [[ "$algorithm" == "No algorithm" ]]; then
+  # Automatically set colors for "No algorithm"
+  colors=true
+else
+  # For any other algorithm, ask user to pick if they want colors
+  if gum confirm "Do you want colors?"; then
+    colors=true
+  else
+    colors=false
+  fi
+fi
+
+if [[ "$colors" == "true" ]]; then
+  echo "Select a color filter:" | gum style --padding "1 2" --width 50
+  colorFilter=$(gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 \
+    "Contrast filter" \
+    "Colorblind Tritanopia filter" \
+    "Colorblind Protanopia filter" \
+    "Colorblind Deuteranopia filter" \
+    "No filter")
+  clear
+else
+  colorFilter="No filter"
+fi
 
 # Down sampling rate
 echo "Set the down sampling rate:" | gum style --padding "1 2" --width 50
@@ -112,9 +152,19 @@ echo "Configuration Summary:" | gum style --padding "1 2" --width 50
 {
   # Create formatted summary text
   summary="$(echo "🔑 API key:" | gum style --foreground 212) ${mapillaryKey:0:4}...${mapillaryKey: -3}
+$(echo "🗺️ Navigation mode:" | gum style --foreground 212) $navigation}
 $(echo "🧮 Algorithm:" | gum style --foreground 212) $algorithm
 $(echo "🔤 Charset:" | gum style --foreground 212) ${charset:0:20}
 $(echo "⚙️ Down sampling rate:" | gum style --foreground 212) $downSampling"
+
+  # Add color information conditionally
+  if [[ "$colors" == "true" ]]; then
+    summary+="
+$(echo "🎨 Colors:" | gum style --foreground 212) Enabled ($colorFilter)"
+  else
+    summary+="
+$(echo "🎨 Colors:" | gum style --foreground 212) Disabled"
+  fi
 
   # Display summary with styling
   echo "$summary" | gum style --margin "0 2" --border normal --width 60 --padding "1 2"
@@ -161,9 +211,12 @@ api {
 }
 
 processing {
+  navigation-type = "${navigation}"
   algorithm = "${algorithm}"
   charset = "${charset}"
   down-sampling-rate = ${downSampling}
+  color = ${colors}
+  color-filter = "${colorFilter}"
 }
 EOF
 }

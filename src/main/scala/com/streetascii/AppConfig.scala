@@ -7,7 +7,9 @@ import com.streetascii.AppConfig.{ApiConfig, ProcessingConfig}
 import com.streetascii.asciiart.Algorithms.{AsciiAlgorithm, BrailleAlgorithm}
 import com.streetascii.asciiart.{Algorithms, Charset}
 import com.streetascii.clients.mapillary.Models.ApiKey
+import com.streetascii.colorfilters.ColorFilter
 import com.streetascii.navigation.Models.NavigationType
+import com.streetascii.navigation.Models.NavigationType.RadiusBased
 import pureconfig._
 import pureconfig.error.CannotConvert
 import pureconfig.generic.auto._
@@ -18,11 +20,12 @@ object AppConfig {
   // Case classes representing your configuration structure
   case class ApiConfig(mapillaryKey: ApiKey)
   case class ProcessingConfig(
+      navigationType: NavigationType,
       algorithm: AsciiAlgorithm,
       charset: Charset,
-      // TODO for Ignelis: implement nav type reading
-      navigationType: NavigationType,
-      downSamplingRate: Int
+      downSamplingRate: Int,
+      color: Boolean,
+      colorFilter: ColorFilter
   ) {
     val verticalSampling: Int = algorithm match {
       case BrailleAlgorithm => downSamplingRate
@@ -33,6 +36,20 @@ object AppConfig {
   def load(configSource: ConfigSource): IO[AppConfig] = {
     IO(configSource.loadOrThrow[AppConfig])
   }
+
+  private implicit val navigationTypeReader: ConfigReader[NavigationType] =
+    ConfigReader.fromString {
+      case "Sequence navigation"  => Right(NavigationType.SequenceBased)
+      case "Proximity navigation" => Right(NavigationType.RadiusBased)
+      case other =>
+        Left(
+          CannotConvert(
+            other,
+            "Navigation type",
+            "Navigation type is unrecognized"
+          )
+        )
+    }
 
   private implicit val mapillaryApiReader: ConfigReader[ApiKey] =
     ConfigReader.fromString(str =>
@@ -48,6 +65,23 @@ object AppConfig {
       case "Braille"  => Right(Charset.Braille)
       case other =>
         Left(CannotConvert(other, "Charset", "Charset is unrecognized"))
+    }
+
+  private implicit val colorFilterReader: ConfigReader[ColorFilter] =
+    ConfigReader.fromString {
+      case "Contrast filter"              => Right(ColorFilter.EnhancedContrast)
+      case "Colorblind Tritanopia filter" => Right(ColorFilter.Tritanopia)
+      case "Colorblind Protanopia filter" => Right(ColorFilter.Protanopia)
+      case "Colorblind Deuteranopia filter" => Right(ColorFilter.Deuteranopia)
+      case "No filter"                      => Right(ColorFilter.NoFilter)
+      case other =>
+        Left(
+          CannotConvert(
+            other,
+            "Color filter",
+            "Color filter is unrecognized"
+          )
+        )
     }
 
   private implicit val algortihmReader: ConfigReader[AsciiAlgorithm] =

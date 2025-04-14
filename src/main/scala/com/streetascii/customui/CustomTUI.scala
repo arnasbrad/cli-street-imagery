@@ -6,12 +6,6 @@ import com.streetascii.Main.logger
 import com.streetascii.asciiart.Conversions
 import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
 import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
-import com.streetascii.colorfilters.ColorConversions.{
-  correctForDeuteranopia,
-  correctForProtanopia,
-  correctForTritanopia,
-  enhanceContrast
-}
 import com.streetascii.common.Models.Radius
 import com.streetascii.navigation.Models.NavigationType.{
   RadiusBased,
