@@ -16,6 +16,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           {
             "id": "123456789",
             "sequence": "seq123456",
+            "compass_angle": 90.5,
             "geometry": {
               "coordinates": [10.123, 59.456]
             },
@@ -31,6 +32,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
         imageDetails.id shouldBe MapillaryImageId("123456789")
         imageDetails.sequenceId shouldBe MapillarySequenceId("seq123456")
+        imageDetails.compassAngle shouldBe 90.5
         imageDetails.coordinates shouldBe Coordinates.unsafeCreate(
           59.456,
           10.123
@@ -49,6 +51,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           {
             "id": "123456789",
             "sequence": "seq123456",
+            "compass_angle": 90.5,
             "geometry": {
               "coordinates": [10.123, 59.456]
             }
@@ -61,6 +64,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
         val imageDetails =
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
         imageDetails.id shouldBe MapillaryImageId("123456789")
+        imageDetails.compassAngle shouldBe 90.5
         imageDetails.sequenceId shouldBe MapillarySequenceId("seq123456")
         imageDetails.coordinates shouldBe Coordinates.unsafeCreate(
           59.456,
@@ -75,6 +79,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           """
           {
             "sequence": "seq123456",
+            "compass_angle": 90.5,
             "thumb_1024_url": "https://images.mapillary.com/123456789/thumb-1024.jpg",
             "thumb_original_url": "https://images.mapillary.com/123456789/thumb-original.jpg"
           }
@@ -84,6 +89,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           """
           {
             "id": "123456789",
+            "compass_angle": 90.5,
             "thumb_1024_url": "https://images.mapillary.com/123456789/thumb-1024.jpg",
             "thumb_original_url": "https://images.mapillary.com/123456789/thumb-original.jpg"
           }
@@ -99,6 +105,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
           {
             "id": "123456789",
             "sequence": "seq123456",
+            "compass_angle": 90.5,
             "geometry": {
               "coordinates": [10.123, 59.456]
             },
@@ -115,6 +122,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
         val imageDetails =
           result.getOrElse(fail("Failed to decode MapillaryImageDetails"))
         imageDetails.id shouldBe MapillaryImageId("123456789")
+        imageDetails.compassAngle shouldBe 90.5
         imageDetails.sequenceId shouldBe MapillarySequenceId("seq123456")
         imageDetails.coordinates shouldBe Coordinates.unsafeCreate(
           59.456,
@@ -137,12 +145,14 @@ class CodecsSpec extends AnyFunSpec with Matchers {
             "data": [
               {
                 "id": "123456789",
+                "compass_angle": 90.5,
                 "geometry": {
                   "coordinates": [10.123, 59.456]
                 }
               },
               {
                 "id": "987654321",
+                "compass_angle": 90.5,
                 "geometry": {
                   "coordinates": [11.123, 60.456]
                 }
@@ -152,15 +162,18 @@ class CodecsSpec extends AnyFunSpec with Matchers {
         """
 
         val result = decode[ImagesResponse](json)
+        println(result)
         result.isRight shouldBe true
 
         val imagesResponse =
           result.getOrElse(fail("Failed to decode ImagesResponse"))
         imagesResponse.data.length shouldBe 2
         imagesResponse.data.head.id.id shouldBe "123456789"
+        imagesResponse.data.head.compassAngle shouldBe 90.5
         imagesResponse.data.head.coordinates.lat shouldBe 59.456
         imagesResponse.data.head.coordinates.lng shouldBe 10.123
         imagesResponse.data(1).id.id shouldBe "987654321"
+        imagesResponse.data(1).compassAngle shouldBe 90.5
         imagesResponse.data(1).coordinates.lat shouldBe 60.456
         imagesResponse.data(1).coordinates.lng shouldBe 11.123
       }
@@ -201,7 +214,8 @@ class CodecsSpec extends AnyFunSpec with Matchers {
             "id": "123456789",
             "geometry": {
               "coordinates": [10.123, 59.456]
-            }
+            },
+            "compass_angle": 90.5
           }
         """
 
@@ -212,6 +226,7 @@ class CodecsSpec extends AnyFunSpec with Matchers {
         imageData.id.id shouldBe "123456789"
         imageData.coordinates.lat shouldBe 59.456
         imageData.coordinates.lng shouldBe 10.123
+        imageData.compassAngle shouldBe 90.5
       }
 
       it("should fail if id is missing") {

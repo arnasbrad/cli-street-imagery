@@ -7,6 +7,7 @@ object Models {
   case class MapillaryImageDetails(
       id: MapillaryImageId,
       sequenceId: MapillarySequenceId,
+      compassAngle: Double,
       coordinates: Coordinates,
       thumb1024Url: Option[String],
       thumbOriginalUrl: Option[String]
@@ -14,7 +15,11 @@ object Models {
 
   case class ImagesResponse(data: List[ImageData])
   case class SequenceImagesResponse(data: List[MapillaryImageId])
-  case class ImageData(id: MapillaryImageId, coordinates: Coordinates)
+  case class ImageData(
+      id: MapillaryImageId,
+      coordinates: Coordinates,
+      compassAngle: Double
+  )
 
   case class MapillaryImageId(id: String)
   case class MapillarySequenceId(id: String)
@@ -42,6 +47,9 @@ object Models {
     }
     case object Sequence extends RequestField {
       def value = "sequence"
+    }
+    case object CompassAngle extends RequestField {
+      def value = "compass_angle"
     }
     case object Thumb1024Url extends RequestField {
       def value = "thumb_1024_url"

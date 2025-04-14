@@ -87,6 +87,48 @@ object Navigation {
     earthRadius * c // Distance in meters
   }
 
+  def calculateTurnAngle(
+      currentCompassAngle: Double,
+      currentCoords: Coordinates,
+      targetCoords: Coordinates
+  ): Double = {
+    def calculateBearing(
+        currentCoords: Coordinates,
+        targetCoords: Coordinates
+    ): Double = {
+      // Convert to radians
+      val lat1 = Math.toRadians(currentCoords.lat)
+      val lng1 = Math.toRadians(currentCoords.lng)
+      val lat2 = Math.toRadians(targetCoords.lat)
+      val lng2 = Math.toRadians(targetCoords.lng)
+
+      val deltaLng = lng2 - lng1
+
+      val y = Math.sin(deltaLng) * Math.cos(lat2)
+      val x = Math.cos(lat1) * Math.sin(lat2) -
+        Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLng)
+
+      var bearing = Math.atan2(y, x)
+
+      // Convert to degrees
+      bearing = Math.toDegrees(bearing)
+
+      // Normalize to 0-360 degrees
+      bearing = (bearing + 360) % 360
+
+      bearing
+    }
+    val turnAngle =
+      calculateBearing(currentCoords, targetCoords) - currentCompassAngle
+
+    // Normalize to -180 to +180 degrees
+    var normalizedAngle = turnAngle
+    while (normalizedAngle > 180) normalizedAngle -= 360
+    while (normalizedAngle <= -180) normalizedAngle += 360
+
+    normalizedAngle
+  }
+
   def listNeighbors(
       list: List[MapillaryImageId],
       target: MapillaryImageId

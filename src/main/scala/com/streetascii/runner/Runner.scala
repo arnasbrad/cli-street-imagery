@@ -46,6 +46,7 @@ case class RunnerImpl(
     } yield ImageInfo(
       hex,
       imageId,
+      imageDetails.compassAngle,
       imageDetails.sequenceId,
       imageDetails.coordinates
     )
@@ -81,6 +82,7 @@ case class RunnerImpl(
     } yield ImageInfo(
       hex,
       imageId,
+      newImageDetails.compassAngle,
       newImageDetails.sequenceId,
       newImageDetails.coordinates
     )

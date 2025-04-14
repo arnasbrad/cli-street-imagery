@@ -20,8 +20,9 @@ object Codecs {
   implicit val mapillaryImageDetailsDecoder: Decoder[MapillaryImageDetails] =
     Decoder.instance { c =>
       for {
-        id         <- c.get[String]("id").map(MapillaryImageId)
-        sequenceId <- c.get[String]("sequence").map(MapillarySequenceId)
+        id           <- c.get[String]("id").map(MapillaryImageId)
+        sequenceId   <- c.get[String]("sequence").map(MapillarySequenceId)
+        compassAngle <- c.get[Double]("compass_angle")
         coordsArray <- c
           .downField("geometry")
           .downField("coordinates")
@@ -31,6 +32,7 @@ object Codecs {
       } yield MapillaryImageDetails(
         id = id,
         sequenceId = sequenceId,
+        compassAngle = compassAngle,
         coordinates =
           Coordinates.unsafeCreate(coordsArray(1), coordsArray.head),
         thumb1024Url = thumb1024Url,
@@ -57,7 +59,8 @@ object Codecs {
 
   implicit val imageDataDecoder: Decoder[ImageData] = (c: HCursor) => {
     for {
-      id <- c.downField("id").as[String]
+      id           <- c.downField("id").as[String]
+      compassAngle <- c.get[Double]("compass_angle")
       // Navigate to the coordinates array in the geometry object
       coordsArray <- c
         .downField("geometry")
@@ -66,7 +69,8 @@ object Codecs {
       // GeoJSON uses [longitude, latitude] order, so we need to swap
     } yield ImageData(
       MapillaryImageId(id),
-      Coordinates.unsafeCreate(lat = coordsArray(1), lng = coordsArray.head)
+      Coordinates.unsafeCreate(lat = coordsArray(1), lng = coordsArray.head),
+      compassAngle = compassAngle
     )
   }
 

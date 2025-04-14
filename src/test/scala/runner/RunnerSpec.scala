@@ -31,7 +31,8 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
     val sequenceId = MapillarySequenceId("test-sequence-id")
     val imageData = ImageData(
       id = imageId,
-      coordinates = coordinates
+      coordinates = coordinates,
+      compassAngle = 90.5
     )
 
     val imagesResponse = ImagesResponse(data = List(imageData))
@@ -52,7 +53,13 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
     // Create the HexImage instance
     val hexImage = HexImage(hexStrings, testWidth, testHeight)
     val imageInfo =
-      ImageInfo(hexImage, imageId, sequenceId, Coordinates.unsafeCreate(50, 50))
+      ImageInfo(
+        hexImage,
+        imageId,
+        90.5,
+        sequenceId,
+        Coordinates.unsafeCreate(50, 50)
+      )
 
     // Create mocks
     val mockMapillaryClient = mock[MapillaryClient]
@@ -86,6 +93,7 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
             id = imageId,
             sequenceId = sequenceId,
             coordinates = Coordinates.unsafeCreate(50, 50),
+            compassAngle = 90.5,
             thumb1024Url = Some("url"),
             thumbOriginalUrl = Some("url")
           )

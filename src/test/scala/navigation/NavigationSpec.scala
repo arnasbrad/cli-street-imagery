@@ -4,17 +4,10 @@ import cats.data.EitherT
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 import com.streetascii.clients.mapillary.Errors.MapillaryError
-import com.streetascii.clients.mapillary.Models.{
-  ImageData,
-  ImagesResponse,
-  MapillaryImageId,
-  MapillarySequenceId,
-  RequestField,
-  SequenceImagesResponse
-}
 import com.streetascii.clients.mapillary.MapillaryClient
-import com.streetascii.navigation.Navigation
+import com.streetascii.clients.mapillary.Models._
 import com.streetascii.common.Models.{Coordinates, Radius}
+import com.streetascii.navigation.Navigation
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -31,13 +24,15 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
     val nearbyImage1 = ImageData(
       id = MapillaryImageId("nearby-1"),
       coordinates =
-        Coordinates.unsafeCreate(51.5075, -0.1279) // Very close to current
+        Coordinates.unsafeCreate(51.5075, -0.1279), // Very close to current
+      compassAngle = 90.5
     )
 
     val nearbyImage2 = ImageData(
       id = MapillaryImageId("nearby-2"),
       coordinates =
-        Coordinates.unsafeCreate(51.5080, -0.1280) // Farther from current
+        Coordinates.unsafeCreate(51.5080, -0.1280), // Farther from current
+      compassAngle = 90.5
     )
 
     val nearbyImage3 = ImageData(
@@ -45,13 +40,15 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
       coordinates = Coordinates.unsafeCreate(
         51.5076,
         -0.1277
-      ) // Medium distance from current
+      ), // Medium distance from current
+      compassAngle = 90.5
     )
 
     // Create the current image data (should be filtered out)
     val currentImage = ImageData(
       id = currentImageId,
-      coordinates = currentCoords
+      coordinates = currentCoords,
+      compassAngle = 90.5
     )
 
     // Setup mock response
@@ -109,7 +106,8 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
         coordinates = Coordinates.unsafeCreate(
           51.5074 + (i * 0.0001),
           -0.1278 + (i * 0.0001)
-        )
+        ),
+        compassAngle = 90.5
       )
     }.toList
 
@@ -160,7 +158,8 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
     // Only the current image in the response
     val currentImage = ImageData(
       id = currentImageId,
-      coordinates = currentCoords
+      coordinates = currentCoords,
+      compassAngle = 90.5
     )
 
     // Setup mock response
@@ -206,7 +205,8 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
         coordinates = Coordinates.unsafeCreate(
           51.5074 + (i * 0.0001),
           -0.1278 + (i * 0.0001)
-        )
+        ),
+        compassAngle = 90.5
       )
     }.toList
 
@@ -550,5 +550,135 @@ class NavigationSpec extends AnyFlatSpec with Matchers with MockFactory {
 
     // The distance between London and Paris should be approximately 344 km
     (distance / 1000).round shouldBe 344L
+  }
+
+  "Navigation.calculateTurnAngle" should "correctly calculate turn angle between current position and target" in {
+    // Test scenario: looking north (0 degrees), target is to the east
+    val currentCoords = Coordinates.unsafeCreate(51.5074, -0.1278) // London
+    val eastTarget =
+      Coordinates.unsafeCreate(51.5074, -0.1268) // East of London
+    val compassAngleNorth = 0.0 // Facing north
+
+    val turnAngleToEast = Navigation.calculateTurnAngle(
+      compassAngleNorth,
+      currentCoords,
+      eastTarget
+    )
+
+    // Should be approximately 90 degrees (turn right/east)
+    turnAngleToEast should be(90.0 +- 5.0)
+
+    // Test scenario: looking east (90 degrees), target is to the north
+    val northTarget =
+      Coordinates.unsafeCreate(51.5084, -0.1278) // North of London
+    val compassAngleEast = 90.0 // Facing east
+
+    val turnAngleToNorth = Navigation.calculateTurnAngle(
+      compassAngleEast,
+      currentCoords,
+      northTarget
+    )
+
+    // Should be approximately -90 degrees (turn left/north)
+    turnAngleToNorth should be(-90.0 +- 5.0)
+
+    // Test scenario: looking south (180 degrees), target is to the south
+    val southTarget =
+      Coordinates.unsafeCreate(51.5064, -0.1278) // South of London
+    val compassAngleSouth = 180.0 // Facing south
+
+    val turnAngleToSouth = Navigation.calculateTurnAngle(
+      compassAngleSouth,
+      currentCoords,
+      southTarget
+    )
+
+    // Should be approximately 0 degrees (no turn needed)
+    turnAngleToSouth should be(0.0 +- 5.0)
+
+    // Test scenario: looking west (270 degrees), target is to the east
+    val compassAngleWest = 270.0 // Facing west
+
+    val turnAngleWestToEast = Navigation.calculateTurnAngle(
+      compassAngleWest,
+      currentCoords,
+      eastTarget
+    )
+
+    // Should be approximately 180 degrees (turn around)
+    turnAngleWestToEast.abs should be(180.0 +- 5.0)
+  }
+
+  it should "handle angle normalization correctly" in {
+    val currentCoords = Coordinates.unsafeCreate(51.5074, -0.1278) // London
+
+    // Test with angle that needs to be normalized from > 180 to <= 180
+    val targetCoords =
+      Coordinates.unsafeCreate(51.5074, -0.1268) // East of London
+    val compassAngle = 350.0 // Almost north, slightly west
+
+    val turnAngle = Navigation.calculateTurnAngle(
+      compassAngle,
+      currentCoords,
+      targetCoords
+    )
+
+    // The bearing to east is ~90, the compass is at 350
+    // So unnormalized would be 90 - 350 = -260
+    // Normalized should be 100 (add 360 to get within -180 to 180)
+    turnAngle should be(100.0 +- 5.0)
+
+    // Ensure the result is always in the range (-180, 180]
+    turnAngle should be <= 180.0
+    turnAngle should be > -180.0
+  }
+
+  it should "calculate correct angles for locations at different hemispheres" in {
+    // Test with coordinates in different hemispheres
+    val northernHemisphere =
+      Coordinates.unsafeCreate(51.5074, -0.1278) // London
+    val southernHemisphere =
+      Coordinates.unsafeCreate(-33.9249, 18.4241) // Cape Town
+    val compassAngle = 0.0 // Facing north
+
+    val turnAngle = Navigation.calculateTurnAngle(
+      compassAngle,
+      northernHemisphere,
+      southernHemisphere
+    )
+
+    // The result should be some angle that's normalized to (-180, 180]
+    turnAngle should be <= 180.0
+    turnAngle should be > -180.0
+  }
+
+  "Navigation.calculateBearing" should "correctly calculate bearing between two coordinates" in {
+    // Since calculateBearing is a nested function, we can test it indirectly
+    // by creating test cases with known bearings
+
+    // London coordinates
+    val london = Coordinates.unsafeCreate(51.5074, -0.1278)
+
+    // Points in cardinal directions (approximately)
+    val north = Coordinates.unsafeCreate(51.5174, -0.1278) // North of London
+    val east  = Coordinates.unsafeCreate(51.5074, -0.1178) // East of London
+    val south = Coordinates.unsafeCreate(51.4974, -0.1278) // South of London
+    val west  = Coordinates.unsafeCreate(51.5074, -0.1378) // West of London
+
+    // Test with compass at 0 (north)
+    val compassAngle = 0.0
+
+    val northBearing =
+      Navigation.calculateTurnAngle(compassAngle, london, north)
+    val eastBearing = Navigation.calculateTurnAngle(compassAngle, london, east)
+    val southBearing =
+      Navigation.calculateTurnAngle(compassAngle, london, south)
+    val westBearing = Navigation.calculateTurnAngle(compassAngle, london, west)
+
+    // With compass at 0, the turn angles should approximate the bearings
+    northBearing should be(0.0 +- 5.0)   // No turn needed to go north
+    eastBearing should be(90.0 +- 5.0)   // 90 degree turn right to go east
+    southBearing should be(180.0 +- 5.0) // 180 degree turn to go south
+    westBearing should be(-90.0 +- 5.0)  // 90 degree turn left to go west
   }
 }

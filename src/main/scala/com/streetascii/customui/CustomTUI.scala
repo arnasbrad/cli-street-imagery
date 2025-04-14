@@ -5,7 +5,7 @@ import com.streetascii.AppConfig
 import com.streetascii.Main.logger
 import com.streetascii.asciiart.Conversions
 import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
-import com.streetascii.clients.mapillary.Models.MapillaryImageId
+import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
 import com.streetascii.colorfilters.ColorConversions.{
   correctForDeuteranopia,
   correctForProtanopia,
@@ -251,10 +251,7 @@ object CustomTUI {
             code <- navOptsEither match {
               case Right(newImageIds) =>
                 for {
-                  _ <- IO.blocking {
-                    writer.write(newImageIds.map(_.id).toString)
-                    writer.flush()
-                  }
+                  _ <- printRadiusNavOpts(newImageIds, imageInfo, chars)
 
                   code <- readRadiusNavigationChoice(newImageIds.map(_.id))
                 } yield code
@@ -326,11 +323,7 @@ object CustomTUI {
             code <- navOptsEither match {
               case Right((backwardsOpt, forwardsOpt)) =>
                 for {
-                  _ <- IO.blocking {
-                    writer.write(s"Backwards: $backwardsOpt\n")
-                    writer.write(s"Forwards: $forwardsOpt")
-                    writer.flush()
-                  }
+                  _ <- printSequenceNavOpts(backwardsOpt, forwardsOpt, chars)
 
                   code <- readSequenceNavigationChoice(
                     backwardsOpt,
@@ -429,6 +422,70 @@ object CustomTUI {
 
           bytes <- TextToImageConverter.createTextImage(
             Constants.help,
+            currChars.head.length,
+            currChars.length
+          )
+          helpImage <- Conversions.convertBytesToHexImage(bytes)
+
+          greyscale = Conversions.hexStringsToSampledGreyscaleDecimal(
+            1,
+            1,
+            helpImage.hexStrings,
+            helpImage.width.value
+          )
+
+          asciiWithColors = appConfig.processing.algorithm
+            .generate(
+              appConfig.processing.charset,
+              greyscale.grayscaleDecimals
+            )
+
+          _ <- printColorGrid(writer, asciiWithColors, greyscale.colors)
+        } yield ()
+      }
+
+      def printRadiusNavOpts(
+          navOptions: List[ImageData],
+          currentImageInfo: ImageInfo,
+          currChars: Array[Array[Char]]
+      ) = {
+        for {
+          _ <- clearScreen(terminal)
+
+          bytes <- TextToImageConverter.createTextImage(
+            Constants.radiusNavOptionsList(currentImageInfo, navOptions),
+            currChars.head.length,
+            currChars.length
+          )
+          helpImage <- Conversions.convertBytesToHexImage(bytes)
+
+          greyscale = Conversions.hexStringsToSampledGreyscaleDecimal(
+            1,
+            1,
+            helpImage.hexStrings,
+            helpImage.width.value
+          )
+
+          asciiWithColors = appConfig.processing.algorithm
+            .generate(
+              appConfig.processing.charset,
+              greyscale.grayscaleDecimals
+            )
+
+          _ <- printColorGrid(writer, asciiWithColors, greyscale.colors)
+        } yield ()
+      }
+
+      def printSequenceNavOpts(
+          backwardsOpt: Option[MapillaryImageId],
+          forwardsOpt: Option[MapillaryImageId],
+          currChars: Array[Array[Char]]
+      ) = {
+        for {
+          _ <- clearScreen(terminal)
+
+          bytes <- TextToImageConverter.createTextImage(
+            Constants.sequenceNavOptsList(backwardsOpt, forwardsOpt),
             currChars.head.length,
             currChars.length
           )

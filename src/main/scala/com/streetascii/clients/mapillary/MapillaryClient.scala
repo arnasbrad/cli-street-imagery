@@ -4,7 +4,7 @@ import cats.data.EitherT
 import cats.effect.{IO, Resource}
 import com.streetascii.clients.mapillary.Codecs._
 import com.streetascii.clients.mapillary.Errors.MapillaryError
-import com.streetascii.clients.mapillary.Models._
+import com.streetascii.clients.mapillary.Models.{RequestField, _}
 import com.streetascii.common.Models._
 import org.http4s.Method.GET
 import org.http4s.client.{Client, UnexpectedStatus}
@@ -21,6 +21,7 @@ trait MapillaryClient {
         RequestField.ID,
         RequestField.Sequence,
         RequestField.Geometry,
+        RequestField.CompassAngle,
         RequestField.Thumb1024Url,
         RequestField.ThumbOriginalUrl
       )
@@ -31,7 +32,8 @@ trait MapillaryClient {
       radiusMeters: Radius,
       fields: List[RequestField] = List(
         RequestField.ID,
-        RequestField.Geometry
+        RequestField.Geometry,
+        RequestField.CompassAngle
       )
   ): EitherT[IO, MapillaryError, ImagesResponse]
 

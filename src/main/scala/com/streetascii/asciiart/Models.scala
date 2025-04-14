@@ -20,6 +20,7 @@ object Models {
   case class ImageInfo(
       hexImage: HexImage,
       imageId: MapillaryImageId,
+      compassAngle: Double,
       sequenceId: MapillarySequenceId,
       coordinates: Coordinates
   )
