@@ -51,8 +51,10 @@ clear
 echo "Select an image conversion algorithm:" | gum style --padding "1 2" --width 50
 algorithm=$(gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 \
   "Luminance" \
-  "Edge detection" \
-  "Braille")
+  "Edge detection Sobel" \
+  "Edge detection Canny" \
+  "Braille" \
+  "No algorithm")
 clear
 
 # Charset selection - skip if Braille is selected
@@ -68,12 +70,29 @@ else
   echo "Select the ASCII charset:" | gum style --padding "1 2" --width 50
   charset=$(gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 \
     "Default (.:-=+*#%@)" \
-    "Extended (\\.'\`^\\\",;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$)" \
+    "Blocks ( ░▒▓█)" \
+    "BlocksExtended ( ·░▒▓▄▌▐▀█)" \
+    "Extended ( .'\`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$" \
     "Braille (⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿)")
 fi
 clear
 
 charset=$(echo "$charset" | cut -d' ' -f1)
+
+if [[ "$algorithm" == "Braille" ]]; then
+  # Automatically set no colors for Braille
+  colors=False
+elif [[ "$algorithm" == "No algorithm" ]]; then
+  # Automatically set colors for "No algorithm"
+  colors=True
+else
+  # For any other algorithm, ask user to pick if they want colors
+  if gum confirm "Do you want colors?"; then
+    colors=True
+  else
+    colors=False
+  fi
+fi
 
 # Down sampling rate
 echo "Set the down sampling rate:" | gum style --padding "1 2" --width 50
@@ -114,7 +133,8 @@ echo "Configuration Summary:" | gum style --padding "1 2" --width 50
   summary="$(echo "🔑 API key:" | gum style --foreground 212) ${mapillaryKey:0:4}...${mapillaryKey: -3}
 $(echo "🧮 Algorithm:" | gum style --foreground 212) $algorithm
 $(echo "🔤 Charset:" | gum style --foreground 212) ${charset:0:20}
-$(echo "⚙️ Down sampling rate:" | gum style --foreground 212) $downSampling"
+$(echo "⚙️ Down sampling rate:" | gum style --foreground 212) $downSampling
+$(echo "🎨 Colors:" | gum style --foreground 212) $colors"
 
   # Display summary with styling
   echo "$summary" | gum style --margin "0 2" --border normal --width 60 --padding "1 2"
@@ -164,6 +184,7 @@ processing {
   algorithm = "${algorithm}"
   charset = "${charset}"
   down-sampling-rate = ${downSampling}
+  color = ${colors}
 }
 EOF
 }
