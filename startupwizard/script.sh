@@ -211,12 +211,12 @@ api {
 }
 
 processing {
-  navigation = "${navigation}"
+  navigation-type = "${navigation}"
   algorithm = "${algorithm}"
   charset = "${charset}"
   down-sampling-rate = ${downSampling}
   color = ${colors}
-  colorFilter = "${colorFilter}"
+  color-filter = "${colorFilter}"
 }
 EOF
 }
