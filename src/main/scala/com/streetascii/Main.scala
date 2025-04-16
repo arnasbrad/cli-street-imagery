@@ -1,7 +1,7 @@
 package com.streetascii
 
 import cats.effect.{ExitCode, IO, IOApp}
-import com.streetascii.AppConfig.{ApiConfig, ProcessingConfig}
+import com.streetascii.AppConfig.{ApiConfig, ColorConfig, ProcessingConfig}
 import com.streetascii.asciiart.Algorithms.LuminanceAlgorithm
 import com.streetascii.asciiart.{Charset, Conversions}
 import com.streetascii.clients.imgur.ImgurClient
@@ -27,7 +27,9 @@ object Main extends IOApp {
       algorithm = LuminanceAlgorithm,
       charset = Charset.Braille,
       navigationType = NavigationType.SequenceBased,
-      downSamplingRate = 4,
+      downSamplingRate = 4
+    ),
+    colors = ColorConfig(
       color = true,
       colorFilter = ColorFilter.EnhancedContrast
     )

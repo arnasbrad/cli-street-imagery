@@ -3,7 +3,7 @@ package com.streetascii
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 import cats.implicits.toBifunctorOps
-import com.streetascii.AppConfig.{ApiConfig, ProcessingConfig}
+import com.streetascii.AppConfig.{ApiConfig, ColorConfig, ProcessingConfig}
 import com.streetascii.asciiart.Algorithms.{AsciiAlgorithm, BrailleAlgorithm}
 import com.streetascii.asciiart.{Algorithms, Charset}
 import com.streetascii.clients.mapillary.Models.ApiKey
@@ -14,7 +14,11 @@ import pureconfig._
 import pureconfig.error.CannotConvert
 import pureconfig.generic.auto._
 
-case class AppConfig(api: ApiConfig, processing: ProcessingConfig)
+case class AppConfig(
+    api: ApiConfig,
+    processing: ProcessingConfig,
+    colors: ColorConfig
+)
 
 object AppConfig {
   // Case classes representing your configuration structure
@@ -23,15 +27,17 @@ object AppConfig {
       navigationType: NavigationType,
       algorithm: AsciiAlgorithm,
       charset: Charset,
-      downSamplingRate: Int,
-      color: Boolean,
-      colorFilter: ColorFilter
+      downSamplingRate: Int
   ) {
     val verticalSampling: Int = algorithm match {
       case BrailleAlgorithm => downSamplingRate
       case _                => downSamplingRate * 2
     }
   }
+  case class ColorConfig(
+      color: Boolean,
+      colorFilter: ColorFilter
+  )
 
   def load(configSource: ConfigSource): IO[AppConfig] = {
     IO(configSource.loadOrThrow[AppConfig])
