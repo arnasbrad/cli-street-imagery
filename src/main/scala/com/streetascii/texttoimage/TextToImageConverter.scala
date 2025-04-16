@@ -3,19 +3,28 @@ package com.streetascii.texttoimage
 import cats.effect._
 
 import java.awt.image.BufferedImage
-import java.awt.{Color, Font, Graphics2D, RenderingHints}
-import java.io.ByteArrayOutputStream
+import java.awt.{Color, Font, Graphics2D, GraphicsEnvironment, RenderingHints}
+import java.io.{ByteArrayOutputStream, File}
 import java.nio.file.{Files, Path, Paths}
 import java.util.Base64
 import javax.imageio.ImageIO
 import scala.annotation.tailrec
 
 object TextToImageConverter extends IOApp {
+  private val customFont: Font = {
+    val stream = getClass.getResourceAsStream("/HomeVideo.ttf")
+    try {
+      Font.createFont(Font.TRUETYPE_FONT, stream)
+    } finally {
+      stream.close()
+    }
+  }
+  GraphicsEnvironment.getLocalGraphicsEnvironment.registerFont(customFont)
 
   // Main entry point
   override def run(args: List[String]): IO[ExitCode] = {
     for {
-      imageBytes <- createTextImage(Constants.help, 1000, 500)
+      imageBytes <- createTextImage(Constants.help, 265, 72)
       _          <- saveImageToFile(imageBytes, "text_image.png")
       _          <- IO.println(s"Image byte array length: ${imageBytes.length}")
       _ <- IO.println(
@@ -63,11 +72,12 @@ object TextToImageConverter extends IOApp {
             )
 
             // Set font and color
-            _ <- IO {
-              val font = new Font("Courier New", Font.BOLD, optimalFontSize)
-              g2d.setFont(font)
-              g2d.setColor(Color.WHITE)
-            }
+            _ <-
+              IO {
+                val font = customFont.deriveFont(optimalFontSize.toFloat)
+                g2d.setFont(font)
+                g2d.setColor(Color.WHITE)
+              }
 
             // Draw the text
             _ <- renderText(g2d, lines, width, height)
@@ -80,13 +90,18 @@ object TextToImageConverter extends IOApp {
   }
 
   private def configureGraphics(g2d: Graphics2D): IO[Unit] = IO {
+    // For pixel fonts, typically you want to disable anti-aliasing
     g2d.setRenderingHint(
       RenderingHints.KEY_TEXT_ANTIALIASING,
-      RenderingHints.VALUE_TEXT_ANTIALIAS_ON
+      RenderingHints.VALUE_TEXT_ANTIALIAS_OFF
     )
     g2d.setRenderingHint(
       RenderingHints.KEY_RENDERING,
       RenderingHints.VALUE_RENDER_QUALITY
+    )
+    g2d.setRenderingHint(
+      RenderingHints.KEY_FRACTIONALMETRICS,
+      RenderingHints.VALUE_FRACTIONALMETRICS_OFF
     )
   }
 
@@ -104,11 +119,12 @@ object TextToImageConverter extends IOApp {
 
     // Binary search approach for finding optimal font size
     @tailrec
-    def findOptimalSize(minSize: Int, maxSize: Int): Int = {
-      if (maxSize - minSize <= 2) minSize
+    def findOptimalSize(minSize: Int, maxSize: Int): (Int, Font) = {
+      if (maxSize - minSize <= 2)
+        (minSize, customFont.deriveFont(minSize.toFloat))
       else {
         val fontSize = (minSize + maxSize) / 2
-        val font     = new Font("Courier New", Font.BOLD, fontSize)
+        val font     = customFont.deriveFont(fontSize.toFloat)
         g2d.setFont(font)
         val metrics = g2d.getFontMetrics(font)
 
@@ -126,7 +142,9 @@ object TextToImageConverter extends IOApp {
       }
     }
 
-    findOptimalSize(8, 300) // Min and max font sizes
+    // Get the optimal size and font
+    val (optimalSize, _) = findOptimalSize(8, 300) // Min and max font sizes
+    optimalSize
   }
 
   private def renderText(
