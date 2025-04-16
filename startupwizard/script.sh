@@ -215,6 +215,9 @@ processing {
   algorithm = "${algorithm}"
   charset = "${charset}"
   down-sampling-rate = ${downSampling}
+}
+
+colors {
   color = ${colors}
   color-filter = "${colorFilter}"
 }
