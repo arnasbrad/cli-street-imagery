@@ -69,10 +69,10 @@ object Constants {
       backwardsOpt: Option[MapillaryImageId],
       forwardsOpt: Option[MapillaryImageId]
   ): String = {
-    val bString =
-      if (backwardsOpt.isDefined) "[b] Backwards ↑" else "[b] Not available"
     val fString =
       if (forwardsOpt.isDefined) "[f] Forwards ↑" else "[g] Not available"
+    val bString =
+      if (backwardsOpt.isDefined) "[b] Backwards ↓" else "[b] Not available"
 
     s"""$fString
        |$bString

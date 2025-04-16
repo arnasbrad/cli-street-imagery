@@ -6,7 +6,7 @@ sealed trait Charset {
 
 object Charset {
   case object Default extends Charset {
-    def value = ".:-=+*#%@"
+    def value = " .:-=+*#%@"
   }
 
   case object Blocks extends Charset {
@@ -24,7 +24,7 @@ object Charset {
 
   case object Braille extends Charset {
     def value =
-      "⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿"
+      " ⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿"
   }
 
   case object Blank extends Charset {
