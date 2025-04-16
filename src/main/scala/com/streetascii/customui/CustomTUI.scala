@@ -2,9 +2,10 @@ package com.streetascii.customui
 
 import cats.effect.{ExitCode, IO, Resource}
 import com.streetascii.AppConfig
+import com.streetascii.AppConfig.ColorConfig
 import com.streetascii.Main.logger
-import com.streetascii.asciiart.Conversions
 import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
+import com.streetascii.asciiart.{Algorithms, Conversions}
 import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
 import com.streetascii.common.Models.Radius
 import com.streetascii.navigation.Models.NavigationType.{
@@ -24,6 +25,8 @@ object CustomTUI {
   // ANSI escape character and reset code
   private val ESC: Char     = '\u001B'
   private val RESET: String = s"$ESC[0m"
+
+  private val textAlgorithm = Algorithms.LuminanceAlgorithm
 
   // Pure function to clamp values to valid range
   private def clamp(value: Int, min: Int = 0, max: Int = 255): Int =
@@ -122,12 +125,15 @@ object CustomTUI {
     }
 
   /** Print a color grid to the terminal in a functional way */
-  private def printColorGrid(
+  private def printGrid(
       writer: BufferedWriter,
       chars: Array[Array[Char]],
-      colors: Array[Array[RGB]]
+      colors: Array[Array[RGB]],
+      colorConfig: ColorConfig
   ): IO[Unit] = {
     IO.blocking {
+      val processedColors = colorConfig.colorFilter.applyFilter(colors, 2)
+
       val sb = new StringBuilder()
 
       for ((line, lineIndex) <- chars.zipWithIndex) {
@@ -136,9 +142,12 @@ object CustomTUI {
         }
 
         for ((char, charIndex) <- line.zipWithIndex) {
-          val rgb         = colors(lineIndex)(charIndex)
-          val coloredChar = safeColorize(char.toString, rgb.r, rgb.g, rgb.b)
-          sb.append(coloredChar)
+          val rgb = processedColors(lineIndex)(charIndex)
+          val processedChar =
+            if (colorConfig.color)
+              safeColorize(char.toString, rgb.r, rgb.g, rgb.b)
+            else char.toString
+          sb.append(processedChar)
         }
       }
 
@@ -348,8 +357,13 @@ object CustomTUI {
 
             case 'r' =>
               for {
-                _    <- clearScreen(terminal)
-                _    <- printColorGrid(writer, chars, colors)
+                _ <- clearScreen(terminal)
+                _ <- printGrid(
+                  writer,
+                  chars,
+                  colors,
+                  appConfig.colors
+                )
                 code <- loop(chars, colors, imageInfo)
               } yield code
 
@@ -389,10 +403,11 @@ object CustomTUI {
                 _ <- logger.info(s"got the good stuff ${imageInfo.imageId}")
                 _ <- clearScreen(terminal)
                 _ <- logger.info(s"cleared")
-                _ <- printColorGrid(
+                _ <- printGrid(
                   writer,
                   asciiWithColors,
-                  greyscale.colors
+                  greyscale.colors,
+                  appConfig.colors
                 )
                 _ <- logger.info(s"printed")
                 code <- loop(
@@ -428,13 +443,18 @@ object CustomTUI {
             helpImage.width.value
           )
 
-          asciiWithColors = appConfig.processing.algorithm
+          asciiWithColors = textAlgorithm
             .generate(
               appConfig.processing.charset,
               greyscale.grayscaleDecimals
             )
 
-          _ <- printColorGrid(writer, asciiWithColors, greyscale.colors)
+          _ <- printGrid(
+            writer,
+            asciiWithColors,
+            greyscale.colors,
+            appConfig.colors
+          )
         } yield ()
       }
 
@@ -460,13 +480,18 @@ object CustomTUI {
             helpImage.width.value
           )
 
-          asciiWithColors = appConfig.processing.algorithm
+          asciiWithColors = textAlgorithm
             .generate(
               appConfig.processing.charset,
               greyscale.grayscaleDecimals
             )
 
-          _ <- printColorGrid(writer, asciiWithColors, greyscale.colors)
+          _ <- printGrid(
+            writer,
+            asciiWithColors,
+            greyscale.colors,
+            appConfig.colors
+          )
         } yield ()
       }
 
@@ -492,17 +517,27 @@ object CustomTUI {
             helpImage.width.value
           )
 
-          asciiWithColors = appConfig.processing.algorithm
+          asciiWithColors = textAlgorithm
             .generate(
               appConfig.processing.charset,
               greyscale.grayscaleDecimals
             )
 
-          _ <- printColorGrid(writer, asciiWithColors, greyscale.colors)
+          _ <- printGrid(
+            writer,
+            asciiWithColors,
+            greyscale.colors,
+            appConfig.colors
+          )
         } yield ()
       }
 
-      printColorGrid(writer, initialChars, initialColors) >> loop(
+      printGrid(
+        writer,
+        initialChars,
+        initialColors,
+        appConfig.colors
+      ) >> loop(
         initialChars,
         initialColors,
         initialImageInfo

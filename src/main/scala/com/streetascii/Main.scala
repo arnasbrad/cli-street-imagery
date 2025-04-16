@@ -26,12 +26,12 @@ object Main extends IOApp {
     processing = ProcessingConfig(
       algorithm = LuminanceAlgorithm,
       charset = Charset.Braille,
-      navigationType = NavigationType.SequenceBased,
+      navigationType = NavigationType.RadiusBased,
       downSamplingRate = 4
     ),
     colors = ColorConfig(
       color = true,
-      colorFilter = ColorFilter.EnhancedContrast
+      colorFilter = ColorFilter.NoFilter
     )
   )
 
