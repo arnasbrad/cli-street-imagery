@@ -6,6 +6,7 @@ import cats.implicits.toBifunctorOps
 import com.streetascii.AppConfig.{ApiConfig, ColorConfig, ProcessingConfig}
 import com.streetascii.asciiart.Algorithms.{AsciiAlgorithm, BrailleAlgorithm}
 import com.streetascii.asciiart.{Algorithms, Charset}
+import com.streetascii.clients.imgur.Models.ClientId
 import com.streetascii.clients.mapillary.Models.ApiKey
 import com.streetascii.colorfilters.ColorFilter
 import com.streetascii.navigation.Models.NavigationType
@@ -22,7 +23,7 @@ case class AppConfig(
 
 object AppConfig {
   // Case classes representing your configuration structure
-  case class ApiConfig(mapillaryKey: ApiKey)
+  case class ApiConfig(mapillaryKey: ApiKey, imgurClientId: ClientId)
   case class ProcessingConfig(
       navigationType: NavigationType,
       algorithm: AsciiAlgorithm,

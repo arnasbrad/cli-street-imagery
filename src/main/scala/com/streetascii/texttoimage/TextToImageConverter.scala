@@ -1,6 +1,7 @@
 package com.streetascii.texttoimage
 
 import cats.effect._
+import com.streetascii.asciiart.Models.RGB
 
 import java.awt.image.BufferedImage
 import java.awt.{Color, Font, Graphics2D, GraphicsEnvironment, RenderingHints}
@@ -81,6 +82,82 @@ object TextToImageConverter extends IOApp {
 
             // Draw the text
             _ <- renderText(g2d, lines, width, height)
+
+            // Convert to byte array
+            bytes <- imageToBytes(image)
+          } yield bytes
+        }
+    } yield bytes
+  }
+
+  def createColoredAsciiImage(
+      chars: Array[Array[Char]],
+      colors: Array[Array[RGB]],
+      fontSizePx: Int = 16,
+      paddingPx: Int = 2
+  ): IO[Array[Byte]] = {
+    for {
+      // Calculate dimensions based on grid size and font
+      metrics <- IO {
+        val tempImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
+        val g2d       = tempImage.createGraphics()
+        try {
+          val font = customFont.deriveFont(fontSizePx.toFloat)
+          g2d.setFont(font)
+          g2d.getFontMetrics
+        } finally {
+          g2d.dispose()
+        }
+      }
+
+      // Calculate image dimensions
+      width = chars.headOption.map(_.length).getOrElse(0) * (metrics.charWidth(
+        'M'
+      ) + paddingPx)
+      height = chars.length * (metrics.getHeight + paddingPx)
+
+      // Create the image
+      image <- IO(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB))
+
+      // Process and render the image
+      bytes <- Resource
+        .make(IO(image.createGraphics())) { g2d =>
+          IO(g2d.dispose())
+        }
+        .use { g2d =>
+          for {
+            // Set up graphics context
+            _ <- configureGraphics(g2d)
+
+            // Set background to black (or any background color you prefer)
+            _ <- IO {
+              g2d.setColor(Color.BLACK)
+              g2d.fillRect(0, 0, width, height)
+            }
+
+            // Set font
+            _ <- IO {
+              val font = customFont.deriveFont(fontSizePx.toFloat)
+              g2d.setFont(font)
+            }
+
+            // Draw each character with its color
+            _ <- IO {
+              val charWidth  = metrics.charWidth('M')
+              val lineHeight = metrics.getHeight
+
+              for (y <- chars.indices; x <- chars(y).indices) {
+                val char = chars(y)(x)
+                val rgb  = colors(y)(x)
+
+                g2d.setColor(new Color(rgb.r, rgb.g, rgb.b))
+                g2d.drawString(
+                  char.toString,
+                  x * (charWidth + paddingPx) + paddingPx / 2,
+                  y * (lineHeight + paddingPx) + metrics.getAscent + paddingPx / 2
+                )
+              }
+            }
 
             // Convert to byte array
             bytes <- imageToBytes(image)
