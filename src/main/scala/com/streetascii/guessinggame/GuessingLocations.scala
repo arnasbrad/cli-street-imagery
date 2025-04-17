@@ -1,5 +1,7 @@
 package com.streetascii.guessinggame
 
+import cats.effect.IO
+import cats.effect.std.Random
 import com.streetascii.clients.mapillary.Models.MapillaryImageId
 import com.streetascii.guessinggame.CountryModels.{Country, GuesserLocation}
 
@@ -20,4 +22,12 @@ object GuessingLocations {
     GuesserLocation(MapillaryImageId("2459116864441145"), Country.Greece),
     GuesserLocation(MapillaryImageId("731714614943735"), Country.Austria)
   )
+
+  def getRandomLocation: IO[GuesserLocation] = {
+    for {
+      index <- Random
+        .scalaUtilRandom[IO]
+        .flatMap(_.betweenInt(0, locations.length - 1))
+    } yield locations(index)
+  }
 }
