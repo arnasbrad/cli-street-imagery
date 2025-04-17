@@ -8,6 +8,7 @@ import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
 import com.streetascii.asciiart.{Algorithms, Conversions}
 import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
 import com.streetascii.common.Models.Radius
+import com.streetascii.guessinggame.CountryModels.Country
 import com.streetascii.navigation.Models.NavigationType.{
   RadiusBased,
   SequenceBased
@@ -199,7 +200,8 @@ object CustomTUI {
       runner: RunnerImpl,
       initialImageInfo: ImageInfo,
       appConfig: AppConfig,
-      isGuessingMode: Boolean
+      isGuessingMode: Boolean,
+      country: Country
   ): IO[ExitCode] = {
     withTerminal { (terminal, writer) =>
       def loop(
@@ -398,6 +400,12 @@ object CustomTUI {
                 case SequenceBased => sequenceNavigationLogic(imageInfo)
               }
 
+            case 'g' if (isGuessingMode) =>
+              for {
+                _ <- printGuessingOptions(chars)
+
+              } yield ExitCode.Success
+
             case 'h' =>
               for {
                 _    <- printHelp(chars)
@@ -466,6 +474,41 @@ object CustomTUI {
             1,
             helpImage.hexStrings,
             helpImage.width.value
+          )
+
+          asciiWithColors = textAlgorithm
+            .generate(
+              appConfig.processing.charset,
+              greyscale.grayscaleDecimals
+            )
+
+          _ <- printGrid(
+            writer,
+            asciiWithColors,
+            greyscale.colors,
+            appConfig.colors
+          )
+        } yield ()
+      }
+
+      def printGuessingOptions(currChars: Array[Array[Char]]) = {
+        for {
+          _ <- clearScreen(terminal)
+
+          bytes <- TextToImageConverter.createTextImage(
+            Constants
+              .guessingOptsList(country, List(Country.Estonia, Country.Latvia)),
+            currChars.head.length,
+            currChars.length
+          )
+
+          image <- Conversions.convertBytesToHexImage(bytes)
+
+          greyscale = Conversions.hexStringsToSampledGreyscaleDecimal(
+            1,
+            1,
+            image.hexStrings,
+            image.width.value
           )
 
           asciiWithColors = textAlgorithm
