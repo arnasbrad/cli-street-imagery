@@ -23,7 +23,6 @@ sealed trait Runner {
   ): EitherT[IO, MapillaryError, ImageInfo]
 
   def generateSocialMediaLinks(
-      text: String,
       imageBytes: Array[Byte]
   ): EitherT[IO, Errors.ImgurError, List[SocialMedia]]
 }
@@ -89,13 +88,15 @@ case class RunnerImpl(
   }
 
   def generateSocialMediaLinks(
-      text: String,
       imageBytes: Array[Byte]
   ): EitherT[IO, Errors.ImgurError, List[SocialMedia]] = {
     for {
       imgurLink <- imgurClient.uploadImage(imageBytes).map(_.data.link)
 
-      xLink  = SocialMedia.X(text = text, imgurLink = imgurLink)
+      xLink = SocialMedia.X(
+        text = "Check out this cool image!",
+        imgurLink = imgurLink
+      )
       fbLink = SocialMedia.FaceBook(imgurLink = imgurLink)
     } yield List(xLink, fbLink)
   }

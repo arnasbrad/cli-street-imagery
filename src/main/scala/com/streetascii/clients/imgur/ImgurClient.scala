@@ -4,7 +4,7 @@ import cats.data.EitherT
 import cats.effect.{IO, Resource}
 import com.streetascii.clients.imgur.Codecs._
 import com.streetascii.clients.imgur.Errors.ImgurError
-import com.streetascii.clients.imgur.Models.ImgurResponse
+import com.streetascii.clients.imgur.Models.{ClientId, ImgurResponse}
 import org.http4s.client.{Client, UnexpectedStatus}
 import org.http4s.ember.client.EmberClientBuilder
 import org.http4s.headers.`Content-Type`
@@ -33,15 +33,24 @@ trait ImgurClient {
 }
 
 object ImgurClient {
-  def make(): Resource[IO, ImgurClient] =
-    EmberClientBuilder.default[IO].build.map(new ImgurClientImpl(_))
+  def make(clientId: ClientId): Resource[IO, ImgurClient] =
+    EmberClientBuilder.default[IO].build.map(new ImgurClientImpl(_, clientId))
 
-  def makeRequest(uri: Uri, imageBytes: Array[Byte]): Request[IO]#Self = {
+  def makeRequest(
+      uri: Uri,
+      imageBytes: Array[Byte],
+      clientId: ClientId
+  ): Request[IO]#Self = {
+    val authHeader = s"Client-ID ${clientId.value}"
     Request[IO](
       method = Method.POST,
       uri = uri,
       headers = Headers(
-        `Content-Type`(MediaType.image.jpeg)
+        `Content-Type`(
+          MediaType.image.png
+        ), // You might want to use png instead of jpeg for ASCII art
+        org.http4s.Header
+          .Raw(org.http4s.headers.Authorization.name, authHeader)
       )
     ).withEntity(imageBytes)
   }
@@ -135,7 +144,8 @@ object ImgurClient {
     }
   }
 
-  private class ImgurClientImpl(client: Client[IO]) extends ImgurClient {
+  private class ImgurClientImpl(client: Client[IO], clientId: ClientId)
+      extends ImgurClient {
     private val baseUri = Uri.unsafeFromString("https://api.imgur.com/3/image")
 
     /** Uploads an image to Imgur.
@@ -144,7 +154,7 @@ object ImgurClient {
         imageBytes: Array[Byte]
     ): EitherT[IO, ImgurError, ImgurResponse] = {
       // Build the URI with optional parameters
-      val request = makeRequest(baseUri, imageBytes)
+      val request = makeRequest(baseUri, imageBytes, clientId)
 
       EitherT(handleErrors(client.expect[ImgurResponse](request)))
     }

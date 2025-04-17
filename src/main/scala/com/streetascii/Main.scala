@@ -5,6 +5,7 @@ import com.streetascii.AppConfig.{ApiConfig, ColorConfig, ProcessingConfig}
 import com.streetascii.asciiart.Algorithms.LuminanceAlgorithm
 import com.streetascii.asciiart.{Charset, Conversions}
 import com.streetascii.clients.imgur.ImgurClient
+import com.streetascii.clients.imgur.Models.ClientId
 import com.streetascii.clients.mapillary.MapillaryClient
 import com.streetascii.clients.mapillary.Models.{ApiKey, MapillaryImageId}
 import com.streetascii.colorfilters.ColorFilter
@@ -18,10 +19,11 @@ object Main extends IOApp {
   implicit def logger: SelfAwareStructuredLogger[IO] = Slf4jLogger.getLogger[IO]
 
   val appConfig: AppConfig = AppConfig(
-    api = ApiConfig(mapillaryKey =
-      ApiKey.unsafeCreate(
+    api = ApiConfig(
+      mapillaryKey = ApiKey.unsafeCreate(
         "key"
-      )
+      ),
+      ClientId("id")
     ),
     processing = ProcessingConfig(
       algorithm = LuminanceAlgorithm,
@@ -38,7 +40,7 @@ object Main extends IOApp {
   private def initClients() = {
     for {
       mapillaryClient <- MapillaryClient.make(appConfig.api.mapillaryKey)
-      imgurClient     <- ImgurClient.make()
+      imgurClient     <- ImgurClient.make(appConfig.api.imgurClientId)
 
     } yield RunnerImpl(mapillaryClient, imgurClient)
   }
@@ -48,7 +50,7 @@ object Main extends IOApp {
       for {
         imageInfo <- runner
           // for when bbox aint working
-          .getHexStringsFromId(MapillaryImageId("1159410088278870"))
+          .getHexStringsFromId(MapillaryImageId("1688256144933335"))
           /*
           .getHexStringsFromLocation(
             Coordinates(51.501001738896115, -0.12600535355615777)

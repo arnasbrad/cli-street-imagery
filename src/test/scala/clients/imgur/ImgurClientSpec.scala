@@ -4,6 +4,7 @@ import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 import com.streetascii.clients.imgur.Errors.ImgurError
 import com.streetascii.clients.imgur.ImgurClient
+import com.streetascii.clients.imgur.Models.ClientId
 import org.http4s.client.UnexpectedStatus
 import org.http4s.{Method, Status, Uri}
 import org.scalatest.funspec.AnyFunSpec
@@ -185,8 +186,9 @@ class ImgurClientSpec extends AnyFunSpec with Matchers {
     it("should create a request with the correct method, URI, and headers") {
       val testUri    = Uri.unsafeFromString("https://test.example.com/image")
       val imageBytes = "test image".getBytes
+      val clientId   = ClientId.unsafeCreate("id")
 
-      val request = ImgurClient.makeRequest(testUri, imageBytes)
+      val request = ImgurClient.makeRequest(testUri, imageBytes, clientId)
 
       // Verify request properties
       request.method shouldBe Method.POST

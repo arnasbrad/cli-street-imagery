@@ -12,6 +12,7 @@ import com.streetascii.asciiart.Models.{
 }
 import com.streetascii.clients.imgur
 import com.streetascii.clients.imgur.ImgurClient
+import com.streetascii.clients.imgur.Models.ClientId
 import com.streetascii.clients.mapillary.Models._
 import com.streetascii.clients.mapillary.{MapillaryClient, Models}
 import com.streetascii.common.Models.{Coordinates, Radius}
@@ -149,7 +150,10 @@ class RunnerSpec extends AnyFlatSpec with Matchers with MockFactory {
 
     // Call the method under test
     val result =
-      runner.generateSocialMediaLinks(text, imageBytes).value.unsafeRunSync()
+      runner
+        .generateSocialMediaLinks(imageBytes)
+        .value
+        .unsafeRunSync()
 
     // Assertions
     result.isRight shouldBe true

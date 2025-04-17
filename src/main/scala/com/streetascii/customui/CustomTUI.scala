@@ -14,6 +14,7 @@ import com.streetascii.navigation.Models.NavigationType.{
 }
 import com.streetascii.navigation.Navigation
 import com.streetascii.runner.RunnerImpl
+import com.streetascii.texttoimage.TextToImageConverter.createColoredAsciiImage
 import com.streetascii.texttoimage.{Constants, TextToImageConverter}
 import org.jline.terminal.{Terminal, TerminalBuilder}
 import org.jline.utils.InfoCmp
@@ -364,6 +365,29 @@ object CustomTUI {
                   colors,
                   appConfig.colors
                 )
+                code <- loop(chars, colors, imageInfo)
+              } yield code
+
+            case 's' =>
+              for {
+                _          <- clearScreen(terminal)
+                imageBytes <- createColoredAsciiImage(chars, colors)
+                urlsEith   <- runner.generateSocialMediaLinks(imageBytes).value
+
+                _ <- urlsEith match {
+                  case Right(urls) =>
+                    IO.blocking {
+                      val urlStrings = urls.map(_.uri.toString())
+                      writer.write(urlStrings.mkString("\n"))
+                      writer.flush()
+                    }
+                  case Left(err) =>
+                    IO.blocking {
+                      writer.write(err.message)
+                      writer.flush()
+                    }
+                }
+
                 code <- loop(chars, colors, imageInfo)
               } yield code
 
