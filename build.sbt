@@ -29,7 +29,9 @@ libraryDependencies ++= Seq(
   "org.scalatest"         %% "scalatest"            % "3.2.19" % Test,
   "org.jline"              % "jline"                % "3.29.0",
   "org.jline"              % "jline-terminal-jansi" % "3.29.0",
-  "com.github.pureconfig" %% "pureconfig"           % "0.17.8"
+  "com.github.pureconfig" %% "pureconfig"           % "0.17.8",
+  "com.monovore"          %% "decline-effect"       % "2.5.0",
+  "com.monovore"          %% "decline"              % "2.5.0"
 )
 
 // Compiler options

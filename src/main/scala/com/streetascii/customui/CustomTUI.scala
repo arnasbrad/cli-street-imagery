@@ -198,7 +198,8 @@ object CustomTUI {
       initialColors: Array[Array[RGB]],
       runner: RunnerImpl,
       initialImageInfo: ImageInfo,
-      appConfig: AppConfig
+      appConfig: AppConfig,
+      isGuessingMode: Boolean
   ): IO[ExitCode] = {
     withTerminal { (terminal, writer) =>
       def loop(
