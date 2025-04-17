@@ -42,7 +42,7 @@ object Conversions extends Conversions {
     )
   }
 
-  private def convertTo2DArray(
+  def convertTo2DArray(
       hexImage: HexImage
   ): Array[Array[String]] = {
 
@@ -58,7 +58,7 @@ object Conversions extends Conversions {
     }.toList
   }
 
-  private def sampleHorizontally(
+  def sampleHorizontally(
       image: Array[Array[String]],
       downsampleFactor: Int
   ): Array[Array[String]] = {
@@ -76,7 +76,7 @@ object Conversions extends Conversions {
     }
   }
 
-  private def sampleVertically(
+  def sampleVertically(
       lines: Array[Array[String]],
       vertical: Int
   ): Array[Array[String]] = {
@@ -94,7 +94,7 @@ object Conversions extends Conversions {
     }
   }
 
-  private def convertToGrayscale(
+  def convertToGrayscale(
       lines: Array[Array[String]]
   ): ColoredPixels = {
     // Pre-allocate arrays for the grayscale values and colors
