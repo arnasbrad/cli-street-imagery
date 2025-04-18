@@ -2,7 +2,10 @@ package com.streetascii.texttoimage
 
 import com.streetascii.asciiart.Models.ImageInfo
 import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
+import com.streetascii.guessinggame.CountryModels.Country
 import com.streetascii.navigation.Navigation
+
+import scala.util.Random
 
 object Constants {
   val help: String =
@@ -15,6 +18,16 @@ object Constants {
       |-[f] - move forwards           -
       |-[b] - move backwards          -
       |--------------------------------""".stripMargin
+
+  val correctGuess: String =
+    """Correct guess
+      |press [enter] to continue""".stripMargin
+
+  def wrongGuess(correctCountry: Country): String = {
+    s"""Incorrect guess
+      |correct was ${correctCountry.name}
+      |GAME OVER""".stripMargin
+  }
 
   def radiusNavOptionsList(
       currentImageData: ImageInfo,
@@ -77,5 +90,21 @@ object Constants {
     s"""$fString
        |$bString
        |""".stripMargin
+  }
+
+  def guessingOptsList(
+      correctCountry: Country,
+      otherCounties: List[Country]
+  ): (String, Int) = {
+    val allCountriesList      = correctCountry :: otherCounties
+    val shuffledCountriesList = Random.shuffle(allCountriesList)
+
+    val str = shuffledCountriesList.zipWithIndex
+      .map { case (guessOpt, index) =>
+        s"[${index + 1}] ${guessOpt.name}"
+      }
+      .mkString("\n")
+    val index = shuffledCountriesList.indexOf(correctCountry)
+    (str, index)
   }
 }

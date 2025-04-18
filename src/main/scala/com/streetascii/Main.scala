@@ -14,6 +14,8 @@ import com.streetascii.clients.mapillary.MapillaryClient
 import com.streetascii.clients.mapillary.Models.ApiKey
 import com.streetascii.colorfilters.ColorFilter
 import com.streetascii.customui.CustomTUI
+import com.streetascii.guessinggame.CountryModels.{Country, GuesserLocation}
+import com.streetascii.guessinggame.GuessingLocations
 import com.streetascii.navigation.Models.NavigationType
 import com.streetascii.runner.RunnerImpl
 import org.typelevel.log4cats.SelfAwareStructuredLogger
@@ -37,7 +39,7 @@ object Main
     processing = ProcessingConfig(
       algorithm = LuminanceAlgorithm,
       charset = Charset.Braille,
-      navigationType = NavigationType.RadiusBased,
+      navigationType = NavigationType.SequenceBased,
       downSamplingRate = 4
     ),
     colors = ColorConfig(
@@ -57,7 +59,8 @@ object Main
   def runTerminalApp(
       imageInfo: ImageInfo,
       runner: RunnerImpl,
-      isGuessingMode: Boolean
+      isGuessingMode: Boolean,
+      country: Country
   ): IO[ExitCode] = {
     val greyscale = Conversions.hexStringsToSampledGreyscaleDecimal(
       appConfig.processing.downSamplingRate,
@@ -78,7 +81,8 @@ object Main
       runner,
       imageInfo,
       appConfig,
-      isGuessingMode
+      isGuessingMode,
+      country
     )
   }
 
@@ -99,7 +103,12 @@ object Main
 
           exitCode <- imageInfo match {
             case Right(imageInfo) =>
-              runTerminalApp(imageInfo, runner, isGuessingMode = false)
+              runTerminalApp(
+                imageInfo,
+                runner,
+                isGuessingMode = false,
+                Country.Latvia
+              )
             case Left(error) =>
               IO.println(
                 s"Origin image parsing failed with error: ${error.message}"
@@ -108,7 +117,28 @@ object Main
         } yield exitCode
       }
     } orElse guessingCommand.map { args =>
-      IO(ExitCode.Success)
+      initClients().use { runner =>
+        for {
+          location <- GuessingLocations.getRandomLocation
+          imageInfoEither <- runner
+            .getHexStringsFromId(location.id)
+            .value
+
+          exitCode <- imageInfoEither match {
+            case Right(imageInfo) =>
+              runTerminalApp(
+                imageInfo,
+                runner,
+                isGuessingMode = true,
+                location.country
+              )
+            case Left(error) =>
+              IO.println(
+                s"Origin image parsing failed with error: ${error.message}"
+              ).as(ExitCode.Error)
+          }
+        } yield exitCode
+      }
     }
   }
 }
