@@ -85,14 +85,16 @@ object Constants {
   def guessingOptsList(
       correctCountry: Country,
       otherCounties: List[Country]
-  ): String = {
+  ): (String, Int) = {
     val allCountriesList      = correctCountry :: otherCounties
     val shuffledCountriesList = Random.shuffle(allCountriesList)
 
-    shuffledCountriesList.zipWithIndex
+    val str = shuffledCountriesList.zipWithIndex
       .map { case (guessOpt, index) =>
         s"[${index + 1}] ${guessOpt.name}"
       }
       .mkString("\n")
+    val index = shuffledCountriesList.indexOf(correctCountry)
+    (str, index)
   }
 }

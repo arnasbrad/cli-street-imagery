@@ -2,6 +2,8 @@ package com.streetascii.guessinggame
 
 import com.streetascii.clients.mapillary.Models.MapillaryImageId
 
+import scala.util.Random
+
 object CountryModels {
   case class GuesserLocation(id: MapillaryImageId, country: Country)
 
@@ -10,6 +12,33 @@ object CountryModels {
   }
 
   case object Country {
+    val values: List[Country] = List(
+      UnitedKingdom,
+      France,
+      Germany,
+      Belgium,
+      Spain,
+      Portugal,
+      Italy,
+      Ukraine,
+      Lithuania,
+      Estonia,
+      Latvia,
+      Poland,
+      Greece,
+      Hungary,
+      Austria
+    )
+
+    def randomPickedCountries(excludedCountry: Country): List[Country] = {
+      val availableCountries =
+        Country.values.filter(country => country != excludedCountry)
+
+      val shuffledCountries = Random.shuffle(availableCountries)
+
+      shuffledCountries.take(4)
+    }
+
     case object UnitedKingdom extends Country {
       val name = "United Kingdom"
     }

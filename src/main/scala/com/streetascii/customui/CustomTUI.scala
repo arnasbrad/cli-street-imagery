@@ -8,6 +8,7 @@ import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
 import com.streetascii.asciiart.{Algorithms, Conversions}
 import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
 import com.streetascii.common.Models.Radius
+import com.streetascii.guessinggame.CountryModels
 import com.streetascii.guessinggame.CountryModels.Country
 import com.streetascii.navigation.Models.NavigationType.{
   RadiusBased,
@@ -401,10 +402,29 @@ object CustomTUI {
               }
 
             case 'g' if (isGuessingMode) =>
-              for {
-                _ <- printGuessingOptions(chars)
+              val otherCountries = Country.randomPickedCountries(country)
 
-              } yield ExitCode.Success
+              val (formattedString, correctIndex) = Constants.guessingOptsList(
+                country,
+                otherCountries
+              )
+              for {
+                _      <- printAsciiText(chars, formattedString)
+                navKey <- readKey(terminal)
+                code <- navKey match {
+                  case k if k >= '1' && k <= ('0' + 5) =>
+                    val index = k - '1' // Convert ASCII value to 0-based index
+                    for {
+                      _ <- clearScreen(terminal)
+                      _ <-
+                        if (index == correctIndex)
+                          printAsciiText(chars, "lol pataikei")
+                        else {
+                          printAsciiText(chars, s"nonoo ${country.name}")
+                        }
+                    } yield ExitCode.Success
+                }
+              } yield code
 
             case 'h' =>
               for {
@@ -458,12 +478,12 @@ object CustomTUI {
         } yield code
       }
 
-      def printHelp(currChars: Array[Array[Char]]) = {
+      def printAsciiText(currChars: Array[Array[Char]], text: String) = {
         for {
           _ <- clearScreen(terminal)
 
           bytes <- TextToImageConverter.createTextImage(
-            Constants.help,
+            text,
             currChars.head.length,
             currChars.length
           )
@@ -491,39 +511,8 @@ object CustomTUI {
         } yield ()
       }
 
-      def printGuessingOptions(currChars: Array[Array[Char]]) = {
-        for {
-          _ <- clearScreen(terminal)
-
-          bytes <- TextToImageConverter.createTextImage(
-            Constants
-              .guessingOptsList(country, List(Country.Estonia, Country.Latvia)),
-            currChars.head.length,
-            currChars.length
-          )
-
-          image <- Conversions.convertBytesToHexImage(bytes)
-
-          greyscale = Conversions.hexStringsToSampledGreyscaleDecimal(
-            1,
-            1,
-            image.hexStrings,
-            image.width.value
-          )
-
-          asciiWithColors = textAlgorithm
-            .generate(
-              appConfig.processing.charset,
-              greyscale.grayscaleDecimals
-            )
-
-          _ <- printGrid(
-            writer,
-            asciiWithColors,
-            greyscale.colors,
-            appConfig.colors
-          )
-        } yield ()
+      def printHelp(currChars: Array[Array[Char]]) = {
+        printAsciiText(currChars, Constants.help)
       }
 
       def printRadiusNavOpts(
