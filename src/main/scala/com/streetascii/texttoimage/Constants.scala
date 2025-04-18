@@ -19,6 +19,16 @@ object Constants {
       |-[b] - move backwards          -
       |--------------------------------""".stripMargin
 
+  val correctGuess: String =
+    """Correct guess
+      |press [enter] to continue""".stripMargin
+
+  def wrongGuess(correctCountry: Country): String = {
+    s"""Incorrect guess
+      |correct was ${correctCountry.name}
+      |GAME OVER""".stripMargin
+  }
+
   def radiusNavOptionsList(
       currentImageData: ImageInfo,
       navOptions: List[ImageData]

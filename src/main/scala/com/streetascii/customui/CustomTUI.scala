@@ -8,7 +8,7 @@ import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
 import com.streetascii.asciiart.{Algorithms, Conversions}
 import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
 import com.streetascii.common.Models.Radius
-import com.streetascii.guessinggame.CountryModels
+import com.streetascii.guessinggame.{CountryModels, GuessingLocations}
 import com.streetascii.guessinggame.CountryModels.Country
 import com.streetascii.navigation.Models.NavigationType.{
   RadiusBased,
@@ -202,13 +202,14 @@ object CustomTUI {
       initialImageInfo: ImageInfo,
       appConfig: AppConfig,
       isGuessingMode: Boolean,
-      country: Country
+      initialCountry: Country
   ): IO[ExitCode] = {
     withTerminal { (terminal, writer) =>
       def loop(
           chars: Array[Array[Char]],
           colors: Array[Array[RGB]],
-          imageInfo: ImageInfo
+          imageInfo: ImageInfo,
+          currentCountry: Country
       ): IO[ExitCode] = {
         def radiusNavigationLogic(
             imageInfo: ImageInfo
@@ -221,7 +222,7 @@ object CustomTUI {
               code <- navKey match {
                 case k if k >= '1' && k <= ('0' + newImageIds.length) =>
                   val index = k - '1' // Convert ASCII value to 0-based index
-                  navigateToPickedLocation(newImageIds(index))
+                  navigateToLocation(newImageIds(index), currentCountry)
                 case 'q' =>
                   IO.pure(ExitCode.Success) // Quit
                 case 'h' =>
@@ -286,14 +287,16 @@ object CustomTUI {
               code <- navKey match {
                 case 'b' =>
                   backwardsOpt match {
-                    case Some(backwards) => navigateToPickedLocation(backwards)
+                    case Some(backwards) =>
+                      navigateToLocation(backwards, currentCountry)
                     case None =>
                       readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
                   }
 
                 case 'f' =>
                   forwardsOpt match {
-                    case Some(forwards) => navigateToPickedLocation(forwards)
+                    case Some(forwards) =>
+                      navigateToLocation(forwards, currentCountry)
                     case None =>
                       readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
                   }
@@ -357,7 +360,7 @@ object CustomTUI {
             case 'c' =>
               for {
                 _    <- clearScreen(terminal)
-                code <- loop(chars, colors, imageInfo)
+                code <- loop(chars, colors, imageInfo, currentCountry)
               } yield code
 
             case 'r' =>
@@ -369,7 +372,7 @@ object CustomTUI {
                   colors,
                   appConfig.colors
                 )
-                code <- loop(chars, colors, imageInfo)
+                code <- loop(chars, colors, imageInfo, currentCountry)
               } yield code
 
             case 's' =>
@@ -392,7 +395,7 @@ object CustomTUI {
                     }
                 }
 
-                code <- loop(chars, colors, imageInfo)
+                code <- loop(chars, colors, imageInfo, currentCountry)
               } yield code
 
             case 'n' =>
@@ -402,10 +405,10 @@ object CustomTUI {
               }
 
             case 'g' if (isGuessingMode) =>
-              val otherCountries = Country.randomPickedCountries(country)
+              val otherCountries = Country.randomPickedCountries(currentCountry)
 
               val (formattedString, correctIndex) = Constants.guessingOptsList(
-                country,
+                currentCountry,
                 otherCountries
               )
               for {
@@ -416,30 +419,74 @@ object CustomTUI {
                     val index = k - '1' // Convert ASCII value to 0-based index
                     for {
                       _ <- clearScreen(terminal)
-                      _ <-
-                        if (index == correctIndex)
-                          printAsciiText(chars, "lol pataikei")
-                        else {
-                          printAsciiText(chars, s"nonoo ${country.name}")
+                      code <-
+                        if (index == correctIndex) {
+                          def readGoNextKey(): IO[ExitCode] = {
+                            for {
+                              navKey <- readKey(terminal)
+                              code <- navKey match {
+                                case '\n' | '\r' =>
+                                  for {
+                                    location <-
+                                      GuessingLocations.getRandomLocation
+                                    _ <- logger.info(location.toString)
+                                    imageInfoEither <- runner
+                                      .getHexStringsFromId(location.id)
+                                      .value
+                                    code <- imageInfoEither match {
+                                      case Right(imageInfo) =>
+                                        navigateToLocation(
+                                          imageInfo.imageId,
+                                          location.country
+                                        )
+                                      case Left(e) =>
+                                        printAsciiText(chars, e.message).as(
+                                          ExitCode.Error
+                                        )
+                                    }
+                                  } yield code
+                                case 'q' =>
+                                  IO.pure(ExitCode.Success) // Quit
+                                case _ => readGoNextKey()
+                              }
+                            } yield code
+                          }
+                          for {
+                            _ <- printAsciiText(chars, Constants.correctGuess)
+                            code <- readGoNextKey()
+                          } yield code
+
+                        } else {
+                          printAsciiText(
+                            chars,
+                            Constants.wrongGuess(currentCountry)
+                          )
+                            .as(ExitCode.Success)
                         }
-                    } yield ExitCode.Success
+                    } yield code
                 }
               } yield code
 
             case 'h' =>
               for {
                 _    <- printHelp(chars)
-                code <- loop(chars, colors, imageInfo)
+                code <- loop(chars, colors, imageInfo, currentCountry)
               } yield code
 
             case _ =>
-              loop(chars, colors, imageInfo) // Ignore and continue
+              loop(
+                chars,
+                colors,
+                imageInfo,
+                currentCountry
+              ) // Ignore and continue
           }
         } yield exitCode
       }
 
-      def navigateToPickedLocation(
-          imageId: MapillaryImageId
+      def navigateToLocation(
+          imageId: MapillaryImageId,
+          nextCountry: Country
       ) = {
         for {
           _ <- logger.info("NAVIGATING")
@@ -466,7 +513,8 @@ object CustomTUI {
                 code <- loop(
                   asciiWithColors,
                   greyscale.colors,
-                  imageInfo
+                  imageInfo,
+                  nextCountry
                 )
               } yield code
             case Left(err) =>
@@ -597,7 +645,8 @@ object CustomTUI {
       ) >> loop(
         initialChars,
         initialColors,
-        initialImageInfo
+        initialImageInfo,
+        initialCountry
       )
     }
   }

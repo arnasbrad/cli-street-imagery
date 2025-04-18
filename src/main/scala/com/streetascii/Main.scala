@@ -120,11 +120,11 @@ object Main
       initClients().use { runner =>
         for {
           location <- GuessingLocations.getRandomLocation
-          imageInfo <- runner
+          imageInfoEither <- runner
             .getHexStringsFromId(location.id)
             .value
 
-          exitCode <- imageInfo match {
+          exitCode <- imageInfoEither match {
             case Right(imageInfo) =>
               runTerminalApp(
                 imageInfo,
