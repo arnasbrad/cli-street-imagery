@@ -27,7 +27,19 @@ object CountryModels {
       Poland,
       Greece,
       Hungary,
-      Austria
+      Austria,
+      Sweden,
+      Bulgaria,
+      Finland,
+      Ireland,
+      CzechRepublic,
+      Denmark,
+      Netherlands,
+      Croatia,
+      Luxembourg,
+      Iceland,
+      Cyprus,
+      Malta
     )
 
     def randomPickedCountries(excludedCountry: Country): List[Country] = {
@@ -97,6 +109,58 @@ object CountryModels {
 
     case object Austria extends Country {
       val name = "Austria"
+    }
+
+    case object Sweden extends Country {
+      val name = "Sweden"
+    }
+
+    case object Bulgaria extends Country {
+      val name = "Bulgaria"
+    }
+
+    case object Finland extends Country {
+      val name = "Finland"
+    }
+
+    case object Ireland extends Country {
+      val name = "Ireland"
+    }
+
+    case object CzechRepublic extends Country {
+      val name = "Czech Republic"
+    }
+
+    case object Denmark extends Country {
+      val name = "Denmark"
+    }
+
+    case object Netherlands extends Country {
+      val name = "Netherlands"
+    }
+
+    case object Croatia extends Country {
+      val name = "Croatia"
+    }
+
+    case object Luxembourg extends Country {
+      val name = "Luxembourg"
+    }
+
+    case object Iceland extends Country {
+      val name = "Iceland"
+    }
+
+    case object Cyprus extends Country {
+      val name = "Cyprus"
+    }
+
+    case object Malta extends Country {
+      val name = "Malta"
+    }
+
+    case object Norway extends Country {
+      val name = "Norway"
     }
   }
 }
