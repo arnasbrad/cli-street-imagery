@@ -99,13 +99,23 @@ Tokia funkcija yra tarytum sujungimas tarp dviejų skaičių sarašų. Pavyzdži
 Kieviena įvestis turi vieną ir tik vieną išvestį. Nesvarbu kokia yra išvestis, jai visada bus išvestis (nėra jokių išimčių).
 Funkcijos rezultatas yra tiesiogiai išvedamas iš įvesties ir iš nieko daugiau (neskaitant žinoma kitokių konstantų, kaip 3).
 Funkcija tik apskaičiuoja išvestį ir nieko daugiau - ji nekeičia kažkokių kitų reikšmių, nesiunčia laiško, neperka obuolių - 
-ji tik įvestį paverčia išvestimi. Tai ir yra visa esmė funkcinio programavimo. Panagrinėkime kelis pavyzdžius.
+ji tik įvestį paverčia išvestimi. Tai ir yra visa esmė funkcinio programavimo.
+
+Svarbi tokių grynų funkcijų savybė yra referencinis skaidrumas (angl. _referential transparency_).
+Tai reiškia, kad bet kurį funkcijos iškvietimą su konkrečiomis įvesties reikšmėmis galima mintyse
+(ar net kodo pertvarkymo metu) pakeisti jos rezultatu, nepakeičiant programos elgsenos visumos. Pavyzdžiui, jei žinome,
+kad mūsų funkcija f(2) visada grąžina 6, mes galime visur programoje, kur matome f(2), įsivaizduoti tiesiog reikšmę 6.
+Tai daro kodą daug lengviau suprantamą, testuojamą ir nuspėjamą, nes funkcijos rezultatas nepriklauso nuo jokių paslėptų
+faktorių ar ankstesnių įvykių – tik nuo jos argumentų.
+
+Panagrinėkime kelis pavyzdžius.
 
 ```scala
 def doSomething(value: Int) = value * 3
 ```
 
-Štai čia matome funkciniame programavime vadinamą gryną (angl _pure_) funkciją - ji įvestį paverčiame išvestimi ir nieko daugiau.
+Štai čia matome funkciniame programavime vadinamą gryną (angl. _pure_) funkciją - ji įvestį paverčiame išvestimi
+ir nieko daugiau. Ji yra referenciškai skaidri.
 Pasižiūrėkime, kokie pavyzdžiai nebūtų grynos funkcijos ir kaip galėtume jas paversti grynomis funkcijomis.
 
 ```scala
@@ -131,9 +141,11 @@ def doSomething(value: Int) = {
 }
 ```
 
-Ši funkcija nebėra gryna, nes ji daro daugiau, nei reikia norint gauti išvestį. Kitaip tariant, turėtų būti
-aišku ką daro funkcija vien iš jos įvesties ir išvesties tipų, net neskaitant pačios funkcijos implementacijos. Tokie
-šalutiniai efektai žymiai apsunkina programos klaidų ieškojimą ir kodo supratimą.
+Ši funkcija nebėra gryna, nes ji daro daugiau, nei reikia norint gauti išvestį. Ji pažeidžia referencinį skaidrumą,
+nes jos iškvietimas ne tik grąžina reikšmę, bet ir turi šalutinį poveikį (pakeičia x reikšmę, išspausdina tekstą),
+todėl negalime jos tiesiog pakeisti rezultatu, neprarasdami šių poveikių. Kitaip tariant, turėtų būti aišku ką daro
+funkcija vien iš jos įvesties ir išvesties tipų, net neskaitant pačios funkcijos implementacijos.
+Tokie šalutiniai efektai žymiai apsunkina programos klaidų ieškojimą ir kodo supratimą.
 
 Tačiau kai kurios funkcijos negali būti idealiai grynos. Pavyzdžiui, spausdinimas į ekraną ar HTTP užklausa -
 abi šios funkcijos priklauso nuo išorinės aplinkos. Jei programa neturi kur spausdinti, ji neveiks. Jei
@@ -184,10 +196,11 @@ yra _void_) taip pat, kaip dirbtume su paprastomis reikšmėmis, kaip _Int_, _St
 perpanaudoti, grąžinti naują reikšmę ir panašiai. Tai yra galima todėl, nes mes programiniame kode dirbame ne su pačia
 šalutine reikšme, o su jos apibūdinimu.
 
-Dažnas IO monados apibūdinimas skamba taip - IO monada saugo dabartinę pasaulio būseną. Bet koks veiksmas viduje IO monados
-yra tiesiog nauja pasaulio būsena, kurioje yra įvykdytas tas veiksmas. Kaip matome, šitoks apibūdinimas nepažeidžia
-funkcinio programavimo - nebuvo jokių kintamų reikšmių ar šalutinių efektų, tik dvi atskiros, nekintamos reikšmės -
-pasaulis prieš ir po veiksmo.
+Dažnas IO monados apibūdinimas skamba taip: IO aprašo transformaciją iš vienos pasaulio būsenos į kitą.
+Kiekvienas veiksmas IO viduje yra ne pats veiksmas, o receptas naujai pasaulio būsenai, kuri gautųsi įvykdžius
+tą veiksmą. Kaip matome, šitoks apibūdinimas nepažeidžia funkcinio programavimo taisyklių - nebuvo jokių kintamų
+reikšmių ar tiesioginių šalutinių efektų pačiame aprašyme, tik dvi atskiros, nekintamos koncepcijos - pasaulis prieš
+ir po veiksmo aprašymo.
 
 Tuo tarpu „Scala“ paralelizmo monada „Future“ to negali.
 
@@ -195,5 +208,53 @@ Tuo tarpu „Scala“ paralelizmo monada „Future“ to negali.
 val spausdintuvas: Future[Unit] = Future(println("Labas, pasauli!"))
 ```
 
-Kad ir kiek kviestume šia reikšmę, ji išspausdins rezultatą vieną ir tiek vieną kartą. Tai nėra intuityvu bei neleidžia mums
-perpanaudoti reikšmės ateityje.
+Kad ir kiek kviestume šia reikšmę, ji išspausdins rezultatą vieną ir tiek vieną kartą, vykdydama efektą iš karto
+ją sukūrus. Tai nėra intuityvu, neleidžia mums perpanaudoti reikšmės ateityje ir pažeidžia referencinį skaidrumą
+(angl. _referential transparency_) – pagrindinį funkcinio programavimo principą, kurio IO laikosi dėl savo
+tingumo (angl. laziness).
+
+Anksčiau minėjome klaidų valdymą. „Cats-Effect“ karkasas mums taip pat suteikia paprastas ir intuityvias sąsajas
+valdyti klaidoms, įvykusioms IO monados veiksmų metu. Mes galime saugiai dirbti su galimai klaidą sukeliančiais
+efektais naudodami metodus kaip _attempt_ (kuris paverčia rezultatą kurio galime negauti dėl klaidos į _Either_ tipą, kuris
+saugo arba rezultatą, arba įvykusią klaidą) arba _handleErrorWith_ (kuris leidžia aprašyti, kaip elgtis klaidos atveju).
+
+```scala
+val galimaiKlaidingas: IO[Int] = IO(5 / 0) // Efektas, kuris mes klaidą
+
+val apdorotaKlaida: IO[Int] = galimaiKlaidingas.handleErrorWith { klaida =>
+  // Jei įvyko klaida, atspausdiname pranešimą ir grąžiname numatytąją reikšmę
+  IO.println(s"Įvyko klaida: ${klaida.getMessage}") *> IO.pure(-1)
+}
+```
+
+Dar vienas ypatingai patogus dalykas, kurį suteikia šis karkasas, yra resursų valdymas. 
+Daugelis šalutinių efektų apima darbą su resursais, kuriuos reikia ne tik atidaryti ar įsigyti, bet ir saugiai uždaryti
+ar paleisti, nepriklausomai nuo to, ar operacijos su jais pavyko, ar įvyko klaida (pavyzdžiui, failų skaitytuvai,
+duomenų bazių prisijungimai, tinklo lizdai). Rankiniu būdu tai užtikrinti sudėtinga ir linkę į klaidas (resursų nutekėjimą).
+„Cats-Effect“ siūlo elegantišką sprendimą – _Resource_ duomenų tipą. Jis aprašo, kaip įsigyti (angl. _acquire_) resursą ir kaip
+jį paleisti (angl. _release_).
+
+```scala
+import cats.effect._
+import java.io._
+
+// Aprašome, kaip saugiai gauti ir uždaryti failo skaitytuvą
+def failoSkaitytuvas(kelias: String): Resource[IO, BufferedReader] =
+  Resource.make {
+    IO(new BufferedReader(new FileReader(kelias))) // Kaip įsigyti
+  } { skaitytuvas =>
+    IO(skaitytuvas.close()).handleErrorWith(_ => IO.unit) // Kaip paleisti (užtikrintai)
+  }
+
+// Naudojame resursą saugiai: .use garantuoja, kad release bus iškviestas
+val saugusSkaitymas: IO[String] = failoSkaitytuvas("manoFailas.txt").use { skaitytuvas =>
+  IO(skaitytuvas.readLine()) // Darbas su resursu
+}
+```
+
+Tai užtikrina, jog resursai bus paleisti net jei programoje įvyks klaida, ar ji bus nutraukta rankiniu būdu.
+
+Visos šitos abstrakcijos leidžia mums rašyti lengviau suprantamą, pertvarkomą ir patikimesnį programinį kodą.
+Žinant, jog šio projekto dydis bus sąlyginai didelis, o jame daug pašalinių efektų dirbant su komandinės eilutės
+spausdinimu, konfigūracinių failų nuskaitymu, išorinių sąsajų bendravimu bei daugybe baitų ir kitokių tipų transformacijų,
+šios abstrakcijos mums labai padėjo parašyti patikimai veikiančią programą.
