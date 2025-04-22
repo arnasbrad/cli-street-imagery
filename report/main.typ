@@ -22,4 +22,6 @@
 
 #include "sections/projektas/projektas.typ"
 
+#include "sections/implementacija/implementacija.typ"
+
 #include "sections/ASCII.typ"
