@@ -1,6 +1,6 @@
-== Funkcinis programavimas su „Scala“
+=== Funkcinis programavimas su „Scala“
 
-=== Apie „Scala“
+==== Apie „Scala“
 
 „Scala“ programavimo kalba, taip pat kaip ir „Java“, yra skirta dirbti su „JVM“
 (_Java Virtual Machine_) platforma - tai reiškia, jog programinis kodas yra kompiliuojamas
@@ -81,7 +81,7 @@ Tai yra puikus pasirinkimas programuotojams, norintiems išplėsti savo įgūdž
 ir įsisavinti funkcinio programavimo koncepcijas, išlaikant pažįstamą
 objektinio programavimo aplinką.
 
-=== „Cats-Effect“ karkasas
+==== „Cats-Effect“ karkasas
 
 Kaip minėjome anksčiau, „Scala“ nėra idealiai funkcinė kalba. Vienas pagrindinis funkcionalumas,
 kurio nėra šioje programavimo kalboje, kuris dažnai randamas kitose funkcinėse programavimo kalbose - 
