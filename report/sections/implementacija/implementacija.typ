@@ -2,3 +2,4 @@
 = Implementacija<implementacija>
 
 #include "apiPasirinkimas/apiPasirinkimas.typ"
+#include "libraryPasirinkimas/libraryPasirinkimas.typ"
