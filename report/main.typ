@@ -12,11 +12,14 @@
 #include "mainPages/ImageList.typ"
 #include "mainPages/TermsList.typ"
 
-#set heading(numbering: "1.1")
 #include "sections/testtext.typ"
 
 #include "sections/ivadas.typ"
 
-#include "sections/whyScala.typ"
-#include "sections/fpWithScala.typ"
+#set heading(numbering: "1.1")
+
+#include "sections/analize/analize.typ"
+
+#include "sections/projektas/projektas.typ"
+
 #include "sections/ASCII.typ"
