@@ -85,47 +85,48 @@ naudotojas gali nusikopijuoti į iškarpinę. Šių įrankių pavyzdžiai:
     - Išvesties dydis: nurodomas pasirenkant norimą rezultato plotį, kas lemia detalumo lygį.
     - Simbolių rinkinys: nėra simbolių rinkinio pasirinkimo.
     - Algoritmai: puslapis leidžia pasirinkti spalvų maišymo ir kraštų atpažinimo algoritmus.
-    - Spalvos: svarbi funkcija – galimybė generuoti ne tik vienspalvį, bet ir spalvotą ASCII meną, naudojant ANSI valdymo kodus (angl. _ANSII escape codes_), kurie leidžia atvaizduoti spalvas standartiniuose terminaluose.
+    - Spalvos: svarbi funkcija – galimybė generuoti ne tik vienspalvį, bet ir spalvotą ASCII meną, naudojant ANSI valdymo
+      kodus (angl. _ANSII escape codes_), kurie leidžia atvaizduoti spalvas standartiniuose terminaluose.
     - Taikymas: paprastas įrankis atliekantis ASCII konvertaciją, pasižymintis minimaliomis konfigūravimo galimybėmis
 
 Komandinės eilutės konvertavimo įrankiai: Šie įrankiai yra sukurti veikti tiesiogiai terminalo aplinkoje, todėl yra žymiai
 lankstesni ir tinkamesni automatizavimui bei integracijai į kitas programas. Šie įrankiai lengvai įdiegiami per paketų
 tvarkykles. Šių įrankių pavyzdžiai:
 
-- „jp2a“: Vienas iš senesnių ir plačiai žinomų CLI įrankių, parašytas C kalba.
+- „jp2a“ - vienas iš senesnių ir plačiai žinomų CLI įrankių, parašytas C kalba (CCC https://github.com/cslarsen/jp2a).
+    - Funkcionalumas: specializuojasi JPEG konvertavime, nors dažnai palaiko ir kitus formatus per išorines bibliotekas,
+      pavyzdžiui, „libpng“. Konvertuoja vaizdą į ASCII simbolius, atsižvelgdamas į pikselių šviesumą.
+    - Parinktys: Leidžia nurodyti išvesties plotį, aukštį, naudoti ANSI spalvas, pasirinkti kraštinių išryškinimo algoritmus, invertuoti išvestį.
+    - Taikymas: Greitas vaizdų peržiūrėjimas terminale, sistemų stebėjimo įrankių papildymas, pavyzdžiui, rodant logotipo ASCII versiją.
+    - Trūkumai projekto kontekste: Sukurtas konvertuoti pavienius failus. Nors teoriškai galima nukreipti vaizdo srautą,
+      jis nėra optimizuotas realaus laiko interaktyviam atvaizdavimui.
+- „libcaca“ - tai ne tik įrankis, bet ir galinga C biblioteka, skirta pažangiam tekstiniam vaizdavimui (CCC http://caca.zoy.org/wiki/libcaca).
+    - Funkcionalumas: šis įrankis daro daugiau nei paprastas ASCII konvertavimas. Jis palaiko ne tik ASCII ar ANSI, bet
+      ir „Unicode“ simbolius, įvairius spalvų maišymo algoritmus, kad pagerintų vaizdo kokybę ribotoje spalvų paletėje.
+      Yra galimybė vaizdo įrašams pritaikyti ASCII simbolių filtrą.
+    - Parinktys: Leidžia pasirinkti šriftą, spalvų maišymo algoritmą, spalvų režimą, išvesties formatą (ANSI, HTML ir kt.).
+    - Taikymas: Aukštesnės kokybės spalvoto ASCII meno generavimas, vaizdo įrašų peržiūra terminale, demonstracinės programos.
+    - Trūkumai projekto kontekste: Pati biblioteka yra labai galinga, bet ji yra orientuotas į failų konvertavimą.
+      Nors biblioteka suteiktų reikiamus primityvus interaktyvumui, jį reikėtų programuoti papildomai. Realizuoti sudėtingą
+      interaktyvią sąsają (kaip gatvių vaizdų naršymas) vien „libcaca“ pagalba būtų nemenkas iššūkis.
+- „`ascii_magic`“ - modernesnis sprendimas, parašytas Python kalba, lengvai integruojamas į Python projektus (CCC https://pypi.org/project/ascii-magic/).
+    - Funkcionalumas: veikia kaip Python biblioteka ir kaip CLI įrankis. Leidžia konvertuoti vaizdus iš failų, URL adresų.
+      Palaiko spalvotą ANSI išvestį.
+    - Parinktys: galima nurodyti išvesties stulpelių skaičių, simbolių rinkinį, spalvų režimą.
+    - Taikymas: Lengvai integruojamas į Python programas, greitas prototipavimas, automatizuotos užduotys.
+    - Trūkumai projekto kontekste: Kaip ir kiti CLI įrankiai, pats savaime nesuteikia interaktyvios sąsajos. Tai labiau
+      statinio konvertavimo biblioteka. Interaktyvumas (naršymas, žaidimas) reikalautų papildomos logikos, naudojant šią
+      biblioteką kaip vieną iš komponentų.
 
-Funkcionalumas: Specializuojasi JPEG konvertavime (nors dažnai palaiko ir kitus formatus per išorines bibliotekas, pvz., libpng). Konvertuoja vaizdą į ASCII simbolius, atsižvelgdamas į pikselių šviesumą.
-
-Parinktys: Leidžia nurodyti išvesties plotį (--width=), aukštį (--height=), naudoti ANSI spalvas (--color), pasirinkti kraštinių išryškinimo algoritmus (--border), invertuoti išvestį (--invert).
-
-Taikymas: Greitas vaizdų peržiūrėjimas terminale, skriptų dalis, sistemų stebėjimo įrankių papildymas (pvz., rodant logotipo ASCII versiją).
-
-Trūkumai projekto kontekste: Sukurtas konvertuoti pavienius failus. Nors teoriškai galima nukreipti vaizdo srautą (pvz., iš kameros per ffmpeg), jis nėra optimizuotas realaus laiko interaktyviam atvaizdavimui. Interaktyvumo funkcijos (pvz., priartinimas, slinkimas per ASCII vaizdą) turėtų būti implementuotos išorinėmis priemonėmis.
-
-Šaltinis (Debian paketo aprašas): https://packages.debian.org/stable/graphics/jp2a
-
-Šaltinis (GitHub veidrodis/fork'as): https://github.com/cslarsen/jp2a
-
-libcaca (ir jos įrankis img2txt): Tai ne tik įrankis, bet ir galinga C biblioteka, skirta pažangiam tekstiniam vaizdavimui.
-
-Funkcionalumas: libcaca eina toliau nei paprastas ASCII konvertavimas. Ji palaiko ne tik ASCII/ANSI, bet ir Unicode simbolius, įvairius ditheringo (spalvų maišymo) algoritmus, kad pagerintų vaizdo kokybę ribotoje spalvų paletėje. Ji gali netgi "leisti" vaizdo įrašus (pvz., per MPlayer su caca išvesties tvarkykle). img2txt yra įrankis, kuris naudoja libcaca biblioteką failų konvertavimui.
-
-Parinktys (img2txt): Leidžia pasirinkti šriftą, ditheringo algoritmą, spalvų režimą, išvesties formatą (ANSI, HTML ir kt.).
-
-Taikymas: Aukštesnės kokybės spalvoto ASCII meno generavimas, vaizdo įrašų peržiūra terminale (su MPlayer/FFplay), demonstracinės programos.
-
-Trūkumai projekto kontekste: Pati libcaca biblioteka yra labai galinga, bet jos standartinis img2txt įrankis vis dar orientuotas į failų konvertavimą. Nors biblioteka suteiktų reikiamus primityvus interaktyvumui, jį reikėtų programuoti papildomai. Realizuoti sudėtingą interaktyvią sąsają (kaip gatvių vaizdų naršymas) vien libcaca pagalba būtų nemenkas iššūkis.
-
-Šaltinis (Oficiali svetainė): http://caca.zoy.org/wiki/libcaca
-
-ascii_magic (Python): Modernesnis sprendimas, parašytas Python kalba, kas palengvina integraciją į Python projektus.
-
-Funkcionalumas: Veikia kaip Python biblioteka ir kaip CLI įrankis. Leidžia konvertuoti vaizdus iš failų, URL adresų ar tiesiogiai iš Pillow objektų. Palaiko spalvotą ANSI išvestį.
-
-Parinktys: Galima nurodyti išvesties stulpelių skaičių, simbolių rinkinį (chars=), spalvų režimą (mode=).
-
-Taikymas: Lengvai integruojamas į Python skriptus ir programas, greitas prototipavimas, automatizuotos užduotys.
-
-Trūkumai projekto kontekste: Kaip ir kiti CLI įrankiai, pats savaime nesuteikia interaktyvios sąsajos. Tai labiau statinio konvertavimo įrankis/biblioteka. Interaktyvumas (naršymas, žaidimas) reikalautų papildomos logikos, naudojant šią biblioteką kaip vieną iš komponentų.
-
-Šaltinis (PyPI): https://pypi.org/project/ascii-magic/
+Atlikta egzistuojančių vaizdo į ASCII konvertavimo sprendimų analizė rodo, kad technologija yra gerai išvystyta ir prieinama
+įvairiomis formomis – nuo paprastų internetinių įrankių iki galingų programavimo bibliotekų. Internetiniai įrankiai yra
+patogūs vienkartiniams konvertavimams, tačiau visiškai netinka šio projekto tikslams dėl savo statinio pobūdžio,
+interaktyvumo stokos ir neįmanomos integracijos į CLI darbo eigas. Tuo tarpu komandinės eilutės įrankiai yra žingsnis
+arčiau, nes veikia terminale ir gali būti automatizuojami. Jie demonstruoja potencialą vaizdinei informacijai pateikti
+komandinėje eilutėje, įskaitant spalvotą ANSI meną. Tačiau jie vis dar yra orientuoti į statinių failų konvertavimą.
+Jų panaudojimas projekte reikalautų papildomų įrankių interaktyvumui valdyti. Vis dėlto, nė vienas iš analizuotų sprendimų
+tiesiogiai nesiūlo pilnai integruotos sistemos, kuri leistų interaktyviai naršyti gatvių vaizdus vien tik komandinės
+eilutės sąsajoje, naudojant ASCII reprezentaciją. Egzistuojantys įrankiai sprendžia tik vaizdo konvertavimo problemą,
+bet ne interaktyvios, dinamiškos, į gatvės vaizdo reprezentavimą orientuotos komandinės eilutės aplikacijos kūrimo iššūkį.
+Šis projektas siekia užpildyti šią nišą, sujungdamas ASCII vizualizavimo technikas su interaktyviu valdymu ir specifiniu
+ geografiniu turiniu, taip praplečiant suvokimą apie komandinės eilutės galimybes.
