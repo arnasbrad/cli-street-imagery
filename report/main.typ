@@ -36,8 +36,12 @@
 
 #include "sections/ivadas.typ"
 
-#set heading(numbering: "1.")
+#set heading(
+    numbering: "1."
+)
 
+#pagebreak()
+#include "sections/typst/typst.typ" 
 #pagebreak()
 #include "sections/analize/analize.typ" 
 #pagebreak()
