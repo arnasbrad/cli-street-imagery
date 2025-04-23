@@ -142,8 +142,45 @@ Tai padės geriau suprasti šio projekto (interaktyvaus gatvių vaizdų naršymo
 lyginant jį su jau egzistuojančiais komandinės eilutės sąsajų principais. Analizei pasirinkti du gerai žinomi pavyzdžiai:
 el. pašto paslauga (konkrečiai „Gmail“) ir muzikos transliavimo platforma („Spotify“).
 
-===== El. pašto klientai komandinėje eilutėje (pvz., „Gmail“ prieiga)
-
 „Gmail“, kaip ir dauguma modernių el. pašto paslaugų, pirmiausia yra pasiekiama per naršyklės sąsają arba specializuotas
 grafines programas („Outlook“, „Thunderbird“, mobiliąsias programėles). Šios sąsajos siūlo vizualiai patrauklų laiškų
-atvaizdavimą, lengvą priedų valdymą, „WYSIWYG“ redaktorius ir integruotas kalendoriaus bei kontaktų funkcijas. Tačiau egzistuoja ir KES alternatyvos, skirtos el. pašto valdymui tiesiogiai iš terminalo.
+atvaizdavimą, lengvą priedų valdymą, WYSIWYG redaktorius ir integruotas kalendoriaus bei kontaktų funkcijas. Tačiau
+egzistuoja ir komandinės eilutės alternatyvos, skirtos el. pašto valdymui tiesiogiai iš terminalo:
+- „mutt“: klasikinis, itin konfigūruojama komandinės eilutės el. pašto klientinė programa, dažnai naudojama su „Gmail“ per IMAP ar
+  SMTP protokolus. Nors senas, jis vis dar populiarus tarp programuotojų ir sistemų administratorių dėl savo efektyvumo ir lankstumo.
+- „himalaya“: modernus, Rust kalba parašyta el. pašto klientinė programa, palaikanti „Gmail“ ir kitas IMAP paslaugas,
+  galinti pasiūlyti patogesnę vartotojo patirtį nei tradiciniai įrankiai.
+- „lieer“: įrankis, skirtas „Gmail“ sinchronizavimui ir darbui neprisijungus, integruojamas su kitais komandinės eilutės įrankiais.
+
+Spotify“ paslauga yra neatsiejama nuo vizualiai turtingos grafinės sąsajos – albumų viršeliai, atlikėjų nuotraukos,
+kuruojami grojaraščiai su paveikslėliais, dinamiškos rekomendacijos. Atrodytų, kad tokia paslauga sunkiai įsivaizduojama
+tekstinėje aplinkoje, tačiau egzistuoja keletas populiarių tekstinės vartotojo sąsajos klientinių programų:
+- „spotify-tui“: populiari klientinė programa, veikianti terminale bei siūlanti į grafinę panašią sąsają, kuri yra valdomą
+  klaviatūra. Reikalauja oficialaus „Spotify“ demono (angl. _daemon_) veikimui fone.
+- „ncspot“: panašus į „spotify-tui“, naudojantis „ncurses“ biblioteką ir siūlantis grojaraščių naršymo, paieškos ir grojimo valdymo funkcijas.
+- „spotifyd“: ne interaktyvus klientas, o demonas, leidžiantis transliuoti „Spotify“ muziką įrenginyje be oficialios
+  grafinės programos, dažnai naudojamas kartu su paprastesniais komandinės eilutės valdymo įrankiais.
+
+Palyginimas su grafinėmis „Gmail“ ir „Spotify“ sąsajomis:
+- Vartotojo sąsaja ir patirtis: šios klientinės programos naudoja tekstinę sąsają, valdomą klaviatūra. Tai reikalauja
+  išmokti komandas ir klavišų kombinacijas, tačiau patyrusiems vartotojams leidžia dirbti labai greitai ir efektyviai.
+  Trūksta vizualinio patrauklumo, sudėtinga atvaizduoti HTML formato turinį ar peržiūrėti įterptus paveikslėlius. Tuo tarpu grafinė
+  vartotojo sąsaja siūlo intuityvią, pelės valdomą sąsają, lengvai suprantamą pradedantiesiems, ir pilną vizualinį turinio atvaizdavimą.
+- Funkcionalumas: pagrindinės funkcijos originalių programų funkcijos yra prieinamos komandinės eilutės alternatyvose.
+  Tačiau pažangesnės funkcijos dažnai paremtos sudėtingomis grafinėmis sąsajomis gali būti neprieinamos arba sunkiau naudojamos.
+- Našumas ir resursų naudojimas: lyginant su grafinių sąsajų programomis, komandinės eilutės alternatyvos naudoja minimaliai
+  sistemos resursų, veikia greitai net ir naudojant senesnes kompiuterių sistemas ar itin lėtą tinklo ryšį.
+- Automatizavimas ir integracija: programos lengvai integruojamos į scenarijus ir automatizuotas darbo eigas, pavyzdžiui,
+  automatinis laiškų apdorojimas, pranešimai. Tai yra didelis privalumas programuotojams ir sistemos administratoriams.
+
+Analizė rodo, kad net sudėtingos, į grafines varotojo sąsajas orientuotos paslaugos kaip „Gmail“ ir „Spotify“ gali būti
+sėkmingai adaptuotos komandinei eilutei. Šios alternatyvos dažniausiai siūlo didesnį našumą, mažesnį resursų naudojimą,
+geresnes automatizavimo galimybes ir klaviatūra paremtą naudojimą. Tačiau tai pasiekiama aukojant vizualinį patrauklumą,
+intuityvumą pradedantiesiems vartotojams ir kartais dalį grafinės sąsajos siūlomo funkcionalumo, ypač susijusio su įvairiu
+medijos turiniu ar sudėtingomis vizualinėmis sąveikomis. Šie pavyzdžiai yra svarbūs šio projekto kontekste, nes jie įrodo,
+jog interaktyvios ir funkcionalios patirtys yra įmanomos komandinėje eilutėje net ir toms užduotims, kurios atrodo
+neatsiejamos nuo grafinių sąsajų. Nors gatvių vaizdų naršymas yra itin vizuali užduotis, egzistuojantys komandinės eilutės
+sprendimai rodo, kad tekstinė reprezentacija (šiuo atveju, ASCII menas) kartu su gerai apgalvota interaktyvia navigacija
+gali sukurti veikiančią ir potencialiai naudingą alternatyvą grafinėmis sąsajomis pagrįstoms sistemoms, užpildant nišą
+vartotojams, vertinantiems komandinės eilutės privalumus. Iššūkis lieka efektyviai perteikti vizualinę informaciją ir
+sukurti intuityvią navigacijos sistemą tekstinėje aplinkoje.
