@@ -1,7 +1,9 @@
 #set text(lang: "lt", region: "lt")
+
 === Kodėl „Scala“?<why-scala>
 
 ==== Įvadas
+
 Programavimo kalbos yra pagrindinis tarpininkas tarp žmogiškos logikos ir mašininio
 kodo - jos leidžia programuotojams paversti abstrakčias idėjas
 ir problemų sprendimo metodus į instrukcijas, kurias kompiuteriai gali vykdyti.
@@ -17,6 +19,7 @@ Manome, jog galima išskirti kelis tipus programavimo kalbų, priklausomai nuo j
 sukūrimo laiko bei paskirties.
 
 ===== Mašininis kodas
+
 Ankstyviausi kompiuteriai reikalavo programavimo dvejetainiu
 mašininiu kodu – 1 ir 0 sekomis, tiesiogiai atitinkančiomis procesoriaus instrukcijas.
 Šis metodas, nors ir tiesiogiai vykdomas aparatinės įrangos, žmogui programuotojui

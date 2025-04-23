@@ -45,8 +45,12 @@ Uždaviniai:
 
 == Darbo strukrūra
 
+aaa
+
 // TODO: pridėti darbo strukrūrą kai ji bus aiški
 
 == Sistemos apimtis
+
+aaa
 
 // TODO: pridėti sistemos apimtį kai ji bus aiški
