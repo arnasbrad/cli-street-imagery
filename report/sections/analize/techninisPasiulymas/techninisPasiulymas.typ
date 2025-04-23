@@ -129,4 +129,21 @@ tiesiogiai nesiūlo pilnai integruotos sistemos, kuri leistų interaktyviai nar�
 eilutės sąsajoje, naudojant ASCII reprezentaciją. Egzistuojantys įrankiai sprendžia tik vaizdo konvertavimo problemą,
 bet ne interaktyvios, dinamiškos, į gatvės vaizdo reprezentavimą orientuotos komandinės eilutės aplikacijos kūrimo iššūkį.
 Šis projektas siekia užpildyti šią nišą, sujungdamas ASCII vizualizavimo technikas su interaktyviu valdymu ir specifiniu
- geografiniu turiniu, taip praplečiant suvokimą apie komandinės eilutės galimybes.
+geografiniu turiniu, taip praplečiant suvokimą apie komandinės eilutės galimybes.
+
+==== Programos naudojančios komandinės eilutės sąsają
+
+Pirmojoje dalyje išnagrinėjus specifinius vaizdo konvertavimo į ASCII meną įrankius, antrojoje dalyje dėmesys krypsta į
+platesnį kontekstą – egzistuojančias komandinės eilutės (angl. _Command-line interface_) alternatyvas plačiai naudojamoms paslaugoms,
+kurios tradiciškai pasiekiamos per grafines vartotojo sąsajas (angl. _Graphical user interfaces_) arba interneto naršykles.
+Šios analizės tikslas – įvertinti, kaip sudėtingos, interaktyvios ir dažnai vizualiai turtingos paslaugos adaptuojamos
+ribotai, tekstinei komandinės eilutės aplinkai, kokie yra tokių sprendimų privalumai, trūkumai ir pritaikymo sritys.
+Tai padės geriau suprasti šio projekto (interaktyvaus gatvių vaizdų naršymo komandinėje eilutėje) potencialą ir iššūkius,
+lyginant jį su jau egzistuojančiais komandinės eilutės sąsajų principais. Analizei pasirinkti du gerai žinomi pavyzdžiai:
+el. pašto paslauga (konkrečiai „Gmail“) ir muzikos transliavimo platforma („Spotify“).
+
+===== El. pašto klientai komandinėje eilutėje (pvz., „Gmail“ prieiga)
+
+„Gmail“, kaip ir dauguma modernių el. pašto paslaugų, pirmiausia yra pasiekiama per naršyklės sąsają arba specializuotas
+grafines programas („Outlook“, „Thunderbird“, mobiliąsias programėles). Šios sąsajos siūlo vizualiai patrauklų laiškų
+atvaizdavimą, lengvą priedų valdymą, „WYSIWYG“ redaktorius ir integruotas kalendoriaus bei kontaktų funkcijas. Tačiau egzistuoja ir KES alternatyvos, skirtos el. pašto valdymui tiesiogiai iš terminalo.
