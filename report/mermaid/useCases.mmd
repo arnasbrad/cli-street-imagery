@@ -1,0 +1,72 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f0f0f0', 'primaryTextColor': '#000', 'primaryBorderColor': '#000', 'lineColor': '#000', 'secondaryColor': '#d9f2fb', 'tertiaryColor': '#fff'}}}%%
+
+flowchart TD
+    %% Use Case Diagram using more standard UML notation
+    
+    %% Define actors with stick figure icons
+    User([fa:fa-user User])
+    MapillaryAPI([fa:fa-server Mapillary API])
+    ImgurAPI([fa:fa-server Imgur API])
+    TravelTimeAPI([fa:fa-server TravelTime API])
+    
+    %% System boundary
+    subgraph StreetAscii sistema
+        %% Main use case - starting the app
+        START_ID((Paleisti programą naudojant paveiksliuko ID))
+        START_COORDS((Paleisti programą naudojant koordinatėmis))
+        START_NAME((Paleisti programą naudojant lokacijos pavadinimą / adresą))
+        START_GUESSING((Paleisti programą šalies spėliojimo režimu))
+
+        GUESSING((Bandyti atspėti šalį))
+
+        GAME((Gauti gatvės vaizdą))
+
+        NAVIGATE((Naviguoti į šalia esančias vietas))
+        SHARE((Išsaugoti ASCII paveiksliuką PNG formatu))
+        SHARE((Dalintis paveiksliuku socialinėje medijoje))
+        HELP((Atidaryti pagalbos meniu))
+        QUIT((Išeiti iš aplikacijos))
+    end
+
+    %% System boundary
+    subgraph Konfigūracija
+        %% Config
+        UC9((Configure application))
+        UC9_1((Change display settings))
+        UC9_2((Apply color filters))
+        UC9_3((Change rendering
+        algorithm))
+    end
+    
+    %% Actor relationships
+    User --- START_ID
+    User --- START_NAME
+    User --- START_COORDS
+    User --- START_GUESSING
+    User --- UC9
+
+    START_ID -->|includes| GAME
+    START_NAME -->|includes| GAME
+    START_COORDS -->|includes| GAME
+    START_GUESSING -->|includes| GAME
+    
+    GUESSING -->|extends| START_GUESSING
+
+    %% All functionality extends from viewing imagery
+
+    NAVIGATE -->|extends| GAME
+    SHARE -->|extends| GAME
+    SHARE -->|extends| GAME
+    HELP -->|extends| GAME
+    QUIT -->|extends| GAME
+    
+    %% Configuration
+    UC9 -->|includes| UC9_1
+    UC9 -->|includes| UC9_2
+    UC9 -->|includes| UC9_3
+    
+    %% External API dependencies
+    GAME --- MapillaryAPI
+    START_NAME --- TravelTimeAPI
+    NAVIGATE --- MapillaryAPI
+    SHARE --- ImgurAPI 

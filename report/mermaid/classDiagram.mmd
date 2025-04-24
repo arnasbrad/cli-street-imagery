@@ -1,0 +1,285 @@
+classDiagram
+    direction LR
+    %% Main app structure
+    class Main {
+        +main(): Opts[IO[ExitCode]]
+        -initClients(): Resource[IO, RunnerImpl]
+        -runTerminalApp(): IO[ExitCode]
+    }
+    
+    %% Configuration
+    class AppConfig {
+        +api: ApiConfig
+        +processing: ProcessingConfig
+        +colors: ColorConfig
+        +load(config: ConfigSource): IO[AppConfig]
+    }
+    
+    class ApiConfig {
+        +mapillaryKey: ApiKey
+        +imgurClientId: ClientId
+    }
+
+    class ProcessingConfig {
+        +navigationType: NavigationType
+        +algorithm: AsciiAlgorithm
+        +charset: Charset
+        +downSamplingRate: Int
+        +verticalSampling: Int
+    }
+    
+    class ColorConfig {
+        +color: Boolean
+        +colorFilter: ColorFilter
+    }
+    
+    %% Navigation
+    class NavigationType {
+        <<enumeration>>
+        +RadiusBased
+        +SequenceBased
+    }
+    
+    class Navigation {
+        +findNearbyImages(): EitherT[IO, MapillaryError, List[ImageData]]
+        +findSequenceNeighbors(): EitherT[IO, MapillaryError, (Option[MapillaryImageId], Option[MapillaryImageId])]
+        +calculateDistance(): Double
+        +calculateTurnAngle(): Double
+        +listNeighbors(): (Option[MapillaryImageId], Option[MapillaryImageId])
+    }
+    
+    %% Runner
+    class RunnerImpl {
+        +mapillaryClient: MapillaryClient
+        +imgurClient: ImgurClient
+        +getHexStringsFromLocation(): EitherT[IO, MapillaryError, ImageInfo]
+        +getHexStringsFromId(): EitherT[IO, MapillaryError, ImageInfo]
+        +generateSocialMediaLinks(): EitherT[IO, ImgurError, List[SocialMedia]]
+    }
+    
+    %% ASCII Art
+    class Conversions {
+        +hexStringsToSampledGreyscaleDecimal(): ColoredPixels
+        +convertBytesToHexImage(): IO[HexImage]
+        +convertTo2DArray(): Array[Array[String]]
+        +charsToStringList(): List[String]
+        +sampleHorizontally(): Array[Array[String]]
+        +sampleVertically(): Array[Array[String]]
+        +convertToGrayscale(): ColoredPixels
+    }
+    
+    class AsciiAlgorithm {
+        <<interface>>
+        +generate(charset: Charset, input: Array[Array[String]]): Array[Array[Char]]
+    }
+    
+    class LuminanceAlgorithm {
+        +generate(charset: Charset, input: Array[Array[String]]): Array[Array[Char]]
+    }
+    
+    class EdgeDetectionSobelAlgorithm {
+        +generate(charset: Charset, input: Array[Array[String]]): Array[Array[Char]]
+    }
+    
+    class EdgeDetectionCannyAlgorithm {
+        +generate(charset: Charset, input: Array[Array[String]]): Array[Array[Char]]
+    }
+    
+    class BrailleAlgorithm {
+        +generate(charset: Charset, input: Array[Array[String]]): Array[Array[Char]]
+    }
+    
+    class Charset {
+        <<enumeration>>
+        +value: String
+        +Default
+        +Blocks
+        +BlocksExtended
+        +Extended
+        +Braille
+        +BraillePatterns
+    }
+    
+    %% Model Classes
+    class Coordinates {
+        +lat: Double
+        +lng: Double
+        +create(lat: Double, lng: Double): Either[ValidationError, Coordinates]
+        +unsafeCreate(lat: Double, lng: Double): Coordinates
+    }
+    
+    class HexImage {
+        +hexStrings: Array[String]
+        +width: ImageWidth
+        +height: ImageHeight
+    }
+    
+    class ImageInfo {
+        +hexImage: HexImage
+        +imageId: MapillaryImageId
+        +compassAngle: Double
+        +sequenceId: MapillarySequenceId
+        +coordinates: Coordinates
+    }
+    
+    class ColoredPixels {
+        +grayscaleDecimals: Array[Array[String]]
+        +colors: Array[Array[RGB]]
+    }
+    
+    class RGB {
+        +r: Int
+        +g: Int
+        +b: Int
+    }
+    
+    %% API Clients
+    class MapillaryClient {
+        <<interface>>
+        +getImage(): EitherT[IO, MapillaryError, (Array[Byte], MapillaryImageDetails)]
+        +getImagesInfoByLocation(): EitherT[IO, MapillaryError, ImagesResponse]
+        +getImageIdsBySequence(): EitherT[IO, MapillaryError, List[MapillaryImageId]]
+    }
+    
+    class ImgurClient {
+        <<interface>>
+        +uploadImage(): EitherT[IO, ImgurError, ImgurResponse]
+    }
+    
+    %% Color filters
+    class ColorFilter {
+        <<interface>>
+        +applyFilter(image: Array[Array[RGB]], intensity: Double): Array[Array[RGB]]
+    }
+    
+    class EnhancedContrast {
+        +applyFilter(image: Array[Array[RGB]], intensity: Double): Array[Array[RGB]]
+    }
+    
+    class Deuteranopia {
+        +applyFilter(image: Array[Array[RGB]], intensity: Double): Array[Array[RGB]]
+    }
+    
+    class Protanopia {
+        +applyFilter(image: Array[Array[RGB]], intensity: Double): Array[Array[RGB]]
+    }
+    
+    class Tritanopia {
+        +applyFilter(image: Array[Array[RGB]], intensity: Double): Array[Array[RGB]]
+    }
+    
+    class NoFilter {
+        +applyFilter(image: Array[Array[RGB]], intensity: Double): Array[Array[RGB]]
+    }
+    
+    %% UI
+    class CustomTUI {
+        +terminalApp(): IO[ExitCode]
+        +rgb(): String
+        +colorize(): String
+    }
+    
+    %% CLI classes
+    class Cli {
+        +idCommand: Opts[ImageIdEntryArgs]
+        +guessingCommand: Opts[GuessingArgs]
+    }
+    
+    %% Text to Image Converter
+    class TextToImageConverter {
+        +createTextImage(): IO[Array[Byte]]
+        +createColoredAsciiImage(): IO[Array[Byte]]
+    }
+    
+    %% Guessing Game
+    class GuessingLocations {
+        +locations: List[GuesserLocation]
+        +getRandomLocation(): IO[GuesserLocation]
+    }
+    
+    class CountryModels {
+        +Country
+        +GuesserLocation
+    }
+    
+    %% Social Media
+    class SocialMedia {
+        <<interface>>
+        +uri: Uri
+    }
+    
+    class X {
+        +text: String
+        +imgurLink: String
+        +uri: Uri
+    }
+    
+    class FaceBook {
+        +imgurLink: String
+        +uri: Uri
+    }
+    
+    %% Relationships
+    Main --> AppConfig
+    Main --> RunnerImpl
+    Main --> CustomTUI
+    Main --> Cli
+    
+    AppConfig *-- ApiConfig
+    AppConfig *-- ProcessingConfig
+    AppConfig *-- ColorConfig
+    
+    ProcessingConfig --> NavigationType
+    ProcessingConfig --> AsciiAlgorithm
+    ProcessingConfig --> Charset
+    
+    ColorConfig --> ColorFilter
+    
+    RunnerImpl --> MapillaryClient
+    RunnerImpl --> ImgurClient
+    RunnerImpl --> Conversions
+    RunnerImpl --> Navigation
+    RunnerImpl --> SocialMedia
+    
+    AsciiAlgorithm <|.. LuminanceAlgorithm
+    AsciiAlgorithm <|.. EdgeDetectionSobelAlgorithm
+    AsciiAlgorithm <|.. EdgeDetectionCannyAlgorithm
+    AsciiAlgorithm <|.. BrailleAlgorithm
+    AsciiAlgorithm --> Charset
+    
+    ColorFilter <|.. EnhancedContrast
+    ColorFilter <|.. Deuteranopia
+    ColorFilter <|.. Protanopia
+    ColorFilter <|.. Tritanopia
+    ColorFilter <|.. NoFilter
+    ColorFilter --> RGB
+    
+    CustomTUI --> RunnerImpl
+    CustomTUI --> ImageInfo
+    CustomTUI --> ColorConfig
+    CustomTUI --> AsciiAlgorithm
+    CustomTUI --> ColorFilter
+    CustomTUI --> TextToImageConverter
+    CustomTUI --> GuessingLocations
+    CustomTUI --> CountryModels
+    
+    SocialMedia <|.. X
+    SocialMedia <|.. FaceBook
+    
+    ImageInfo *-- HexImage
+    ImageInfo --> Coordinates
+    ImageInfo --> MapillaryImageId
+    ImageInfo --> MapillarySequenceId
+    
+    Navigation --> NavigationType
+    Navigation --> Coordinates
+    
+    ColoredPixels *-- RGB
+    
+    Conversions --> HexImage
+    Conversions --> ColoredPixels
+    Conversions --> RGB
+    
+    GuessingLocations --> CountryModels
+    
+    TextToImageConverter --> RGB

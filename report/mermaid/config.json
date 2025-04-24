@@ -1,0 +1,8 @@
+{
+  "layout": "elk",
+  "elk": {
+    "mergeEdges": false,
+    "nodePlacementStrategy": "LINEAR_SEGMENTS"
+  },
+  "theme": "base"
+}
