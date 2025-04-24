@@ -4,3 +4,4 @@
 #include "apiPasirinkimas/apiPasirinkimas.typ"
 #include "libraryPasirinkimas/libraryPasirinkimas.typ"
 #include "vartotojoSasaja/vartotojoSasaja.typ"
+#include "ascii/ASCII.typ"

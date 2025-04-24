@@ -48,5 +48,3 @@
 #include "sections/projektas/projektas.typ"
 #pagebreak()
 #include "sections/implementacija/implementacija.typ"
-#pagebreak()
-#include "sections/ASCII.typ"
