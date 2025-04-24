@@ -32,7 +32,7 @@
 #include "mainPages/ImageList.typ"
 #include "mainPages/TermsList.typ"
 
-#include "sections/testtext.typ"
+//#include "sections/testtext.typ"
 
 #include "sections/ivadas.typ"
 
