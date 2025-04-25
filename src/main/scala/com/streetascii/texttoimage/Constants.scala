@@ -12,7 +12,6 @@ object Constants {
   object Help {
     val mainHelp: String =
       """| [n] - navigation
-         | [r] - re-render
          | [s] - share
          | [h] - help
          | [q] - quit""".stripMargin
@@ -23,12 +22,14 @@ object Constants {
 
     val radiusNavHelp: String =
       """| [1 - n] - go to selected location
+         | [r] - re-render
          | [n] - back to navigation
          | [q] - quit""".stripMargin
 
     val sequenceNavHelp: String =
       """| [f] - go forwards
          | [b] - go backwards
+         | [r] - re-render
          | [n] - back to navigation
          | [q] - quit""".stripMargin
 

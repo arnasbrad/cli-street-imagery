@@ -531,8 +531,6 @@ object CustomTUI {
             case 'q' =>
               exitApp(chars)
 
-            case 'r' => reRender
-
             case 's' =>
               for {
                 _          <- clearScreen(terminal)
@@ -559,7 +557,7 @@ object CustomTUI {
                 case SequenceBased => sequenceNavigationLogic(imageInfo)
               }
 
-            case 'g' if (isGuessingMode) =>
+            case 'g' if isGuessingMode =>
               for {
                 otherCountries <- Country.randomPickedCountries(currentCountry)
                 tuple <- Constants.guessingOptsList(
