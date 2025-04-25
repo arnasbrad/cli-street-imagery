@@ -8,8 +8,9 @@ import com.streetascii.clients.imgur.{Errors, ImgurClient}
 import com.streetascii.clients.mapillary.Errors.MapillaryError
 import com.streetascii.clients.mapillary.MapillaryClient
 import com.streetascii.clients.mapillary.Models.MapillaryImageId
+import com.streetascii.clients.traveltime.Errors.TravelTimeError
+import com.streetascii.clients.traveltime.TravelTimeClient
 import com.streetascii.common.Models._
-import com.streetascii.navigation.Navigation
 import com.streetascii.socialmedia.SocialMedia
 
 sealed trait Runner {
@@ -22,6 +23,10 @@ sealed trait Runner {
       imageId: MapillaryImageId
   ): EitherT[IO, MapillaryError, ImageInfo]
 
+  def getCoordinatesFromAddress(
+      address: String
+  ): EitherT[IO, TravelTimeError, Option[Coordinates]]
+
   def generateSocialMediaLinks(
       imageBytes: Array[Byte]
   ): EitherT[IO, Errors.ImgurError, List[SocialMedia]]
@@ -30,6 +35,7 @@ sealed trait Runner {
 case class RunnerImpl(
     mapillaryClient: MapillaryClient,
     imgurClient: ImgurClient,
+    travelTimeClient: TravelTimeClient,
     conversions: Conversions = Conversions
 ) extends Runner {
   def getHexStringsFromId(
@@ -86,6 +92,13 @@ case class RunnerImpl(
       newImageDetails.coordinates
     )
   }
+
+  def getCoordinatesFromAddress(
+      address: String
+  ): EitherT[IO, TravelTimeError, Option[Coordinates]] =
+    for {
+      resp <- travelTimeClient.geocodingSearch(address)
+    } yield resp.features.headOption.map(_.coordinates)
 
   def generateSocialMediaLinks(
       imageBytes: Array[Byte]
