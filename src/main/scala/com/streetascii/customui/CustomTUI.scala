@@ -8,8 +8,8 @@ import com.streetascii.asciiart.Models.{ColoredPixels, ImageInfo, RGB}
 import com.streetascii.asciiart.{Algorithms, Conversions}
 import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
 import com.streetascii.common.Models.Radius
-import com.streetascii.guessinggame.{CountryModels, GuessingLocations}
 import com.streetascii.guessinggame.CountryModels.Country
+import com.streetascii.guessinggame.GuessingLocations
 import com.streetascii.navigation.Models.NavigationType.{
   RadiusBased,
   SequenceBased
@@ -204,6 +204,10 @@ object CustomTUI {
       isGuessingMode: Boolean,
       initialCountry: Country
   ): IO[ExitCode] = {
+    val mainHelpText =
+      if (isGuessingMode) Constants.Help.mainHelpWithGuessing
+      else Constants.Help.mainHelp
+
     withTerminal { (terminal, writer) =>
       def loop(
           chars: Array[Array[Char]],
@@ -215,8 +219,10 @@ object CustomTUI {
             imageInfo: ImageInfo
         ) = {
           def readRadiusNavigationChoice(
-              newImageIds: List[MapillaryImageId]
-          ): IO[ExitCode] =
+              newImages: List[ImageData],
+              isHelpMode: Boolean = false
+          ): IO[ExitCode] = {
+            val newImageIds = newImages.map(_.id)
             for {
               navKey <- readKey(terminal)
               code <- navKey match {
@@ -224,18 +230,31 @@ object CustomTUI {
                   val index = k - '1' // Convert ASCII value to 0-based index
                   navigateToLocation(newImageIds(index), currentCountry)
                 case 'q' =>
-                  IO.pure(ExitCode.Success) // Quit
+                  exitApp(chars)
                 case 'h' =>
                   for {
-                    _    <- printHelp(chars)
-                    code <- readRadiusNavigationChoice(newImageIds)
+                    _ <- printAsciiText(chars, Constants.Help.radiusNavHelp)
+                    code <- readRadiusNavigationChoice(
+                      newImages,
+                      isHelpMode = true
+                    )
+                  } yield code
+                case 'r' => reRender
+                case 'n' if isHelpMode =>
+                  for {
+                    _ <- printAsciiText(
+                      chars,
+                      Constants.radiusNavOptionsList(imageInfo, newImages)
+                    )
+                    code <- readRadiusNavigationChoice(newImages)
                   } yield code
                 case _ =>
                   for {
-                    code <- readRadiusNavigationChoice(newImageIds)
+                    code <- readRadiusNavigationChoice(newImages)
                   } yield code
               }
             } yield code
+          }
 
           for {
             _ <- clearScreen(terminal)
@@ -258,18 +277,19 @@ object CustomTUI {
              */
 
             code <- navOptsEither match {
-              case Right(newImageIds) =>
+              case Right(newImages) =>
                 for {
-                  _ <- printRadiusNavOpts(newImageIds, imageInfo, chars)
-
-                  code <- readRadiusNavigationChoice(newImageIds.map(_.id))
+                  _ <- printAsciiText(
+                    chars,
+                    Constants.radiusNavOptionsList(imageInfo, newImages)
+                  )
+                  code <- readRadiusNavigationChoice(newImages)
                 } yield code
 
-              case Left(_) =>
-                IO.blocking {
-                  writer.write("something failed")
-                  writer.flush()
-                }.as(ExitCode.Error)
+              case Left(e) =>
+                printAsciiText(chars, e.message).as(
+                  ExitCode.Error
+                )
             }
 
           } yield code
@@ -280,7 +300,8 @@ object CustomTUI {
         ) = {
           def readSequenceNavigationChoice(
               backwardsOpt: Option[MapillaryImageId],
-              forwardsOpt: Option[MapillaryImageId]
+              forwardsOpt: Option[MapillaryImageId],
+              isHelpMode: Boolean = false
           ): IO[ExitCode] =
             for {
               navKey <- readKey(terminal)
@@ -301,14 +322,32 @@ object CustomTUI {
                       readSequenceNavigationChoice(backwardsOpt, forwardsOpt)
                   }
 
+                case 'r' => reRender
+
                 case 'h' =>
                   for {
-                    _ <- printHelp(chars)
+                    _ <- printAsciiText(chars, Constants.Help.sequenceNavHelp)
+                    code <- readSequenceNavigationChoice(
+                      backwardsOpt,
+                      forwardsOpt,
+                      isHelpMode = true
+                    )
+                  } yield code
+
+                case 'n' if isHelpMode =>
+                  for {
+                    _ <- printAsciiText(
+                      chars,
+                      Constants.sequenceNavOptsList(backwardsOpt, forwardsOpt)
+                    )
                     code <- readSequenceNavigationChoice(
                       backwardsOpt,
                       forwardsOpt
                     )
                   } yield code
+
+                case 'q' =>
+                  exitApp(chars)
 
                 case _ =>
                   for {
@@ -334,7 +373,10 @@ object CustomTUI {
             code <- navOptsEither match {
               case Right((backwardsOpt, forwardsOpt)) =>
                 for {
-                  _ <- printSequenceNavOpts(backwardsOpt, forwardsOpt, chars)
+                  _ <- printAsciiText(
+                    chars,
+                    Constants.sequenceNavOptsList(backwardsOpt, forwardsOpt)
+                  )
 
                   code <- readSequenceNavigationChoice(
                     backwardsOpt,
@@ -342,38 +384,154 @@ object CustomTUI {
                   )
                 } yield code
 
-              case Left(_) =>
-                IO.blocking {
-                  writer.write("something failed")
-                  writer.flush()
-                }.as(ExitCode.Error)
+              case Left(e) =>
+                printAsciiText(chars, e.message).as(
+                  ExitCode.Error
+                )
             }
           } yield code
         }
+
+        def readGuessingOpt(
+            formattedString: String,
+            correctIndex: Int,
+            isHelpMode: Boolean = false
+        ): IO[ExitCode] = {
+          for {
+            navKey <- readKey(terminal)
+            code <- navKey match {
+              case k if k >= '1' && k <= ('0' + 5) =>
+                val index = k - '1' // Convert ASCII value to 0-based index
+                for {
+                  _ <- clearScreen(terminal)
+                  code <-
+                    if (index == correctIndex) {
+                      def readGoNextKey(): IO[ExitCode] = {
+                        for {
+                          navKey <- readKey(terminal)
+                          code <- navKey match {
+                            case '\n' | '\r' =>
+                              for {
+                                _ <- clearScreen(terminal)
+                                location <-
+                                  GuessingLocations.getRandomLocation
+                                _ <- logger.info(location.toString)
+                                imageInfoEither <- runner
+                                  .getHexStringsFromId(location.id)
+                                  .value
+                                code <- imageInfoEither match {
+                                  case Right(imageInfo) =>
+                                    navigateToLocation(
+                                      imageInfo.imageId,
+                                      location.country
+                                    )
+                                  case Left(e) =>
+                                    printAsciiText(chars, e.message).as(
+                                      ExitCode.Error
+                                    )
+                                }
+                              } yield code
+                            case 'q' =>
+                              exitApp(chars)
+                            case _ => readGoNextKey()
+                          }
+                        } yield code
+                      }
+                      for {
+                        _    <- printAsciiText(chars, Constants.correctGuess)
+                        code <- readGoNextKey()
+                      } yield code
+
+                    } else {
+                      printAsciiText(
+                        chars,
+                        Constants.wrongGuess(currentCountry)
+                      )
+                        .as(ExitCode.Success)
+                    }
+                } yield code
+              case 'h' =>
+                for {
+                  _ <- printAsciiText(chars, Constants.Help.guessingHelp)
+                  code <- readGuessingOpt(
+                    formattedString,
+                    correctIndex,
+                    isHelpMode = true
+                  )
+                } yield code
+              case 'g' if isHelpMode =>
+                for {
+                  _    <- printAsciiText(chars, formattedString)
+                  code <- readGuessingOpt(formattedString, correctIndex)
+                } yield code
+              case 'q' =>
+                exitApp(chars)
+              case _ =>
+                readGuessingOpt(formattedString, correctIndex)
+            }
+          } yield code
+        }
+
+        def navigateToLocation(
+            imageId: MapillaryImageId,
+            nextCountry: Country
+        ) = {
+          for {
+            _ <- logger.info("NAVIGATING")
+            _ <- clearScreen(terminal)
+            res <- runner
+              .getHexStringsFromId(imageId)
+              .value
+            _ <- logger.info(s"got hex ${res.isRight}")
+            code <- res match {
+              case Right(imageInfo) =>
+                val (greyscale, asciiWithColors) =
+                  getAsciiConversionResult(imageInfo, appConfig)
+                for {
+                  _ <- logger.info(s"got the good stuff ${imageInfo.imageId}")
+                  _ <- clearScreen(terminal)
+                  _ <- logger.info(s"cleared")
+                  _ <- printGrid(
+                    writer,
+                    asciiWithColors,
+                    greyscale.colors,
+                    appConfig.colors
+                  )
+                  _ <- logger.info(s"printed")
+                  code <- loop(
+                    asciiWithColors,
+                    greyscale.colors,
+                    imageInfo,
+                    nextCountry
+                  )
+                } yield code
+              case Left(e) =>
+                printAsciiText(chars, e.message).as(
+                  ExitCode.Error
+                )
+            }
+          } yield code
+        }
+
+        def reRender =
+          for {
+            _ <- clearScreen(terminal)
+            _ <- printGrid(
+              writer,
+              chars,
+              colors,
+              appConfig.colors
+            )
+            code <- loop(chars, colors, imageInfo, currentCountry)
+          } yield code
 
         for {
           key <- readKey(terminal)
           exitCode <- key match {
             case 'q' =>
-              IO.pure(ExitCode.Success) // Quit
+              exitApp(chars)
 
-            case 'c' =>
-              for {
-                _    <- clearScreen(terminal)
-                code <- loop(chars, colors, imageInfo, currentCountry)
-              } yield code
-
-            case 'r' =>
-              for {
-                _ <- clearScreen(terminal)
-                _ <- printGrid(
-                  writer,
-                  chars,
-                  colors,
-                  appConfig.colors
-                )
-                code <- loop(chars, colors, imageInfo, currentCountry)
-              } yield code
+            case 'r' => reRender
 
             case 's' =>
               for {
@@ -381,21 +539,18 @@ object CustomTUI {
                 imageBytes <- createColoredAsciiImage(chars, colors)
                 urlsEith   <- runner.generateSocialMediaLinks(imageBytes).value
 
-                _ <- urlsEith match {
+                code <- urlsEith match {
                   case Right(urls) =>
                     IO.blocking {
                       val urlStrings = urls.map(_.uri.toString())
                       writer.write(urlStrings.mkString("\n"))
                       writer.flush()
-                    }
-                  case Left(err) =>
-                    IO.blocking {
-                      writer.write(err.message)
-                      writer.flush()
-                    }
+                    } >> loop(chars, colors, imageInfo, currentCountry)
+                  case Left(e) =>
+                    printAsciiText(chars, e.message).as(
+                      ExitCode.Error
+                    )
                 }
-
-                code <- loop(chars, colors, imageInfo, currentCountry)
               } yield code
 
             case 'n' =>
@@ -405,71 +560,20 @@ object CustomTUI {
               }
 
             case 'g' if (isGuessingMode) =>
-              val otherCountries = Country.randomPickedCountries(currentCountry)
-
-              val (formattedString, correctIndex) = Constants.guessingOptsList(
-                currentCountry,
-                otherCountries
-              )
               for {
-                _      <- printAsciiText(chars, formattedString)
-                navKey <- readKey(terminal)
-                code <- navKey match {
-                  case k if k >= '1' && k <= ('0' + 5) =>
-                    val index = k - '1' // Convert ASCII value to 0-based index
-                    for {
-                      _ <- clearScreen(terminal)
-                      code <-
-                        if (index == correctIndex) {
-                          def readGoNextKey(): IO[ExitCode] = {
-                            for {
-                              navKey <- readKey(terminal)
-                              code <- navKey match {
-                                case '\n' | '\r' =>
-                                  for {
-                                    location <-
-                                      GuessingLocations.getRandomLocation
-                                    _ <- logger.info(location.toString)
-                                    imageInfoEither <- runner
-                                      .getHexStringsFromId(location.id)
-                                      .value
-                                    code <- imageInfoEither match {
-                                      case Right(imageInfo) =>
-                                        navigateToLocation(
-                                          imageInfo.imageId,
-                                          location.country
-                                        )
-                                      case Left(e) =>
-                                        printAsciiText(chars, e.message).as(
-                                          ExitCode.Error
-                                        )
-                                    }
-                                  } yield code
-                                case 'q' =>
-                                  IO.pure(ExitCode.Success) // Quit
-                                case _ => readGoNextKey()
-                              }
-                            } yield code
-                          }
-                          for {
-                            _ <- printAsciiText(chars, Constants.correctGuess)
-                            code <- readGoNextKey()
-                          } yield code
-
-                        } else {
-                          printAsciiText(
-                            chars,
-                            Constants.wrongGuess(currentCountry)
-                          )
-                            .as(ExitCode.Success)
-                        }
-                    } yield code
-                }
+                otherCountries <- Country.randomPickedCountries(currentCountry)
+                tuple <- Constants.guessingOptsList(
+                  currentCountry,
+                  otherCountries
+                )
+                (formattedString, correctIndex) = tuple
+                _    <- printAsciiText(chars, formattedString)
+                code <- readGuessingOpt(formattedString, correctIndex)
               } yield code
 
             case 'h' =>
               for {
-                _    <- printHelp(chars)
+                _    <- printAsciiText(chars, mainHelpText)
                 code <- loop(chars, colors, imageInfo, currentCountry)
               } yield code
 
@@ -482,48 +586,6 @@ object CustomTUI {
               ) // Ignore and continue
           }
         } yield exitCode
-      }
-
-      def navigateToLocation(
-          imageId: MapillaryImageId,
-          nextCountry: Country
-      ) = {
-        for {
-          _ <- logger.info("NAVIGATING")
-          _ <- clearScreen(terminal)
-          res <- runner
-            .getHexStringsFromId(imageId)
-            .value
-          _ <- logger.info(s"got hex ${res.isRight}")
-          code <- res match {
-            case Right(imageInfo) =>
-              val (greyscale, asciiWithColors) =
-                getAsciiConversionResult(imageInfo, appConfig)
-              for {
-                _ <- logger.info(s"got the good stuff ${imageInfo.imageId}")
-                _ <- clearScreen(terminal)
-                _ <- logger.info(s"cleared")
-                _ <- printGrid(
-                  writer,
-                  asciiWithColors,
-                  greyscale.colors,
-                  appConfig.colors
-                )
-                _ <- logger.info(s"printed")
-                code <- loop(
-                  asciiWithColors,
-                  greyscale.colors,
-                  imageInfo,
-                  nextCountry
-                )
-              } yield code
-            case Left(err) =>
-              logger.info(s"error form mapillary : ${err.message}") >> IO {
-                writer.write("something failed AAA")
-                writer.flush()
-              }.as(ExitCode.Error)
-          }
-        } yield code
       }
 
       def printAsciiText(currChars: Array[Array[Char]], text: String) = {
@@ -559,83 +621,8 @@ object CustomTUI {
         } yield ()
       }
 
-      def printHelp(currChars: Array[Array[Char]]) = {
-        printAsciiText(currChars, Constants.help)
-      }
-
-      def printRadiusNavOpts(
-          navOptions: List[ImageData],
-          currentImageInfo: ImageInfo,
-          currChars: Array[Array[Char]]
-      ) = {
-        for {
-          _ <- clearScreen(terminal)
-
-          bytes <- TextToImageConverter.createTextImage(
-            Constants.radiusNavOptionsList(currentImageInfo, navOptions),
-            currChars.head.length,
-            currChars.length
-          )
-          helpImage <- Conversions.convertBytesToHexImage(bytes)
-
-          greyscale = Conversions.hexStringsToSampledGreyscaleDecimal(
-            1,
-            1,
-            helpImage.hexStrings,
-            helpImage.width.value
-          )
-
-          asciiWithColors = textAlgorithm
-            .generate(
-              appConfig.processing.charset,
-              greyscale.grayscaleDecimals
-            )
-
-          _ <- printGrid(
-            writer,
-            asciiWithColors,
-            greyscale.colors,
-            appConfig.colors
-          )
-        } yield ()
-      }
-
-      def printSequenceNavOpts(
-          backwardsOpt: Option[MapillaryImageId],
-          forwardsOpt: Option[MapillaryImageId],
-          currChars: Array[Array[Char]]
-      ) = {
-        for {
-          _ <- clearScreen(terminal)
-
-          bytes <- TextToImageConverter.createTextImage(
-            Constants.sequenceNavOptsList(backwardsOpt, forwardsOpt),
-            currChars.head.length,
-            currChars.length
-          )
-          helpImage <- Conversions.convertBytesToHexImage(bytes)
-
-          greyscale = Conversions.hexStringsToSampledGreyscaleDecimal(
-            1,
-            1,
-            helpImage.hexStrings,
-            helpImage.width.value
-          )
-
-          asciiWithColors = textAlgorithm
-            .generate(
-              appConfig.processing.charset,
-              greyscale.grayscaleDecimals
-            )
-
-          _ <- printGrid(
-            writer,
-            asciiWithColors,
-            greyscale.colors,
-            appConfig.colors
-          )
-        } yield ()
-      }
+      def exitApp(currChars: Array[Array[Char]]): IO[ExitCode] =
+        printAsciiText(currChars, Constants.exiting).as(ExitCode.Success)
 
       printGrid(
         writer,
