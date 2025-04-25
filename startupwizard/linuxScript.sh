@@ -1,5 +1,26 @@
 #!/bin/bash
 
+# Check if gum is already installed
+if ! command gum --version &> /dev/null; then
+  echo "Gum not found. Installing gum..."
+  sleep 1
+  sudo apt update
+
+  ## Switch to temp dir for the setup
+  rm -rf /tmp/ttp-setup-tools
+  mkdir -p /tmp/ttp-setup-tools
+  cd /tmp/ttp-setup-tools
+
+  # To make this script pretty installing Gum
+  mkdir -p /etc/apt/keyrings
+  curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
+  sudo apt update && sudo apt install gum
+else
+  echo "Gum is already installed. Version: $(gum --version)"
+  sleep 1
+fi
+
 # Clear the terminal
 clear
 
