@@ -539,11 +539,14 @@ object CustomTUI {
 
                 code <- urlsEith match {
                   case Right(urls) =>
-                    IO.blocking {
-                      val urlStrings = urls.map(_.uri.toString())
-                      writer.write(urlStrings.mkString("\n"))
-                      writer.flush()
-                    } >> loop(chars, colors, imageInfo, currentCountry)
+                    val urlStrings = urls.map(_.uri.toString())
+                    for {
+                      _ <- IO.blocking {
+                        writer.write(urlStrings.mkString("\n"))
+                        writer.flush()
+                      }
+                      code <- loop(chars, colors, imageInfo, currentCountry)
+                    } yield code
                   case Left(e) =>
                     printAsciiText(chars, e.message).as(
                       ExitCode.Error
