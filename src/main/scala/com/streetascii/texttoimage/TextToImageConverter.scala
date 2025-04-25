@@ -25,7 +25,7 @@ object TextToImageConverter extends IOApp {
   // Main entry point
   override def run(args: List[String]): IO[ExitCode] = {
     for {
-      imageBytes <- createTextImage(Constants.help, 265, 72)
+      imageBytes <- createTextImage(Constants.Help.mainHelp, 265, 72)
       _          <- saveImageToFile(imageBytes, "text_image.png")
       _          <- IO.println(s"Image byte array length: ${imageBytes.length}")
       _ <- IO.println(

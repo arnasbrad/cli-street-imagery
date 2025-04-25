@@ -1,5 +1,6 @@
 package com.streetascii.texttoimage
 
+import cats.effect.IO
 import com.streetascii.asciiart.Models.ImageInfo
 import com.streetascii.clients.mapillary.Models.{ImageData, MapillaryImageId}
 import com.streetascii.guessinggame.CountryModels.Country
@@ -8,25 +9,46 @@ import com.streetascii.navigation.Navigation
 import scala.util.Random
 
 object Constants {
-  val help: String =
-    """--------------------------
-      |General inputs
-      |[q] - quit
-      |[n] - navigation
-      |--------------------------------
-      |-Sequence navigation inputs    -
-      |-[f] - move forwards           -
-      |-[b] - move backwards          -
-      |--------------------------------""".stripMargin
+  object Help {
+    val mainHelp: String =
+      """| [n] - navigation
+         | [s] - share
+         | [h] - help
+         | [q] - quit""".stripMargin
+
+    val mainHelpWithGuessing: String =
+      s"""| [g] - guess country
+          |$mainHelp""".stripMargin
+
+    val radiusNavHelp: String =
+      """| [1 - n] - go to selected location
+         | [r] - re-render
+         | [n] - back to navigation
+         | [q] - quit""".stripMargin
+
+    val sequenceNavHelp: String =
+      """| [f] - go forwards
+         | [b] - go backwards
+         | [r] - re-render
+         | [n] - back to navigation
+         | [q] - quit""".stripMargin
+
+    val guessingHelp: String =
+      """| [1 - 5] - guess
+         | [g] - back to guessing
+         | [q] - quit""".stripMargin
+  }
+
+  val exiting: String = "Goodbye!"
 
   val correctGuess: String =
-    """Correct guess
-      |press [enter] to continue""".stripMargin
+    """| Correct guess
+       | press [enter] to continue""".stripMargin
 
   def wrongGuess(correctCountry: Country): String = {
-    s"""Incorrect guess
-      |correct was ${correctCountry.name}
-      |GAME OVER""".stripMargin
+    s"""| Incorrect guess
+        | correct was ${correctCountry.name}
+        | GAME OVER""".stripMargin
   }
 
   def radiusNavOptionsList(
@@ -87,24 +109,23 @@ object Constants {
     val bString =
       if (backwardsOpt.isDefined) "[b] Backwards ↓" else "[b] Not available"
 
-    s"""$fString
-       |$bString
-       |""".stripMargin
+    s"""| $fString
+        | $bString""".stripMargin
   }
 
   def guessingOptsList(
       correctCountry: Country,
       otherCounties: List[Country]
-  ): (String, Int) = {
-    val allCountriesList      = correctCountry :: otherCounties
-    val shuffledCountriesList = Random.shuffle(allCountriesList)
-
-    val str = shuffledCountriesList.zipWithIndex
-      .map { case (guessOpt, index) =>
-        s"[${index + 1}] ${guessOpt.name}"
-      }
-      .mkString("\n")
-    val index = shuffledCountriesList.indexOf(correctCountry)
-    (str, index)
+  ): IO[(String, Int)] = {
+    val allCountriesList = correctCountry :: otherCounties
+    for {
+      shuffledCountriesList <- IO(Random.shuffle(allCountriesList))
+      str = shuffledCountriesList.zipWithIndex
+        .map { case (guessOpt, index) =>
+          s"[${index + 1}] ${guessOpt.name}"
+        }
+        .mkString("\n")
+      index = shuffledCountriesList.indexOf(correctCountry)
+    } yield (str, index)
   }
 }

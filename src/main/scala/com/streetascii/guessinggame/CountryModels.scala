@@ -1,5 +1,6 @@
 package com.streetascii.guessinggame
 
+import cats.effect.IO
 import com.streetascii.clients.mapillary.Models.MapillaryImageId
 
 import scala.util.Random
@@ -42,13 +43,13 @@ object CountryModels {
       Malta
     )
 
-    def randomPickedCountries(excludedCountry: Country): List[Country] = {
+    def randomPickedCountries(excludedCountry: Country): IO[List[Country]] = {
       val availableCountries =
         Country.values.filter(country => country != excludedCountry)
 
-      val shuffledCountries = Random.shuffle(availableCountries)
+      val shuffledCountries = IO(Random.shuffle(availableCountries))
 
-      shuffledCountries.take(4)
+      shuffledCountries.map(_.take(4))
     }
 
     case object UnitedKingdom extends Country {
