@@ -23,7 +23,12 @@ case class AppConfig(
 
 object AppConfig {
   // Case classes representing your configuration structure
-  case class ApiConfig(mapillaryKey: ApiKey, imgurClientId: ClientId)
+  case class ApiConfig(
+      mapillaryKey: ApiKey,
+      imgurClientId: Option[ClientId],
+      traveltimeAppId: Option[clients.traveltime.Models.AppId],
+      traveltimeKey: Option[clients.traveltime.Models.ApiKey]
+  )
   case class ProcessingConfig(
       navigationType: NavigationType,
       algorithm: AsciiAlgorithm,
@@ -64,6 +69,42 @@ object AppConfig {
         .create(str)
         .leftMap(err => CannotConvert(str, "Mapillary token", err.toString))
     )
+
+  private implicit val imgurApiReader: ConfigReader[Option[ClientId]] =
+    ConfigReader.fromString {
+      case "Disabled" => Right(None)
+      case other =>
+        ClientId
+          .create(other)
+          .leftMap(err => CannotConvert(other, "Imgur client id", err.toString))
+          .map(Some(_))
+    }
+
+  private implicit val traveltimeAppIdReader
+      : ConfigReader[Option[clients.traveltime.Models.AppId]] =
+    ConfigReader.fromString {
+      case "Disabled" => Right(None)
+      case other =>
+        clients.traveltime.Models.AppId
+          .create(other)
+          .leftMap(err =>
+            CannotConvert(other, "TravelTime app id", err.toString)
+          )
+          .map(Some(_))
+    }
+
+  private implicit val traveltimeApiKeyReader
+      : ConfigReader[Option[clients.traveltime.Models.ApiKey]] =
+    ConfigReader.fromString {
+      case "Disabled" => Right(None)
+      case other =>
+        clients.traveltime.Models.ApiKey
+          .create(other)
+          .leftMap(err =>
+            CannotConvert(other, "TravelTime API key", err.toString)
+          )
+          .map(Some(_))
+    }
 
   private implicit val charsetReader: ConfigReader[Charset] =
     ConfigReader.fromString {

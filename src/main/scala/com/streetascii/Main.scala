@@ -41,7 +41,9 @@ object Main
       mapillaryKey = ApiKey.unsafeCreate(
         "key"
       ),
-      ClientId("id")
+      Some(ClientId("id")),
+      None,
+      None
     ),
     processing = ProcessingConfig(
       algorithm = LuminanceAlgorithm,
@@ -58,7 +60,7 @@ object Main
   private def initClients() = {
     for {
       mapillaryClient <- MapillaryClient.make(appConfig.api.mapillaryKey)
-      imgurClient     <- ImgurClient.make(appConfig.api.imgurClientId)
+      imgurClient     <- ImgurClient.make(appConfig.api.imgurClientId.get)
       // TODO: parse creds from appConfig
       travelTimeClient <- TravelTimeClient.make(
         clients.traveltime.Models.AppId("x"),

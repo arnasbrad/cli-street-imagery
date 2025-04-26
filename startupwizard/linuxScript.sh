@@ -1,5 +1,26 @@
 #!/bin/bash
 
+# Check if gum is already installed
+if ! command gum --version &> /dev/null; then
+  echo "Gum not found. Installing gum..."
+  sleep 1
+  sudo apt update
+
+  ## Switch to temp dir for the setup
+  rm -rf /tmp/ttp-setup-tools
+  mkdir -p /tmp/ttp-setup-tools
+  cd /tmp/ttp-setup-tools
+
+  # To make this script pretty installing Gum
+  mkdir -p /etc/apt/keyrings
+  curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
+  sudo apt update && sudo apt install gum
+else
+  echo "Gum is already installed. Version: $(gum --version)"
+  sleep 1
+fi
+
 # Clear the terminal
 clear
 
@@ -30,6 +51,26 @@ while [ -z "$mapillaryKey" ] || ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z
     echo "Expected format: MLY|****************|********************************" | gum style --foreground 208
   fi
 done
+clear
+
+if gum confirm "Do you want to input an Imgur API key?"; then
+  echo "Enter your Imgur API Key:" | gum style --padding "1 2" --width 50
+  imgurKey=$(gum input --placeholder.foreground 240 --width 50 --password --placeholder "Enter your Imgur API key here")
+else
+  imgurKey="Disabled"
+fi
+clear
+
+if gum confirm "Do you want to use geocoding features (search the map by addresses)?"; then
+  echo "Enter your TravelTime app ID:" | gum style --padding "1 2" --width 50
+  travelTimeAppId=$(gum input --placeholder.foreground 240 --width 50 --password --placeholder "Enter your TravelTime app ID here")
+  clear
+  echo "Enter your TravelTime API Key:" | gum style --padding "1 2" --width 50
+  travelTimeKey=$(gum input --placeholder.foreground 240 --width 50 --password --placeholder "Enter your TravelTime API key here")
+else
+  travelTimeAppId="Disabled"
+  travelTimeKey="Disabled"
+fi
 clear
 
 echo "Select navigation mode:" | gum style --padding "1 2" --width 50
@@ -136,7 +177,7 @@ while [ -z "$downSampling" ] || ! [[ "$downSampling" =~ ^[0-9]+$ ]] || [ "$downS
   fi
 
   # Get input
-  downSampling=$(gum input --placeholder.foreground 240 --width 50 --placeholder "Enter the down sampling rate (press [ENTER] for hint)")
+  downSampling=$(gum input --placeholder.foreground 240 --width 60 --placeholder "Enter the down sampling rate (press [ENTER] for hint)")
 
   # Show hint if empty (with clear to prevent stacking)
   if [ -z "$downSampling" ]; then
@@ -150,9 +191,28 @@ clear
 # Summary of selections
 echo "Configuration Summary:" | gum style --padding "1 2" --width 50
 {
-  # Create formatted summary text
-  summary="$(echo "🔑 API key:" | gum style --foreground 212) ${mapillaryKey:0:4}...${mapillaryKey: -3}
-$(echo "🗺️ Navigation mode:" | gum style --foreground 212) $navigation}
+  # Create formatted summary text with Imgur key right after Mapillary key
+  summary="$(echo "🔑 Mapillary API key:" | gum style --foreground 212) ${mapillaryKey:0:4}...${mapillaryKey: -1}"
+
+  # Add Imgur API key information right after Mapillary key
+  if [[ "$imgurKey" != "Disabled" ]]; then
+    summary+="
+$(echo "🔑 Imgur API key:" | gum style --foreground 212) ${imgurKey:0:1}...${imgurKey: -1}"
+  fi
+
+  if [[ "$travelTimeAppId" != "Disabled" ]]; then
+      summary+="
+$(echo "🔑 TravelTime app ID:" | gum style --foreground 212) ${imgurKey:0:1}...${travelTimeAppId: -1}"
+    fi
+
+  if [[ "$travelTimeKey" != "Disabled" ]]; then
+      summary+="
+$(echo "🔑 TravelTime API key:" | gum style --foreground 212) ${imgurKey:0:1}...${travelTimeKey: -1}"
+    fi
+
+  # Continue with the rest of the summary
+  summary+="
+$(echo "🗺️ Navigation mode:" | gum style --foreground 212) $navigation
 $(echo "🧮 Algorithm:" | gum style --foreground 212) $algorithm
 $(echo "🔤 Charset:" | gum style --foreground 212) ${charset:0:20}
 $(echo "⚙️ Down sampling rate:" | gum style --foreground 212) $downSampling"
@@ -208,6 +268,9 @@ gum confirm "Ready to proceed and save configuration?" && {
   cat > "$configPath" << EOF
 api {
   mapillary-key = "${mapillaryKey}"
+  imgur-client-id = "${imgurKey}"
+  travelTime-app-id = "${travelTimeAppId}"
+  travelTime-key ="${travelTimeKey}"
 }
 
 processing {
