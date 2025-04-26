@@ -53,7 +53,7 @@ object Cli {
   )
 
   val coordinatesCommand: Opts[CoordinatesEntryArgs] = Opts.subcommand(
-    Command(name = "coords", header = "Start with geographic coordinates")(
+    Command(name = "coordinates", header = "Start with geographic coordinates")(
       coordinatesArg.map(CoordinatesEntryArgs)
     )
   )

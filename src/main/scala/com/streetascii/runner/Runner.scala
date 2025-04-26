@@ -16,7 +16,7 @@ import com.streetascii.socialmedia.SocialMedia
 sealed trait Runner {
   def getHexStringsFromLocation(
       coordinates: Coordinates,
-      radius: Radius = Radius.unsafeCreate(3)
+      radius: Radius = Radius.unsafeCreate(15)
   ): EitherT[IO, MapillaryError, ImageInfo]
 
   def getHexStringsFromId(
@@ -73,7 +73,7 @@ case class RunnerImpl(
             .map(_.id)
             .toRight(
               MapillaryError.NotFoundError(
-                s"No images found for coordinates = $coordinates, radius = $radius m. Try a different location or increasing the radius."
+                s"No images found for coordinates = $coordinates, radius = ${radius}m. Try a different location or increasing the radius."
               )
             )
         )
