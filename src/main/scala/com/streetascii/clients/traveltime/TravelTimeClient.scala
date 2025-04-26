@@ -138,6 +138,7 @@ object TravelTimeClient {
       // Build the URI with optional parameters
       val uri = baseUri
         .withQueryParam("query", query)
+        .withQueryParam("limit", 1)
 
       val request = Request[IO](
         method = Method.GET,
