@@ -1,6 +1,6 @@
 package com.streetascii
 
-import cats.effect.{ExitCode, IO}
+import cats.effect.{ExitCode, IO, Resource}
 import com.monovore.decline.Opts
 import com.monovore.decline.effect.CommandIOApp
 import com.streetascii.AppConfig.{ApiConfig, ColorConfig, ProcessingConfig}
@@ -60,14 +60,20 @@ object Main
   private def initClients() = {
     for {
       mapillaryClient <- MapillaryClient.make(appConfig.api.mapillaryKey)
-      imgurClient     <- ImgurClient.make(appConfig.api.imgurClientId.get)
-      // TODO: parse creds from appConfig
-      travelTimeClient <- TravelTimeClient.make(
-        clients.traveltime.Models.AppId("x"),
-        clients.traveltime.Models.ApiKey("x")
-      )
+      imgurClientOpt <- appConfig.api.imgurClientId match {
+        case Some(clientId) => ImgurClient.make(clientId).map(Some(_))
+        case None           => Resource.pure[IO, Option[ImgurClient]](None)
+      }
+      travelTimeClientOpt <- (
+        appConfig.api.traveltimeAppId,
+        appConfig.api.traveltimeKey
+      ) match {
+        case (Some(id), Some(key)) =>
+          TravelTimeClient.make(id, key).map(Some(_))
+        case _ => Resource.pure[IO, Option[TravelTimeClient]](None)
+      }
 
-    } yield RunnerImpl(mapillaryClient, imgurClient, travelTimeClient)
+    } yield RunnerImpl(mapillaryClient, imgurClientOpt, travelTimeClientOpt)
   }
 
   def runTerminalApp(

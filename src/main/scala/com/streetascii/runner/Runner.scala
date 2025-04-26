@@ -4,6 +4,7 @@ import cats.data.EitherT
 import cats.effect.IO
 import com.streetascii.asciiart.Conversions
 import com.streetascii.asciiart.Models.ImageInfo
+import com.streetascii.clients.imgur.Errors.ImgurError
 import com.streetascii.clients.imgur.{Errors, ImgurClient}
 import com.streetascii.clients.mapillary.Errors.MapillaryError
 import com.streetascii.clients.mapillary.MapillaryClient
@@ -34,8 +35,8 @@ sealed trait Runner {
 
 case class RunnerImpl(
     mapillaryClient: MapillaryClient,
-    imgurClient: ImgurClient,
-    travelTimeClient: TravelTimeClient,
+    imgurClientOpt: Option[ImgurClient],
+    travelTimeClientOpt: Option[TravelTimeClient],
     conversions: Conversions = Conversions
 ) extends Runner {
   def getHexStringsFromId(
@@ -95,22 +96,41 @@ case class RunnerImpl(
 
   def getCoordinatesFromAddress(
       address: String
-  ): EitherT[IO, TravelTimeError, Option[Coordinates]] =
-    for {
-      resp <- travelTimeClient.geocodingSearch(address)
-    } yield resp.features.headOption.map(_.coordinates)
+  ): EitherT[IO, TravelTimeError, Option[Coordinates]] = {
+    travelTimeClientOpt match {
+      case Some(travelTimeClient) =>
+        for {
+          resp <- travelTimeClient.geocodingSearch(address)
+        } yield resp.features.headOption.map(_.coordinates)
+      case None =>
+        EitherT.leftT(
+          TravelTimeError.AuthenticationError(
+            "Cannot use geocoding API, TravelTime credentials were not set"
+          )
+        )
+    }
+  }
 
   def generateSocialMediaLinks(
       imageBytes: Array[Byte]
   ): EitherT[IO, Errors.ImgurError, List[SocialMedia]] = {
-    for {
-      imgurLink <- imgurClient.uploadImage(imageBytes).map(_.data.link)
+    imgurClientOpt match {
+      case Some(imgurClient) =>
+        for {
+          imgurLink <- imgurClient.uploadImage(imageBytes).map(_.data.link)
 
-      xLink = SocialMedia.X(
-        text = "Check out this cool image!",
-        imgurLink = imgurLink
-      )
-      fbLink = SocialMedia.FaceBook(imgurLink = imgurLink)
-    } yield List(xLink, fbLink)
+          xLink = SocialMedia.X(
+            text = "Check out this cool image!",
+            imgurLink = imgurLink
+          )
+          fbLink = SocialMedia.FaceBook(imgurLink = imgurLink)
+        } yield List(xLink, fbLink)
+      case None =>
+        EitherT.leftT(
+          ImgurError.AuthenticationError(
+            "Cannot use Imgur API, client id is not set"
+          )
+        )
+    }
   }
 }
