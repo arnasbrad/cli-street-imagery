@@ -268,7 +268,7 @@ gum confirm "Ready to proceed and save configuration?" && {
   cat > "$configPath" << EOF
 api {
   mapillary-key = "${mapillaryKey}"
-  imgur-key = "${imgurKey}"
+  imgur-client-id = "${imgurKey}"
   travelTime-app-id = "${travelTimeAppId}"
   travelTime-key ="${travelTimeKey}"
 }
