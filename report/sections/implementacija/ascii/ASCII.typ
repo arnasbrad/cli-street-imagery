@@ -172,7 +172,7 @@ naujos eilutės simboliais („`\n`“), taip suformuojant galutinį ASCII meno 
 
 Galutinio rezultato kokybė, naudojant šviesumo algoritmą, labai priklauso nuo kelių veiksnių. Esminę įtaką daro pasirinktas
 ASCII simbolių rinkinys. Kuo daugiau simbolių jame yra ir kuo tolygiau pasiskirstęs jų vizualinis tankis (t.y., kuo mažesni
-"šuoliai" tarp gretimų simbolių tankumo), tuo glotnesnius toninius perėjimus ir detalesnį vaizdą galima išgauti. Prastai
+„šuoliai“ tarp gretimų simbolių tankumo), tuo glotnesnius toninius perėjimus ir detalesnį vaizdą galima išgauti. Prastai
 parinktas rinkinys, kuriame simbolių tankis kinta netolygiai arba kuriame yra mažai simbolių, gali lemti grubų, „laiptuotą“
 vaizdą su prarastomis detalėmis.
 
@@ -255,7 +255,7 @@ vaizdus, potencialiai atvaizduojant ir kontūrų kryptį.
 Algoritmo veikimas susideda iš kelių nuoseklių etapų, kurių kiekvienas remiasi ankstesnio etapo rezultatais:
 - Pradinis paruošimas ir triukšmo mažinimas:
   - Kaip ir kitiems vaizdo apdorojimo algoritmams, pirmiausia reikalingas pilkų atspalvių vaizdas, kur kiekvienas pikselis
-  turi reikšmę tarp 0 ir 255.
+    turi reikšmę tarp 0 ir 255.
   - Prieš ieškant kontūrų, vaizdas yra apdorojamas 5x5 Gauso filtru. Šio žingsnio tikslas yra sumažinti vaizdo triukšmą,
     kurie galėtų būti klaidingai interpretuojami kaip kontūrai vėlesniuose etapuose. Gauso filtras „sušvelnina“ vaizdą,
     pakeisdamas kiekvieno pikselio reikšmę svertiniu jo ir kaimyninių reikšmių vidurkiu. Didesnis 5x5 dydžio filtras
@@ -278,39 +278,19 @@ Algoritmo veikimas susideda iš kelių nuoseklių etapų, kurių kiekvienas remi
     abiejų kaimynų išilgai gradiento krypties reikšmėms), išlaiko savo reikšmę. Visų kitų pikseliai nustatomi į 0. Taip
     užtikrinama, kad kontūro linija būtų kuo plonesnė.
 - Trūkumų taisymas:
+  - Tai paskutinis ir vienas svarbiausių Canny algoritmo žingsnių, skirtas atskirti tikrus kontūrus nuo triukšmo sukeltų
+  artefaktų ir sujungti nutrūkusius kontūrų segmentus.
+  - Naudojamos dvi slenkstinės reikšmės: aukšta  ir žema ribos, pikseliai, kurių reikšmė viršija aukštą ribą, iš karto
+    laikomi "stipriais" kontūrų taškais ir pažymimi galutine kontūro reikšme. Pikseliai, kurių reikšmė yra tarp žemos ir
+    aukštos ribų, laikomi "silpnais" kontūrų taškais. Jie potencialiai gali būti kontūro dalis, bet tik jei yra susiję
+    su stipriu kontūru. Pikseliai, kurių reikšmė yra mažesnė už žemąją ribą, atmetami kaip triukšmas.
+  - Toliau rekursyviai vykdomas kontūrų sekimas: pradedant nuo stiprių kontūrų taškų, ieškoma greta esančių silpnų taškų.
+    Visi silpni taškai, kurie tiesiogiai ar netiesiogiai jungiasi prie stipraus taško taip pat tampa galutinio kontūro dalimi.
+    Silpni taškai, kurie neprisijungia prie jokio stipraus kontūro, galiausiai atmetami.
+  - Rezultatas: gaunamas galutinis kontūrų žemėlapis, kuriame kontūrai yra ploni, geriau sujungti ir mažiau paveikti triukšmo.
+- Galutinis apdorojimas ir konvertavimas į ASCII meną:
+  - Gautas kontūrų žemėlapis gali būti invertuojamas, jei norima, kad kontūrai būtų tamsūs šviesiame fone.
+  - Tikrinama kiekvieno pikselio kontūro reikšmė. Jei ji pakankamai didelė, kad būtų laikoma kontūru - programa parenka
+    specialų ASCII simbolį, atspindintį kontūro kryptį: „-, |, /, \“ arba stipresnius jų variantus „═, ║, ╱, ╲“. Jei
+    pikselis nelaikomas kontūru ir yra fono dalis - jis paliekamas tuščias.
 
-Tai paskutinis ir vienas svarbiausių Canny algoritmo žingsnių, skirtas atskirti tikrus kontūrus nuo triukšmo sukeltų artefaktų ir sujungti nutrūkusius kontūrų segmentus.
-
-Naudojamos dvi slenkstinės reikšmės: aukšta (highThreshold, kode nustatyta 70) ir žema (lowThreshold, kode nustatyta 30).
-
-Veikimas:
-
-Pikseliai, kurių magnitudė (po NMS) viršija highThreshold, iš karto laikomi "stipriais" kontūrų taškais ir pažymimi galutine kontūro reikšme (pvz., 255).
-
-Pikseliai, kurių magnitudė yra tarp lowThreshold ir highThreshold, laikomi "silpnais" kontūrų taškais. Jie potencialiai gali būti kontūro dalis, bet tik jei yra susiję su stipriu kontūru.
-
-Pikseliai, kurių magnitudė mažesnė už lowThreshold, atmetami kaip triukšmas (reikšmė 0).
-
-Toliau vykdomas kontūrų sekimas (rekursyviai įgyvendintas connectWeakEdges): pradedant nuo stiprių kontūrų taškų, ieškoma greta esančių silpnų taškų. Visi silpni taškai, kurie tiesiogiai ar netiesiogiai (per kitus silpnus taškus) jungiasi prie stipraus taško, yra „paaukštinami“ ir taip pat tampa galutinio kontūro dalimi (reikšmė 255).
-
-Silpni taškai, kurie neprisijungia prie jokio stipraus kontūro, galiausiai atmetami (reikšmė 0).
-
-Rezultatas: Gaunamas galutinis kontūrų žemėlapis, kuriame kontūrai yra ploni, geriau sujungti ir mažiau paveikti triukšmo.
-
-Galutinis Apdorojimas ir Konvertavimas į ASCII (edgeDetectionAlgorithm):
-
-Gautas kontūrų žemėlapis (edges) gali būti invertuojamas (invert parametras), jei norima, kad kontūrai būtų tamsūs šviesiame fone. Reikšmės konvertuojamos į eilutes (stringEdges). Funkcija detectEdges grąžina šį žemėlapį ir anksčiau išsaugotą gradientų krypčių masyvą (directions).
-
-edgeDetectionAlgorithm funkcija naudoja abu šiuos masyvus galutiniam ASCII menui sukurti.
-
-Kiekvienam pikseliui tikrinama jo kontūro reikšmė (intValue). Jei ji pakankamai didelė (pvz., > 50), kad būtų laikoma kontūru:
-
-Iš directions masyvo paimama to pikselio kryptis.
-
-Funkcija mapDirectionToChar parenka specialų ASCII simbolį, atspindintį kontūro kryptį (-, |, /, \ ar stipresnius variantus ═, ║, ╱, ╲).
-
-Jei pikselis nelaikomas kontūru (yra fono dalis):
-
-Jo intValue (atspindinti fono šviesumą) naudojama parenkant simbolį iš charset pagal standartinį šviesumo algoritmo principą (tiesinį susiejimą).
-
-Taip sukuriamas hibridinis ASCII vaizdas, kur kontūrai pabrėžiami kryptiniais simboliais, o fonas atvaizduojamas pagal šviesumą.

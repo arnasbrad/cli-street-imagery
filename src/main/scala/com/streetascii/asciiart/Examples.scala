@@ -66,7 +66,7 @@ object Examples {
     // Vertical sampling NEEDS to be 2x of horizontal one
     val horizontalSampling = 2
     val verticalSampling   = horizontalSampling * 2
-    val algorithm          = "sobel"
+    val algorithm          = "canny"
     val charset            = Charset.Extended
 
     val grayscaleValues =
