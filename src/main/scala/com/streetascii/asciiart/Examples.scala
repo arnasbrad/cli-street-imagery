@@ -59,14 +59,14 @@ object Examples {
 
   def main(args: Array[String]): Unit = {
     val filePath  = "testBytesForIgnelis.txt"
-    val lineWidth = 1900
+    val lineWidth = 1024
 
     val rgbValues = readHexValues(filePath)
 
     // Vertical sampling NEEDS to be 2x of horizontal one
-    val horizontalSampling = 4
+    val horizontalSampling = 2
     val verticalSampling   = horizontalSampling * 2
-    val algorithm          = "a"
+    val algorithm          = "sobel"
     val charset            = Charset.Extended
 
     val grayscaleValues =

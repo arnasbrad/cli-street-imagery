@@ -7,7 +7,7 @@
 
 Ascii (angl. _American Standard Code for Information interchange_) yra vienas iš populiariausių teksto simbolių kodavimo formatų,
 naudojamas atvaizduoti tekstą kompiuterinėse sistemose ir internete
-(https://www.techtarget.com/whatis/definition/ASCII-American-Standard-Code-for-Information-Interchange). Šis kodavimo
+(CCC https://www.techtarget.com/whatis/definition/ASCII-American-Standard-Code-for-Information-Interchange). Šis kodavimo
 standartas buvo sukurtas 1963 metais siekiant, jog skritingų gamintojų kompiuterių sistemos galėtų dalintis ir apdoroti
 informaciją. ASCII simboliai skirstomi į dvi grupes: spausdinamuosius ir nespausdinamuosius. Spausdinamieji simboliai apima
 raides, skaičius, skirybos ženklus bei specialius simbolius, tuo tarpu nespausdinamųjų aibė yra sudaryta iš eilučių
@@ -32,7 +32,7 @@ pirmieji egzemplioriai užfiksuoti dar prieš ASCII standarto sukūrimą (#ref(<
 
 Vaizdų iš simbolių kūrimo pradžia siejama net ne su kompiuteriais, o su XIX amžiuje plačiai naudojamomis rašymo mašinėlėmis.
 Vaizdų sudarymas iš simbolių buvo skatinamas rašymo mašinėlių gamintojų rengiamuose turnyruose
-(https://direct.mit.edu/books/oa-monograph/5649/From-ASCII-Art-to-Comic-SansTypography-and-Popular).
+(CCC https://direct.mit.edu/books/oa-monograph/5649/From-ASCII-Art-to-Comic-SansTypography-and-Popular).
 Antrasis ASCII meno populiarumo šuolis buvo matomas XX amžiaus viduryje, kai vis daugiau žmonių turėjo prieigą prie pirmųjų
 kompiuterių. Žinoma, tais laikais kompiuteriai dar neturėjo grafinių sąsajų, todėl vaizdus reprezentuoti buvo galima tik ASCII
 simboliais. Spausdinti ir masiškai platinti teksto simbolių meną kompiuterio pagalba buvo žymiai paprasčiau, nei naudojantis
@@ -67,7 +67,7 @@ ekraną. Šios problemos sprendimas yra elementarus - sumažinti šrifto dydį. 
 pavyzdžiui, sumažinus šriftą iki pačio mažiausio leidžiamo dydžio, rezultatas dažnu atveju kokybe neatsiliks nuo orginalaus
 rastrinio vaizdo. Taip pat, kuo mažesnis yra gaunamas paveiksliukas, tuo lengviau žmogaus smegenys geba atpažinti jo turinį.
 Mažesnį plotą užimantys objektai dažniausiai suvokiami per jų formą arba figūrą, o didesni objetai suprantami kaip fonas
-(https://link.springer.com/article/10.3758/BF03207416?utm_source=chatgpt.com). Dėl to suprasti abstraktų paveikslą žiūrint
+(CCC https://link.springer.com/article/10.3758/BF03207416?utm_source=chatgpt.com). Dėl to suprasti abstraktų paveikslą žiūrint
 iš toli yra lengviau, tas pats gali būti pritaikyta ir ASCII menui. Žinoma, mažesnis šriftas ne visada yra geriau. Iš teksto
 simbolių kuriamo vaizdo esmė nėra pati aukščiausia kokybė. ASCII menas yra kuriamas dėl stilistinių tikslų. Taigi sumažinti
 šrifto dydį galima tik tiek, kol vis dar bus galima įskaityti individualius simbolius. Norint pasiekti optimalų rezultatą
@@ -157,26 +157,18 @@ kad šis rinkinys būtų iš anksto surikiuotas pagal simbolių vizualinį tank�
 Pavyzdžiui, paprastas rinkinys galėtų būti „.:-=+\*\#`\%\@`“, kur „.“ yra mažiausio tankio, o „@“ – didžiausio.
 
 Pats konvertavimo procesas vyksta iteruojant per kiekvieną pilkų tonų nuotraukos pikselį. Kiekvienam aplankytam pikseliui
-yra nuskaitoma jo šviesumo reikšmė *L* (skaičius tarp 0 ir 255). Ši reikšmė turi būti transformuota į indeksą, atitinkantį
+yra nuskaitoma jo šviesumo reikšmė (skaičius tarp 0 ir 255). Ši reikšmė turi būti transformuota į indeksą, atitinkantį
 poziciją mūsų surikiuotame ASCII simbolių rinkinyje. Populiariausias ir paprasčiausias būdas tai padaryti yra tiesinis
-susiejimas (angl. _linear mapping_). Tarkime, mūsų simbolių rinkinyje yra *N* simbolių. Tuomet visą šviesumo intervalą
-[0, 255] galima proporcingai padalinti į *N* dalių. Kiekviena dalis atitiks vieną simbolį. Pikselio šviesumo reikšmę *L*
-galima konvertuoti į simbolių rinkinio indeksą *i* naudojant formulę: `i = floor(L / 256 * N)`. Čia `floor` funkcija
-naudojama tam, kad gautume sveikąjį skaičių (indeksą), nes rezultatas gali būti trupmeninis; ji tiesiog nupjauna trupmeninę
-dalį, apvalindama žemyn. Svarbu pastebėti, kad daliname iš 256 (o ne 255), kad reikšmė 255 patektų į paskutinio simbolio
-intervalą (indeksas N-1), o ne už jo ribų.
+susiejimas (angl. _linear mapping_) (CCC https://asciieverything.com/ascii-tips/how-does-image-to-ascii-work/). Tarkime, mūsų simbolių rinkinyje yra *N* simbolių. Tuomet visą šviesumo intervalą
+[0, 255] galima proporcingai padalinti į *N* dalių. Kiekviena dalis atitiks vieną simbolį. Pikselio šviesumo reikšmę
+galima konvertuoti į simbolių rinkinio indeksą naudojant formulę:
+#align(center)[`i = floor( L * (N - 1) / 255 ),`]
+čia L yra pikselio šviesumo reikšmė, N yra bendras simbolių skaičius pasirinktame ASCII rinkinyje, (N - 1) yra didžiausias
+galimas indekso numeris simbolių rinkinyje, dalijymas iš 255 normalizuoja šviesumo reikšmę į intervalą [0, N-1].
 
-Pavyzdžiui, jei naudojame anksčiau minėtą 9 simbolių rinkinį („.:-=+\*\#`\%\@`“, N=11), tuomet pikseliui,
-kurio šviesumas L=20 (gana tamsus), apskaičiuotas indeksas būtų „`floor(20 / 256 * 11) = floor(0.859) = 0`“. Tai reiškia, kad
-šiam pikseliui bus priskirtas pirmasis simbolis iš rinkinio, t.y., „`.`“. Jei pikselio šviesumas yra L=150 (vidutinis), indeksas
-bus „`floor(150 / 256 * 11) = floor(6.44) = 6`“, ir jam bus priskirtas šeštasis simbolis (indeksas 5) – „`#`“. Galiausiai, labai
-šviesiam pikseliui su L=250, indeksas būtų „`floor(250 / 256 * 9) = floor(8.78) = 8`“, todėl jam bus priskirtas paskutinis,
-tankiausias simbolis „@“.
-
-Kai kiekvienam pikseliui (arba pikselių blokui, jei buvo mažinama rezoliucija) priskiriamas atitinkamas ASCII simbolis,
-šie simboliai yra išdėstomi į dvimatę struktūrą, atkartojančią pradinės nuotraukos matmenis. Dažniausiai tai realizuojama
-kaip tekstinė eilutė, kurioje eilutės atskiriamos naujos eilutės simboliais („`\n`“), taip suformuojant galutinį ASCII meno
-kūrinį, paruoštą atvaizdavimui ekrane ar faile.
+Kai kiekvienam pikseliui priskiriamas atitinkamas ASCII simbolis, šie simboliai yra išdėstomi į dvimatę struktūrą,
+atkartojančią pradinės nuotraukos matmenis. Dažniausiai tai realizuojama kaip tekstinė eilutė, kurioje eilutės atskiriamos
+naujos eilutės simboliais („`\n`“), taip suformuojant galutinį ASCII meno kūrinį, paruoštą atvaizdavimui ekrane ar faile.
 
 Galutinio rezultato kokybė, naudojant šviesumo algoritmą, labai priklauso nuo kelių veiksnių. Esminę įtaką daro pasirinktas
 ASCII simbolių rinkinys. Kuo daugiau simbolių jame yra ir kuo tolygiau pasiskirstęs jų vizualinis tankis (t.y., kuo mažesni
@@ -185,20 +177,69 @@ parinktas rinkinys, kuriame simbolių tankis kinta netolygiai arba kuriame yra m
 vaizdą su prarastomis detalėmis.
 
 Nepaisant galimų trūkumų, šviesumo algoritmas turi akivaizdžių privalumų. Pirmiausia, jis yra konceptualiai paprastas ir
-lengvai įgyvendinamas programuojant. Antra, jis yra skaičiavimų prasme efektyvus, nes kiekvieno pikselio apdorojimas
+lengvai įgyvendinamas programuojant. Antra, jis yra efektyvus skaičiavimų prasme, nes kiekvieno pikselio apdorojimas
 reikalauja tik kelių paprastų aritmetinių operacijų. Dėl šių savybių jis veikia greitai net ir apdorojant didelės raiškos
 nuotraukas. Be to, šis metodas gana gerai perteikia bendrą vaizdo šviesumo pasiskirstymą, kas dažnai yra
 pagrindinis ASCII meno tikslas.
 
 Vis dėlto, šis paprastumas turi savo kainą. Algoritmas linkęs prarasti smulkias detales ir ypač aštrius kontūrus, nes jis
 neanalizuoja pikselio aplinkos ar formų vaizde – kiekvienas pikselis traktuojamas izoliuotai, atsižvelgiant tik į jo paties
-šviesumą. Todėl objektai su sudėtingomis tekstūromis ar ryškiomis ribomis gali atrodyti suplokštinti ar sulieti. Kaip minėta,
+šviesumą (CCC https://publications.lib.chalmers.se/records/fulltext/215545/local_215545.pdf). Todėl objektai su sudėtingomis tekstūromis ar ryškiomis ribomis gali atrodyti sulieti. Kaip minėta,
 rezultato kokybė kritiškai priklauso nuo simbolių rinkinio – netinkamas rinkinys gali visiškai sugadinti vaizdą.
 
 Apibendrinant, šviesumo algoritmas yra fundamentalus ASCII meno generavimo įrankis, puikiai tinkantis kaip atspirties taškas
 arba tais atvejais, kai siekiama greitai gauti bendrą vaizdo įspūdį, perteikiant jo toninius perėjimus. Nors jis gali ne
 visada išsaugoti visas detales, jo paprastumas ir efektyvumas daro jį populiariu pasirinkimu daugeliui taikymų.
 
-===== Sobel kraštų atpažinimo algoritmas (angl. _Sobel edge detection_)
+===== Sobelio kraštų atpažinimo algoritmas (angl. _Sobel edge detection_)
+
+Kontūrų atpažinimo algoritmas siūlo alternatyvų būdą vaizdo konvertavimui į ASCII meną, lyginant su šviesumo atvaizdavimu.
+Užuot tiesiogiai konvertavus pikselių šviesumą į simbolius, šis metodas pirmiausia siekia identifikuoti ir pabrėžti vaizdo
+kontūrus – linijas ir ribas tarp skirtingų objektų ar sričių. Galutinis ASCII kūrinys tokiu būdu primena eskizą ar linijinį
+piešinį, išryškinantį formas, o ne toninius perėjimus. Šis metodas remiasi standartinėmis skaitmeninio vaizdų apdorojimo
+technikomis, dažniausiai naudojant filtrus, tokius kaip Sobelio operatorius, siekiant aptikti staigius šviesumo pokyčius vaizde.
+
+Pagrindinė algoritmo idėja yra ta, kad kontūrai vaizde atsiranda ten, kur gretimų pikselių šviesumo reikšmės smarkiai
+skiriasi. Algoritmas analizuoja kiekvieno pikselio kaimynystę, kad įvertintų šio šviesumo pokyčio stiprumą arba gradientą.
+Ten, kur pokytis yra didelis, laikoma, kad yra kontūras; kur pokytis mažas, pavyzdžiui, lygiuose, vientisos spalvos plotuose - kontūro nėra.
+
+Algoritmo veikimas prasideda, kaip ir šviesumo algoritmo atveju, nuo vaizdo paruošimo – konvertavimo į pilkų atspalvių
+paletę. Kiekvienas pikselis čia taip pat apibūdinamas viena šviesumo reikšme. Toliau vykdomi šie žingsniai, siekiant
+rasti kraštus nuotraukoje:
+- Pasiruošimas ir kraštinių pikselių apdorojimas: pirmiausia patikrinami vaizdo matmenys. Kadangi kontūrų aptikimui naudojamas
+  3x3 dydžio filtras (Sobelio operatorius), vaizdas turi būti bent 3 pikselių aukščio ir pločio. Jei vaizdas per mažas,
+  algoritmas grąžina originalų vaizdą. Svarbu pažymėti, kad kontūrų skaičiavimas atliekamas tik vidiniams vaizdo pikseliams,
+  aplink kuriuos galima suformuoti pilną 3x3 matricą. Pats kraštinis vieno pikselio pločio rėmelis dažniausiai lieka
+  neapdorotas – jo pikseliai išlaiko pradinę pilko tono reikšmę.
+- Sobelio operatoriaus taikymas: kiekvienam vidiniam pikseliui (x, y) yra išskiriama jo 3x3 matrica. Šiai matricai yra
+  pritaikomi du Sobelio filtrai (angl. _kernels_):
+  - sobelX = $mat(-1, 0, 1; -2, 0, 2; -1, 0, 1)$ – aptinka vertikalius kontūrus (pokyčius horizontalia kryptimi).
+  - sobelY = $mat(-1, -2, -1; 0, 0, 0; 1, 2, 1)$ – aptinka horizontalius kontūrus (pokyčius vertikalia kryptimi).
+- Filtro reikšmių sumavimas: kiekvienas 3x3 matricos pikselio šviesumo reikšmė padauginama iš atitinkamo
+  Sobelio filtro elemento, ir visi rezultatai sumuojami. Taip gaunamos dvi reikšmės: gx (gradiento X kryptimi įvertis)
+  ir gy (gradiento Y kryptimi įvertis).
+- Gradiento stiprumo skaičiavimas: gautos gx ir gy reikšmės parodo, koks stiprus yra šviesumo pokytis atitinkamai
+  horizontalia ir vertikalia kryptimis. Bendra kontūro stiprumo reikšmė, apskaičiuojama naudojant Pitagoro teoremą.
+  Gauta reikšmė normalizuojama, kad tilptų į [0, 255] intervalą. Ši reikšmė parodo, kontūro ryškumą tame taške.
+- Kraštų invertavimas: algoritmas numato galimybę rezultatą invertuoti. Tai reiškia, kad ryškūs kontūrai gaus mažą reikšmę
+  ir bus atvaizduojami tamsiai, o lygūs plotai gaus didelę reikšmę ir bus šviesūs. Tai dažnai yra pageidaujamas efektas
+  ASCII mene, nes kontūrai gali būti prastai matomi priklausomai nuo komandinės eilutės fono spalvos.
+- Rezultato formavimas: po šių žingsnių gaunamas naujas dvimatis masyvas, kurio kiekvienas elementas atitinka apskaičiuotą
+  kontūro stiprumo reikšmę normalizuotą intervale [0, 255].
+
+Galiausiai, programa naudoja šį kontūrų stiprumo masyvą ir konvertuoja jį į ASCII simbolius. Šis konvertavimo etapas yra
+identiškas tam, kuris naudojamas šviesumo algoritme, vienintelis skirtumas, jog šįkart formulėje pridėta ir kontūro stiprumo reikšmė:
+#align(center)[`i = floor( E * (N - 1) / 255 ),`]
+čia E yra pikselio kontūro stiprumo reikšmė (0-255), N yra simbolių skaičius rinkinyje. Kiekvienam pikseliui parenkamas
+atitinkamas simbolis, suformuojant galutinį ASCII meno kūrinį.
+
+Rezultato kokybė, naudojant šį kraštų atpažinimo algoritmą, priklauso nuo kelių veiksnių. Sobelio operatorius yra gana
+paprastas ir jautrus triukšmui vaizde – atsitiktiniai maži šviesumo svyravimai gali būti klaidingai interpretuojami kaip
+kontūrai. Gauti kontūrai taip pat gali būti storesni nei tikėtasi. Kaip ir šviesumo algoritmo atveju, pasirinktas ASCII
+simbolių rinkinys yra labai svarbus – jis lemia, kaip bus atvaizduojami skirtingo stiprumo kontūrai.
+
+Apibendrinant, kontūrų išryškinimo algoritmas yra vertinga ASCII meno generavimo technika, ypač tinkama, kai norima pabrėžti
+vaizdo struktūrą ir formas, o ne fotorealistišką šviesumo atvaizdavimą. Šis algoritmas gali išryškinti detales, kurios būtų
+prarandamos naudojant šviesumo atvaizdavimo algoritmą, ypač jei vaizde yra daug panašaus šviesumo, bet aiškių ribų turinčių plotų.
 
 ===== Canny kraštų atpažinimo algoritmas (angl. _Canny edge detection_)
