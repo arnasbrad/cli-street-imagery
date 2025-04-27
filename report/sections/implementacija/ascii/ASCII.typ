@@ -212,14 +212,14 @@ rasti kraštus nuotraukoje:
   aplink kuriuos galima suformuoti pilną 3x3 matricą. Pats kraštinis vieno pikselio pločio rėmelis dažniausiai lieka
   neapdorotas – jo pikseliai išlaiko pradinę pilko tono reikšmę.
 - Sobelio operatoriaus taikymas: kiekvienam vidiniam pikseliui (x, y) yra išskiriama jo 3x3 matrica. Šiai matricai yra
-  pritaikomi du Sobelio filtrai (angl. _kernels_):
+  pritaikomi du Sobelio filtrai (angl. _kernels_) (CCC https://www.projectrhea.org/rhea/index.php/An_Implementation_of_Sobel_Edge_Detection):
   - sobelX = $mat(-1, 0, 1; -2, 0, 2; -1, 0, 1)$ – aptinka vertikalius kontūrus (pokyčius horizontalia kryptimi).
   - sobelY = $mat(-1, -2, -1; 0, 0, 0; 1, 2, 1)$ – aptinka horizontalius kontūrus (pokyčius vertikalia kryptimi).
 - Filtro reikšmių sumavimas: kiekvienas 3x3 matricos pikselio šviesumo reikšmė padauginama iš atitinkamo
   Sobelio filtro elemento, ir visi rezultatai sumuojami. Taip gaunamos dvi reikšmės: gx (gradiento X kryptimi įvertis)
   ir gy (gradiento Y kryptimi įvertis).
 - Gradiento stiprumo skaičiavimas: gautos gx ir gy reikšmės parodo, koks stiprus yra šviesumo pokytis atitinkamai
-  horizontalia ir vertikalia kryptimis. Bendra kontūro stiprumo reikšmė, apskaičiuojama naudojant Pitagoro teoremą.
+  horizontalia ir vertikalia kryptimis. Bendra kontūro stiprumo reikšmė, apskaičiuojama naudojant Pitagoro teoremą (CCC https://proceedings.informingscience.org/InSITE2009/InSITE09p097-107Vincent613.pdf).
   Gauta reikšmė normalizuojama, kad tilptų į [0, 255] intervalą. Ši reikšmė parodo, kontūro ryškumą tame taške.
 - Kraštų invertavimas: algoritmas numato galimybę rezultatą invertuoti. Tai reiškia, kad ryškūs kontūrai gaus mažą reikšmę
   ir bus atvaizduojami tamsiai, o lygūs plotai gaus didelę reikšmę ir bus šviesūs. Tai dažnai yra pageidaujamas efektas
@@ -243,3 +243,74 @@ vaizdo struktūrą ir formas, o ne fotorealistišką šviesumo atvaizdavimą. Š
 prarandamos naudojant šviesumo atvaizdavimo algoritmą, ypač jei vaizde yra daug panašaus šviesumo, bet aiškių ribų turinčių plotų.
 
 ===== Canny kraštų atpažinimo algoritmas (angl. _Canny edge detection_)
+
+Canny kontūrų išryškinimo algoritmas yra laikomas vienu iš efektyviausių ir plačiausiai naudojamų metodų kontūrams aptikti
+skaitmeniniuose vaizduose. Lyginant su paprastesniais metodais, pavyzdžiui, pagrįstais tik Sobelio operatoriumi, Canny
+algoritmas siekia ne tik identifikuoti šviesumo pokyčius, bet ir optimizuoti rezultatus pagal tris pagrindinius kriterijus:
+tikslų aptikimą (kuo daugiau realių kontūrų aptinkama, kuo mažiau klaidingų), tikslią lokalizaciją (aptikti kontūrai turi
+būti kuo arčiau tikrųjų kontūrų vaizde) ir minimalistinį efektą (vienas realus kontūras turi generuoti tik vieną aptiktą
+kontūrą). Pritaikytas ASCII meno generavimui, šis algoritmas leidžia sukurti detalius, plonų linijų, „eskizą“ primenančius
+vaizdus, potencialiai atvaizduojant ir kontūrų kryptį.
+
+Algoritmo veikimas susideda iš kelių nuoseklių etapų, kurių kiekvienas remiasi ankstesnio etapo rezultatais:
+- Pradinis paruošimas ir triukšmo mažinimas:
+  - Kaip ir kitiems vaizdo apdorojimo algoritmams, pirmiausia reikalingas pilkų atspalvių vaizdas, kur kiekvienas pikselis
+  turi reikšmę tarp 0 ir 255.
+  - Prieš ieškant kontūrų, vaizdas yra apdorojamas 5x5 Gauso filtru. Šio žingsnio tikslas yra sumažinti vaizdo triukšmą,
+    kurie galėtų būti klaidingai interpretuojami kaip kontūrai vėlesniuose etapuose. Gauso filtras „sušvelnina“ vaizdą,
+    pakeisdamas kiekvieno pikselio reikšmę svertiniu jo ir kaimyninių reikšmių vidurkiu. Didesnis 5x5 dydžio filtras
+    leidžia efektyviau sumažinti triukšmą, nors ir šiek tiek labiau sulieja vaizdą. Kraštiniai 2 pikselių pločio
+    rėmeliai lieka neapdoroti.
+- Gradiento intensyvumo ir krypties radimas:
+  - Šiame žingsnyje naudojami 3x3 Sobelio operatoriai (sobelX ir sobelY), kad būtų apskaičiuotas šviesumo pokyčio
+    (gradiento) stiprumas ir kryptis kiekvienam sulieto vaizdo pikseliui.
+  - Stiprumas parodo, kiek stiprus yra kontūras tame taške. Ji normalizuojama intervale [0, 255].
+  - Kryptis parodo kontūro orientaciją. Ši kryptis yra esminė Canny algoritmo dalis, nes ji naudojama vėlesniame etapuose
+    siekiant atvaizduoti kraštinių kryptį ASCII simboliais. Kryptis yra supaprastinama į vieną iš keturių pagrindinių
+    krypčių: 0° (horizontali), 45° (linkstanti į dešinę), 90° (vertikali) arba 135° (linkstanti į kairę).
+  - Rezultatas yra du masyvai: vienas su gradiento reikšmėmis ir kitas su supaprastintomis kryptimis.
+- Ne maksimumų slopinimas:
+  - Kontūrai, gauti po gradiento skaičiavimo, dažnai būna storesni nei vienas pikselis. Šio etapo tikslas yra suploninti
+    šiuos kontūrus iki vieno pikselio pločio linijų.
+  - Kiekvienam pikseliui tikrinama jo gradiento reikšmė. Ji lyginama su dviejų kaimyninių pikselių reikšmėmis išilgai
+    gradiento krypties, nustatytos ankstesniame žingsnyje. Pavyzdžiui, jei kryptis yra 90° (vertikali), pikselis lyginamas
+    su kaimynais viršuje ir apačioje. Tik tie pikseliai, kurių reikšmė yra lokaliai didžiausia (t.y., didesnė arba lygi
+    abiejų kaimynų išilgai gradiento krypties reikšmėms), išlaiko savo reikšmę. Visų kitų pikseliai nustatomi į 0. Taip
+    užtikrinama, kad kontūro linija būtų kuo plonesnė.
+- Trūkumų taisymas:
+
+Tai paskutinis ir vienas svarbiausių Canny algoritmo žingsnių, skirtas atskirti tikrus kontūrus nuo triukšmo sukeltų artefaktų ir sujungti nutrūkusius kontūrų segmentus.
+
+Naudojamos dvi slenkstinės reikšmės: aukšta (highThreshold, kode nustatyta 70) ir žema (lowThreshold, kode nustatyta 30).
+
+Veikimas:
+
+Pikseliai, kurių magnitudė (po NMS) viršija highThreshold, iš karto laikomi "stipriais" kontūrų taškais ir pažymimi galutine kontūro reikšme (pvz., 255).
+
+Pikseliai, kurių magnitudė yra tarp lowThreshold ir highThreshold, laikomi "silpnais" kontūrų taškais. Jie potencialiai gali būti kontūro dalis, bet tik jei yra susiję su stipriu kontūru.
+
+Pikseliai, kurių magnitudė mažesnė už lowThreshold, atmetami kaip triukšmas (reikšmė 0).
+
+Toliau vykdomas kontūrų sekimas (rekursyviai įgyvendintas connectWeakEdges): pradedant nuo stiprių kontūrų taškų, ieškoma greta esančių silpnų taškų. Visi silpni taškai, kurie tiesiogiai ar netiesiogiai (per kitus silpnus taškus) jungiasi prie stipraus taško, yra „paaukštinami“ ir taip pat tampa galutinio kontūro dalimi (reikšmė 255).
+
+Silpni taškai, kurie neprisijungia prie jokio stipraus kontūro, galiausiai atmetami (reikšmė 0).
+
+Rezultatas: Gaunamas galutinis kontūrų žemėlapis, kuriame kontūrai yra ploni, geriau sujungti ir mažiau paveikti triukšmo.
+
+Galutinis Apdorojimas ir Konvertavimas į ASCII (edgeDetectionAlgorithm):
+
+Gautas kontūrų žemėlapis (edges) gali būti invertuojamas (invert parametras), jei norima, kad kontūrai būtų tamsūs šviesiame fone. Reikšmės konvertuojamos į eilutes (stringEdges). Funkcija detectEdges grąžina šį žemėlapį ir anksčiau išsaugotą gradientų krypčių masyvą (directions).
+
+edgeDetectionAlgorithm funkcija naudoja abu šiuos masyvus galutiniam ASCII menui sukurti.
+
+Kiekvienam pikseliui tikrinama jo kontūro reikšmė (intValue). Jei ji pakankamai didelė (pvz., > 50), kad būtų laikoma kontūru:
+
+Iš directions masyvo paimama to pikselio kryptis.
+
+Funkcija mapDirectionToChar parenka specialų ASCII simbolį, atspindintį kontūro kryptį (-, |, /, \ ar stipresnius variantus ═, ║, ╱, ╲).
+
+Jei pikselis nelaikomas kontūru (yra fono dalis):
+
+Jo intValue (atspindinti fono šviesumą) naudojama parenkant simbolį iš charset pagal standartinį šviesumo algoritmo principą (tiesinį susiejimą).
+
+Taip sukuriamas hibridinis ASCII vaizdas, kur kontūrai pabrėžiami kryptiniais simboliais, o fonas atvaizduojamas pagal šviesumą.
