@@ -50,7 +50,11 @@ object MapillaryClient {
     *   A Resource containing the MapillaryClient
     */
   def make(apiKey: ApiKey): Resource[IO, MapillaryClient] =
-    EmberClientBuilder.default[IO].build.map(new MapillaryClientImpl(_, apiKey))
+    EmberClientBuilder
+      .default[IO]
+      .withMaxResponseHeaderSize(32 * 1024)
+      .build
+      .map(new MapillaryClientImpl(_, apiKey))
 
   /** Enhanced error handler for HTTP requests and IO operations.
     *
