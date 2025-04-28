@@ -7,14 +7,39 @@ chcp 65001 >nul
 :: Clear the terminal
 cls
 
-:: Check if gum is installed
-where gum >nul 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    echo This script requires 'gum' to be installed.
-    echo Please install gum from https://github.com/charmbracelet/gum
-    echo You can install it via: scoop install gum, winget install gum, or directly from GitHub.
-    exit /b 1
-)
+:: Check if gum is installed by trying to get its version
+gum --version >nul 2>&1
+
+:: If gum is not installed, install it
+if %ERRORLEVEL% NEQ 0 goto InstallGum
+goto ContinueScript
+
+:InstallGum
+echo gum is not installed. Installing it now...
+:: Install gum using winget
+winget install charmbracelet.gum
+echo.
+echo Installation completed.
+echo Note: You may need to restart your command prompt for the changes to take effect.
+echo.
+echo 1. Try to continue with the script without restarting
+echo 2. Exit and restart the script after reopening command prompt
+echo.
+set /p choice="Enter your choice (1 or 2): "
+
+if "%choice%"=="1" goto ContinueScript
+echo.
+echo Please restart your command prompt and run the script again.
+pause
+exit /b 0
+
+:ContinueScript
+:: Display version if installed and continue with script
+for /f "tokens=*" %%a in ('gum --version 2^>nul') do echo %%a
+echo Continuing with the script...
+timeout /t 2 >nul
+
+cls
 
 :: ASCII Art header
 gum style --foreground 212 --align center --width 70 --margin "1 0 0 0" "█▀ ▀█▀ █▀█ █▀▀ █▀▀ ▀█▀   █▀█ █▀ █▀▀ █ █"
@@ -229,7 +254,7 @@ if defined WriteError goto :WriteConfigFile_Cleanup
 :: --- Use standard echo with parentheses and normal %var% expansion ---
 (echo api {) > "%TargetConfigPath%" || set "WriteError=1"
 (echo   mapillary-key = "%mapillaryKey%") >> "%TargetConfigPath%" || set "WriteError=1"
-(echo   imgur-key = "%imgurKey%") >> "%TargetConfigPath%" || set "WriteError=1"
+(echo   imgur-client-id = "%imgurKey%") >> "%TargetConfigPath%" || set "WriteError=1"
 (echo   travelTime-app-id = "%travelTimeAppId%") >> "%TargetConfigPath%" || set "WriteError=1"
 (echo   travelTime-key = "%travelTimeKey%") >> "%TargetConfigPath%" || set "WriteError=1"
 (echo }) >> "%TargetConfigPath%" || set "WriteError=1"
