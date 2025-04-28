@@ -252,7 +252,7 @@ būti kuo arčiau tikrųjų kontūrų vaizde) ir minimalistinį efektą (vienas 
 kontūrą). Pritaikytas ASCII meno generavimui, šis algoritmas leidžia sukurti detalius, plonų linijų, „eskizą“ primenančius
 vaizdus, potencialiai atvaizduojant ir kontūrų kryptį.
 
-Algoritmo veikimas susideda iš kelių nuoseklių etapų, kurių kiekvienas remiasi ankstesnio etapo rezultatais:
+Algoritmo veikimas susideda iš kelių nuoseklių etapų (CCC https://www.educative.io/answers/what-is-canny-edge-detection), kurių kiekvienas remiasi ankstesnio etapo rezultatais:
 - Pradinis paruošimas ir triukšmo mažinimas:
   - Kaip ir kitiems vaizdo apdorojimo algoritmams, pirmiausia reikalingas pilkų atspalvių vaizdas, kur kiekvienas pikselis
     turi reikšmę tarp 0 ir 255.
@@ -279,7 +279,7 @@ Algoritmo veikimas susideda iš kelių nuoseklių etapų, kurių kiekvienas remi
     užtikrinama, kad kontūro linija būtų kuo plonesnė.
 - Trūkumų taisymas:
   - Tai paskutinis ir vienas svarbiausių Canny algoritmo žingsnių, skirtas atskirti tikrus kontūrus nuo triukšmo sukeltų
-  artefaktų ir sujungti nutrūkusius kontūrų segmentus.
+    artefaktų ir sujungti nutrūkusius kontūrų segmentus.
   - Naudojamos dvi slenkstinės reikšmės: aukšta  ir žema ribos, pikseliai, kurių reikšmė viršija aukštą ribą, iš karto
     laikomi "stipriais" kontūrų taškais ir pažymimi galutine kontūro reikšme. Pikseliai, kurių reikšmė yra tarp žemos ir
     aukštos ribų, laikomi "silpnais" kontūrų taškais. Jie potencialiai gali būti kontūro dalis, bet tik jei yra susiję
@@ -294,3 +294,80 @@ Algoritmo veikimas susideda iš kelių nuoseklių etapų, kurių kiekvienas remi
     specialų ASCII simbolį, atspindintį kontūro kryptį: „-, |, /, \“ arba stipresnius jų variantus „═, ║, ╱, ╲“. Jei
     pikselis nelaikomas kontūru ir yra fono dalis - jis paliekamas tuščias.
 
+Canny kraštų atpažinimo algoritmo rezultatas labai priklauso nuo parinktų parametrų: Gauso filtro dydžio ir nuo
+slenkstinių ribų reikšmių. Per aukšti slenksčiai gali praleisti svarbius kontūrus, per žemi – įtraukti daug triukšmo.
+Pagrindinis šio algoritmo pranašumas, lyginant su Sobelio algortimu, yra geresnis triukšmo valdymas, dėl pradinio Gauso
+filtravimo algoritmas yra atsparesnis triukšmui. Algoritmas natūraliai apskaičiuoja kontūro kryptį, kurią galima panaudoti
+stilizuotam ASCII atvaizdavimui. Tačiau šie pranašumai yra pasiekiami skaičiavimo laiko kaina, Canny algoritmas yra
+gerokai sudėtingesnis ir reikalauja daugiau skaičiavimų nei paprastas šviesumo ar Sobelio algoritmai. Taip pat kaip ir
+kiti kontūrų aptikimo metodai, jis praranda informaciją apie lygius plotus ir švelnius atspalvių perėjimus. Apibendrinant,
+Canny algoritmas yra pažangus ir galingas įrankis kontūrams išgauti, leidžiantis generuoti detalius ir struktūriškai
+tikslius vaizdus iš ASCII simbolių, ypač kai norima pabrėžti formas ir linijas, o ne tik bendrą šviesumą. O galimybė
+naudoti kryptinę informaciją suteikia rezultatui unikalumo
+
+===== Papildomi vaizdų konvertavimo į ASCII metodai
+
+Be šviesumo ir kontūrų atpažinimo algoritmų, kurie yra pamatiniai ir plačiausiai taikomi metodai generuojant ASCII meną
+iš skaitmeninių vaizdų, egzistuoja ir kiti, netradiciniai ir labiau eksperimentiniai, būdai atlikti šią transformaciją.
+Šie metodai dažnai nukrypsta nuo tiesioginio pikselių šviesumo ar aiškiai identifikuojamų struktūrinių linijų atvaizdavimo,
+vietoj to siūlydami alternatyvius vaizdo informacijos kodavimo principus. Nors kai kurie iš šių metodų gali turėti įdomių
+pritaikymų arba sukurti unikalius vizualinius rezultatus, jie paprastai nėra tokie universalūs kaip anksčiau aptartieji
+ir dažnai turi specifinių apribojimų ar geriausiai tinka tik tam tikro tipo vaizdams apdoroti. Jų analizė vis dėlto yra
+naudinga, nes praplečia supratimą apie galimas vaizdo konvertavimo į tekstą strategijas ir iššūkius. Šiame skyriuje
+apžvelgsime keletą tokių papildomų konvertavimo būdų, kurie gali būti laikomi labiau eksperimentiniais ar nišiniais.
+
+Brailio rašto algoritmas yra dar viena technika skaitmeniniams vaizdams konvertuoti į tekstinį meną, tačiau ji veikia iš
+esmės skirtingai nei šviesumo ar kontūrų aptikimo algoritmai. Užuot kiekvieną pikselį atvaizdavus vienu ASCII simboliu,
+šis metodas grupuoja originalaus vaizdo pikselius į mažus blokus (šiuo atveju, 2x4 pikselių) ir kiekvieną tokį bloką
+atitinka vienas specialus Brailio rašto simbolis (CCC https://www.pharmabraille.com/pharmaceutical-braille/the-braille-alphabet/). Brailio simboliai yra sudaryti iš 8 taškų matricos (2 stulpeliai, 4
+eilutės). Kiekvienas iš šių 8 taškų gali būti matomas arba nematomas, leidžiant sukurti 2⁸ = 256 skirtingas kombinacijas.
+Algoritmas išnaudoja šią savybę, susiedamas kiekvieno taško būseną su atitinkamo pikselio šviesumu 2x4 bloke.
+
+Pagrindinė algoritmo idėja yra tokia:
+- Pradinis paruošimas ir slenksčio nustatymas:
+  - Kaip įprasta, algoritmas pradeda darbą su vaizdu konvertuotu į pilkus atspalvius. Apskaičiuojamas viso vaizdo
+    vidutinis šviesumas.
+  - Nustatomas globalus šviesumo slenkstis. Šis slenkstis bus naudojamas sprendžiant, ar konkretus pikselis yra
+    pakankamai tamsus, kad atitinkamas Brailio taškas būtų matomas.
+- Vaizdo padalijimas į blokus:
+  - Originalus vaizdas yra padalijamas į 2 pikselių pločio ir 4 pikselių aukščio blokus. Kadangi kiekvienas toks blokas
+    bus atvaizduotas vienu Brailio simboliu, galutinio ASCII vaizdo matmenys bus maždaug perpus mažesni pločio ir keturis
+    kartus mažesni aukščio atžvilgiu .
+- Brailio simbolio generavimas kiekvienam blokui:
+  - Iteruojama per kiekvieną 2x4 pikselių bloką. Kiekvienam blokui apibrėžiamas 8 Brailio taškų išdėstymas.
+  - Toliau kiekvienam iš 8 pikselių tame 2x4 bloke tikrinamas jo šviesumas. Jei pikselio šviesumo reikšmė yra mažesnė už
+    anksčiau apskaičiuotą globalų slenkstį, laikoma, kad šis pikselis yra tamsus. Tokiu atveju, atitinkamas Brailio taškas
+    tampa matomu. Jei pikselio šviesumas yra didesnis ar lygus slenksčiui, atitinkamas Brailio taškas lieka nematomas.
+  - Po visų 8 pikselių patikrinimo, gaunamas 8 bitų skaičius, kuris unikaliai atspindi tamsių pikselių išsidėstymą 2x4
+    bloke. Šis skaičius tarnauja kaip indeksas.
+- Simbolių priskyrimas ir rezultato formavimas:
+  - Apskaičiuotas indeksas naudojamas parenkant konkretų Brailio simbolį iš specialiai paruošto simbolių rinkinio. Šis
+    rinkinys turi būti sudarytas iš 256 Brailio simbolių.
+  - Parinktas Brailio simbolis įrašomas į atitinkamą vietą galutiniame dvimačiame simbolių masyve. Procesas kartojamas
+    visiems 2x4 blokams, kol suformuojamas visas Brailio ASCII vaizdas
+
+Nors Brailio algoritmas gali pasiekti didesnį efektyvų detalumą nei šviesumo algoritmas, jis turi reikšmingų apribojimų,
+ypač dirbant su sudėtingais fotografiniais vaizdais, tokiais kaip gatvės lygio vaizdai:
+- Globalus slenkstis: didžiausias trūkumas yra vieno globalaus slenksčio naudojimas visam vaizdui. Vaizdai su dideliais
+  šviesumo skirtumais, pavyzdžiui, ryškus dangus ir tamsūs pastatų šešėliai gatvės scenoje bus prastai atvaizduoti.
+  Slenkstis, parinktas pagal vidutinį šviesumą, gali būti per aukštas tamsioms sritims (prarandamos detalės šešėliuose)
+  ir per žemas šviesioms sritims (viskas tampa baltais taškais).
+- Dvejetainis atvaizdavimas: šis metodas gali reprezentuoti vaizdą kiekviename 2x4 bloke tik dviejose stadijose –
+  pikselis yra arba tamsus, arba šviesus. Tai reiškia, kad prarandamas labai didelis kiekis informacijos. Švelnūs
+  perėjimai, tekstūros ir šešėliai, būdingi realioms scenoms, negali būti perteikti.
+- Nesuderinamumas su spalvotu atvaizdavimu: kadangi vienas šiuo metodu sugeneruoto vaizdo simbolis talpina 8 pikselius,
+  prarandame ir spalvų informaciją. Žinoma, galima būtų naudoti šių pikselių spalvų visdurkį, tačiau toks kiekis sumaišytų
+  spalvų ne pagerins, o pakenks galutinio rezultato kokybei.
+
+Dėl šių priežasčių, Brailio konvertavimo metodas nėra tinkamas atvaizduoti sudėtingus, daug atspalvių turinčius vaizdus,
+tokius kaip peizažai ar gatvių fotografijos. Jis geriausiai tinka monochromatiniams vaizdams, turintiems aiškius kraštus.
+Rezultatas bus dar geresnis jei yra aiškus atskyrimas tarp tamsių ir šviesių sričių. Žemiau pateikiama ideali sutuacija,
+kurioje būtų naudingas šis konvertavimo metodas (#ref(<ideal_braille_example>)).
+
+#figure(
+  image("/images/ideal_braille_example.png", width: 15cm),
+  caption: [Idealus vaizdas konvertavimui su Brailio metodu.],
+) <ideal_braille_example>
+
+Brailio metodas yra nišinis ASCII reprezentavimo būdas, turintis unikalių privalumų. Tačiau jo pritaikymas šio projekto
+ribose yra ribotas dėl ypatingai didelio prarandamos informacijos kiekio atvaizduojant chaotiškas gatvės fotografijas.
