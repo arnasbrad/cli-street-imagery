@@ -316,7 +316,7 @@ ir dažnai turi specifinių apribojimų ar geriausiai tinka tik tam tikro tipo v
 naudinga, nes praplečia supratimą apie galimas vaizdo konvertavimo į tekstą strategijas ir iššūkius. Šiame skyriuje
 apžvelgsime keletą tokių papildomų konvertavimo būdų, kurie gali būti laikomi labiau eksperimentiniais ar nišiniais.
 
-Brailio rašto algoritmas yra dar viena technika skaitmeniniams vaizdams konvertuoti į tekstinį meną, tačiau ji veikia iš
+*Brailio rašto algoritmas* yra dar viena technika skaitmeniniams vaizdams konvertuoti į tekstinį meną, tačiau ji veikia iš
 esmės skirtingai nei šviesumo ar kontūrų aptikimo algoritmai. Užuot kiekvieną pikselį atvaizdavus vienu ASCII simboliu,
 šis metodas grupuoja originalaus vaizdo pikselius į mažus blokus (šiuo atveju, 2x4 pikselių) ir kiekvieną tokį bloką
 atitinka vienas specialus Brailio rašto simbolis (CCC https://www.pharmabraille.com/pharmaceutical-braille/the-braille-alphabet/). Brailio simboliai yra sudaryti iš 8 taškų matricos (2 stulpeliai, 4
@@ -371,3 +371,36 @@ kurioje būtų naudingas šis konvertavimo metodas (#ref(<ideal_braille_example>
 
 Brailio metodas yra nišinis ASCII reprezentavimo būdas, turintis unikalių privalumų. Tačiau jo pritaikymas šio projekto
 ribose yra ribotas dėl ypatingai didelio prarandamos informacijos kiekio atvaizduojant chaotiškas gatvės fotografijas.
+
+*Vieno simbolio užpildymo metodas* yra bene pats minimalistiškiausias. Jo veikimo principas radikaliai skiriasi nuo anksčiau
+aptartų algoritmų kadangi šis algoritmas visiškai ignoruoja originalaus vaizdo turinį, išskyrus jo matmenis.
+
+Veikimo Principas:
+- Nuskaitomi įvesties vaizdo matmenys – aukštis ir plotis.
+- Sukuriama naujas dvimatis simbolių masyvas, turintis lygiai tokius pačius matmenis kaip ir įvesties vaizdas.
+- Visa šis masyvas yra užpildomas vienu ir tuo pačiu solidaus bloko „█“ simboliu, kuris pilnai užpildo vienam simboliui
+  skirtą vietą.
+
+Tai reiškia, kad nepriklausomai nuo to, kas buvo pavaizduota originalioje nuotraukoje, šio metodo rezultatas visada bus
+vientisas stačiakampis, sudarytas iš identiškų simbolių. Iš pirmo žvilgsnio gali atrodyti, kad toks algoritmas yra
+bevertis, nes jis neperteikia jokios vizualinės informacijos iš pradinio vaizdo per simbolių variaciją. Tačiau jo tikroji
+paskirtis atsiskleidžia specifiniame kontekste - spalvoto ASCII meno generavime. Anksčiau išvardinti veiksmai naudojami
+kaip paruošiamasis žingsnis, sukuriant tekstinį „drobės“ pagrindą. Nors patys simboliai yra vienodi, spausdinimo į
+komandinę eilutę etape kiekvienam simboliui bus priskiriama spalva, paimta iš atitinkamos originalaus vaizdo vietos.
+Tokiu būdu, nors tekstūra yra visiškai vienoda, spalvų variacijos sukuria galutinį vaizdą. Rezultatas primena pikselių
+meną (angl. _pixel art_), tik vietoj spalvotų kvadratėlių naudojami spalvoti ASCII simboliai.
+
+Privalumai:
+- Itin paprastas ir greitas: pats greičiausias ir paprasčiausias šiame projekte naudotas konvertavimo metodas.
+- Pilnas vaizdo padengimas: bloko simboliai pilnai užpildo vaizdą, matomas tik minimalus kiekis vienspalvio fono.
+
+Trūkumai:
+- Visiškai neinformatyvus be spalvų: pats savaime, be papildomo spalvinimo etapo, algoritmas nesukuria jokio atpažįstamo vaizdo.
+- Neišnaudoja ASCII simbolių įvairovės: priešingai nei tradiciniai algoritmai, šis nepasinaudoja skirtingų simbolių vizualiniu
+  svoriu ar forma detalių ar tekstūrų perteikimui.
+
+Apibendrinant, vieno simbolio užpildymo metodas yra netradicinis ASCII meno generavimo metodas, kuris pats nesukuria
+vaizdo iš šviesumo ar kontūrų, bet tarnauja kaip fundamentalus žingsnis kuriant spalvotą tekstinį meną, kur vizualinė
+informacija perteikiama ne per simbolių formą, o per jiems priskiriamas spalvas. Dėl šios priklausomybės nuo vėlesnio
+spalvinimo ir visiško pradinio vaizdo tekstūrinės informacijos ignoravimo, jis pagrįstai priskiriamas prie eksperimentinių
+ar specializuotų konvertavimo metodų.
