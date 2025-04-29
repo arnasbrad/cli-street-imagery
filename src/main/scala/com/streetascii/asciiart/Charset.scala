@@ -1,39 +1,49 @@
 package com.streetascii.asciiart
 
 sealed trait Charset {
-  def value: String
+  val value: String
+  val textPrintingValue: String
+
+  def getValue(isText: Boolean): String =
+    if (isText) textPrintingValue else value
 }
 
 object Charset {
   case object Default extends Charset {
-    def value = " .:-=+*#%@"
+    val value             = ".:-=+*#%@"
+    val textPrintingValue = s" $value"
   }
 
   case object Blocks extends Charset {
-    def value = " ░▒▓█"
+    val value             = "░▒▓█"
+    val textPrintingValue = s" $value"
   }
 
   case object BlocksExtended extends Charset {
-    def value = " ·░▒▓▄▌▐▀█"
+    val value             = "·░▒▓▄▌▐▀█"
+    val textPrintingValue = s" $value"
   }
 
   case object Extended extends Charset {
-    def value =
-      " .'`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+    val value =
+      ".'`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+    val textPrintingValue = s" $value"
   }
 
   case object Braille extends Charset {
-    def value =
-      " ⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿"
+    val value =
+      "⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿"
+    val textPrintingValue = s" $value"
   }
 
   case object Blank extends Charset {
-    def value =
+    val value =
       "█"
+    val textPrintingValue = s" $value"
   }
 
   case object BraillePatterns extends Charset {
-    def value: String = {
+    val value: String = {
       // Generate all 256 possible Braille patterns (2^8 combinations)
       (0 until 256)
         .map(pattern => {
@@ -42,5 +52,6 @@ object Charset {
         })
         .mkString
     }
+    val textPrintingValue: String = value
   }
 }

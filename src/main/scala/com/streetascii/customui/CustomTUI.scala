@@ -610,7 +610,8 @@ object CustomTUI {
           asciiWithColors = textAlgorithm
             .generate(
               appConfig.processing.charset,
-              greyscale.grayscaleDecimals
+              greyscale.grayscaleDecimals,
+              isText = true
             )
 
           _ <- printGrid(

@@ -17,12 +17,12 @@ class Algoritms extends AnyFlatSpec with Matchers {
 
     // Expected output based on Default charset: ".:-=+*#%@"
     // For 0 -> '.', for 127 -> '*', for 255 -> '@'
-    result(0)(0) should be(' ') // Black maps to first char
-    result(0)(1) should be('+') // Mid-gray maps to middle char
+    result(0)(0) should be('.') // Black maps to first char
+    result(0)(1) should be('*') // Mid-gray maps to middle char
     result(0)(2) should be('@') // White maps to last char
 
     // Additional assertions for the second row
-    result(1)(0) should be('.') // 50 maps to a character near the beginning
+    result(1)(0) should be(':') // 50 maps to a character near the beginning
     result(1)(1) should be('+') // 150 maps to a character past the middle
     result(1)(2) should be('%') // 200 maps to a character near the end
   }
@@ -88,8 +88,8 @@ class Algoritms extends AnyFlatSpec with Matchers {
 
     // The algorithm should extract one channel (& 0xff)
     // 0 & 0xff = 0, 8421504 & 0xff = 0, 16777215 & 0xff = 255
-    result(0)(0) should be(' ') // Black -> first char
-    result(0)(1) should be('=') // Should be 0 after extracting the lowest byte
+    result(0)(0) should be('.') // Black -> first char
+    result(0)(1) should be('+') // Should be 0 after extracting the lowest byte
     result(0)(2) should be('@') // White -> last char
   }
 
@@ -101,8 +101,8 @@ class Algoritms extends AnyFlatSpec with Matchers {
     val result = LuminanceAlgorithm.generate(Charset.Default, input)
 
     // Should use the first character for invalid input
-    result(0)(0) should be(' ') // Valid input
-    result(0)(1) should be(' ') // Invalid input defaults to first char
+    result(0)(0) should be('.') // Valid input
+    result(0)(1) should be('.') // Invalid input defaults to first char
     result(0)(2) should be('@') // Valid input
   }
 
