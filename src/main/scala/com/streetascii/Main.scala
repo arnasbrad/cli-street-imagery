@@ -187,7 +187,7 @@ object Main
                     } yield exitCode
                   case None =>
                     IO.println(
-                      s"Geocoding dit not return any results for address: ${args.address}"
+                      s"Geocoding did not return any results for address: ${args.address}"
                     ).as(ExitCode.Error)
                 }
               case Left(error) =>
