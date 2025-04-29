@@ -1,6 +1,7 @@
 package com.streetascii.cli
 
 import cats.data.Validated
+import cats.implicits.catsSyntaxTuple2Semigroupal
 import com.monovore.decline._
 import com.streetascii.cli.Models.{
   AddressEntryArgs,
@@ -14,6 +15,16 @@ import com.streetascii.common.Models.Coordinates
 import scala.util.Try
 
 object Cli {
+  // Define a function to create the config option (for consistency)
+  private def configPathOpt: Opts[String] =
+    Opts
+      .option[String](
+        long = "config",
+        short = "c",
+        help = "Path to configuration file"
+      )
+      .withDefault("./config.conf")
+
   private val imageIdArg =
     Opts
       .argument[String](metavar = "IMAGE_ID")
@@ -48,25 +59,25 @@ object Cli {
 
   val idCommand: Opts[ImageIdEntryArgs] = Opts.subcommand(
     Command(name = "id", header = "Start with a Mapillary image ID")(
-      imageIdArg.map(ImageIdEntryArgs)
+      (imageIdArg, configPathOpt).mapN(ImageIdEntryArgs)
     )
   )
 
   val coordinatesCommand: Opts[CoordinatesEntryArgs] = Opts.subcommand(
     Command(name = "coordinates", header = "Start with geographic coordinates")(
-      coordinatesArg.map(CoordinatesEntryArgs)
+      (coordinatesArg, configPathOpt).mapN(CoordinatesEntryArgs)
     )
   )
 
   val addressCommand: Opts[AddressEntryArgs] = Opts.subcommand(
     Command(name = "address", header = "Start with a street address")(
-      addressArg.map(AddressEntryArgs)
+      (addressArg, configPathOpt).mapN(AddressEntryArgs)
     )
   )
 
   val guessingCommand: Opts[GuessingArgs] = Opts.subcommand(
     Command(name = "guessing", header = "Start in guessing mode")(
-      Opts(GuessingArgs())
+      configPathOpt.map(configPath => GuessingArgs(configPath))
     )
   )
 }

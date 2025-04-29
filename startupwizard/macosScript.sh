@@ -266,8 +266,8 @@ gum confirm "Ready to proceed and save configuration?" && {
 api {
   mapillary-key = "${mapillaryKey}"
   imgur-client-id = "${imgurKey}"
-  travelTime-app-id = "${travelTimeAppId}"
-  travelTime-key ="${travelTimeKey}"
+  traveltime-app-id = "${travelTimeAppId}"
+  traveltime-key ="${travelTimeKey}"
 }
 
 processing {

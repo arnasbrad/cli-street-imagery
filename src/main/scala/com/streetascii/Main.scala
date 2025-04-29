@@ -3,10 +3,8 @@ package com.streetascii
 import cats.effect.{ExitCode, IO, Resource}
 import com.monovore.decline.Opts
 import com.monovore.decline.effect.CommandIOApp
-import com.streetascii.AppConfig.{ApiConfig, ColorConfig, ProcessingConfig}
-import com.streetascii.asciiart.Algorithms.LuminanceAlgorithm
+import com.streetascii.asciiart.Conversions
 import com.streetascii.asciiart.Models.ImageInfo
-import com.streetascii.asciiart.{Charset, Conversions}
 import com.streetascii.cli.Cli.{
   addressCommand,
   coordinatesCommand,
@@ -14,19 +12,15 @@ import com.streetascii.cli.Cli.{
   idCommand
 }
 import com.streetascii.clients.imgur.ImgurClient
-import com.streetascii.clients.imgur.Models.ClientId
 import com.streetascii.clients.mapillary.MapillaryClient
-import com.streetascii.clients.mapillary.Models.ApiKey
-import com.streetascii.clients.traveltime.Models.AppId
 import com.streetascii.clients.traveltime.TravelTimeClient
-import com.streetascii.colorfilters.ColorFilter
 import com.streetascii.customui.CustomTUI
-import com.streetascii.guessinggame.CountryModels.{Country, GuesserLocation}
+import com.streetascii.guessinggame.CountryModels.Country
 import com.streetascii.guessinggame.GuessingLocations
-import com.streetascii.navigation.Models.NavigationType
 import com.streetascii.runner.RunnerImpl
 import org.typelevel.log4cats.SelfAwareStructuredLogger
 import org.typelevel.log4cats.slf4j.Slf4jLogger
+import pureconfig.ConfigSource
 
 object Main
     extends CommandIOApp(
@@ -36,6 +30,7 @@ object Main
     ) {
   implicit def logger: SelfAwareStructuredLogger[IO] = Slf4jLogger.getLogger[IO]
 
+  /*
   val appConfig: AppConfig = AppConfig(
     api = ApiConfig(
       mapillaryKey = ApiKey.unsafeCreate(
@@ -56,8 +51,9 @@ object Main
       colorFilter = ColorFilter.NoFilter
     )
   )
+   */
 
-  private def initClients() = {
+  private def initClients(appConfig: AppConfig) = {
     for {
       mapillaryClient <- MapillaryClient.make(appConfig.api.mapillaryKey)
       imgurClientOpt <- appConfig.api.imgurClientId match {
@@ -80,7 +76,8 @@ object Main
       imageInfo: ImageInfo,
       runner: RunnerImpl,
       isGuessingMode: Boolean,
-      country: Country
+      country: Country,
+      appConfig: AppConfig
   ): IO[ExitCode] = {
     val greyscale = Conversions.hexStringsToSampledGreyscaleDecimal(
       appConfig.processing.downSamplingRate,
@@ -108,112 +105,125 @@ object Main
 
   override def main: Opts[IO[ExitCode]] = {
     idCommand.map { args =>
-      initClients().use { runner =>
-        for {
-          imageInfo <- runner
-            .getHexStringsFromId(args.imageId)
-            .value
+      AppConfig.loadFromPath(args.configPath).flatMap { appConfig =>
+        initClients(appConfig).use { runner =>
+          for {
+            imageInfo <- runner
+              .getHexStringsFromId(args.imageId)
+              .value
 
-          exitCode <- imageInfo match {
-            case Right(imageInfo) =>
-              runTerminalApp(
-                imageInfo,
-                runner,
-                isGuessingMode = false,
-                Country.Latvia
-              )
-            case Left(error) =>
-              IO.println(
-                s"Origin image parsing failed with error: ${error.message}"
-              ).as(ExitCode.Error)
-          }
-        } yield exitCode
+            exitCode <- imageInfo match {
+              case Right(imageInfo) =>
+                runTerminalApp(
+                  imageInfo,
+                  runner,
+                  isGuessingMode = false,
+                  Country.Latvia,
+                  appConfig
+                )
+              case Left(error) =>
+                IO.println(
+                  s"Origin image parsing failed with error: ${error.message}"
+                ).as(ExitCode.Error)
+            }
+          } yield exitCode
+        }
       }
-    } orElse coordinatesCommand.map { args =>
-      initClients().use { runner =>
-        for {
-          imageInfo <- runner
-            .getHexStringsFromLocation(args.coordinates)
-            .value
 
-          exitCode <- imageInfo match {
-            case Right(imageInfo) =>
-              runTerminalApp(
-                imageInfo,
-                runner,
-                isGuessingMode = false,
-                Country.Latvia
-              )
-            case Left(error) =>
-              IO.println(
-                s"Origin image parsing failed with error: ${error.message}"
-              ).as(ExitCode.Error)
-          }
-        } yield exitCode
+    } orElse coordinatesCommand.map { args =>
+      AppConfig.loadFromPath(args.configPath).flatMap { appConfig =>
+        initClients(appConfig).use { runner =>
+          for {
+            imageInfo <- runner
+              .getHexStringsFromLocation(args.coordinates)
+              .value
+
+            exitCode <- imageInfo match {
+              case Right(imageInfo) =>
+                runTerminalApp(
+                  imageInfo,
+                  runner,
+                  isGuessingMode = false,
+                  Country.Latvia,
+                  appConfig
+                )
+              case Left(error) =>
+                IO.println(
+                  s"Origin image parsing failed with error: ${error.message}"
+                ).as(ExitCode.Error)
+            }
+          } yield exitCode
+        }
       }
     } orElse addressCommand.map { args =>
-      initClients().use { runner =>
-        for {
-          respEith <- runner.getCoordinatesFromAddress(args.address).value
+      AppConfig.loadFromPath(args.configPath).flatMap { appConfig =>
+        initClients(appConfig).use { runner =>
+          for {
+            respEith <- runner.getCoordinatesFromAddress(args.address).value
 
-          exitCode <- respEith match {
-            case Right(coordinatesOpt) =>
-              coordinatesOpt match {
-                case Some(coordinates) =>
-                  for {
-                    imageInfo <- runner
-                      .getHexStringsFromLocation(coordinates)
-                      .value
+            exitCode <- respEith match {
+              case Right(coordinatesOpt) =>
+                coordinatesOpt match {
+                  case Some(coordinates) =>
+                    for {
+                      imageInfo <- runner
+                        .getHexStringsFromLocation(coordinates)
+                        .value
 
-                    exitCode <- imageInfo match {
-                      case Right(imageInfo) =>
-                        runTerminalApp(
-                          imageInfo,
-                          runner,
-                          isGuessingMode = false,
-                          Country.Latvia
-                        )
-                      case Left(error) =>
-                        IO.println(
-                          s"Origin image parsing failed with error: ${error.message}"
-                        ).as(ExitCode.Error)
-                    }
-                  } yield exitCode
-                case None =>
-                  IO.println(
-                    s"Geocoding dit not return any results for address: ${args.address}"
-                  ).as(ExitCode.Error)
-              }
-            case Left(error) =>
-              IO.println(
-                s"Error during address geocoding: ${error.message}"
-              ).as(ExitCode.Error)
-          }
+                      exitCode <- imageInfo match {
+                        case Right(imageInfo) =>
+                          runTerminalApp(
+                            imageInfo,
+                            runner,
+                            isGuessingMode = false,
+                            Country.Latvia,
+                            appConfig
+                          )
+                        case Left(error) =>
+                          IO.println(
+                            s"Origin image parsing failed with error: ${error.message}"
+                          ).as(ExitCode.Error)
+                      }
+                    } yield exitCode
+                  case None =>
+                    IO.println(
+                      s"Geocoding did not return any results for address: ${args.address}"
+                    ).as(ExitCode.Error)
+                }
+              case Left(error) =>
+                IO.println(
+                  s"Error during address geocoding: ${error.message}"
+                ).as(ExitCode.Error)
+            }
 
-        } yield exitCode
+          } yield exitCode
+        }
       }
     } orElse guessingCommand.map { args =>
-      initClients().use { runner =>
-        for {
-          location <- GuessingLocations.getRandomLocation
-          imageInfoEither <- runner
-            .getHexStringsFromId(location.id)
-            .value
+      AppConfig.loadFromPath(args.configPath).flatMap { appConfig =>
+        initClients(appConfig).use { runner =>
+          for {
+            location <- GuessingLocations.getRandomLocation
+            imageInfoEither <- runner
+              .getHexStringsFromId(location.id)
+              .value
 
-          exitCode <- imageInfoEither match {
-            case Right(imageInfo) =>
-              runTerminalApp(
-                imageInfo,
-                runner,
-                isGuessingMode = true,
-                location.country
-              )
-            case Left(error) =>
-              IO.println(
-                s"Origin image parsing failed with error: ${error.message}"
-              ).as(ExitCode.Error)
-          }
-        } yield exitCode
+            exitCode <- imageInfoEither match {
+              case Right(imageInfo) =>
+                runTerminalApp(
+                  imageInfo,
+                  runner,
+                  isGuessingMode = true,
+                  location.country,
+                  appConfig
+                )
+              case Left(error) =>
+                IO.println(
+                  s"Origin image parsing failed with error: ${error.message}"
+                ).as(ExitCode.Error)
+            }
+          } yield exitCode
+        }
       }
     }
   }
