@@ -4,7 +4,7 @@ import com.streetascii.asciiart.Charset.CustomCharset
 
 sealed trait Charset {
   val value: String
-  val withSpaceAtStart: Charset = CustomCharset(s" $value")
+  val valueForText: Charset = CustomCharset(s" $value")
 }
 
 object Charset {
@@ -47,6 +47,6 @@ object Charset {
         })
         .mkString
     }
-    override val withSpaceAtStart: Charset = CustomCharset(value)
+    override val valueForText: Charset = CustomCharset(value)
   }
 }
