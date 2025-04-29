@@ -1,45 +1,40 @@
 package com.streetascii.asciiart
 
+import com.streetascii.asciiart.Charset.CustomCharset
+
 sealed trait Charset {
   val value: String
-  val textPrintingValue: String
-
-  def getValue(isText: Boolean): String =
-    if (isText) textPrintingValue else value
+  val withSpaceAtStart: Charset = CustomCharset(s" $value")
 }
 
 object Charset {
+  case class CustomCharset(value: String) extends Charset
+
   case object Default extends Charset {
-    val value             = ".:-=+*#%@"
-    val textPrintingValue = s" $value"
+    val value = ".:-=+*#%@"
   }
 
   case object Blocks extends Charset {
-    val value             = "░▒▓█"
-    val textPrintingValue = s" $value"
+    val value = "░▒▓█"
   }
 
   case object BlocksExtended extends Charset {
-    val value             = "·░▒▓▄▌▐▀█"
-    val textPrintingValue = s" $value"
+    val value = "·░▒▓▄▌▐▀█"
   }
 
   case object Extended extends Charset {
     val value =
       ".'`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
-    val textPrintingValue = s" $value"
   }
 
   case object Braille extends Charset {
     val value =
       "⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿"
-    val textPrintingValue = s" $value"
   }
 
   case object Blank extends Charset {
     val value =
       "█"
-    val textPrintingValue = s" $value"
   }
 
   case object BraillePatterns extends Charset {
@@ -52,6 +47,6 @@ object Charset {
         })
         .mkString
     }
-    val textPrintingValue: String = value
+    override val withSpaceAtStart: Charset = CustomCharset(value)
   }
 }

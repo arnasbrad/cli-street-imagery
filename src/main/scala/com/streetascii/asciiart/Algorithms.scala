@@ -6,16 +6,14 @@ object Algorithms {
   trait AsciiAlgorithm {
     def generate(
         charset: Charset,
-        input: Array[Array[String]],
-        isText: Boolean = false
+        input: Array[Array[String]]
     ): Array[Array[Char]]
   }
 
   case object BlankFilledAlgorithm extends AsciiAlgorithm {
     override def generate(
         charset: Charset,
-        input: Array[Array[String]],
-        isText: Boolean
+        input: Array[Array[String]]
     ): Array[Array[Char]] = {
       // Get dimensions from input
       val height = input.length
@@ -29,17 +27,14 @@ object Algorithms {
   case object LuminanceAlgorithm extends AsciiAlgorithm {
     override def generate(
         charset: Charset,
-        input: Array[Array[String]],
-        isText: Boolean
+        input: Array[Array[String]]
     ): Array[Array[Char]] =
-      luminanceAlgorithm(input, charset, isText)
+      luminanceAlgorithm(input, charset)
 
     private def luminanceAlgorithm(
         grayscaleValues: Array[Array[String]],
-        charset: Charset,
-        isText: Boolean
+        charset: Charset
     ): Array[Array[Char]] = {
-      val charsetString = charset.getValue(isText)
       grayscaleValues.map { row =>
         row.map { str =>
           Try {
@@ -58,17 +53,17 @@ object Algorithms {
 
             // Map to ASCII character
             val index =
-              ((grayscaleValue * (charsetString.length - 1)) / 255.0).toInt
+              ((grayscaleValue * (charset.value.length - 1)) / 255.0).toInt
 
             // Clamp the index to prevent out of bounds
             val safeIndex =
-              math.min(math.max(index, 0), charsetString.length - 1)
-            charsetString(safeIndex)
+              math.min(math.max(index, 0), charset.value.length - 1)
+            charset.value(safeIndex)
           } match {
             case Success(c) => c
             case Failure(e) =>
               println(e.getMessage)
-              charsetString(0)
+              charset.value(0)
           }
         }
       }
@@ -78,10 +73,9 @@ object Algorithms {
   case object EdgeDetectionSobelAlgorithm extends AsciiAlgorithm {
     override def generate(
         charset: Charset,
-        input: Array[Array[String]],
-        isText: Boolean
+        input: Array[Array[String]]
     ): Array[Array[Char]] =
-      edgeDetectionAlgorithm(input, charset, isText = isText, invert = false)
+      edgeDetectionAlgorithm(input, charset, false)
 
     private def detectEdges(
         grayscaleValues: Array[Array[String]],
@@ -161,10 +155,8 @@ object Algorithms {
     private def edgeDetectionAlgorithm(
         grayscaleValues: Array[Array[String]],
         charset: Charset,
-        isText: Boolean,
         invert: Boolean
     ): Array[Array[Char]] = {
-      val charsetString = charset.getValue(isText)
       // Detect edges
       val edgeValues = detectEdges(grayscaleValues, invert)
 
@@ -173,13 +165,13 @@ object Algorithms {
         row.map { str =>
           Try {
             val intValue = str.toInt
-            val index = ((intValue * (charsetString.length - 1)) / 255.0).toInt
+            val index = ((intValue * (charset.value.length - 1)) / 255.0).toInt
             val safeIndex =
-              math.min(math.max(index, 0), charsetString.length - 1)
-            charsetString(safeIndex)
+              math.min(math.max(index, 0), charset.value.length - 1)
+            charset.value(safeIndex)
           } match {
             case Success(res) => res
-            case Failure(e)   => charsetString.head
+            case Failure(e)   => charset.value.head
           }
         }
       }
@@ -189,10 +181,9 @@ object Algorithms {
   case object EdgeDetectionCannyAlgorithm extends AsciiAlgorithm {
     override def generate(
         charset: Charset,
-        input: Array[Array[String]],
-        isText: Boolean
+        input: Array[Array[String]]
     ): Array[Array[Char]] =
-      edgeDetectionAlgorithm(input, charset, isText = isText, invert = false)
+      edgeDetectionAlgorithm(input, charset, false)
 
     private def detectEdges(
         grayscaleValues: Array[Array[String]],
@@ -466,9 +457,9 @@ object Algorithms {
     private def mapDirectionToChar(
         direction: Int,
         intensity: Int,
-        charsetString: String
+        charset: Charset
     ): Char = {
-      if (intensity == 0) return charsetString.head // Non-edge pixel
+      if (intensity == 0) return charset.value.head // Non-edge pixel
 
       // Get a set of directional characters based on the direction
       val directionalChar = direction match {
@@ -497,10 +488,8 @@ object Algorithms {
     private def edgeDetectionAlgorithm(
         grayscaleValues: Array[Array[String]],
         charset: Charset,
-        isText: Boolean,
         invert: Boolean
     ): Array[Array[Char]] = {
-      val charsetString = charset.getValue(isText)
       // Detect edges and get directions
       val (edgeValues, directions) = detectEdges(grayscaleValues, invert)
 
@@ -513,18 +502,18 @@ object Algorithms {
             // If this is an edge pixel, use directional character
             if (intValue > 50) { // Threshold to determine if it's an edge
               val direction = directions(y)(x)
-              mapDirectionToChar(direction, intValue, charsetString)
+              mapDirectionToChar(direction, intValue, charset)
             } else {
               // For non-edge pixels, use the regular charset mapping
               val index =
-                ((intValue * (charsetString.length - 1)) / 255.0).toInt
+                ((intValue * (charset.value.length - 1)) / 255.0).toInt
               val safeIndex =
-                math.min(math.max(index, 0), charsetString.length - 1)
-              charsetString(safeIndex)
+                math.min(math.max(index, 0), charset.value.length - 1)
+              charset.value(safeIndex)
             }
           } match {
             case Success(res) => res
-            case Failure(_)   => charsetString.head
+            case Failure(_)   => charset.value.head
           }
         }
       }
@@ -534,10 +523,9 @@ object Algorithms {
   case object BrailleAlgorithm extends AsciiAlgorithm {
     override def generate(
         charset: Charset,
-        input: Array[Array[String]],
-        isText: Boolean
+        input: Array[Array[String]]
     ): Array[Array[Char]] =
-      brailleAlgorithm(input, charset, isText)
+      brailleAlgorithm(input, charset)
 
     private def calculateAverageBrightness(
         packedRgbArray: Array[Array[String]]
@@ -619,13 +607,11 @@ object Algorithms {
 
     private def brailleAlgorithm(
         grayscaleValues: Array[Array[String]],
-        charset: Charset,
-        isText: Boolean
+        charset: Charset
     ): Array[Array[Char]] = {
-      val charsetString = charset.getValue(isText)
-      val height        = grayscaleValues.length
-      val width         = if (height > 0) grayscaleValues(0).length else 0
-      val brightness    = calculateAverageBrightness(grayscaleValues) - 55
+      val height     = grayscaleValues.length
+      val width      = if (height > 0) grayscaleValues(0).length else 0
+      val brightness = calculateAverageBrightness(grayscaleValues) - 55
 
       if (height <= 0 || width <= 0) {
         // Return a properly structured empty result
@@ -651,7 +637,7 @@ object Algorithms {
                 height,
                 brightness
               )
-              charsetString(patternIndex)
+              charset.value(patternIndex)
             }.toArray
           }.toArray
 

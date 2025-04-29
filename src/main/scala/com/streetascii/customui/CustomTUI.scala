@@ -609,9 +609,8 @@ object CustomTUI {
 
           asciiWithColors = textAlgorithm
             .generate(
-              appConfig.processing.charset,
-              greyscale.grayscaleDecimals,
-              isText = true
+              appConfig.processing.charset.withSpaceAtStart,
+              greyscale.grayscaleDecimals
             )
 
           _ <- printGrid(
