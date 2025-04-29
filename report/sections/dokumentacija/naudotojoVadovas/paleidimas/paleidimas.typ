@@ -50,7 +50,7 @@ klaidai, ektrane matysite atitinkamą klaidos tekstą, pavyzdžiui:
   ```
 - Nepavykusio koordinačių radimo klaida
   ```
-  Geocoding dit not return any results for address: Neegzistuojantis adresas 12341234
+  Geocoding did not return any results for address: Neegzistuojantis adresas 12341234
   ```
 Ir panašios klaidos.
 
