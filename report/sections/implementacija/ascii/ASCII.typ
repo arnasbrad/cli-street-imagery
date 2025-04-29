@@ -167,14 +167,27 @@ galima konvertuoti į simbolių rinkinio indeksą naudojant formulę:
 galimas indekso numeris simbolių rinkinyje, dalijymas iš 255 normalizuoja šviesumo reikšmę į intervalą [0, N-1].
 
 Kai kiekvienam pikseliui priskiriamas atitinkamas ASCII simbolis, šie simboliai yra išdėstomi į dvimatę struktūrą,
-atkartojančią pradinės nuotraukos matmenis. Dažniausiai tai realizuojama kaip tekstinė eilutė, kurioje eilutės atskiriamos
-naujos eilutės simboliais („`\n`“), taip suformuojant galutinį ASCII meno kūrinį, paruoštą atvaizdavimui ekrane ar faile.
+atkartojančią pradinės nuotraukos matmenis. Eilutės atskiriamos naujos eilutės simboliais („`\n`“), taip suformuojant
+galutinį ASCII meno kūrinį, paruoštą atvaizdavimui ekrane ar faile.
 
 Galutinio rezultato kokybė, naudojant šviesumo algoritmą, labai priklauso nuo kelių veiksnių. Esminę įtaką daro pasirinktas
-ASCII simbolių rinkinys. Kuo daugiau simbolių jame yra ir kuo tolygiau pasiskirstęs jų vizualinis tankis (t.y., kuo mažesni
-„šuoliai“ tarp gretimų simbolių tankumo), tuo glotnesnius toninius perėjimus ir detalesnį vaizdą galima išgauti. Prastai
+ASCII simbolių rinkinys. Kuo daugiau simbolių jame yra ir kuo tolygiau pasiskirstęs jų vizualinis tankis tai yra, kuo mažesni
+„šuoliai“ tarp gretimų simbolių tankumo, tuo glotnesnius atspalvių perėjimus ir detalesnį vaizdą galima išgauti. Prastai
 parinktas rinkinys, kuriame simbolių tankis kinta netolygiai arba kuriame yra mažai simbolių, gali lemti grubų, „laiptuotą“
-vaizdą su prarastomis detalėmis.
+vaizdą su prarastomis detalėmis. Toliau pateikiamas šviesumo algoritmo pavyzdys naudojant Brailio simbolių rinkinį (#ref(<luminance_example>)).
+
+#figure(
+  image("/images/luminance_example.png", width: 15cm),
+  caption: [Šviesumo algoritmo pavyzdys naudojant Brailio simbolių rinkinį.],
+) <luminance_example>
+
+Šiuo būdu atvaizduojant nuotraukas mažiau tankūs Brailio simboliai padaro spalvų skirtumus ryškesnius, kadangi daugiau
+juodo komandinės eilutės fono yra matoma. Toliau bandome konvertuoti naudojant anksčiau aprašytą išplėstąją simbolių aibę (#ref(<luminance_example2>)).
+
+#figure(
+  image("/images/luminance_example2.png", width: 15cm),
+  caption: [Šviesumo algoritmo pavyzdys naudojant išplėstąjį simbolių rinkinį.],
+) <luminance_example2>
 
 Nepaisant galimų trūkumų, šviesumo algoritmas turi akivaizdžių privalumų. Pirmiausia, jis yra konceptualiai paprastas ir
 lengvai įgyvendinamas programuojant. Antra, jis yra efektyvus skaičiavimų prasme, nes kiekvieno pikselio apdorojimas
@@ -236,7 +249,23 @@ atitinkamas simbolis, suformuojant galutinį ASCII meno kūrinį.
 Rezultato kokybė, naudojant šį kraštų atpažinimo algoritmą, priklauso nuo kelių veiksnių. Sobelio operatorius yra gana
 paprastas ir jautrus triukšmui vaizde – atsitiktiniai maži šviesumo svyravimai gali būti klaidingai interpretuojami kaip
 kontūrai. Gauti kontūrai taip pat gali būti storesni nei tikėtasi. Kaip ir šviesumo algoritmo atveju, pasirinktas ASCII
-simbolių rinkinys yra labai svarbus – jis lemia, kaip bus atvaizduojami skirtingo stiprumo kontūrai.
+simbolių rinkinys yra labai svarbus – jis lemia, kaip bus atvaizduojami skirtingo stiprumo kontūrai. Toliau pateikiamas
+rezultatas naudojant išplėstinį simbolių rinkinį (#ref(<sobel_example>)).
+
+#figure(
+  image("/images/sobel_example.png", width: 15cm),
+  caption: [Sobelio algoritmo pavyzdys naudojant Brailio simbolių rinkinį.],
+) <sobel_example>
+
+Kaip matome šis algoritmas išryškino ryškiausius kraštus lyginant su šviesumo algoritmu. Pagrindiniai išryškinti kraštai
+yra tarp dangaus ir žemės taip pat aprink suolelį. Tačiau šioje nuotraukoje labai didelio šio algoritmo efekto nesimato,
+pabandykime konvertuoti miesto nuotrauką su daugiau ryškių kraštinių (#ref(<sobel_example2>)). Šiame pavyzdyje geriau
+atsiskleidžia algoritmo privalumai, žymiai labiau išryškinamos pastatų detalės.
+
+#figure(
+  image("/images/sobel_example2.png", width: 15cm),
+  caption: [Optimalus Sobelio algoritmo pavyzdys.],
+) <sobel_example2>
 
 Apibendrinant, kontūrų išryškinimo algoritmas yra vertinga ASCII meno generavimo technika, ypač tinkama, kai norima pabrėžti
 vaizdo struktūrą ir formas, o ne fotorealistišką šviesumo atvaizdavimą. Šis algoritmas gali išryškinti detales, kurios būtų
@@ -294,6 +323,22 @@ Algoritmo veikimas susideda iš kelių nuoseklių etapų (CCC https://www.educat
     specialų ASCII simbolį, atspindintį kontūro kryptį: „-, |, /, \“ arba stipresnius jų variantus „═, ║, ╱, ╲“. Jei
     pikselis nelaikomas kontūru ir yra fono dalis - jis paliekamas tuščias.
 
+Sugeneravus tą patį vaizdą su išplėstiniu simbolių rinkinių gauname (#ref(<canny_example>)) pateiktą rezultatą. Vėlgi
+kadangi nuotrauka neturėjo labai daug ryškių kraštinių, rezultatas vaizdo detalumu stipriai atsilieka nuo kitų algoritmų.
+
+#figure(
+  image("/images/canny_example.png", width: 15cm),
+  caption: [Canny algoritmo pavyzdys naudojant išplėstąjį simbolių rinkinį.],
+) <canny_example>
+
+Tačiau, kaip ir su Sobelio algoritmu, tereikia pasirinkti tinkamą nuotrauką su dideliu kiekiu kraštinių, kad šis algoritmas
+sužibėtų. Žemiau pateikiama nuotrauka yra optimali pasirinktam algoritmui (#ref(<canny_example2>)).
+
+#figure(
+  image("/images/canny_example2.png", width: 15cm),
+  caption: [Optimalus Canny algoritmo pavyzdys.],
+) <canny_example2>
+
 Canny kraštų atpažinimo algoritmo rezultatas labai priklauso nuo parinktų parametrų: Gauso filtro dydžio ir nuo
 slenkstinių ribų reikšmių. Per aukšti slenksčiai gali praleisti svarbius kontūrus, per žemi – įtraukti daug triukšmo.
 Pagrindinis šio algoritmo pranašumas, lyginant su Sobelio algortimu, yra geresnis triukšmo valdymas, dėl pradinio Gauso
@@ -346,8 +391,8 @@ Pagrindinė algoritmo idėja yra tokia:
   - Parinktas Brailio simbolis įrašomas į atitinkamą vietą galutiniame dvimačiame simbolių masyve. Procesas kartojamas
     visiems 2x4 blokams, kol suformuojamas visas Brailio ASCII vaizdas
 
-Nors Brailio algoritmas gali pasiekti didesnį efektyvų detalumą nei šviesumo algoritmas, jis turi reikšmingų apribojimų,
-ypač dirbant su sudėtingais fotografiniais vaizdais, tokiais kaip gatvės lygio vaizdai:
+Nors Brailio algoritmas gali pasiekti didesnį efektyvų detalumą nei šviesumo algoritmas, jis turi reikšmingų apribojimų (#ref(<braille_example>)),
+ypač dirbant su sudėtingomis fotografijomis, tokiomis kaip gatvės lygio vaizdai:
 - Globalus slenkstis: didžiausias trūkumas yra vieno globalaus slenksčio naudojimas visam vaizdui. Vaizdai su dideliais
   šviesumo skirtumais, pavyzdžiui, ryškus dangus ir tamsūs pastatų šešėliai gatvės scenoje bus prastai atvaizduoti.
   Slenkstis, parinktas pagal vidutinį šviesumą, gali būti per aukštas tamsioms sritims (prarandamos detalės šešėliuose)
@@ -358,6 +403,11 @@ ypač dirbant su sudėtingais fotografiniais vaizdais, tokiais kaip gatvės lygi
 - Nesuderinamumas su spalvotu atvaizdavimu: kadangi vienas šiuo metodu sugeneruoto vaizdo simbolis talpina 8 pikselius,
   prarandame ir spalvų informaciją. Žinoma, galima būtų naudoti šių pikselių spalvų visdurkį, tačiau toks kiekis sumaišytų
   spalvų ne pagerins, o pakenks galutinio rezultato kokybei.
+
+#figure(
+  image("/images/braille_example.png", width: 15cm),
+  caption: [Canny algoritmo pavyzdys atvaizduojant gatvės lygio vaizdus.],
+) <braille_example>
 
 Dėl šių priežasčių, Brailio konvertavimo metodas nėra tinkamas atvaizduoti sudėtingus, daug atspalvių turinčius vaizdus,
 tokius kaip peizažai ar gatvių fotografijos. Jis geriausiai tinka monochromatiniams vaizdams, turintiems aiškius kraštus.
@@ -388,7 +438,12 @@ paskirtis atsiskleidžia specifiniame kontekste - spalvoto ASCII meno generavime
 kaip paruošiamasis žingsnis, sukuriant tekstinį „drobės“ pagrindą. Nors patys simboliai yra vienodi, spausdinimo į
 komandinę eilutę etape kiekvienam simboliui bus priskiriama spalva, paimta iš atitinkamos originalaus vaizdo vietos.
 Tokiu būdu, nors tekstūra yra visiškai vienoda, spalvų variacijos sukuria galutinį vaizdą. Rezultatas primena pikselių
-meną (angl. _pixel art_), tik vietoj spalvotų kvadratėlių naudojami spalvoti ASCII simboliai.
+meną (angl. _pixel art_), tik vietoj spalvotų kvadratėlių naudojami spalvoti ASCII simboliai (#ref(<blank_filled_example>)).
+
+#figure(
+  image("/images/blank_filled_example.png", width: 15cm),
+  caption: [Vieno simbolio užpildymo metodo rezultato pavyzdys.],
+) <blank_filled_example>
 
 Privalumai:
 - Itin paprastas ir greitas: pats greičiausias ir paprasčiausias šiame projekte naudotas konvertavimo metodas.
