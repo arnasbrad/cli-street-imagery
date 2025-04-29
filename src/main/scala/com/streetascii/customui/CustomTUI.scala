@@ -609,7 +609,7 @@ object CustomTUI {
 
           asciiWithColors = textAlgorithm
             .generate(
-              appConfig.processing.charset,
+              appConfig.processing.charset.valueForText,
               greyscale.grayscaleDecimals
             )
 

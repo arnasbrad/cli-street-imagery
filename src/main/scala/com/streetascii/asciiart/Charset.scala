@@ -1,39 +1,44 @@
 package com.streetascii.asciiart
 
+import com.streetascii.asciiart.Charset.CustomCharset
+
 sealed trait Charset {
-  def value: String
+  val value: String
+  def valueForText: Charset = CustomCharset(s" $value")
 }
 
 object Charset {
+  case class CustomCharset(value: String) extends Charset
+
   case object Default extends Charset {
-    def value = " .:-=+*#%@"
+    val value = ".:-=+*#%@"
   }
 
   case object Blocks extends Charset {
-    def value = " ░▒▓█"
+    val value = "░▒▓█"
   }
 
   case object BlocksExtended extends Charset {
-    def value = " ·░▒▓▄▌▐▀█"
+    val value = "·░▒▓▄▌▐▀█"
   }
 
   case object Extended extends Charset {
-    def value =
-      " .'`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+    val value =
+      ".'`^\\\",:;Il!i~+_-?][}{1)(|\\\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
   }
 
   case object Braille extends Charset {
-    def value =
-      " ⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿"
+    val value =
+      "⠁⠉⠋⠛⠟⠿⡿⢿⣻⣽⣾⣷⣟⣯⣿"
   }
 
   case object Blank extends Charset {
-    def value =
+    val value =
       "█"
   }
 
   case object BraillePatterns extends Charset {
-    def value: String = {
+    val value: String = {
       // Generate all 256 possible Braille patterns (2^8 combinations)
       (0 until 256)
         .map(pattern => {
@@ -42,5 +47,6 @@ object Charset {
         })
         .mkString
     }
+    override def valueForText: Charset = CustomCharset(value)
   }
 }
