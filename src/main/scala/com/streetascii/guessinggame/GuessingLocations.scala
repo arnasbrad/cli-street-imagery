@@ -38,7 +38,7 @@ object GuessingLocations {
     GuesserLocation(MapillaryImageId("897739650771327"), Country.Hungary),
     GuesserLocation(
       MapillaryImageId(
-        "160900319252801" // TODO: this is 360, change to normal
+        "255962119288149"
       ),
       Country.CzechRepublic
     ),
