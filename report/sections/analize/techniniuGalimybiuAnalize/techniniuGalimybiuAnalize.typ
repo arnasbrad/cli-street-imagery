@@ -35,7 +35,7 @@ lyginant su grafinėmis vartotojo sąsajomis (angl. _graphical user interface_ a
 galimybes atvaizduoti „Street View“ vaizdus ir kurti vartotojo sąsają:
 
 Spalvų palaikymas: Daugelis standartinių terminalų emuliatorių ir populiarių terminalo vartotojo sąsajos
-(angl. _text user interface_ arba _TUI_) bibliotekų dėl atgalinio suderinamumo arba paprastumo dažnai palaiko ribotą
+(angl. _terminal user interface_ arba _TUI_) bibliotekų dėl atgalinio suderinamumo arba paprastumo dažnai palaiko ribotą
 spalvų paletę (pvz., 16 spalvų) arba neleidžia pilnai išnaudoti modernesnių terminalų galimybių
 (pavyzdžiui, 256 spalvų palaikymo).
 Tai ženkliai apribotų galimybes tiksliai ir detaliai konvertuoti fotografinius vaizdus į ASCII meną,

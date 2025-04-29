@@ -50,3 +50,11 @@
 #include "sections/implementacija/implementacija.typ"
 #pagebreak()
 #include "sections/dokumentacija/dokumentacija.typ"
+
+@harry
+
+#bibliography(
+    "bibliography.yaml",
+    style: "iso-690.csl" 
+)
+
