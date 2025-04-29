@@ -105,7 +105,7 @@ object Main
 
   override def main: Opts[IO[ExitCode]] = {
     idCommand.map { args =>
-      AppConfig.load(ConfigSource.file(args.configPath)).flatMap { appConfig =>
+      AppConfig.loadFromPath(args.configPath).flatMap { appConfig =>
         initClients(appConfig).use { runner =>
           for {
             imageInfo <- runner
@@ -131,7 +131,7 @@ object Main
       }
 
     } orElse coordinatesCommand.map { args =>
-      AppConfig.load(ConfigSource.file(args.configPath)).flatMap { appConfig =>
+      AppConfig.loadFromPath(args.configPath).flatMap { appConfig =>
         initClients(appConfig).use { runner =>
           for {
             imageInfo <- runner
@@ -156,7 +156,7 @@ object Main
         }
       }
     } orElse addressCommand.map { args =>
-      AppConfig.load(ConfigSource.file(args.configPath)).flatMap { appConfig =>
+      AppConfig.loadFromPath(args.configPath).flatMap { appConfig =>
         initClients(appConfig).use { runner =>
           for {
             respEith <- runner.getCoordinatesFromAddress(args.address).value
@@ -200,7 +200,7 @@ object Main
         }
       }
     } orElse guessingCommand.map { args =>
-      AppConfig.load(ConfigSource.file(args.configPath)).flatMap { appConfig =>
+      AppConfig.loadFromPath(args.configPath).flatMap { appConfig =>
         initClients(appConfig).use { runner =>
           for {
             location <- GuessingLocations.getRandomLocation

@@ -49,6 +49,10 @@ object AppConfig {
     IO(configSource.loadOrThrow[AppConfig])
   }
 
+  def loadFromPath(path: String): IO[AppConfig] = {
+    IO(ConfigSource.file(path).loadOrThrow[AppConfig])
+  }
+
   private implicit val navigationTypeReader: ConfigReader[NavigationType] =
     ConfigReader.fromString {
       case "Sequence navigation"  => Right(NavigationType.SequenceBased)
