@@ -12,7 +12,7 @@ procesas. Kaip minėta ankstesniuose skyriuose, pagrindiniu aplikacijos karkasu 
 
 Pradiniame etape buvo svarstoma galimybė naudoti egzistuojančią TUI biblioteką, siekiant paspartinti
 kūrimo procesą ir pasinaudoti paruoštais vartotojo sąsajos komponentais (langais, lentelėmis, sąrašais).
-Buvo pasirinkta išbandyti biblioteką „tui-scala“ (citata https://github.com/oyvindberg/tui-scala). Tai yra „Scala“
+Buvo pasirinkta išbandyti biblioteką „tui-scala“ @tui-scala-repo. Tai yra „Scala“
 kalbai skirta sąsaja (angl. _wrapper_) populiariai „Rust“ kalbos bibliotekai „tui-rs“, kuri siūlo deklaratyvų
 būdą kurti sudėtingas terminalo sąsajas.
 
@@ -43,7 +43,7 @@ Atsižvelgiant į „tui-scala“ apribojimus, buvo priimtas sprendimas atsisaky
 minimalų TUI modulį, pritaikytą specifiniams projekto poreikiams. Šis modulis, matomas pateiktame `CustomTUI.scala`
 kode, remiasi keliomis pagrindinėmis technologijomis ir principais:
 
-1. Tiesioginis terminalo valdymas su „JLine“: buvo panaudota „Java“ biblioteka „JLine“ (citata https://github.com/jline/jline3).
+1. Tiesioginis terminalo valdymas su „JLine“: buvo panaudota „Java“ biblioteka „JLine“ @jline3-repo.
 Ji suteikia galimybę žemu lygiu sąveikauti su terminalu:
   - Įjungti „raw“ režimą (`terminal.enterRawMode()`), kuris leidžia nuskaityti kiekvieną klavišo paspaudimą iš karto,
   neatliekant standartinio eilutės buferizavimo ar redagavimo.

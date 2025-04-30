@@ -3,7 +3,8 @@
 #set par(
     spacing: 10pt,
     justify: true,
-    leading: 1.15em
+    //leading: 1.15em
+    leading: 0.8975em
 )
 #set page(
     paper: "a4",
@@ -50,8 +51,6 @@
 #include "sections/implementacija/implementacija.typ"
 #pagebreak()
 #include "sections/dokumentacija/dokumentacija.typ"
-
-@harry
 
 #bibliography(
     "bibliography.yaml",

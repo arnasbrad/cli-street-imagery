@@ -6,8 +6,8 @@ Baigiamojo darbo rengimas yra sudėtingas procesas, reikalaujantis ne tik turini
 ir nuoseklaus jo formatavimo bei struktūrizavimo. Tradiciškai akademiniuose darbuose dominuoja
 du pagrindiniai įrankiai: teksto redaktoriai, tokie kaip „Microsoft Word“ (ar jo atitikmenys, pvz.,
 „LibreOffice Writer“), ir tipografinė sistema „LaTeX“. Šiame darbe, siekiant efektyvesnio ir
-lankstesnio rengimo proceso, buvo pasirinktas alternatyvus, modernus įrankis – „Typst“
-(citata https://typst.app/). Šiame skyriuje argumentuojamas šis pasirinkimas, lyginant
+lankstesnio rengimo proceso, buvo pasirinktas alternatyvus, modernus įrankis – „Typst“ @typst-homepage.
+Šiame skyriuje argumentuojamas šis pasirinkimas, lyginant
 wwjį su labiau įprastomis alternatyvomis.
 
 == Tradicinių Įrankių Apžvalga ir Jų Trūkumai Projekto Kontekste
@@ -74,9 +74,9 @@ privalumai šio darbo kontekste:
   greičiau nei naudojant „LaTeX“. Pagrindinės funkcijos yra lengvai perprantamos, o sudėtingesni
   aspektai yra logiškai struktūrizuoti.
 3. Puiki dokumentacija: „Typst“ turi išsamią, interaktyvią ir lengvai naršomą oficialią dokumentaciją
-  su gausiais pavyzdžiais (citata https://typst.app/docs/). Tai labai palengvina mokymąsi ir problemų sprendimą.
+  su gausiais pavyzdžiais @typst-docs-homepage. Tai labai palengvina mokymąsi ir problemų sprendimą.
 4. Greitas kompiliavimas: „Typst“ yra sukurtas su dideliu dėmesiu našumui. Kompiliavimas, ypač inkrementinis
-  (kai keičiama tik dalis dokumento), yra ženkliai greitesnis nei daugeliu atvejų su „LaTeX“ (citata https://typst.app/docs/guides/guide-for-latex-users/).
+  (kai keičiama tik dalis dokumento), yra ženkliai greitesnis nei daugeliu atvejų su „LaTeX“ @typst-guide-latex.
   Tai leidžia matyti pakeitimų rezultatus beveik akimirksniu, kas pagerina rašymo ir taisymo procesą.
 5. Integruotos galingos programavimo galimybės: skirtingai nuo „LaTeX“ makro sistemos, „Typst“ turi
   integruotą, modernią skriptų kalbą. Galima lengvai apibrėžti kintamuosius, funkcijas, naudoti ciklus
