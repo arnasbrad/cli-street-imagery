@@ -47,10 +47,9 @@ Asemblerio kalbomis dažniausiai yra visiškai nepraktiškas sprendimas. Kai egz
 tiek daug aukštesnio lygio kalbų, Asemblerio kalbos naudojamos tik esant labai
 griežtiems resursų ir greičio reikalavimams – panašiai kaip mašininis kodas.
 Vienas pavyzdys tokio panaudojimo – „Apollo-11“ orientacinio kompiuterio
-programinis kodas (citata https://github.com/chrislgarry/Apollo-11).
+programinis kodas @apollo11.
 Šis kompiuteris turėjo labai ribotą atminties kiekį - 2048 žodžius atsitiktinės
-prieigos atminties bei 36 864 žodžius pagrindinės atminties
-(citata https://en.wikipedia.org/wiki/Apollo_Guidance_Computer). Taip pat, žinoma,
+prieigos atminties bei 36 864 žodžius pagrindinės atminties @agc-wiki. Taip pat, žinoma,
 kompiuterio procesorius lyginant su šių dienų standartais buvo ypatingai silpnas,
 dėl ko reikėjo parašyti patį optimaliausią kodą.
 
@@ -203,7 +202,7 @@ su statiniais tipais.
 
 ===== Programavimo paradigma
 
-Robert Cecil Martin savo knygoje „Clean Architecture“ (citata) išskiria tris
+Robert Cecil Martin savo knygoje „Clean Architecture“ @clean-architecture išskiria tris
 pagrindines programavimo paradigmas: struktūrinis, objektinis bei funkcinis
 programavimas. Pagal autorių, kiekviena paradigma ne suteikia mums kažką, o priešingai -jos atima galimybę iš programuotojų rašyti kodą, kuris lengvai priveda prie klaidų.
 
@@ -270,15 +269,14 @@ ir mūsų projektui:
 
 - „Facebook“, socialinės medijos platforma, naudoja „Haskell“ programavimo
   kalbą siekiant kovoti su šlamštu savo
-  platformoje (citata https://engineering.fb.com/2015/06/26/security/fighting-spam-with-haskell/)
+  platformoje @fb-haskell-spam.
 - „Walmart“, JAV mažmeninės prekybos centras, naudoja „Clojure“ savo duomenų
-  valdymo sistemai (citata https://clojure.org/community/success_stories)
+  valdymo sistemai @clojure-success.
 - „X“ (anksčiau buvusi „Twitter“ socialinės medijos platforma), plačiai naudoja „Scala“.
 - „Microsoft“, JAV programinės ir techninės įrangos gamintojas, sukūrė ir naudoja
-  „F\#“ įvairioms paslaugoms (citata https://learn.microsoft.com/en-us/dotnet/fsharp/).
+  „F\#“ įvairioms paslaugoms @fsharp-docs.
 - „Jane Street“, JAV patentuota prekybos įmonė, naudoja
-  „OCaml“ prekybos sistemoms ir finansinei analizei
-  (citata https://blog.janestreet.com/why-ocaml/).
+  „OCaml“ prekybos sistemoms ir finansinei analizei @janestreet-why-ocaml.
 
 Žinodami, jog beveik visas programavimo kalbas galima vienaip ar kitaip panaudoti,
 sprendžiant pačias įvairiausias problemas, galutiniame kalbos pasirinkime labiausiai

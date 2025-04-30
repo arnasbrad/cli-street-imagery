@@ -18,7 +18,7 @@ daugybę kitų kodo projektavimo modėlių, kuriuos dažnai matome objektinio st
 kalbose - tai stipriai palengvina darbą žmogui, pirmą kartą bandančiam funkcinį
 programavimą.
 
-„Scala“ buvo sukurta 2004 metais Martino Odersky (citata https://www.oreilly.com/library/view/scala-and-spark/9781785280849/005ee526-d74c-4d1e-a1b3-34f6213d5ece.xhtml),
+„Scala“ buvo sukurta 2004 metais Martino Odersky @history-and-purposes-of-scala,
 siekiant sukurti modernią programavimo kalbą, kuri apjungtų objektinio ir funkcinio
 programavimo privalumus. Vienas didžiausių „Scala“ privalumų yra jos išraiškingumas
 – dažnai galima parašyti daugiau funkcionalumo su mažiau kodo eilučių, palyginus
@@ -60,17 +60,16 @@ struktūrų palaikymas – tai tik keletas funkcinio programavimo bruožų,
 kuriuos egzistuoja „Scala“ kalboje.
 
 Pramonėje „Scala“ dažnai naudojama didelės apimties duomenų apdorojimo sistemose.
-„Apache Spark“ (citata https://www.chaosgenius.io/blog/apache-spark-with-scala/),
+„Apache Spark“ @chaosgenius-spark-scala,
 vienas populiariausių didelių duomenų apdorojimo karkasų,
-yra parašytas būtent „Scala“ kalba. Tokios įmonės kaip „X“, „LinkedIn“ ir „Netflix“
-(citata https://sysgears.com/articles/how-tech-giants-use-scala/)
+yra parašytas būtent „Scala“ kalba. Tokios įmonės kaip „X“, „LinkedIn“ ir „Netflix“ @sysgears-scala-giants
 naudoja „Scala“ savo pagrindinėse sistemose dėl jos gebėjimo efektyviai valdyti
 lygiagrečias užduotis ir didelius duomenų srautus.
 
 „Scala“ ekosistema taip pat siūlo keletą galingų įrankių ir įskiepių,
-tokių kaip „Akka“ (citata https://akka.io/) (aktorių modeliu pagrįsta lygiagretumo sistema),
-„Play Framework“ (citata https://www.playframework.com/) (tinklalapių kūrimo karkasas)
-ir „Cats“ (citata https://typelevel.org/cats/)
+tokių kaip „Akka“ @akka-homepage (aktorių modeliu pagrįsta lygiagretumo sistema),
+„Play Framework“ @playframework-homepage (tinklalapių kūrimo karkasas)
+ir „Cats“ @cats-homepage
 (funkcinio programavimo abstrakcijos). Šios bibliotekos padeda programuotojams
 kurti tvarų, testuojamą ir lengvai prižiūrimą kodą.
 
@@ -157,7 +156,7 @@ programos būseną už funkcijos aprėpties ribų, pavyzdžiui, duomenų nuskait
 skaičių generavimas ir panašios operacijos. Tradicinėse funkcinėse kalbose šalutiniai efektai yra aiškiai apibrėžiami
 ir izoliuojami, kas leidžia programuotojams tiksliai žinoti, kokius poveikius gali turėti jų funkcijos. Tai suteikia
 geresnes galimybes testuoti kodą, lengviau suprasti programos veikimą, išvengti netikėtų šalutinių pasekmių bei
-nesunkiai valdyti programos klaidas. „Cats-Effect“ (citata https://typelevel.org/cats-effect) karkasas „Scala“
+nesunkiai valdyti programos klaidas. „Cats-Effect“ @cats-effect-homepage karkasas „Scala“
 programavimo kalbai įveda šią koncepcija per IO monadą
 ir kitus abstrakcijos mechanizmus, kurie leidžia programuotojams apibrėžti ir komponuoti efektus deklaratyviu būdu,
 kartu išlaikant griežtą tipų saugumą.
@@ -165,14 +164,14 @@ kartu išlaikant griežtą tipų saugumą.
 Toliau panagrinėsime koks tikslas yra naudoti efektų valdymo karkasą kaip „Cats-Effect“ bei kokias problemas
 jis padeda išspręsti.
 
-Esminė šio karkaso abstrakcija yra pluoštai (angl. _Fibers_) (citata https://typelevel.org/cats-effect/docs/concepts#fibers).
+Esminė šio karkaso abstrakcija yra pluoštai (angl. _Fibers_) @cats-effect-docs-concepts.
 Tai yra „Cats-Effect“ paralelizmo pagrindas. Pluoštai yra lengvos gijos, skirtos reprezentuoti seką veiksmų, kurie
 programos veikimo metu galiausiai bus realizuoti. Pluoštai yra ypatingai lengvi - vienas pluoštas užima vos 150 baitų atminties.
 Tai reiškia, jog mes galima sukurti dešimtis milijonų pluoštų be jokių problemų. Per daug nelendant į technines detales,
 galima jų naudą apibendrinti taip - pluoštai leidžia mums lengvai, be papildomo vargo, valdyti paralelizmą bei suteikia
 mums galimybę bet kurį skaičiavimo procesą sustabdyti ar atšaukti, net jei jis jau yra vykdomas.
 
-Šio karkaso konteksta efektas (angl. _effect_) (citata https://typelevel.org/cats-effect/docs/concepts#effects) yra veiksmo
+Šio karkaso konteksta efektas (angl. _effect_) @cats-effect-docs-concepts yra veiksmo
 (ar veiksmų) apibrėžimas, kuris bus įvykdytas, kai vyks
 kodo vertinimas (angl. _evaluation_). Pagrindinis toks efektas yra IO.
 
