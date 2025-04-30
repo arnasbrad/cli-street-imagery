@@ -4,3 +4,4 @@
 #include "komercineSpecifikacija/komercineSpecifikacija.typ"
 #include "sistemosFunkcijos/sistemosFunkcijos.typ"
 #include "naudotojoSasajosSpecifikacija/naudotojoSasajosSpecifikacija.typ"
+#include "realizacijaiKeliamiReikalavimai/realizacijaiKeliamiReikalavimai.typ"
