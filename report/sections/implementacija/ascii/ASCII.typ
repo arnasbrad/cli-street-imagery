@@ -145,7 +145,7 @@ Jo pagrindinė idėja yra intuityvi ir tiesiogiai susijusi su tuo, kaip mes vizu
 veikia remdamasis tiesioginiu atitikimu tarp kiekvieno nuotraukos taško (pikselio) šviesumo lygio ir pasirinkto ASCII
 simbolio vizualinio „svorio“ arba „tankio“. Paprastai tariant, tamsesniems vaizdo fragmentams atvaizduoti parenkami simboliai,
 kurie užima mažiau vietos arba atrodo „lengvesni“ (pavyzdžiui, taškas „.“, kablelis „,“), tuo tarpu šviesesnės sritys
-reprezentuojamos „tankesniais“ ar daugiau ploto padengiančiais simboliais (pvz., dolerių ženklas „`$`“, procento ženklas „%“ ar
+reprezentuojamos „tankesniais“ ar daugiau ploto padengiančiais simboliais (pvz., dolerių ženklas „\$“, procento ženklas „\%“ ar
 net pilnas blokas „█“). Žinoma, šis principas gali būti ir atvirkštinis, jei pasirenkamas šviesus fonas ir tamsūs
 simboliai – tuomet tankiausi simboliai atitiks tamsiausias vaizdo dalis.
 
@@ -154,7 +154,7 @@ Norint pritaikyti šį algoritmą, pirmiausia reikia turėti vaizdą, paruoštą
 viena skaitine reikšme, nurodančia jo šviesumą. Dažniausiai ši reikšmė svyruoja intervale nuo 0 (visiškai juoda) iki 255
 (visiškai balta). Kitas būtinas komponentas yra ASCII simbolių rinkinys, kuris tarnaus kaip mūsų „ASCII paletė“. Svarbu,
 kad šis rinkinys būtų iš anksto surikiuotas pagal simbolių vizualinį tankį – nuo mažiausiai tankaus iki tankiausio.
-Pavyzdžiui, paprastas rinkinys galėtų būti „.:-=+\*\#`\%\@`“, kur „.“ yra mažiausio tankio, o „@“ – didžiausio.
+Pavyzdžiui, paprastas rinkinys galėtų būti „.:-=+\*\#\%\@“, kur „.“ yra mažiausio tankio, o „@“ – didžiausio.
 
 Pats konvertavimo procesas vyksta iteruojant per kiekvieną pilkų tonų nuotraukos pikselį. Kiekvienam aplankytam pikseliui
 yra nuskaitoma jo šviesumo reikšmė (skaičius tarp 0 ir 255). Ši reikšmė turi būti transformuota į indeksą, atitinkantį
@@ -167,7 +167,7 @@ galima konvertuoti į simbolių rinkinio indeksą naudojant formulę:
 galimas indekso numeris simbolių rinkinyje, dalijymas iš 255 normalizuoja šviesumo reikšmę į intervalą [0, N-1].
 
 Kai kiekvienam pikseliui priskiriamas atitinkamas ASCII simbolis, šie simboliai yra išdėstomi į dvimatę struktūrą,
-atkartojančią pradinės nuotraukos matmenis. Eilutės atskiriamos naujos eilutės simboliais („`\n`“), taip suformuojant
+atkartojančią pradinės nuotraukos matmenis. Eilutės atskiriamos naujos eilutės simboliais („_\\n_“), taip suformuojant
 galutinį ASCII meno kūrinį, paruoštą atvaizdavimui ekrane ar faile.
 
 Galutinio rezultato kokybė, naudojant šviesumo algoritmą, labai priklauso nuo kelių veiksnių. Esminę įtaką daro pasirinktas

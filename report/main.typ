@@ -1,4 +1,4 @@
-//TODO: uncomment font change
+#set text(lang: "lt", region: "lt")
 #set text(font: "Times New Roman", size: 12pt)
 #set par(
     spacing: 10pt,
@@ -15,6 +15,24 @@
         bottom: 20mm
     )
 )
+
+#set figure(supplement: none)
+#show figure.caption: it => {
+    set text(size: 10pt)
+    if it.kind == image {
+        [#context it.counter.display(it.numbering) pav. #it.body]
+    } else {
+        [#it.supplement #context it.counter.display(it.numbering): #it.body]
+    }
+}
+
+#show raw: it => block(
+  fill: rgb("#f0ede6"),
+  inset: 8pt,
+  radius: 2pt,
+  text(it)
+)
+
 #import "variables.typ": *
 #include "mainPages/TitlePage.typ"
 
@@ -29,7 +47,7 @@
 #include "mainPages/PageSummaryEN.typ"
 
 #include "mainPages/TableOfContents.typ"
-#include "mainPages/TableList.typ"
+//#include "mainPages/TableList.typ"
 #include "mainPages/ImageList.typ"
 #include "mainPages/TermsList.typ"
 
@@ -51,9 +69,10 @@
 #include "sections/implementacija/implementacija.typ"
 #pagebreak()
 #include "sections/dokumentacija/dokumentacija.typ"
-
+#pagebreak()
 #bibliography(
     "bibliography.yaml",
-    style: "iso-690.csl" 
+    title: "Literatūros sąrašas",
+    //style: "iso-690.csl"
 )
 

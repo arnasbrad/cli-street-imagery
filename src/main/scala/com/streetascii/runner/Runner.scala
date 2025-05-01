@@ -74,7 +74,7 @@ case class RunnerImpl(
             .map(_.id)
             .toRight(
               MapillaryError.NotFoundError(
-                s"No images found for coordinates = $coordinates, radius = ${radius.value}m. Try a different location or increasing the radius."
+                s"No images found for coordinates = $coordinates, radius = ${radius.value}m. Try a different location."
               )
             )
         )

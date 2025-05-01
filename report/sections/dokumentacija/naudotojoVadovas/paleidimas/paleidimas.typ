@@ -81,4 +81,74 @@ Sėkmingai radus nurodytą paveiksliuką, programoje matysite ASCII atvaizduotą
 galėsite spėti šalį. Daugiau apie tai, kaip spėlioti, bus aprašyta vėlesniuose dokumentacijos
 skyriuose.
 
+==== Konfigūracinio failo nurodymas
+
+Programai veikti reikalingas konfigūracinis failas, kuriam sukurti yra pateikti specialūs
+scenarijai, aprašyti konfigūracijos dokumentacijoje. Paleidžiant programą, naudotojas
+gali pateikti kelią iki konfigūracinio failo.
+
+```bash
+sbt "run guessing --config ./mano_configuracija.conf"
+
+sbt "run guessing -c ./mano_configuracija.conf"
+```
+
+Jei _--config_ arba _-c_ parametras nėra nurodytas, bus naudojama numatytoji (angl. _default_) reikšmė
+_./config.conf_.
+
+=== Pagalba
+
+Jei naudototojas nežino kaip paleisti programą ar kokie argumentai yra galimi, paleidimo metu
+galima iškviesti pagalbos meniu naudojant _--help_ vėliavėlę (angl. _flag_).
+Klaidingo paleidimo metu (pavyzdžiui, bandant paleisti programą su klaidingais parametrais)
+pagalbos meniu bus pateiktas automatiškai.
+
+- Komanda _sbt "run --help"_
+  
+  Išvestis:
+
+  ```bash
+  Usage:
+      StreetAscii id
+      StreetAscii coordinates
+      StreetAscii address
+      StreetAscii guessing
+
+  Street imagery in your terminal
+
+  Options and flags:
+      --help
+          Display this help text.
+      --version, -v
+          Print the version number and exit.
+
+  Subcommands:
+      id
+          Start with a Mapillary image ID
+      coordinates
+          Start with geographic coordinates
+      address
+          Start with a street address
+      guessing
+          Start in guessing mode
+  ```
+
+- Komanda _sbt "run guessing --help"_
+
+  Išvestis:
+
+  ```bash
+  Usage: StreetAscii guessing [--config <string>]
+
+  Start in guessing mode
+
+  Options and flags:
+      --help
+          Display this help text.
+      --config <string>, -c <string>
+          Path to configuration file
+  ```
+
+Analogiškai galima gauti pagalbos meniu visoms kitoms komandoms.
+
 

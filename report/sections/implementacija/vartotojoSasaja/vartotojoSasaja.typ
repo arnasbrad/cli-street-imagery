@@ -28,16 +28,16 @@ Pagrindinė būsena yra ASCII gatvės vaizdo rodymas. Vartotojui paspaudus tam t
 būseną arba atlieka veiksmą:
 
 - Vaizdo rodymas (pagrindinė būsena): rodydamas vaizdą, programa laukia vartotojo įvesties.
-- Veiksmo sužadinimas: klavišo paspaudimas (pvz., `n`, `h`, `g`, `q`) inicijuoja perėjimą.
-- Informacijos pateikimas bei parinkčių rodymas: paspaudus pagalbos (`h`) ar navigacijos (`n`) klavišą, ekranas
+- Veiksmo sužadinimas: klavišo paspaudimas (pvz., _n_, _h_, _g_, _q_) inicijuoja perėjimą.
+- Informacijos pateikimas bei parinkčių rodymas: paspaudus pagalbos (_h_) ar navigacijos (_n_) klavišą, ekranas
   išvalomas, ir vietoje pagrindinio vaizdo laikinai parodoma tekstinė informacija arba galimų veiksmų sąrašas
   (pvz., navigacijos krypčių), sugeneruotas kaip ASCII tekstas. Programa pereina į laukimo būseną, kol vartotojas
   pasirenka vieną iš pateiktų parinkčių arba grįžta.
 - Navigacija: pasirinkus navigacijos kryptį, inicijuojamas naujo vaizdo duomenų gavimas, po kurio vėl perpiešiamas
   pagrindinis vaizdas su nauja lokacija.
-- Kiti Veiksmai: kitos komandos (pvz., ekrano perpiešimas `r`, dalinimasis `s`) atlieka atitinkamą veiksmą ir
+- Kiti Veiksmai: kitos komandos (pvz., ekrano perpiešimas _r_, dalinimasis _s_) atlieka atitinkamą veiksmą ir
   dažniausiai grįžta į pagrindinę vaizdo rodymo būseną.
-- Išėjimas: paspaudus išėjimo klavišą (`q`), programa baigia darbą.
+- Išėjimas: paspaudus išėjimo klavišą (_q_), programa baigia darbą.
 
 Šis modelis leidžia išlaikyti švarią pagrindinę sąsają (tik vaizdas) ir pateikti papildomas funkcijas pagal poreikį.
 
@@ -54,7 +54,7 @@ Dėl pasirinkto minimalistinio požiūrio, sąsajos elementai yra labai paprasti
 
 Navigacija yra viena pagrindinių interaktyvių funkcijų. Ji realizuota taip:
 
-1. Vartotojas inicijuoja navigacijos režimą paspausdamas tam skirtą klavišą (`n`).
+1. Vartotojas inicijuoja navigacijos režimą paspausdamas tam skirtą klavišą (_n_).
 2. Sistema, priklausomai nuo konfigūracijos ar aptiktų „Mapillary“ duomenų tipo, pateikia galimų judėjimo krypčių sąrašą
   (kaip tekstinį ASCII vaizdą).
 3. Vartotojas pasirenka vieną iš krypčių paspausdamas atitinkamą klavišą (pvz., skaičių ar raidę).

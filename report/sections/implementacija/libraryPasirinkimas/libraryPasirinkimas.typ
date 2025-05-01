@@ -40,22 +40,22 @@ pilnavertės TUI bibliotekos teikiamos galimybės tapo nebereikalingos ir netgi 
 === Sprendimas: nuosavas TUI modulis
 
 Atsižvelgiant į „tui-scala“ apribojimus, buvo priimtas sprendimas atsisakyti išorinės TUI bibliotekos ir sukurti nuosavą,
-minimalų TUI modulį, pritaikytą specifiniams projekto poreikiams. Šis modulis, matomas pateiktame `CustomTUI.scala`
+minimalų TUI modulį, pritaikytą specifiniams projekto poreikiams. Šis modulis, matomas pateiktame _CustomTUI.scala_
 kode, remiasi keliomis pagrindinėmis technologijomis ir principais:
 
 1. Tiesioginis terminalo valdymas su „JLine“: buvo panaudota „Java“ biblioteka „JLine“ @jline3-repo.
 Ji suteikia galimybę žemu lygiu sąveikauti su terminalu:
-  - Įjungti „raw“ režimą (`terminal.enterRawMode()`), kuris leidžia nuskaityti kiekvieną klavišo paspaudimą iš karto,
+  - Įjungti „raw“ režimą (_terminal.enterRawMode()_), kuris leidžia nuskaityti kiekvieną klavišo paspaudimą iš karto,
   neatliekant standartinio eilutės buferizavimo ar redagavimo.
-  - Tiesiogiai nuskaityti vartotojo įvestį (`terminal.reader().read()`).
+  - Tiesiogiai nuskaityti vartotojo įvestį (_terminal.reader().read()_).
   - Valdyti terminalo būseną, pavyzdžiui, išvalyti ekraną naudojant terminalo galimybes
-  (`terminal.puts(InfoCmp.Capability.clear_screen)`).
-2. Tiesioginis ANSI spalvų kodų generavimas: siekiant įveikti 16 spalvų apribojimą, buvo implementuota funkcija
-  (`rgb` ir `colorize`), kuri tiesiogiai generuoja ANSI escape sekas 24 bitų „True Color“ spalvoms
-  (pvz., `\u001B[38;2;r;g;bm`). Tai leido perduoti terminalui tikslią RGB informaciją kiekvienam ASCII simboliui,
+  (_terminal.puts(InfoCmp.Capability.clear_screen)_).
+2. Tiesioginis ANSI spalvų kodų generavimas: siekiant įveikti 16 spalvų apribojimą, buvo implementuota funkcija,
+  kuri tiesiogiai generuoja ANSI escape sekas 24 bitų „True Color“ spalvoms
+  (pvz., _\u001B[38;2;r;g;bm_). Tai leido perduoti terminalui tikslią RGB informaciją kiekvienam ASCII simboliui,
   jei terminalo emuliatorius palaiko šį režimą.
-3. Efektyvus išvedimas su `BufferedWriter`: siekiant optimizuoti viso ekrano perpiešimą (kas vyksta keičiant vaizdą),
-  išvedimui į terminalą buvo naudojamas `java.io.BufferedWriter`. Tai leidžia sukaupti visą perpiešiamo ekrano turinį į
+3. Efektyvus išvedimas su _BufferedWriter_: siekiant optimizuoti viso ekrano perpiešimą (kas vyksta keičiant vaizdą),
+  išvedimui į terminalą buvo naudojamas _java.io.BufferedWriter_. Tai leidžia sukaupti visą perpiešiamo ekrano turinį į
   buferį (angl. _buffer_) ir išvesti jį vienu kartu, kas yra efektyviau nei rašyti kiekvieną simbolį ar eilutę atskirai.
 4. Minimalizmas: nuosavas modulis implementuoja tik būtiniausią funkcionalumą: spalvoto ASCII tinklelio atvaizdavimą,
   ekrano valymą ir klavišų nuskaitymą. Neapkraunama papildomais komponentais, kurių projektui nereikia.

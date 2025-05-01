@@ -1,4 +1,4 @@
-=== Konfigūracija
+=== Konfigūracija<config-docs>
 
 // TODO: ignelis make config docs
 

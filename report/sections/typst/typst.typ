@@ -34,12 +34,12 @@ wwjį su labiau įprastomis alternatyvomis.
   - Struktūra ir konsistencija: griežta struktūra ir stilių valdymas užtikrina dokumento vientisumą.
   - Automatizavimas: bibliografijos, turinio, paveikslų sąrašų, kryžminių nuorodų generavimas yra
     standartinė funkcijos dalis.
-  - Tekstinis formatas: `.tex` failai yra paprasto teksto, todėl puikiai tinka versijų kontrolei su „Git“.
+  - Tekstinis formatas: _.tex_ failai yra paprasto teksto, todėl puikiai tinka versijų kontrolei su „Git“.
   - Plati ekosistema: daugybė paketų ir šablonų įvairiems poreikiams.
 
   Tačiau „LaTeX“ taip pat turi trūkumų, ypač šiuolaikiniam kūrėjui:
   - Sintaksės sudėtingumas: „LaTeX“ sintaksė, nors ir galinga, dažnai yra gana sudėtinga,
-    reikalaujanti daug specialiųjų simbolių (`\`, `{`, `}`) ir gali būti sunkiai įskaitoma.
+    reikalaujanti daug specialiųjų simbolių (_\\_, _{_, _}_) ir gali būti sunkiai įskaitoma.
   - Mokymosi kreivė: įvaldyti „LaTeX“ iki lygio, leidžiančio laisvai kurti ir modifikuoti
     sudėtingus dokumentus, reikalauja nemažai laiko ir pastangų.
   - Klaidų pranešimai: gali būti sunkiai suprantami, ypač pradedantiesiems.
@@ -96,7 +96,7 @@ privalumai šio darbo kontekste:
   kad populiarūs kodų redaktoriai (pvz., „Visual Studio Code“, „NeoVim“ ar net „Intellij IDEA“) gali
   teikti sintaksės paryškinimą, automatinį raktažodžių užbaigimą, klaidų tikrinimą realiu laiku ir
   kitas pagalbos funkcijas, kurios ženkliai padidina produktyvumą.
-7. Tekstinis formatas ir „Git“ suderinamumas: kaip ir „LaTeX“, „Typst“ naudoja paprasto teksto `.typ`
+7. Tekstinis formatas ir „Git“ suderinamumas: kaip ir „LaTeX“, „Typst“ naudoja paprasto teksto _.typ_
   failus, kurie idealiai tinka versijų kontrolei su „Git“.
 8. Dokument konfigūracija: sistema leidžia lengvai keisti viso dokumento stilių ir įvairius parametrus vienoje vietoje.
 
