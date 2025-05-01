@@ -1,3 +1,6 @@
 === Statinis sistemos vaizdas
 
-#image("/images/classDiagramElk.png")
+#figure(
+  image("/images/classDiagramElk.png"),
+  caption: [Klasių diagrama],
+) <class-diagram>

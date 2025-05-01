@@ -109,7 +109,7 @@ tvarkykles. Šių įrankių pavyzdžiai:
     - Trūkumai projekto kontekste: Pati biblioteka yra labai galinga, bet ji yra orientuotas į failų konvertavimą.
       Nors biblioteka suteiktų reikiamus primityvus interaktyvumui, jį reikėtų programuoti papildomai. Realizuoti sudėtingą
       interaktyvią sąsają (kaip gatvių vaizdų naršymas) vien „libcaca“ pagalba būtų nemenkas iššūkis.
-- „`ascii_magic`“ - modernesnis sprendimas, parašytas Python kalba, lengvai integruojamas į Python projektus (CCC https://pypi.org/project/ascii-magic/).
+- „ascii\_magic“ - modernesnis sprendimas, parašytas Python kalba, lengvai integruojamas į Python projektus (CCC https://pypi.org/project/ascii-magic/).
     - Funkcionalumas: veikia kaip Python biblioteka ir kaip CLI įrankis. Leidžia konvertuoti vaizdus iš failų, URL adresų.
       Palaiko spalvotą ANSI išvestį.
     - Parinktys: galima nurodyti išvesties stulpelių skaičių, simbolių rinkinį, spalvų režimą.
