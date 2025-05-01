@@ -112,9 +112,11 @@ object AppConfig {
 
   private implicit val charsetReader: ConfigReader[Charset] =
     ConfigReader.fromString {
-      case "Default"  => Right(Charset.Default)
-      case "Extended" => Right(Charset.Extended)
-      case "Braille"  => Right(Charset.Braille)
+      case "Default"        => Right(Charset.Default)
+      case "Extended"       => Right(Charset.Extended)
+      case "Braille"        => Right(Charset.Braille)
+      case "Blocks"         => Right(Charset.Blocks)
+      case "BlocksExtended" => Right(Charset.BlocksExtended)
       case other =>
         Left(CannotConvert(other, "Charset", "Charset is unrecognized"))
     }
@@ -142,6 +144,7 @@ object AppConfig {
       case "EdgeDetectionSobel" => Right(Algorithms.EdgeDetectionSobelAlgorithm)
       case "EdgeDetectionCanny" => Right(Algorithms.EdgeDetectionCannyAlgorithm)
       case "Braille"            => Right(Algorithms.BrailleAlgorithm)
+      case "No algorithm"       => Right(Algorithms.BlankFilledAlgorithm)
       case other =>
         Left(CannotConvert(other, "Algorithm", "Algorithm is unrecognized"))
     }
