@@ -3,7 +3,7 @@
 #page(header: none)[
   #set text(size: 12pt)
   #AuthorName.at(1).
-  #ProjectTitle.
+  #ProjectName.
   #ProjectType.
   #ProjectSupervisor.join(" ").
   #ProjectFaculty, Kauno technologijos universitetas.
@@ -19,6 +19,7 @@
     *Santrauka*
   
   #set align(start)
+  // TODO: wtf is santrauka
   #lorem(30)\
   \
   #lorem(40)
