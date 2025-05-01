@@ -117,6 +117,7 @@ object AppConfig {
       case "Braille"        => Right(Charset.Braille)
       case "Blocks"         => Right(Charset.Blocks)
       case "BlocksExtended" => Right(Charset.BlocksExtended)
+      case "Blank"          => Right(Charset.Blank)
       case other =>
         Left(CannotConvert(other, "Charset", "Charset is unrecognized"))
     }

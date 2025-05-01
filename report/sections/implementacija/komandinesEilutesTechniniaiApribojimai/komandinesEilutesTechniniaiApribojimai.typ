@@ -16,7 +16,14 @@ Pagrindinės techninės limitacijos yra šios:
   - Skirtingi terminalų emuliatoriai ir operacinės sistemos palaiko skirtingą spalvų skaičių, nuo monochrominio vaizdo
     iki 8, 16 ar 256 skirtingų spalvų (CCC https://marvinh.dev/blog/terminal-colors/).
   - Kuo mažiau spalvų palaiko naudojamas terminalo emuliatorius, tuo daugiau informacijos prarandama atvaizduojant gatvės
-    lygio vaizdus komandinėje eilutėje.
+    lygio vaizdus komandinėje eilutėje. Pateikto pavyzdžio (#ref(<color_comparison>)) kairėje nuotrauka atvaizduojama
+    pasitelkiant tik 16 pagrindinių ANSI spalvų, tuo tarpu dešinėje matomos viso 16,7 milijono RGB spektro spalvų.
+
+    #figure(
+      image("/images/color_comparison.png", width: 15cm),
+      caption: [ASCII rezultato palyginimas naudojant skirtingą galimų spalvų kiekį.],
+    ) <color_comparison>
+
 - Vienodas teksto dydis:
   - Standartinėse komandinės eilutės aplinkose nėra paprasto būdo vienu metu tame pačiame ekrane atvaizduoti tekstą
     keliais skirtingais dydžiais kaip įprasta grafinėse sąsajose.
