@@ -20,7 +20,7 @@
 #show figure.caption: it => {
     set text(size: 10pt)
     if it.kind == image {
-        [#context it.counter.display(it.numbering) pav. #it.body]
+        [#text(weight: "bold")[#context it.counter.display(it.numbering) pav.] #it.body]
     } else {
         [#it.supplement #context it.counter.display(it.numbering): #it.body]
     }
@@ -44,7 +44,6 @@
 #include "mainPages/SecondPage.typ"
 #include "mainPages/ThirdPage.typ"
 #include "mainPages/PageSummaryLT.typ"
-#include "mainPages/PageSummaryEN.typ"
 
 #include "mainPages/TableOfContents.typ"
 //#include "mainPages/TableList.typ"
