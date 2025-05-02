@@ -11,43 +11,44 @@ import scala.util.Random
 object Constants {
   object Help {
     val mainHelp: String =
-      """| [n] - navigation
-         | [s] - share
-         | [h] - help
-         | [q] - quit""".stripMargin
+      """| [N] - NAVIGATION
+         | [S] - SHARE
+         | [C] - CAPTURE (SAVE AS PNG)
+         | [H] - HELP
+         | [Q] - QUIT""".stripMargin
 
     val mainHelpWithGuessing: String =
-      s"""| [g] - guess country
+      """| [G] - GUESS COUNTRY
           |$mainHelp""".stripMargin
 
     val radiusNavHelp: String =
-      """| [1 - n] - go to selected location
-         | [r] - re-render
-         | [n] - back to navigation
-         | [q] - quit""".stripMargin
+      """| [1 - N] - GO TO SELECTED LOCATION
+         | [R] - RE-RENDER
+         | [N] - BACK TO NAVIGATION
+         | [Q] - QUIT""".stripMargin
 
     val sequenceNavHelp: String =
-      """| [f] - go forwards
-         | [b] - go backwards
-         | [r] - re-render
-         | [n] - back to navigation
-         | [q] - quit""".stripMargin
+      """| [F] - GO FORWARDS
+         | [B] - GO BACKWARDS
+         | [R] - RE-RENDER
+         | [N] - BACK TO NAVIGATION
+         | [Q] - QUIT""".stripMargin
 
     val guessingHelp: String =
-      """| [1 - 5] - guess
-         | [g] - back to guessing
-         | [q] - quit""".stripMargin
+      """| [1 - 5] - GUESS
+         | [G] - BACK TO GUESSING
+         | [Q] - QUIT""".stripMargin
   }
 
-  val exiting: String = "Goodbye!"
+  val exiting: String = "GOODBYE!"
 
   val correctGuess: String =
-    """| Correct guess
-       | press [enter] to continue""".stripMargin
+    """| CORRECT GUESS
+       | PRESS [ENTER] TO CONTINUE""".stripMargin
 
   def wrongGuess(correctCountry: Country): String = {
-    s"""| Incorrect guess
-        | correct was ${correctCountry.name}
+    s"""| INCORRECT GUESS
+        | CORRECT WAS ${correctCountry.name}
         | GAME OVER""".stripMargin
   }
 
@@ -79,7 +80,7 @@ object Constants {
           }
         }
         .map(_._2)
-        .getOrElse('⇑') // Default to North if no match (shouldn't happen)
+        .getOrElse('↑') // Default to North if no match (shouldn't happen)
     }
 
     navOptions.zipWithIndex
@@ -105,9 +106,9 @@ object Constants {
       forwardsOpt: Option[MapillaryImageId]
   ): String = {
     val fString =
-      if (forwardsOpt.isDefined) "[f] Forwards ↑" else "[f] Not available"
+      if (forwardsOpt.isDefined) "[F] FORWARDS ↑" else "[F] NOT AVAILABLE"
     val bString =
-      if (backwardsOpt.isDefined) "[b] Backwards ↓" else "[b] Not available"
+      if (backwardsOpt.isDefined) "[B] BACKWARDS ↓" else "[B] NOT AVAILABLE"
 
     s"""| $fString
         | $bString""".stripMargin

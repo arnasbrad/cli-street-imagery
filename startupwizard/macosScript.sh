@@ -111,6 +111,13 @@ if [ "$algorithm" = "Braille" ]; then
   # Show a notification that charset was auto-selected
   echo "Braille algorithm selected - using braille charset automatically" | gum style --padding "1 2" --width 60 --foreground 212
   sleep 2.5
+elif [ "$algorithm" = "No algorithm" ]; then
+  # Set charset to default constant without asking
+  charset="Blank"
+
+  # Show a notification that charset was auto-selected
+  echo "No algorithm selected - using blank charset automatically" | gum style --padding "1 2" --width 60 --foreground 212
+  sleep 2.5
 else
   # Only show charset selection for non-Braille algorithms
   echo "Select the ASCII charset:" | gum style --padding "1 2" --width 50
