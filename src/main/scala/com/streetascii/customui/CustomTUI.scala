@@ -16,7 +16,10 @@ import com.streetascii.navigation.Models.NavigationType.{
 }
 import com.streetascii.navigation.Navigation
 import com.streetascii.runner.RunnerImpl
-import com.streetascii.texttoimage.TextToImageConverter.createColoredAsciiImage
+import com.streetascii.texttoimage.TextToImageConverter.{
+  createColoredAsciiImage,
+  saveImageToPng
+}
 import com.streetascii.texttoimage.{Constants, TextToImageConverter}
 import org.jline.terminal.{Terminal, TerminalBuilder}
 import org.jline.utils.InfoCmp
@@ -95,7 +98,7 @@ object CustomTUI {
     }
 
   /** Resource for managing a JLine Terminal */
-  def terminalResource: Resource[IO, Terminal] =
+  private def terminalResource: Resource[IO, Terminal] =
     Resource.make(
       IO.blocking {
         val terminal = TerminalBuilder
@@ -552,6 +555,21 @@ object CustomTUI {
                       ExitCode.Error
                     )
                 }
+              } yield code
+
+            case 'r' => reRender
+
+            case 'c' =>
+              for {
+                _          <- clearScreen(terminal)
+                imageBytes <- createColoredAsciiImage(chars, colors)
+                fileName   <- saveImageToPng(imageBytes)
+                _ <- printAsciiText(
+                  chars,
+                  s"IMAGE SAVED WITH NAME:\n$fileName"
+                )
+
+                code <- loop(chars, colors, imageInfo, currentCountry)
               } yield code
 
             case 'n' =>

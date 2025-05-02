@@ -5,8 +5,10 @@ import com.streetascii.asciiart.Models.RGB
 
 import java.awt.image.BufferedImage
 import java.awt.{Color, Font, Graphics2D, GraphicsEnvironment, RenderingHints}
-import java.io.{ByteArrayOutputStream, File}
+import java.io.{ByteArrayOutputStream, FileOutputStream}
 import java.nio.file.{Files, Path, Paths}
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Base64
 import javax.imageio.ImageIO
 import scala.annotation.tailrec
@@ -21,6 +23,8 @@ object TextToImageConverter extends IOApp {
     }
   }
   GraphicsEnvironment.getLocalGraphicsEnvironment.registerFont(customFont)
+
+  private val imageFont: Font = new Font("Courier new", Font.PLAIN, 12)
 
   // Main entry point
   override def run(args: List[String]): IO[ExitCode] = {
@@ -90,11 +94,36 @@ object TextToImageConverter extends IOApp {
     } yield bytes
   }
 
+  def saveImageToPng(imageBytes: Array[Byte]): IO[String] = {
+    for {
+      timestamp <- IO {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")
+        LocalDateTime.now.format(formatter)
+      }
+
+      filename = s"image_$timestamp.png"
+
+      outputPath = Paths.get(".").resolve(filename).toAbsolutePath.normalize()
+
+      _ <- Resource
+        .make {
+          IO(new FileOutputStream(outputPath.toFile))
+        } { fos =>
+          IO(fos.close()).handleErrorWith(_ => IO.unit)
+        }
+        .use { fos =>
+          IO {
+            fos.write(imageBytes)
+            fos.flush()
+          }.as(())
+        }
+    } yield filename
+  }
+
   def createColoredAsciiImage(
       chars: Array[Array[Char]],
       colors: Array[Array[RGB]],
-      fontSizePx: Int = 16,
-      paddingPx: Int = 2
+      fontSizePx: Int = 16
   ): IO[Array[Byte]] = {
     for {
       // Calculate dimensions based on grid size and font
@@ -102,7 +131,7 @@ object TextToImageConverter extends IOApp {
         val tempImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
         val g2d       = tempImage.createGraphics()
         try {
-          val font = customFont.deriveFont(fontSizePx.toFloat)
+          val font = imageFont.deriveFont(fontSizePx.toFloat)
           g2d.setFont(font)
           g2d.getFontMetrics
         } finally {
@@ -110,11 +139,12 @@ object TextToImageConverter extends IOApp {
         }
       }
 
-      // Calculate image dimensions
-      width = chars.headOption.map(_.length).getOrElse(0) * (metrics.charWidth(
-        'M'
-      ) + paddingPx)
-      height = chars.length * (metrics.getHeight + paddingPx)
+      // Use a narrower character for width calculation ('i' is quite narrow)
+      charWidth = metrics.charWidth('n')
+
+      // Calculate image dimensions with no extra padding
+      width  = chars.headOption.map(_.length).getOrElse(0) * charWidth
+      height = chars.length * metrics.getHeight
 
       // Create the image
       image <- IO(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB))
@@ -137,13 +167,12 @@ object TextToImageConverter extends IOApp {
 
             // Set font
             _ <- IO {
-              val font = customFont.deriveFont(fontSizePx.toFloat)
+              val font = imageFont.deriveFont(fontSizePx.toFloat)
               g2d.setFont(font)
             }
 
             // Draw each character with its color
             _ <- IO {
-              val charWidth  = metrics.charWidth('M')
               val lineHeight = metrics.getHeight
 
               for (y <- chars.indices; x <- chars(y).indices) {
@@ -153,8 +182,8 @@ object TextToImageConverter extends IOApp {
                 g2d.setColor(new Color(rgb.r, rgb.g, rgb.b))
                 g2d.drawString(
                   char.toString,
-                  x * (charWidth + paddingPx) + paddingPx / 2,
-                  y * (lineHeight + paddingPx) + metrics.getAscent + paddingPx / 2
+                  x * charWidth, // No padding between characters horizontally
+                  y * lineHeight + metrics.getAscent // No padding between lines
                 )
               }
             }

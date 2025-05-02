@@ -15,10 +15,11 @@ object Constants {
          | [S] - SHARE
          | [C] - CAPTURE (SAVE AS PNG)
          | [H] - HELP
+         | [R] - RE-RENDER
          | [Q] - QUIT""".stripMargin
 
     val mainHelpWithGuessing: String =
-      """| [G] - GUESS COUNTRY
+      s"""| [G] - GUESS COUNTRY
           |$mainHelp""".stripMargin
 
     val radiusNavHelp: String =
