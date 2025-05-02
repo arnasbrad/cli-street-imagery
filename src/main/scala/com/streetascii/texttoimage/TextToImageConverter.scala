@@ -13,7 +13,7 @@ import scala.annotation.tailrec
 
 object TextToImageConverter extends IOApp {
   private val customFont: Font = {
-    val stream = getClass.getResourceAsStream("/HomeVideo.ttf")
+    val stream = getClass.getResourceAsStream("/tto.ttf")
     try {
       Font.createFont(Font.TRUETYPE_FONT, stream)
     } finally {
