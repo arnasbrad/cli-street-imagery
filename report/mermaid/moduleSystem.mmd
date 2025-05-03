@@ -1,0 +1,69 @@
+graph TD
+    subgraph "Vartotojo techninė įranga"
+        Terminal[Terminalas / Konsolė]
+        OS[Operacinė sistema]
+    end
+    
+    subgraph "CLI programa"
+        CLI[CLI sąsaja]
+        ImageRenderer[ASCII vaizdų perteikimo modulis]
+        NavigationLogic[Navigacijos logikos modulis]
+        ConfigFile[Konfigūracijos failas]
+        TUI[Pasirinktas TUI modulis]
+        AppConfig[Programos konfigūracija]
+    end
+    
+    subgraph "API klientai"
+        MapillaryClient[Mapillary klientas]
+        ImgurClient[Imgur klientas]
+        TravelTimeClient[TravelTime klientas]
+    end
+
+    subgraph "Išorinės paslaugos"
+        MapillaryAPI[Mapillary API]
+        ImgurAPI[Imgur API]
+        TravelTimeAPI[TravelTime API]
+    end
+    
+    %% Component relationships
+    User[Vartotojas] --> Terminal
+    Terminal --> CLI
+    CLI --> ConfigFile
+    ConfigFile --> AppConfig
+    AppConfig --> ImageRenderer
+    AppConfig --> NavigationLogic
+    CLI --> TUI
+    TUI --> User
+    
+    TUI --> ImageRenderer
+    TUI --> NavigationLogic
+    
+    NavigationLogic --> MapillaryClient
+    NavigationLogic --> TravelTimeClient
+    
+    TUI --> ImgurClient
+    
+    MapillaryClient --> MapillaryAPI
+    ImgurClient --> ImgurAPI
+    TravelTimeClient --> TravelTimeAPI
+    
+    MapillaryAPI --> MapillaryClient
+    MapillaryClient --> ImageRenderer
+    
+    OS --> CLI
+    
+    %% Define styles
+    classDef hardware fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef software fill:#bbf,stroke:#333,stroke-width:1px;
+    classDef external fill:#bfb,stroke:#333,stroke-width:1px;
+    classDef clients fill:#ffb980,stroke:#333,stroke-width:1px;
+    classDef config fill:#fbb,stroke:#333,stroke-width:1px;
+    classDef user fill:#fff,stroke:#333,stroke-width:1px;
+    
+    %% Apply styles
+    class Terminal,OS hardware;
+    class CLI,ImageRenderer,NavigationLogic,TUI software;
+    class MapillaryAPI,ImgurAPI,TravelTimeAPI external;
+    class MapillaryClient,ImgurClient,TravelTimeClient clients;
+    class ConfigFile,AppConfig config;
+    class User user;
