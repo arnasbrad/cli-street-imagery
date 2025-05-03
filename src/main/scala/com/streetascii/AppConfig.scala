@@ -112,12 +112,13 @@ object AppConfig {
 
   private implicit val charsetReader: ConfigReader[Charset] =
     ConfigReader.fromString {
-      case "Default"        => Right(Charset.Default)
-      case "Extended"       => Right(Charset.Extended)
-      case "Braille"        => Right(Charset.Braille)
-      case "Blocks"         => Right(Charset.Blocks)
-      case "BlocksExtended" => Right(Charset.BlocksExtended)
-      case "Blank"          => Right(Charset.Blank)
+      case "Default"         => Right(Charset.Default)
+      case "Extended"        => Right(Charset.Extended)
+      case "Braille"         => Right(Charset.Braille)
+      case "Blocks"          => Right(Charset.Blocks)
+      case "BlocksExtended"  => Right(Charset.BlocksExtended)
+      case "Blank"           => Right(Charset.Blank)
+      case "BraillePatterns" => Right(Charset.BraillePatterns)
       case other =>
         Left(CannotConvert(other, "Charset", "Charset is unrecognized"))
     }
