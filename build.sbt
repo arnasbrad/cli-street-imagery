@@ -60,6 +60,7 @@ Test / scalacOptions ++= Seq(
   "-Wconf:msg=unused value of type org.scalamock:s"
 )
 
+assembly / mainClass := Some("com.streetascii.Main")
 // without this sbt assembly contains about duplicate module-info.class files
 assembly / assemblyMergeStrategy := {
   case PathList("module-info.class") => MergeStrategy.discard
