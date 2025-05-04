@@ -41,7 +41,7 @@ while [ -z "$mapillaryKey" ] || ! echo "$mapillaryKey" | grep -qE "^MLY\|[a-zA-Z
   fi
 
   # Prompt for input
-  mapillaryKey=$(gum input --placeholder.foreground 240 --width 50 --password --placeholder "Enter the Mapillary API key (press [ENTER] for hint)")
+  mapillaryKey=$(gum input --placeholder.foreground 240 --width 60 --password --placeholder "Enter the Mapillary API key (press [ENTER] for hint)")
 
   # Show hint if empty
   if [ -z "$mapillaryKey" ]; then
