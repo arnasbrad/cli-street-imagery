@@ -1,0 +1,57 @@
+flowchart RL
+    start((Startas)) --> display[Atvaizduoti sugeneruotą nuotrauką]
+    display --> input[Laukti naudotojo komandos]
+    
+    input --> keyChoice{Atlikti veiksmą}
+    
+    %% Main navigation
+    keyChoice -- n --> navType{Navigavimo tipas}
+    navType -- Atstumo --> radiusNav[Parodyti artimas lokacijas]
+    navType -- Sekos --> seqNav[Parodyti judėjimo kryptis]
+    
+    radiusNav --> numChoice[Pasirinkti lokaciją 1-5]
+    seqNav --> dirChoice[Pasirinkti judėjimo kryptį]
+    
+    numChoice --> fetchNew[Gauti naują lokaciją]
+    dirChoice --> fetchNew
+    
+    fetchNew --> processImg[Generuoti ASCII meną]
+    processImg --> display
+    
+    %% Guessing game
+    keyChoice -- g --> guessing[Parodyti galimas valstybes]
+    guessing --> guess[Pasirinkti valstybę 1-5]
+    guess --> correct{Teisingas spėjimas}
+    
+    correct -- Taip --> correctMsg[Parodyti sėkmės pranešimą]
+    correct -- Ne --> wrongMsg[Parodyti teisingą valstybę]
+    
+    correctMsg --> enterKey[Pasirinkti žaisti toliau]
+    enterKey --> randomLoc[Gauti naują lokaciją]
+    randomLoc --> fetchNew
+    
+    wrongMsg --> display
+    
+    %% Other actions
+    keyChoice -- h --> help[Parodyti pagalbinį tekstą]
+    keyChoice -- r --> rerender[Parodyti dabartinę lokaciją dar kartą]
+    keyChoice -- c --> save[Išsaugoti nuotrauką]
+    keyChoice -- s --> share[Generuoti socialinės medijos nuorodą]
+    keyChoice -- q --> exit((Pabaiga))
+    
+    help --> input
+    rerender --> input
+    save --> input
+    share --> input
+    
+    %% Styling
+    classDef default fill:#e3f2fd,stroke:#1565c0,stroke-width:1px
+    classDef decision fill:#fff,stroke:#01579b,stroke-width:1px
+    classDef navigation fill:#b2dfdb,stroke:#00695c,stroke-width:1px
+    classDef guessing fill:#d1c4e9,stroke:#4527a0,stroke-width:1px
+    classDef terminator fill:#000,stroke:#000,color:#fff,stroke-width:1px
+    
+    class start,exit terminator
+    class keyChoice,navType,correct decision
+    class radiusNav,seqNav,numChoice,dirChoice,fetchNew navigation
+    class guessing,guess,correctMsg,wrongMsg guessing
