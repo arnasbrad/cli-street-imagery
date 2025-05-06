@@ -76,7 +76,7 @@ cls
 
 :: Select navigation mode - NO TEMP FILES
 gum style --padding "1 2" --width 50 "Select navigation mode:"
-for /f "delims=" %%a in ('gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 "Sequence navigation" "Proximity navigation"') do set "navigation=%%a"
+for /f "delims=" %%a in ('gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 "Sequence Navigation" "Proximity Navigation"') do set "navigation=%%a"
 cls
 
 :: Algorithm selection with help option
@@ -98,27 +98,31 @@ cls
 
 :: Algorithm selection - NO TEMP FILES
 gum style --padding "1 2" --width 50 "Select an image conversion algorithm:"
-for /f "delims=" %%a in ('gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 "Luminance" "Edge detection Sobel" "Edge detection Canny" "Braille" "No algorithm"') do set "algorithm=%%a"
+for /f "delims=" %%a in ('gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 "Luminance" "Edge Detection Sobel" "Edge Detection Canny" "Braille" "No Algorithm"') do set "algorithm=%%a"
 cls
 
 :: Charset selection - skip if Braille is selected
 if "%algorithm%"=="Braille" (
-    set "charset=BraillePatterns"
+    set "charset=Braille Patterns"
     gum style --padding "1 2" --width 60 --foreground 212 "Braille algorithm selected - using braille charset automatically"
+    timeout /t 3 >nul
+) else if "%algorithm%"=="No Algorithm" (
+    set "charset=Blank"
+    gum style --padding "1 2" --width 60 --foreground 212 "No algorithm selected - using blank charset"
     timeout /t 3 >nul
 ) else (
     gum style --padding "1 2" --width 50 "Select the ASCII charset:"
-    for /f "delims=" %%a in ('gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 "Default" "Blocks" "BlocksExtended" "Extended" "Braille"') do set "charset=%%a"
+    for /f "delims=" %%a in ('gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 "Default" "Blocks" "Blocks Extended" "Extended" "Braille"') do set "charset=%%a"
 )
 cls
 
 :: === Color Selection Refactored with GOTO ===
 set "colors=false"  :: Default to false
-set "colorFilter=No filter" :: Default filter
+set "colorFilter=No Filter" :: Default filter
 
 :: Decide IF colors should be enabled
 if /I "%algorithm%"=="Braille" goto SkipColorPrompt
-if /I "%algorithm%"=="No algorithm" (
+if /I "%algorithm%"=="No Algorithm" (
     set "colors=true"
     goto SkipColorPrompt
 )
@@ -139,7 +143,7 @@ if /I not "%colors%"=="true" goto SkipColorFilter
 
 :: This code only runs if colors is true
 gum style --padding "1 2" --width 50 "Select a color filter:"
-for /f "delims=" %%a in ('gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 "Contrast filter" "Colorblind Tritanopia filter" "Colorblind Protanopia filter" "Colorblind Deuteranopia filter" "No filter"') do set "colorFilter=%%a"
+for /f "delims=" %%a in ('gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 "Contrast" "Tritanopia" "Protanopia" "Deuteranopia" "No Filter"') do set "colorFilter=%%a"
 cls
 
 :SkipColorFilter
@@ -255,8 +259,8 @@ if defined WriteError goto :WriteConfigFile_Cleanup
 (echo api {) > "%TargetConfigPath%" || set "WriteError=1"
 (echo   mapillary-key = "%mapillaryKey%") >> "%TargetConfigPath%" || set "WriteError=1"
 (echo   imgur-client-id = "%imgurKey%") >> "%TargetConfigPath%" || set "WriteError=1"
-(echo   travelTime-app-id = "%travelTimeAppId%") >> "%TargetConfigPath%" || set "WriteError=1"
-(echo   travelTime-key = "%travelTimeKey%") >> "%TargetConfigPath%" || set "WriteError=1"
+(echo   traveltime-app-id = "%travelTimeAppId%") >> "%TargetConfigPath%" || set "WriteError=1"
+(echo   traveltime-key = "%travelTimeKey%") >> "%TargetConfigPath%" || set "WriteError=1"
 (echo }) >> "%TargetConfigPath%" || set "WriteError=1"
 (echo() >> "%TargetConfigPath%" || set "WriteError=1"  :: echo( for blank line
 (echo processing {) >> "%TargetConfigPath%" || set "WriteError=1"
@@ -289,7 +293,6 @@ goto :eof
 :: ================================================
 :: End Subroutine
 :: ================================================
-
 
 :EndScript
 endlocal

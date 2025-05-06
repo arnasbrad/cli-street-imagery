@@ -55,8 +55,8 @@ object AppConfig {
 
   private implicit val navigationTypeReader: ConfigReader[NavigationType] =
     ConfigReader.fromString {
-      case "Sequence navigation"  => Right(NavigationType.SequenceBased)
-      case "Proximity navigation" => Right(NavigationType.RadiusBased)
+      case "Sequence Navigation"  => Right(NavigationType.SequenceBased)
+      case "Proximity Navigation" => Right(NavigationType.RadiusBased)
       case other =>
         Left(
           CannotConvert(
@@ -112,24 +112,24 @@ object AppConfig {
 
   private implicit val charsetReader: ConfigReader[Charset] =
     ConfigReader.fromString {
-      case "Default"         => Right(Charset.Default)
-      case "Extended"        => Right(Charset.Extended)
-      case "Braille"         => Right(Charset.Braille)
-      case "Blocks"          => Right(Charset.Blocks)
-      case "BlocksExtended"  => Right(Charset.BlocksExtended)
-      case "Blank"           => Right(Charset.Blank)
-      case "BraillePatterns" => Right(Charset.BraillePatterns)
+      case "Default"          => Right(Charset.Default)
+      case "Extended"         => Right(Charset.Extended)
+      case "Braille"          => Right(Charset.Braille)
+      case "Blocks"           => Right(Charset.Blocks)
+      case "Blocks Extended"  => Right(Charset.BlocksExtended)
+      case "Blank"            => Right(Charset.Blank)
+      case "Braille Patterns" => Right(Charset.BraillePatterns)
       case other =>
         Left(CannotConvert(other, "Charset", "Charset is unrecognized"))
     }
 
   private implicit val colorFilterReader: ConfigReader[ColorFilter] =
     ConfigReader.fromString {
-      case "Contrast filter"              => Right(ColorFilter.EnhancedContrast)
-      case "Colorblind Tritanopia filter" => Right(ColorFilter.Tritanopia)
-      case "Colorblind Protanopia filter" => Right(ColorFilter.Protanopia)
-      case "Colorblind Deuteranopia filter" => Right(ColorFilter.Deuteranopia)
-      case "No filter"                      => Right(ColorFilter.NoFilter)
+      case "Contrast"     => Right(ColorFilter.EnhancedContrast)
+      case "Tritanopia"   => Right(ColorFilter.Tritanopia)
+      case "Protanopia"   => Right(ColorFilter.Protanopia)
+      case "Deuteranopia" => Right(ColorFilter.Deuteranopia)
+      case "No Filter"    => Right(ColorFilter.NoFilter)
       case other =>
         Left(
           CannotConvert(
@@ -142,11 +142,13 @@ object AppConfig {
 
   private implicit val algortihmReader: ConfigReader[AsciiAlgorithm] =
     ConfigReader.fromString {
-      case "Luminance"          => Right(Algorithms.LuminanceAlgorithm)
-      case "EdgeDetectionSobel" => Right(Algorithms.EdgeDetectionSobelAlgorithm)
-      case "EdgeDetectionCanny" => Right(Algorithms.EdgeDetectionCannyAlgorithm)
-      case "Braille"            => Right(Algorithms.BrailleAlgorithm)
-      case "No algorithm"       => Right(Algorithms.BlankFilledAlgorithm)
+      case "Luminance" => Right(Algorithms.LuminanceAlgorithm)
+      case "Edge Detection Sobel" =>
+        Right(Algorithms.EdgeDetectionSobelAlgorithm)
+      case "Edge Detection Canny" =>
+        Right(Algorithms.EdgeDetectionCannyAlgorithm)
+      case "Braille"      => Right(Algorithms.BrailleAlgorithm)
+      case "No Algorithm" => Right(Algorithms.BlankFilledAlgorithm)
       case other =>
         Left(CannotConvert(other, "Algorithm", "Algorithm is unrecognized"))
     }

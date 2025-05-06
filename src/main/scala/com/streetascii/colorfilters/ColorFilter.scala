@@ -40,7 +40,6 @@ object ColorFilter {
         if (max > min) (value - min).toDouble / (max - min) else 0.5
 
       // Apply contrast enhancement formula:
-      // Bring the value toward the middle for factor < 1 or away from the middle for factor > 1
       val adjusted = 0.5 + factor * (normalized - 0.5)
 
       // Clamp to 0-1 range
@@ -96,20 +95,55 @@ object ColorFilter {
           val errorG = g - dg
           val errorB = b - db
 
-          // Adjust error based on intensity
-          val adjustedErrorR = errorR * intensity
-          val adjustedErrorG = errorG * intensity
+          // Calculate red-green difference
+          val redGreenDiff = r - g
 
-          // Apply corrections by redistributing the error to enhance color differences
-          // Specifically emphasize red-green differences by shifting them to blue channel
-          val correctedR = r
-          val correctedG = g
-          val correctedB = b + adjustedErrorR * 0.7 + adjustedErrorG * 0.7
+          // Calculate compensation strength - stronger where red and green are similar
+          val compensationStrength =
+            math.min(1.0, 1.0 - math.abs(redGreenDiff) * 3) * intensity
+
+          // Enhanced compensation for specific problem areas
+          val correctedR =
+            r + (0.3 * compensationStrength * (if (r > g) 1.0 else -0.5))
+          val correctedG =
+            g - (0.3 * compensationStrength * (if (g > r) 1.0 else -0.5))
+
+          // Use blue channel for additional signaling (deuteranopes can see blue well)
+          val correctedB = if (math.abs(redGreenDiff) < 0.2) {
+            // When red and green are very similar, use blue to create a distinctive signal
+            if (r > g) {
+              b - (0.4 * compensationStrength) // Decrease blue for reddish colors
+            } else {
+              b + (0.4 * compensationStrength) // Increase blue for greenish colors
+            }
+          } else {
+            b
+          }
+
+          // Enhanced contrast in areas of similar luminance
+          val luminance           = 0.2126 * r + 0.7152 * g + 0.0722 * b
+          val redLuminanceRatio   = r / (luminance + 0.01)
+          val greenLuminanceRatio = g / (luminance + 0.01)
+
+          // If red and green contribute similarly to luminance, enhance differences
+          val finalR =
+            if (math.abs(redLuminanceRatio - greenLuminanceRatio) < 0.3) {
+              correctedR * (1.0 + 0.2 * compensationStrength)
+            } else {
+              correctedR
+            }
+
+          val finalG =
+            if (math.abs(redLuminanceRatio - greenLuminanceRatio) < 0.3) {
+              correctedG * (1.0 - 0.1 * compensationStrength)
+            } else {
+              correctedG
+            }
 
           // Ensure values stay in valid range
           RGB(
-            linearToSRGB(math.min(1.0, math.max(0.0, correctedR))),
-            linearToSRGB(math.min(1.0, math.max(0.0, correctedG))),
+            linearToSRGB(math.min(1.0, math.max(0.0, finalR))),
+            linearToSRGB(math.min(1.0, math.max(0.0, finalG))),
             linearToSRGB(math.min(1.0, math.max(0.0, correctedB)))
           )
         })
@@ -129,7 +163,7 @@ object ColorFilter {
           val g = sRGBToLinear(pixel.g)
           val b = sRGBToLinear(pixel.b)
 
-          // First, simulate how protanopes see this color
+          // Simulate protanopia vision
           val pr = 0.567 * r + 0.433 * g + 0.0 * b
           val pg = 0.558 * r + 0.442 * g + 0.0 * b
           val pb = 0.0 * r + 0.242 * g + 0.758 * b
@@ -139,21 +173,37 @@ object ColorFilter {
           val errorG = g - pg
           val errorB = b - pb
 
-          // Adjust error based on intensity
-          val adjustedErrorR = errorR * intensity
-          val adjustedErrorG = errorG * intensity
+          // Shift red-green difference into channels they can perceive better
+          val correctedR =
+            r + errorG * 0.7 * intensity // Enhance red with green info
+          val correctedG =
+            g - errorR * 0.7 * intensity // Differentiate green from red
+          val correctedB =
+            b + (errorR - errorG) * intensity // Use blue channel for additional contrast
 
-          // Apply corrections by redistributing the error to enhance color differences
-          // Emphasize red-green differences by shifting them to blue channel
-          val correctedR = r
-          val correctedG = g
-          val correctedB = b + adjustedErrorR * 0.7 + adjustedErrorG * 0.7
+          // Enhance overall contrast in problem areas
+          val redGreenDiff = Math.abs(r - g)
+          val contrastBoost = if (redGreenDiff < 0.2) {
+            // If red and green are similar (trouble area for protanopes)
+            // Increase their difference by shifting toward blue or yellow
+            if (r > g) {
+              // Push toward magenta (more blue)
+              correctedB * (1.0 + 0.3 * intensity)
+            } else {
+              // Push toward yellow (less blue)
+              correctedB * (1.0 - 0.3 * intensity)
+            }
+          } else {
+            correctedB
+          }
 
           // Ensure values stay in valid range
           RGB(
             linearToSRGB(math.min(1.0, math.max(0.0, correctedR))),
             linearToSRGB(math.min(1.0, math.max(0.0, correctedG))),
-            linearToSRGB(math.min(1.0, math.max(0.0, correctedB)))
+            linearToSRGB(
+              math.min(1.0, math.max(0.0, math.min(contrastBoost, 1.0)))
+            )
           )
         })
       )
@@ -181,15 +231,39 @@ object ColorFilter {
           val errorR = r - tr
           val errorG = g - tg
           val errorB = b - tb
+          
+          // For tritanopia (blue-yellow confusion), we need to enhance those differences
 
-          // Adjust error based on intensity
-          val adjustedErrorB = errorB * intensity
+          // Calculate blue-yellow axis (blue vs red+green)
+          val blueYellowDiff = b - ((r + g) / 2)
 
-          // Apply corrections by redistributing the error to enhance color differences
-          // For tritanopia, enhance the blue-yellow difference by primarily affecting red and green
-          val correctedR = r + adjustedErrorB * 0.7
-          val correctedG = g + adjustedErrorB * 0.7
-          val correctedB = b
+          // Apply stronger compensation where blue and yellow are similar
+          val compensationStrength =
+            math.min(1.0, 1.0 - math.abs(blueYellowDiff) * 3) * intensity
+
+          // Shift colors to enhance blue-yellow differences
+          val correctedR = r
+          // Decrease green when blue is present to create more contrast
+          val correctedG = g - (b * 0.4 * compensationStrength)
+          // Enhance blue channel to make blues more distinct
+          val correctedB = if (b > 0.3) {
+            b + (0.6 * compensationStrength)
+          } else {
+            b - (0.3 * compensationStrength) // Decrease blues when they're already low
+          }
+
+          // Additional contrast for problematic blue-green distinctions
+          val blueGreenRatio = if (g > 0.1) b / g else 10.0
+          if (blueGreenRatio > 0.8 && blueGreenRatio < 1.2) {
+            // If blue and green are similar (difficult for tritanopes)
+            if (b > g) {
+              // Make blue more intense
+              correctedB + (0.3 * compensationStrength)
+            } else {
+              // Make green more vibrant and reduce blue
+              correctedG + (0.3 * compensationStrength)
+            }
+          }
 
           // Ensure values stay in valid range
           RGB(
