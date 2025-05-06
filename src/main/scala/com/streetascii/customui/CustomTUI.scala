@@ -135,10 +135,13 @@ object CustomTUI {
       writer: BufferedWriter,
       chars: Array[Array[Char]],
       colors: Array[Array[RGB]],
-      colorConfig: ColorConfig
+      colorConfig: ColorConfig,
+      ignoreFilter: Boolean = false
   ): IO[Unit] = {
     IO.blocking {
-      val processedColors = colorConfig.colorFilter.applyFilter(colors, 2)
+      val processedColors =
+        if (ignoreFilter) colors
+        else colorConfig.colorFilter.applyFilter(colors, 2)
 
       val sb = new StringBuilder()
 
@@ -638,7 +641,8 @@ object CustomTUI {
             writer,
             asciiWithColors,
             greyscale.colors,
-            appConfig.colors
+            appConfig.colors,
+            ignoreFilter = true
           )
         } yield ()
       }
