@@ -50,7 +50,7 @@ object Constants {
 
   def wrongGuess(correctCountry: Country): String = {
     s"""| INCORRECT GUESS
-        | CORRECT WAS ${correctCountry.name}
+        | CORRECT WAS ${correctCountry.name.toUpperCase}
         | GAME OVER""".stripMargin
   }
 
@@ -100,7 +100,7 @@ object Constants {
             currentImageData.coordinates,
             navOpt.coordinates
           )
-          s"[${index + 1}] ${distanceStr}m ${angleToDirectionChar(turnAngle)}"
+          s"[${index + 1}] ${distanceStr}M ${angleToDirectionChar(turnAngle)}"
         }
         .mkString("\n")
   }
@@ -127,7 +127,7 @@ object Constants {
       shuffledCountriesList <- IO(Random.shuffle(allCountriesList))
       str = shuffledCountriesList.zipWithIndex
         .map { case (guessOpt, index) =>
-          s"[${index + 1}] ${guessOpt.name}"
+          s"[${index + 1}] ${guessOpt.name.toUpperCase}"
         }
         .mkString("\n")
       index = shuffledCountriesList.indexOf(correctCountry)
