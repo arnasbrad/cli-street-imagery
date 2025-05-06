@@ -14,14 +14,12 @@ import com.streetascii.cli.Cli.{
 import com.streetascii.clients.imgur.ImgurClient
 import com.streetascii.clients.mapillary.MapillaryClient
 import com.streetascii.clients.traveltime.TravelTimeClient
-import com.streetascii.common.Models.Radius
 import com.streetascii.customui.CustomTUI
 import com.streetascii.guessinggame.CountryModels.Country
 import com.streetascii.guessinggame.GuessingLocations
 import com.streetascii.runner.RunnerImpl
 import org.typelevel.log4cats.SelfAwareStructuredLogger
 import org.typelevel.log4cats.slf4j.Slf4jLogger
-import pureconfig.ConfigSource
 
 object Main
     extends CommandIOApp(
