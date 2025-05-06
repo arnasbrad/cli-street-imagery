@@ -441,7 +441,10 @@ object CustomTUI {
                         } yield code
                       }
                       for {
-                        _    <- printAsciiText(chars, Constants.correctGuess)
+                        _ <- printAsciiText(
+                          chars,
+                          Constants.correctGuess(currentCountry)
+                        )
                         code <- readGoNextKey()
                       } yield code
 

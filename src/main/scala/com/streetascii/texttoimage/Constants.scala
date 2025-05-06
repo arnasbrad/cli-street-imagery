@@ -7,6 +7,7 @@ import com.streetascii.guessinggame.CountryModels.Country
 import com.streetascii.navigation.Navigation
 
 import scala.util.Random
+import java.text.DecimalFormat
 
 object Constants {
   object Help {
@@ -43,9 +44,9 @@ object Constants {
 
   val exiting: String = "GOODBYE!"
 
-  val correctGuess: String =
-    """| CORRECT GUESS
-       | PRESS [ENTER] TO CONTINUE""".stripMargin
+  def correctGuess(correctCountry: Country): String =
+    s"""| ${correctCountry.name.toUpperCase} IS CORRECT!
+        | PRESS [ENTER] TO CONTINUE""".stripMargin
 
   def wrongGuess(correctCountry: Country): String = {
     s"""| INCORRECT GUESS
@@ -53,23 +54,23 @@ object Constants {
         | GAME OVER""".stripMargin
   }
 
+  // Define angle ranges for each direction
+  private val ranges = Array(
+    (-22.5  -> 22.5, '↑'),   // North
+    (22.5   -> 67.5, '↗'),   // Northeast
+    (67.5   -> 112.5, '→'),  // East
+    (112.5  -> 157.5, '↘'),  // Southeast
+    (157.5  -> -157.5, '↓'), // South (wrapping around from 157.5 to -157.5)
+    (-157.5 -> -112.5, '↙'), // Southwest
+    (-112.5 -> -67.5, '←'),  // West
+    (-67.5  -> -22.5, '↖')   // Northwest
+  )
+
   def radiusNavOptionsList(
       currentImageData: ImageInfo,
       navOptions: List[ImageData]
   ): String = {
     def angleToDirectionChar(normalizedAngle: Double): Char = {
-      // Define angle ranges for each direction
-      val ranges = Array(
-        (-22.5  -> 22.5, '↑'),   // North
-        (22.5   -> 67.5, '↗'),   // Northeast
-        (67.5   -> 112.5, '→'),  // East
-        (112.5  -> 157.5, '↘'),  // Southeast
-        (157.5  -> -157.5, '↓'), // South (wrapping around from 157.5 to -157.5)
-        (-157.5 -> -112.5, '↙'), // Southwest
-        (-112.5 -> -67.5, '←'),  // West
-        (-67.5  -> -22.5, '↖')   // Northwest
-      )
-
       // Find the matching range
       ranges
         .find { case ((min, max), _) =>
@@ -84,23 +85,25 @@ object Constants {
         .getOrElse('↑') // Default to North if no match (shouldn't happen)
     }
 
-    navOptions.zipWithIndex
-      .map { case (navOpt, index) =>
-        val distance = Navigation.calculateDistance(
-          currentImageData.coordinates,
-          navOpt.coordinates
-        )
-        val turnAngle = Navigation.calculateTurnAngle(
-          currentImageData.compassAngle,
-          currentImageData.coordinates,
-          navOpt.coordinates
-        )
-        s"[${index + 1}] ${distance.toString.take(3)}m, ${angleToDirectionChar(turnAngle)}"
-      }
-      .mkString("\n")
+    if (navOptions.isEmpty) "NO NEARBY\nLOCATIONS"
+    else
+      navOptions.zipWithIndex
+        .map { case (navOpt, index) =>
+          val distance = Navigation.calculateDistance(
+            currentImageData.coordinates,
+            navOpt.coordinates
+          )
+          val formatter   = new DecimalFormat("0.0")
+          val distanceStr = formatter.format(distance)
+          val turnAngle = Navigation.calculateTurnAngle(
+            currentImageData.compassAngle,
+            currentImageData.coordinates,
+            navOpt.coordinates
+          )
+          s"[${index + 1}] ${distanceStr}m ${angleToDirectionChar(turnAngle)}"
+        }
+        .mkString("\n")
   }
-
-  def radiusNavOptionsMap(navOptions: List[ImageData]): String = ""
 
   def sequenceNavOptsList(
       backwardsOpt: Option[MapillaryImageId],

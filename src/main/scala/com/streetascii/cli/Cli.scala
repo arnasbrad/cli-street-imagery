@@ -1,7 +1,7 @@
 package com.streetascii.cli
 
 import cats.data.Validated
-import cats.implicits.catsSyntaxTuple2Semigroupal
+import cats.implicits.{catsSyntaxTuple2Semigroupal, catsSyntaxTuple3Semigroupal}
 import com.monovore.decline._
 import com.streetascii.cli.Models.{
   AddressEntryArgs,
@@ -10,7 +10,7 @@ import com.streetascii.cli.Models.{
   ImageIdEntryArgs
 }
 import com.streetascii.clients.mapillary.Models.MapillaryImageId
-import com.streetascii.common.Models.Coordinates
+import com.streetascii.common.Models.{Coordinates, Radius}
 
 import scala.util.Try
 
@@ -24,6 +24,21 @@ object Cli {
         help = "Path to configuration file"
       )
       .withDefault("./config.conf")
+
+  private def radiusOpt =
+    Opts
+      .option[Int](
+        long = "radius",
+        short = "r",
+        help = "Radius size for finding images"
+      )
+      .withDefault(15)
+      .mapValidated(value =>
+        Radius.create(value) match {
+          case Right(radius) => Validated.valid(radius)
+          case Left(error)   => Validated.invalidNel(s"Invalid radius: $error")
+        }
+      )
 
   private val imageIdArg =
     Opts
@@ -65,13 +80,13 @@ object Cli {
 
   val coordinatesCommand: Opts[CoordinatesEntryArgs] = Opts.subcommand(
     Command(name = "coordinates", header = "Start with geographic coordinates")(
-      (coordinatesArg, configPathOpt).mapN(CoordinatesEntryArgs)
+      (coordinatesArg, radiusOpt, configPathOpt).mapN(CoordinatesEntryArgs)
     )
   )
 
   val addressCommand: Opts[AddressEntryArgs] = Opts.subcommand(
     Command(name = "address", header = "Start with a street address")(
-      (addressArg, configPathOpt).mapN(AddressEntryArgs)
+      (addressArg, radiusOpt, configPathOpt).mapN(AddressEntryArgs)
     )
   )
 

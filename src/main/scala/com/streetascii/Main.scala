@@ -14,6 +14,7 @@ import com.streetascii.cli.Cli.{
 import com.streetascii.clients.imgur.ImgurClient
 import com.streetascii.clients.mapillary.MapillaryClient
 import com.streetascii.clients.traveltime.TravelTimeClient
+import com.streetascii.common.Models.Radius
 import com.streetascii.customui.CustomTUI
 import com.streetascii.guessinggame.CountryModels.Country
 import com.streetascii.guessinggame.GuessingLocations
@@ -135,7 +136,7 @@ object Main
         initClients(appConfig).use { runner =>
           for {
             imageInfo <- runner
-              .getHexStringsFromLocation(args.coordinates)
+              .getHexStringsFromLocation(args.coordinates, args.radius)
               .value
 
             exitCode <- imageInfo match {
@@ -167,7 +168,10 @@ object Main
                   case Some(coordinates) =>
                     for {
                       imageInfo <- runner
-                        .getHexStringsFromLocation(coordinates)
+                        .getHexStringsFromLocation(
+                          coordinates,
+                          args.radius
+                        )
                         .value
 
                       exitCode <- imageInfo match {
