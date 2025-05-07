@@ -1,3 +1,9 @@
+# Pavyzdinis Mapillary raktas
+
+```
+MLY|1111111111111111|22222222222222222233333333333333
+```
+
 # Adresas
 
 ## Kauno Pilis
