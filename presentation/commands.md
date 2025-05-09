@@ -12,6 +12,8 @@ MLY|1111111111111111|22222222222222222233333333333333
 java -jar street-ascii.jar address "Kauno pilis"
 ```
 
++ in game help
+
 # Koordinatės
 
 ## Soboras - 2
@@ -31,6 +33,8 @@ java -jar street-ascii.jar coordinates "54.876282420000024,24.019055750000007" -
 ```
 java -jar street-ascii.jar coordinates "54.875859750008,24.020683770015" --radius 1
 ```
+
++ saving
 
 # ID
 
