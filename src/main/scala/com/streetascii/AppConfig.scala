@@ -55,8 +55,9 @@ object AppConfig {
 
   private implicit val navigationTypeReader: ConfigReader[NavigationType] =
     ConfigReader.fromString {
-      case "Sequence Navigation"  => Right(NavigationType.SequenceBased)
-      case "Proximity Navigation" => Right(NavigationType.RadiusBased)
+      case "Sequence Navigation"      => Right(NavigationType.SequenceBased)
+      case "Sequence Fast Navigation" => Right(NavigationType.SequenceBasedFast)
+      case "Proximity Navigation"     => Right(NavigationType.RadiusBased)
       case other =>
         Left(
           CannotConvert(
