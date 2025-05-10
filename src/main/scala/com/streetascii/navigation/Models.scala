@@ -7,5 +7,7 @@ object Models {
     case object RadiusBased extends NavigationType
 
     case object SequenceBased extends NavigationType
+
+    case object SequenceBasedFast extends NavigationType
   }
 }

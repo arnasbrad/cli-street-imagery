@@ -12,7 +12,8 @@ import com.streetascii.guessinggame.CountryModels.Country
 import com.streetascii.guessinggame.GuessingLocations
 import com.streetascii.navigation.Models.NavigationType.{
   RadiusBased,
-  SequenceBased
+  SequenceBased,
+  SequenceBasedFast
 }
 import com.streetascii.navigation.Navigation
 import com.streetascii.runner.RunnerImpl
@@ -398,6 +399,106 @@ object CustomTUI {
           } yield code
         }
 
+        def sequenceFastNavigationLogic(
+            imageInfo: ImageInfo
+        ) = {
+          def readSequenceFastNavigationChoice(
+              backwardsOpt: Option[MapillaryImageId],
+              forwardsOpt: Option[MapillaryImageId],
+              isHelpMode: Boolean = false
+          ): IO[ExitCode] =
+            for {
+              navKey <- readKey(terminal)
+              code <- navKey match {
+                case 'b' =>
+                  backwardsOpt match {
+                    case Some(backwards) =>
+                      navigateToLocation(backwards, currentCountry)
+                    case None =>
+                      for {
+                        _ <- printAsciiText(chars, "CANNOT GO\nFURTHER BACK")
+                        code <- readSequenceFastNavigationChoice(
+                          backwardsOpt,
+                          forwardsOpt
+                        )
+                      } yield code
+                  }
+
+                case 'f' =>
+                  forwardsOpt match {
+                    case Some(forwards) =>
+                      navigateToLocation(forwards, currentCountry)
+                    case None =>
+                      for {
+                        _ <- printAsciiText(chars, "CANNOT GO\nFURTHER FORWARD")
+                        code <- readSequenceFastNavigationChoice(
+                          backwardsOpt,
+                          forwardsOpt
+                        )
+                      } yield code
+                  }
+
+                case 'h' =>
+                  for {
+                    _ <- printAsciiText(chars, Constants.Help.sequenceNavHelp)
+                    code <- readSequenceFastNavigationChoice(
+                      backwardsOpt,
+                      forwardsOpt,
+                      isHelpMode = true
+                    )
+                  } yield code
+
+                case 'n' if isHelpMode =>
+                  for {
+                    _ <- printAsciiText(
+                      chars,
+                      Constants.sequenceNavOptsList(backwardsOpt, forwardsOpt)
+                    )
+                    code <- readSequenceFastNavigationChoice(
+                      backwardsOpt,
+                      forwardsOpt
+                    )
+                  } yield code
+
+                case 'q' =>
+                  exitApp(chars)
+
+                case _ =>
+                  for {
+                    code <- readSequenceFastNavigationChoice(
+                      backwardsOpt,
+                      forwardsOpt
+                    )
+                  } yield code
+              }
+            } yield code
+
+          for {
+            navOptsEither <-
+              Navigation
+                .findSequenceNeighbors(
+                  currentImageId = imageInfo.imageId,
+                  sequenceId = imageInfo.sequenceId
+                )(runner.mapillaryClient)
+                .value
+
+            code <- navOptsEither match {
+              case Right((backwardsOpt, forwardsOpt)) =>
+                for {
+                  code <- readSequenceFastNavigationChoice(
+                    backwardsOpt,
+                    forwardsOpt
+                  )
+                } yield code
+
+              case Left(e) =>
+                printAsciiText(chars, e.message).as(
+                  ExitCode.Error
+                )
+            }
+          } yield code
+        }
+
         def readGuessingOpt(
             formattedString: String,
             correctIndex: Int,
@@ -487,11 +588,11 @@ object CustomTUI {
         ) = {
           for {
             _ <- logger.info("NAVIGATING")
-            _ <- clearScreen(terminal)
             res <- runner
               .getHexStringsFromId(imageId)
               .value
             _ <- logger.info(s"got hex ${res.isRight}")
+            _ <- clearScreen(terminal)
             code <- res match {
               case Right(imageInfo) =>
                 val (greyscale, asciiWithColors) =
@@ -580,8 +681,9 @@ object CustomTUI {
 
             case 'n' =>
               appConfig.processing.navigationType match {
-                case RadiusBased   => radiusNavigationLogic(imageInfo)
-                case SequenceBased => sequenceNavigationLogic(imageInfo)
+                case RadiusBased       => radiusNavigationLogic(imageInfo)
+                case SequenceBased     => sequenceNavigationLogic(imageInfo)
+                case SequenceBasedFast => sequenceFastNavigationLogic(imageInfo)
               }
 
             case 'g' if isGuessingMode =>
