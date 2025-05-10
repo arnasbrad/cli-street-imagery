@@ -10,7 +10,7 @@ nurodžius konkrečias koordinates koordinates programa ieškos esamų paveiksli
 platformoje, nubrėždama nedidelį stačiakampį aplink nurodytas koordinates.
 
 ```bash
-sbt "run coordinates 54.901300696008846,11.892028147030498"
+java -jar street-ascii.jar coordinates 54.901300696008846,11.892028147030498"
 ```
 
 Sėkmingai radus paveiksliuką, programoje matysite ASCII atvaizduotą jo vaizdą. Įvykus
@@ -39,7 +39,7 @@ naudojant koordinates.
 Šiam funkcionalumui būtini „TravelTime“ sąsajos raktai.
 
 ```bash
-sbt 'run address "Kauno Pilis"'
+java -jar street-ascii.jar address "Kauno Pilis"
 ```
 
 Sėkmingai radus paveiksliuką, programoje matysite ASCII atvaizduotą jo vaizdą. Įvykus
@@ -61,7 +61,7 @@ nurodžius konkretų identifikatorių, programa suras atitinkampą paveiksliuka
 jog kiekvieną kartą bus gautas tas pats paveiksliukas.
 
 ```bash
-sbt "run id 1688256144933335"
+java -jar street-ascii.jar id 1688256144933335"
 ```
 
 Sėkmingai radus nurodytą paveiksliuką, programoje matysite ASCII atvaizduotą jo vaizdą. Įvykus
@@ -74,7 +74,7 @@ atsitiktinai parinks lokaciją, o naudotojas turės atspėti, kokioje šalyje ji
 yra.
 
 ```bash
-sbt "run guessing"
+java -jar street-ascii.jar guessing"
 ```
 
 Sėkmingai radus nurodytą paveiksliuką, programoje matysite ASCII atvaizduotą jo vaizdą bei
@@ -88,23 +88,22 @@ scenarijai, aprašyti konfigūracijos dokumentacijoje. Paleidžiant programą, n
 gali pateikti kelią iki konfigūracinio failo.
 
 ```bash
-sbt "run guessing --config ./mano_configuracija.conf"
+java -jar street-ascii.jar guessing --config ./mano_configuracija.conf"
 
-sbt "run guessing -c ./mano_configuracija.conf"
+java -jar street-ascii.jar guessing -c ./mano_configuracija.conf"
 ```
 
-Jei _--config_ arba _-c_ parametras nėra nurodytas, bus naudojama numatytoji (angl. _default_) reikšmė
+Jei _-\-config_ arba _-c_ parametras nėra nurodytas, bus naudojama numatytoji (angl. _default_) reikšmė
 _./config.conf_.
 
 === Pagalba
 
 Jei naudototojas nežino kaip paleisti programą ar kokie argumentai yra galimi, paleidimo metu
-galima iškviesti pagalbos meniu naudojant _--help_ vėliavėlę (angl. _flag_).
+galima iškviesti pagalbos meniu naudojant _-\-help_ vėliavėlę (angl. _flag_).
 Klaidingo paleidimo metu (pavyzdžiui, bandant paleisti programą su klaidingais parametrais)
 pagalbos meniu bus pateiktas automatiškai.
 
-- Komanda _sbt "run --help"_
-  
+- `java -jar street-ascii.jar --help`
   Išvestis:
 
   ```bash
@@ -133,7 +132,7 @@ pagalbos meniu bus pateiktas automatiškai.
           Start in guessing mode
   ```
 
-- Komanda _sbt "run guessing --help"_
+- `java -jar street-ascii.jar guessing --help`
 
   Išvestis:
 
