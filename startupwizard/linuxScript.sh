@@ -76,6 +76,7 @@ clear
 echo "Select navigation mode:" | gum style --padding "1 2" --width 50
   navigation=$(gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 \
     "Sequence Navigation" \
+    "Sequence Fast Navigation" \
     "Proximity Navigation")
   clear
 

@@ -76,7 +76,7 @@ cls
 
 :: Select navigation mode - NO TEMP FILES
 gum style --padding "1 2" --width 50 "Select navigation mode:"
-for /f "delims=" %%a in ('gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 "Sequence Navigation" "Proximity Navigation"') do set "navigation=%%a"
+for /f "delims=" %%a in ('gum choose --cursor.foreground 212 --selected.foreground 212 --height 10 "Sequence Navigation" "Sequence Fast Navigation" "Proximity Navigation"') do set "navigation=%%a"
 cls
 
 :: Algorithm selection with help option
