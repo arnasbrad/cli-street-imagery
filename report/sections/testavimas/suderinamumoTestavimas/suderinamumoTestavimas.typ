@@ -32,4 +32,6 @@ konfigūracijos. Vartotojui suteikiama galimybė konfigūracijos faile rankiniu 
 - Simbolių atvaizdavimas: specialūs simboliai, naudojami išplėstiniuose ASCII rinkiniuose ir Brailio rašte,
   buvo atvaizduojami korektiškai terminaluose, palaikančiuose UTF-8 koduotę (kas yra standartas daugumoje modernių terminalų).
 
-Apibendrinant, suderinamumo testavimas parodė, kad programa yra gerai perkeliama tarp pagrindinių operacinių sistemų. Nors automatinis spalvų palaikymo nustatymas visose įmanomose terminalo konfigūracijose yra sudėtingas, rankinis spalvų įjungimo/išjungimo valdymas per konfigūracijos failą suteikia pakankamą lankstumą naudotojui.
+Apibendrinant, suderinamumo testavimas parodė, kad programa yra gerai perkeliama tarp pagrindinių operacinių sistemų.
+Automatinis spalvų palaikymo tikrinimas pasirodė nevertingas, dėl to buvo pasirinkta suteikti rankinį spalvų
+įjungimo bei išjungimo valdymą per konfigūracijos failą naudotojui.

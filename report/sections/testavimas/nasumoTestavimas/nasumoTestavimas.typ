@@ -21,6 +21,20 @@ Testavimo metu buvo stebimi šie našumo aspektai:
   - Bendras operacijų greitis: dauguma programos operacijų, tokių kaip ASCII meno generavimas iš gautų vaizdo duomenų, ekrano perpiešimas,
     navigacijos parinkčių rodymas ar pagalbos meniu iškvietimas, yra atliekamos pakankamai greitai, paprastai per mažiau nei 1–2 sekundes.
     Tokio greičio operacijos mūsų tikslui yra priimtinos.
+
+    Štai, pavyzdžiui, palyginimas kiek užtrunka kiekvienas ASCII generavimo algoritmas:
+    ```
+    No Algorithm         - 22ms
+    Luminance            - 32ms
+    Braille              - 125ms
+    Sobel Edge Detection - 636ms
+    Canny Edge Detection - 943ms
+    ```
+
+    Matome, jog net ir ilgiausias algoritmas užtrunka mažiau nei sekundę. Taip pat šie testai buvo daromi su
+    didžiausia mūsų programos leidžiama nuotraukos kokybe. Tikėtina, kad naudotojas naudos bent 3 kartus sumažintą
+    nuotrauką, kas taip pat žymiai sumažins konvertavimo laiką.
+
   - Priklausomybė nuo išorinių API: pastebėta, kad bendras programos atsako laikas, ypač keičiant lokaciją ar pirmą kartą
     užkraunant vaizdą, labiausiai priklauso nuo „Mapillary“ API atsako greičio. Esant normalioms tinklo sąlygoms ir serverio apkrovai,
     atsakas gaunamas pakankamai greitai, tačiau retais atvejais, kai „Mapillary“ atsakas vėluoja, tai tiesiogiai įtakoja ir bendrą
