@@ -6,8 +6,7 @@
 ==== ASCII
 
 Ascii (angl. _American Standard Code for Information interchange_) yra vienas iš populiariausių teksto simbolių kodavimo formatų,
-naudojamas atvaizduoti tekstą kompiuterinėse sistemose ir internete
-(CCC https://www.techtarget.com/whatis/definition/ASCII-American-Standard-Code-for-Information-Interchange). Šis kodavimo
+naudojamas atvaizduoti tekstą kompiuterinėse sistemose ir internete @techtarget-ascii. Šis kodavimo
 standartas buvo sukurtas 1963 metais siekiant, jog skritingų gamintojų kompiuterių sistemos galėtų dalintis ir apdoroti
 informaciją. ASCII simboliai skirstomi į dvi grupes: spausdinamuosius ir nespausdinamuosius. Spausdinamieji simboliai apima
 raides, skaičius, skirybos ženklus bei specialius simbolius, tuo tarpu nespausdinamųjų aibė yra sudaryta iš eilučių

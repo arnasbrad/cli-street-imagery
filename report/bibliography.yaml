@@ -1,361 +1,376 @@
 # example
 harry:
-    type: Book
-    title: Harry Potter and the Order of the Phoenix
-    author: Rowling, J. K.
-    volume: 5
-    page-total: 768
-    date: 2003-06-21
+  type: Book
+  title: Harry Potter and the Order of the Phoenix
+  author: Rowling, J. K.
+  volume: 5
+  page-total: 768
+  date: 2003-06-21
 
 # example
 electronic:
-    type: Web
-    title: Ishkur's Guide to Electronic Music
-    serial-number: v2.5
-    author: Ishkur
-    url: http://www.techno.org/electronic-music-guide/
+  type: Web
+  title: Ishkur's Guide to Electronic Music
+  serial-number: v2.5
+  author: Ishkur
+  url: http://www.techno.org/electronic-music-guide/
 
 apollo11:
-    type: Repository
-    title: Original Apollo 11 Guidance Computer (AGC) source code
-    author: Garry, Chris
-    publisher:
-        name: GitHub
-        location: San Francisco, California
-    url:
-        value: https://github.com/chrislgarry/Apollo-11
-        date: 2025-03-10
-    note: "Original Apollo 11 Guidance Computer (AGC) source code for the command and lunar modules."
+  type: Repository
+  title: Original Apollo 11 Guidance Computer (AGC) source code
+  author: Garry, Chris
+  publisher:
+    name: GitHub
+    location: San Francisco, California
+  url:
+    value: https://github.com/chrislgarry/Apollo-11
+    date: 2025-03-10
+  note: "Original Apollo 11 Guidance Computer (AGC) source code for the command and lunar modules."
 
 agc-wiki:
-    type: Entry
-    title: Apollo Guidance Computer
-    date: 2025-03-31
-    language: en
-    parent:
-        type: Reference
-        title: Wikipedia, the Free Encyclopedia
-        publisher:
-            name: Wikimedia Foundation
-            location: San Francisco, California
-    url: 
-        value: https://en.wikipedia.org/wiki/Apollo_Guidance_Computer
-        date: 2024-03-10
+  type: Entry
+  title: Apollo Guidance Computer
+  date: 2025-03-31
+  language: en
+  parent:
+    type: Reference
+    title: Wikipedia, the Free Encyclopedia
+    publisher:
+      name: Wikimedia Foundation
+      location: San Francisco, California
+  url:
+    value: https://en.wikipedia.org/wiki/Apollo_Guidance_Computer
+    date: 2024-03-10
 
 clean-architecture:
-    type: Book
-    title: "Clean Architecture: A Craftsman's Guide to Software Structure and Design"
-    author: Martin, Robert C.
-    publisher:
-        name: Prentice Hall
-        location: Upper Saddle River, New Jersey
-    date: 2017-09
-    serial-number:
-        isbn: 978-0134494166
-    page-total: 432
-    language: en
+  type: Book
+  title: "Clean Architecture: A Craftsman's Guide to Software Structure and Design"
+  author: Martin, Robert C.
+  publisher:
+    name: Prentice Hall
+    location: Upper Saddle River, New Jersey
+  date: 2017-09
+  serial-number:
+    isbn: 978-0134494166
+  page-total: 432
+  language: en
 
 fb-haskell-spam:
-    type: Article
-    title: Fighting spam with Haskell
-    author: "Simon Marlow"
-    date: 2015-06-26
-    parent:
-        type: Blog
-        title: Engineering at Meta
-        publisher:
-            name: Meta Platforms, Inc.
-            location: Menlo Park, California
-    url:
-        value: https://engineering.fb.com/2015/06/26/security/fighting-spam-with-haskell/
-        date: 2025-04-03
-    language: en
+  type: Article
+  title: Fighting spam with Haskell
+  author: "Simon Marlow"
+  date: 2015-06-26
+  parent:
+    type: Blog
+    title: Engineering at Meta
+    publisher:
+      name: Meta Platforms, Inc.
+      location: Menlo Park, California
+  url:
+    value: https://engineering.fb.com/2015/06/26/security/fighting-spam-with-haskell/
+    date: 2025-04-03
+  language: en
 
 clojure-success:
-    type: Web
-    title: Success Stories
-    publisher:
-        name: Clojure
-    url:
-        value: https://clojure.org/community/success_stories
-        date: 2025-04-03
-    language: en
-    note: "A collection of success stories and case studies from companies using Clojure, hosted on the official Clojure website."
+  type: Web
+  title: Success Stories
+  publisher:
+    name: Clojure
+  url:
+    value: https://clojure.org/community/success_stories
+    date: 2025-04-03
+  language: en
+  note: "A collection of success stories and case studies from companies using Clojure, hosted on the official Clojure website."
 
 fsharp-docs:
-    type: Web
-    title: F# documentation
-    publisher:
-        name: Microsoft
-        location: Redmond, Washington
-    url:
-        value: https://learn.microsoft.com/en-us/dotnet/fsharp/
-        date: 2024-04-03
-    language: en-US
-    note: "Official Microsoft documentation landing page for the F# programming language, part of the .NET documentation on Microsoft Learn."
+  type: Web
+  title: F# documentation
+  publisher:
+    name: Microsoft
+    location: Redmond, Washington
+  url:
+    value: https://learn.microsoft.com/en-us/dotnet/fsharp/
+    date: 2024-04-03
+  language: en-US
+  note: "Official Microsoft documentation landing page for the F# programming language, part of the .NET documentation on Microsoft Learn."
 
 janestreet-why-ocaml:
-    type: Article
-    title: Why OCaml?
-    author: Yaron Minsky
-    date: 2016-01-25
-    parent:
-        type: Blog
-        title: Jane Street Tech Blog
-        publisher:
-            name: Jane Street
-    url:
-        value: https://blog.janestreet.com/why-ocaml/
-        date: 2024-04-03
-    language: en
+  type: Article
+  title: Why OCaml?
+  author: Yaron Minsky
+  date: 2016-01-25
+  parent:
+    type: Blog
+    title: Jane Street Tech Blog
+    publisher:
+      name: Jane Street
+  url:
+    value: https://blog.janestreet.com/why-ocaml/
+    date: 2024-04-03
+  language: en
 
 history-and-purposes-of-scala:
-    type: Chapter
-    title: History and purposes of Scala
-    url:
-        value: https://www.oreilly.com/library/view/scala-and-spark/9781785280849/005ee526-d74c-4d1e-a1b3-34f6213d5ece.xhtml
-        date: 2025-03-25
-    language: en
+  type: Chapter
+  title: History and purposes of Scala
+  url:
+    value: https://www.oreilly.com/library/view/scala-and-spark/9781785280849/005ee526-d74c-4d1e-a1b3-34f6213d5ece.xhtml
+    date: 2025-03-25
+  language: en
 
 typst-homepage:
-    type: Web
-    title: Typst
-    url:
-        value: https://typst.app/
-        date: 2025-04-20
-    language: en
-    note: "Official homepage for the Typst typesetting system."
+  type: Web
+  title: Typst
+  url:
+    value: https://typst.app/
+    date: 2025-04-20
+  language: en
+  note: "Official homepage for the Typst typesetting system."
 
 typst-docs-homepage:
-    type: Web
-    title: Typst Documentation
-    url:
-        value: https://typst.app/docs/
-        date: 2024-04-20
-    language: en
-    note: "Official documentation landing page for the Typst typesetting system."
+  type: Web
+  title: Typst Documentation
+  url:
+    value: https://typst.app/docs/
+    date: 2024-04-20
+  language: en
+  note: "Official documentation landing page for the Typst typesetting system."
 
 typst-guide-latex:
+  type: Web
+  title: Typst Guide for LaTeX Users
+  parent:
     type: Web
-    title: Typst Guide for LaTeX Users
+    title: Typst Documentation Guides
     parent:
-        type: Web
-        title: Typst Documentation Guides
-        parent:
-            type: Web
-            title: Typst Documentation
-            url: { value: https://typst.app/docs/ }
-    url:
-        value: https://typst.app/docs/guides/guide-for-latex-users/
-        date: 2025-04-20
-    language: en
-    note: "Specific guide within the Typst documentation aimed at users transitioning from LaTeX."
+      type: Web
+      title: Typst Documentation
+      url: { value: https://typst.app/docs/ }
+  url:
+    value: https://typst.app/docs/guides/guide-for-latex-users/
+    date: 2025-04-20
+  language: en
+  note: "Specific guide within the Typst documentation aimed at users transitioning from LaTeX."
 
 chaosgenius-spark-scala:
-    type: Article
-    title: Apache Spark With Scala 101—Hands-on Data Analysis Guide (2025)
-    author: Jain, Prince
-    date: 2025
-    parent:
-        type: Blog
-        title: Chaos Genius Blog
-        publisher:
-            name: Chaos Genius
-    url:
-        value: https://www.chaosgenius.io/blog/apache-spark-with-scala/
-        date: 2025-03-25
-    language: en
+  type: Article
+  title: Apache Spark With Scala 101—Hands-on Data Analysis Guide (2025)
+  author: Jain, Prince
+  date: 2025
+  parent:
+    type: Blog
+    title: Chaos Genius Blog
+    publisher:
+      name: Chaos Genius
+  url:
+    value: https://www.chaosgenius.io/blog/apache-spark-with-scala/
+    date: 2025-03-25
+  language: en
 
 sysgears-scala-giants:
-    type: Article
-    title: How Tech Giants Use Scala
-    author: Alex Periel
-    url:
-        value: https://sysgears.com/articles/how-tech-giants-use-scala/
-        date: 2025-03-25
-    language: en
+  type: Article
+  title: How Tech Giants Use Scala
+  author: Alex Periel
+  url:
+    value: https://sysgears.com/articles/how-tech-giants-use-scala/
+    date: 2025-03-25
+  language: en
 
 akka-homepage:
-    type: Web
-    title: Akka
-    publisher:
-        name: Lightbend, Inc.
-        location: San Francisco, California
-    url:
-        value: https://akka.io/
-        date: 2025-03-25
-    language: en
-    note: "Official homepage for the Akka concurrent and distributed actor model toolkit."
+  type: Web
+  title: Akka
+  publisher:
+    name: Lightbend, Inc.
+    location: San Francisco, California
+  url:
+    value: https://akka.io/
+    date: 2025-03-25
+  language: en
+  note: "Official homepage for the Akka concurrent and distributed actor model toolkit."
 
 playframework-homepage:
-    type: Web
-    title: Play Framework
-    publisher:
-        name: Lightbend, Inc.
-        location: San Francisco, California
-    url:
-        value: https://www.playframework.com/
-        date: 2025-03-25
-    language: en
-    note: "Official homepage for the Play web application framework."
+  type: Web
+  title: Play Framework
+  publisher:
+    name: Lightbend, Inc.
+    location: San Francisco, California
+  url:
+    value: https://www.playframework.com/
+    date: 2025-03-25
+  language: en
+  note: "Official homepage for the Play web application framework."
 
 cats-homepage:
-    type: Web
-    title: Cats
-    publisher:
-        name: Typelevel
-    url:
-        value: https://typelevel.org/cats/
-        date: 2025-03-25
-    language: en
-    note: "Official homepage for Cats, a functional programming library for Scala, part of the Typelevel ecosystem."
+  type: Web
+  title: Cats
+  publisher:
+    name: Typelevel
+  url:
+    value: https://typelevel.org/cats/
+    date: 2025-03-25
+  language: en
+  note: "Official homepage for Cats, a functional programming library for Scala, part of the Typelevel ecosystem."
 
 cats-effect-homepage:
-    type: Web
-    title: Cats Effect
-    publisher:
-        name: Typelevel
-    url:
-        value: https://typelevel.org/cats-effect/
-        date: 2025-03-25
-    language: en
-    note: "Official homepage for Cats Effect, a functional effect system for Scala, part of the Typelevel ecosystem."
+  type: Web
+  title: Cats Effect
+  publisher:
+    name: Typelevel
+  url:
+    value: https://typelevel.org/cats-effect/
+    date: 2025-03-25
+  language: en
+  note: "Official homepage for Cats Effect, a functional effect system for Scala, part of the Typelevel ecosystem."
 
 cats-effect-docs-concepts:
+  type: Web
+  title: Core Concepts
+  parent:
     type: Web
-    title: Core Concepts
+    title: Cats Effect Documentation
     parent:
-        type: Web
-        title: Cats Effect Documentation
-        parent:
-            type: Web
-            title: Cats Effect
-            publisher: { name: Typelevel }
-            url: { value: https://typelevel.org/cats-effect/ }
-    publisher:
-        name: Typelevel
-    url:
-        value: https://typelevel.org/cats-effect/docs/concepts
-        date: 2025-03-25
-    language: en
-    note: "Documentation page explaining core concepts of Cats Effect, including Fibers and Effects."
+      type: Web
+      title: Cats Effect
+      publisher: { name: Typelevel }
+      url: { value: https://typelevel.org/cats-effect/ }
+  publisher:
+    name: Typelevel
+  url:
+    value: https://typelevel.org/cats-effect/docs/concepts
+    date: 2025-03-25
+  language: en
+  note: "Documentation page explaining core concepts of Cats Effect, including Fibers and Effects."
 
 tui-scala-repo:
-    type: Repository
-    title: tui-scala
-    author: Øyvind Raddum Berg
-    publisher:
-        name: GitHub
-    url:
-        value: https://github.com/oyvindberg/tui-scala
-        date: 2025-04-05
-    note: "Terminal UI library for Scala."
+  type: Repository
+  title: tui-scala
+  author: Øyvind Raddum Berg
+  publisher:
+    name: GitHub
+  url:
+    value: https://github.com/oyvindberg/tui-scala
+    date: 2025-04-05
+  note: "Terminal UI library for Scala."
 
 gmaps-sv-overview:
-    type: Web
-    title: Street View Static API Overview
-    publisher:
-        name: Google
-        location: Mountain View, California
-    url:
-        value: https://developers.google.com/maps/documentation/streetview/overview
-        date: 2025-04-05
-    language: en
-    note: "Overview page for the Street View Static API within the Google Maps Platform documentation."
+  type: Web
+  title: Street View Static API Overview
+  publisher:
+    name: Google
+    location: Mountain View, California
+  url:
+    value: https://developers.google.com/maps/documentation/streetview/overview
+    date: 2025-04-05
+  language: en
+  note: "Overview page for the Street View Static API within the Google Maps Platform documentation."
 
 gmaps-sv-billing:
-    type: Web
-    title: Street View Static API Usage and Billing
-    publisher:
-        name: Google
-        location: Mountain View, California
-    url:
-        value: https://developers.google.com/maps/documentation/streetview/usage-and-billing
-        date: 2024-07-19
-    language: en
-    note: "Usage and billing details for the Street View Static API within the Google Maps Platform documentation."
+  type: Web
+  title: Street View Static API Usage and Billing
+  publisher:
+    name: Google
+    location: Mountain View, California
+  url:
+    value: https://developers.google.com/maps/documentation/streetview/usage-and-billing
+    date: 2024-07-19
+  language: en
+  note: "Usage and billing details for the Street View Static API within the Google Maps Platform documentation."
 
 jline3-repo:
-    type: Repository
-    title: jline3
-    url:
-        value: https://github.com/jline/jline3
-        date: 2025-04-19
-    note: "JLine is a Java library for handling console input."
+  type: Repository
+  title: jline3
+  url:
+    value: https://github.com/jline/jline3
+    date: 2025-04-19
+  note: "JLine is a Java library for handling console input."
 
 mapillary-homepage:
-    type: Web
-    title: Mapillary
-    publisher:
-        name: Meta Platforms, Inc.
-        location: Menlo Park, California
-    url:
-        value: https://www.mapillary.com/
-        date: 2025-04-20
-    language: en
-    note: "Official homepage for the Mapillary street-level imagery platform."
+  type: Web
+  title: Mapillary
+  publisher:
+    name: Meta Platforms, Inc.
+    location: Menlo Park, California
+  url:
+    value: https://www.mapillary.com/
+    date: 2025-04-20
+  language: en
+  note: "Official homepage for the Mapillary street-level imagery platform."
 
 mapillary-joins-fb-blog:
-    type: Article
-    title: Mapillary Joins Facebook on the Journey of Improving Maps Everywhere
-    author: Solem, Jan Erik
-    date: 2020-06-18
-    parent:
-        type: Blog
-        title: Mapillary Blog
-        publisher:
-            name: Meta Platforms, Inc.
-    url:
-        value: https://blog.mapillary.com/news/2020/06/18/Mapillary-joins-Facebook.html
-        date: 2025-04-20
-    language: en
+  type: Article
+  title: Mapillary Joins Facebook on the Journey of Improving Maps Everywhere
+  author: Solem, Jan Erik
+  date: 2020-06-18
+  parent:
+    type: Blog
+    title: Mapillary Blog
+    publisher:
+      name: Meta Platforms, Inc.
+  url:
+    value: https://blog.mapillary.com/news/2020/06/18/Mapillary-joins-Facebook.html
+    date: 2025-04-20
+  language: en
 
 mapillary-api-docs:
-    type: Web
-    title: Mapillary API Documentation
-    publisher:
-        name: Meta Platforms, Inc.
-    url:
-        value: https://www.mapillary.com/developer/api-documentation/
-        date: 2025-04-20
-    language: en
-    note: "Landing page for the Mapillary API documentation."
+  type: Web
+  title: Mapillary API Documentation
+  publisher:
+    name: Meta Platforms, Inc.
+  url:
+    value: https://www.mapillary.com/developer/api-documentation/
+    date: 2025-04-20
+  language: en
+  note: "Landing page for the Mapillary API documentation."
 
 mapillary-terms:
-    type: Web
-    title: Mapillary Terms of Use
-    publisher:
-        name: Meta Platforms, Inc.
-        location: Menlo Park, California
-    url:
-        value: https://www.mapillary.com/terms
-        date: 2025-04-20
-    language: en
-    note: "Official terms of use for the Mapillary platform, including data licensing terms (e.g., section 3.b)."
+  type: Web
+  title: Mapillary Terms of Use
+  publisher:
+    name: Meta Platforms, Inc.
+    location: Menlo Park, California
+  url:
+    value: https://www.mapillary.com/terms
+    date: 2025-04-20
+  language: en
+  note: "Official terms of use for the Mapillary platform, including data licensing terms (e.g., section 3.b)."
 
 mapillary-uploader-guide:
-    type: Article
-    title: "Mapillary Desktop Uploader: the complete guide"
-    date: 2025-03
-    parent:
-        type: Web
-        title: Mapillary Help Center
-        publisher:
-            name: Meta Platforms, Inc.
-            location: Menlo Park, California
-    url:
-        value: https://help.mapillary.com/hc/en-us/articles/360020825811-Mapillary-Desktop-Uploader-the-complete-guide
-        date: 2025-04-20
-    language: en-US
+  type: Article
+  title: "Mapillary Desktop Uploader: the complete guide"
+  date: 2025-03
+  parent:
+    type: Web
+    title: Mapillary Help Center
+    publisher:
+      name: Meta Platforms, Inc.
+      location: Menlo Park, California
+  url:
+    value: https://help.mapillary.com/hc/en-us/articles/360020825811-Mapillary-Desktop-Uploader-the-complete-guide
+    date: 2025-04-20
+  language: en-US
 
 cc-by-sa-4:
-    type: Web
-    title: Attribution-ShareAlike 4.0 International 
-    publisher:
-        name: Creative Commons
-        location: Mountain View, California
-    url:
-        value: https://creativecommons.org/licenses/by-sa/4.0/
-        date: 2025-04-20
-    language: en
-    note: "Official license deed for the CC BY-SA 4.0 International license."
+  type: Web
+  title: Attribution-ShareAlike 4.0 International
+  publisher:
+    name: Creative Commons
+    location: Mountain View, California
+  url:
+    value: https://creativecommons.org/licenses/by-sa/4.0/
+    date: 2025-04-20
+  language: en
+  note: "Official license deed for the CC BY-SA 4.0 International license."
+
+techtarget-ascii:
+  type: Article
+  title: ASCII (American Standard Code for Information Interchange)
+  author:
+    - Loshin, Peter
+    - Awati, Rahul
+  publisher:
+    name: TechTarget
+    location: Newton, Massachusetts
+  url:
+    value: https://www.techtarget.com/whatis/definition/ASCII-American-Standard-Code-for-Information-Interchange
+    date: 2025-05-10
+  note: "The author attribution is based on external indexing; the article existed by March 2018."
+  language: en
