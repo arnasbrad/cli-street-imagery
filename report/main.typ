@@ -67,6 +67,8 @@
 #pagebreak()
 #include "sections/implementacija/implementacija.typ"
 #pagebreak()
+#include "sections/testavimas/testavimas.typ"
+#pagebreak()
 #include "sections/dokumentacija/dokumentacija.typ"
 #pagebreak()
 #bibliography(
