@@ -3,3 +3,4 @@
 
 #include "konfiguracija/konfiguracija.typ"
 #include "paleidimas/paleidimas.typ"
+#include "programosNaudojimas/programosNaudojimas.typ"
