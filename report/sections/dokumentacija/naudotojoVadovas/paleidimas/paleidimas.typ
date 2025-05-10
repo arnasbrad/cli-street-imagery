@@ -1,7 +1,5 @@
 === Paleidimas
 
-// TODO: replace sbt run commands with jar commands, maybe docker if exits
-
 Paleisti programą galima keturiais būdais.
 
 ==== Pagal koordinates:
