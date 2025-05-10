@@ -15,6 +15,7 @@ import com.streetascii.asciiart.Conversions.{
 import java.io.{File, PrintWriter}
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
+import scala.concurrent.duration._
 
 object Examples {
   def readHexValues(filePath: String): Array[String] = {
@@ -64,7 +65,7 @@ object Examples {
     val rgbValues = readHexValues(filePath)
 
     // Vertical sampling NEEDS to be 2x of horizontal one
-    val horizontalSampling = 2
+    val horizontalSampling = 1
     val verticalSampling   = horizontalSampling * 2
     val algorithm          = "canny"
     val charset            = Charset.Extended
@@ -84,6 +85,8 @@ object Examples {
       case "blank"   => BlankFilledAlgorithm
       case _         => LuminanceAlgorithm // Default to luminance
     }
+
+    val start = System.nanoTime()
 
     val asciiArt = settings match {
       case LuminanceAlgorithm =>
@@ -112,6 +115,10 @@ object Examples {
           grayscaleValues.grayscaleDecimals
         )
     }
+
+    val end      = System.nanoTime()
+    val duration = (end - start).nanos
+    println(s"Time taken: ${duration.toMillis} ms")
 
     val formatForPrinting = charsToStringList(asciiArt)
     printAsciiToFile(formatForPrinting)
