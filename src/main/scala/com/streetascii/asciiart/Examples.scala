@@ -65,7 +65,7 @@ object Examples {
     val rgbValues = readHexValues(filePath)
 
     // Vertical sampling NEEDS to be 2x of horizontal one
-    val horizontalSampling = 1
+    val horizontalSampling = 4
     val verticalSampling   = horizontalSampling * 2
     val algorithm          = "canny"
     val charset            = Charset.Extended
