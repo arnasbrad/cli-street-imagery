@@ -22,7 +22,7 @@ import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
-class Conversion extends AnyFlatSpec with Matchers {
+class ConversionSpec extends AnyFlatSpec with Matchers {
   "convertTo2DArray" should "convert a 1D array to a 2D array based on width" in {
     // Given a HexImage with 6 elements and width 3
     val hexImage = HexImage(

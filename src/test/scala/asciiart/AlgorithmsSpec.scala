@@ -5,7 +5,7 @@ import com.streetascii.asciiart.Charset
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class Algoritms extends AnyFlatSpec with Matchers {
+class AlgorithmsSpec extends AnyFlatSpec with Matchers {
   "LuminanceAlgorithm" should "convert grayscale values to ASCII using Default charset" in {
     // Input grayscale values (as strings)
     val input = Array(
