@@ -273,6 +273,7 @@ if defined WriteError goto :WriteConfigFile_Cleanup
 (echo colors {) >> "%TargetConfigPath%" || set "WriteError=1"
 (echo   color = %colors%) >> "%TargetConfigPath%" || set "WriteError=1"
 (echo   color-filter = "%colorFilter%") >> "%TargetConfigPath%" || set "WriteError=1"
+(echo   intensity = 1) >> "%TargetConfigPath%" || set "WriteError=1"
 (echo }) >> "%TargetConfigPath%" || set "WriteError=1"
 :: --- End of individual appends ---
 

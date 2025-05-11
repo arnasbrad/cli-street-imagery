@@ -142,7 +142,7 @@ object CustomTUI {
     IO.blocking {
       val processedColors =
         if (ignoreFilter) colors
-        else colorConfig.colorFilter.applyFilter(colors, 2)
+        else colorConfig.colorFilter.applyFilter(colors, colorConfig.intensity)
 
       val sb = new StringBuilder()
 

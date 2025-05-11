@@ -1,13 +1,10 @@
 #set text(lang: "lt", region: "lt")
 
-== ASCII
-
-=== Nuotraukų konvertavimas į ASCII
-==== ASCII
+== Nuotraukų konvertavimas į ASCII
+=== ASCII
 
 Ascii (angl. _American Standard Code for Information interchange_) yra vienas iš populiariausių teksto simbolių kodavimo formatų,
-naudojamas atvaizduoti tekstą kompiuterinėse sistemose ir internete
-(CCC https://www.techtarget.com/whatis/definition/ASCII-American-Standard-Code-for-Information-Interchange). Šis kodavimo
+naudojamas atvaizduoti tekstą kompiuterinėse sistemose ir internete @techtarget-ascii. Šis kodavimo
 standartas buvo sukurtas 1963 metais siekiant, jog skritingų gamintojų kompiuterių sistemos galėtų dalintis ir apdoroti
 informaciją. ASCII simboliai skirstomi į dvi grupes: spausdinamuosius ir nespausdinamuosius. Spausdinamieji simboliai apima
 raides, skaičius, skirybos ženklus bei specialius simbolius, tuo tarpu nespausdinamųjų aibė yra sudaryta iš eilučių
@@ -20,7 +17,7 @@ IETF (angl. _Internet Engineering Task Force_) įvedė naująjį „Unicode“ s
 ASCII, tačiau naujasis formatas pilnai palaiko ASCII atgalinio suderinamumo pagalba. Nors šiomis
 dienomis naudojame „Unicode“ standartą, 255 simbolių rinkinys, anksčiau priklausęs ASCII formatui, vis dar vadinamas ASCII.
 
-==== ASCII menas
+=== ASCII menas
 
 ASCII menas tai grafinio dizaino technika, kuria vaizdai atvaizduojami pasitelkiant teksto simbolius. Šios meno formos
 pirmieji egzemplioriai užfiksuoti dar prieš ASCII standarto sukūrimą (#ref(<typewriter_art>)).
@@ -31,17 +28,16 @@ pirmieji egzemplioriai užfiksuoti dar prieš ASCII standarto sukūrimą (#ref(<
 ) <typewriter_art>
 
 Vaizdų iš simbolių kūrimo pradžia siejama net ne su kompiuteriais, o su XIX amžiuje plačiai naudojamomis rašymo mašinėlėmis.
-Vaizdų sudarymas iš simbolių buvo skatinamas rašymo mašinėlių gamintojų rengiamuose turnyruose
-(CCC https://direct.mit.edu/books/oa-monograph/5649/From-ASCII-Art-to-Comic-SansTypography-and-Popular).
+Vaizdų sudarymas iš simbolių buvo skatinamas rašymo mašinėlių gamintojų rengiamuose turnyruose @ascii-comic-sans.
 Antrasis ASCII meno populiarumo šuolis buvo matomas XX amžiaus viduryje, kai vis daugiau žmonių turėjo prieigą prie pirmųjų
 kompiuterių. Žinoma, tais laikais kompiuteriai dar neturėjo grafinių sąsajų, todėl vaizdus reprezentuoti buvo galima tik ASCII
 simboliais. Spausdinti ir masiškai platinti teksto simbolių meną kompiuterio pagalba buvo žymiai paprasčiau, nei naudojantis
 spausdinimo mašinėle. Tačiau sparčiai populiarėjant grafinėms vartotojo sąsajoms, ASCII menas buvo pakeistas rastrinės grafikos.
 Šiomis dienomis ASCII menas naudojimas nišiniuose sistemose ir programose dėl savo stilistinių priežasčių ir nostalgijos.
 
-=== Pasiruošimas konvertuoti nuotraukas Į ASCII
+== Pasiruošimas konvertuoti nuotraukas Į ASCII
 
-==== Nuotraukos proporcijų išlaikymas
+=== Nuotraukos proporcijų išlaikymas
 
 Siekiant konvertuoti nuotraukos pikselius į ASCII simbolius, susiduriame su proporcijų išlaikymo problema. Kitaip nei
 rastrinėje grafikoje, kurioje nuotraukos atvaizduojamos vienodo pločio ir aukščio pikseliais, teksto simboliai yra nevienodų
@@ -59,7 +55,7 @@ galimi keli sprendimo būdai:
   reikšmių vidurkiai yra naudojami sukurti naują pikselio reikšmę neprarandant informacijos. Tačiau pagrindinis šio metodo
   minusas yra neryškus kraštų atvaizdavimas, kadangi dažnu atveju kelių visiškai skirtingų pikselių reikšmės yra sumaišomos į vieną.
 
-==== ASCII simbolių dydžio pasirinkimas
+=== ASCII simbolių dydžio pasirinkimas
 
 Modernūs fotoaparatai geba sukurti labai aukštos rezoliucijos nuotraukas. Šie vaizdai yra sudaryti iš kelių milijonų pikselių.
 Konvertuojant kiekvieną nuotraukos pikselį į atskirą ASCII simbolį, gautas rezultatas nesutips į jokį komerciškai prieinamą
@@ -67,13 +63,13 @@ ekraną. Šios problemos sprendimas yra elementarus - sumažinti šrifto dydį. 
 pavyzdžiui, sumažinus šriftą iki pačio mažiausio leidžiamo dydžio, rezultatas dažnu atveju kokybe neatsiliks nuo orginalaus
 rastrinio vaizdo. Taip pat, kuo mažesnis yra gaunamas paveiksliukas, tuo lengviau žmogaus smegenys geba atpažinti jo turinį.
 Mažesnį plotą užimantys objektai dažniausiai suvokiami per jų formą arba figūrą, o didesni objetai suprantami kaip fonas
-(CCC https://link.springer.com/article/10.3758/BF03207416?utm_source=chatgpt.com). Dėl to suprasti abstraktų paveikslą žiūrint
+@figure-ground-perception. Dėl to suprasti abstraktų paveikslą žiūrint
 iš toli yra lengviau, tas pats gali būti pritaikyta ir ASCII menui. Žinoma, mažesnis šriftas ne visada yra geriau. Iš teksto
 simbolių kuriamo vaizdo esmė nėra pati aukščiausia kokybė. ASCII menas yra kuriamas dėl stilistinių tikslų. Taigi sumažinti
 šrifto dydį galima tik tiek, kol vis dar bus galima įskaityti individualius simbolius. Norint pasiekti optimalų rezultatą
 būtina suderinti abu anksčiau aptartus reikalavimus.
 
-==== Nuotraukos reprezentacija pilkos spalvos tonais
+=== Nuotraukos reprezentacija pilkos spalvos tonais
 
 ASCII meną galima skirstyti į 2 grupes: spalvotąjį ir nespalvotąjį. Kadangi visi kadrai gaunami iš gatvės lygio platformų
 „Google Maps“ ir „Mapillary“ jau bus spalvoti, pasirūpinti reikės tik konvertavimu iš RGB į pilkus atspalvius. Kovertuoti
@@ -91,7 +87,7 @@ turėsime kiekvieną nuotraukos pikselį, tai atlikti galima pasitelkus viena i�
 
 Čia R – raudonos RGB spalvos reikšmė, G - žalios spalvos reikšmė, o B - mėlynos.
 
-==== ASCII simbolių rinkinio pasirinkimas
+=== ASCII simbolių rinkinio pasirinkimas
 
 Tinkamo simbolių rinkinio pasirinkimas yra vienas iš svarbiausių ASCII meno kūrimo etapų. Šis pasirinkimas daro įtaką galutinio
 rezultato detalumui, kontrasto intervalui bei įtakoja žmogaus galimybę atpažinti vaizduojamus objektus. ASCII mene šviesumą
@@ -108,8 +104,8 @@ kuriuos yra siekiama atvaizduoti. Kuo didesnė ši aibė, tuo detalesnius objekt
 dažnu atveju teks atvaizduoti medžius, todėl detalūs simbolių rinkiniai bus naudojami siekiant kuo detalesnio rezultato.
 Pateiktuose pavyzdžiuose (#ref(<charset_comparison>)) bus naudojami šie, paprastas ir išplėstas, simbolių rinkiniai:
 
-- Paprastas simbolių rinkinys „.:-=+\*\#\%\@“.
-- Išplėstas simbolių rinkinys „ .\'\`^\",:;Il!i~+\_-?\]\[}{1)(|\\tfjrxnuvczXYUJCLQ0OZmwqpdbkhao#8\%B\@\$“.
+- Paprastas simbolių rinkinys `.:-=+\*\#\%\@`
+- Išplėstas simbolių rinkinys `.'^\",:;Il!i~+_-?][}{1)(|\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$`
 
 Kairėje pusėje matome medžio atvaizdą sugeneruotą su išplėstu simbolių rinkiniu, o dešinėje - paprastu. Naudojant paprastąjį
 rinkinį gauname atvaizdą, kuriame subjekto detalės skiriasi ryškiai skirtingais atspalviais. Nors detalumo nuotraukoje yra
@@ -121,9 +117,32 @@ sudaromas iš pačių simbolių. Šalutinis šio rinkinio efektas yra labai dide
   caption: [Palyginimas tarp paprasto ir išplėsto simbolių rinkinio.],
 ) <charset_comparison>
 
-=== Nuotraukų konvertavimo į ASCII meną algoritmai
+=== Tinkamos duomenų strukūros pasirinkimas
 
-==== Įvadas
+Pradiniame projekto etape pasirinkome naudoti standartinę sąrašo (angl. _list_) duomenų struktūrą dėl jos patogumo ir
+funkcinio programavimo paradigmos atitikimo. Programavimo kalboje „Scala“ sąrašas iš tiesų veikia kaip susieto sąrašo
+(angl. _linked list_) tipo duomenų struktūra, kuri puikiai tinka funkcinėms operacijoms @scala-list. Ji taip pat užtikrina
+nekintamumą (angl. _immutability_), kas atitiko mūsų pradinį projekto dizainą.
+
+Tačiau konvertuojant didelės apimties nuotraukas į ASCII meną, pastebėjome reikšmingą veikimo efektyvumo sumažėjimą. Tai
+ypač išryškėjo dirbant su originalios rezoliucijos nuotraukomis. Naudojant sąrašo duomenų struktūrą elementus tenka
+pasiekti nuosekliai einant nuo sąrašo pradžios. Su kai kuriais ASCII konvertavimo algoritmais programa užtrukdavo netgi
+keliolika sekundžių, kol būdavo sugeneruotas vaizdas. Toks laukimo laikas buvo nepriimtinas, kadangi nefunkciniai
+reikalavimai nurodė maksimalų 5 sekundes trunkantį vaizdų apdorojimą.
+
+Sprendžiant šią problemą, nusprendėme naudoti masyvo duomenų struktūrą. „Scala“ masyvas užtikrina O(1) sudėtingumo
+prieigą prie bet kurio elemento pagal indeksą. Nors ši duomenų struktūra yra kintama (angl. _mutable_) ir mažiau atitinka
+funkcinio programavimo principus, jo našumo privalumai mūsų atveju buvo svarbesni. Perėjimas prie masyvo struktūros
+pareikalavo tam tikrų kodo architektūros pakeitimų, tačiau rezultatai buvo įspūdingi.
+
+Po migracijos prie masyvo duomenų struktūros, pastebėjome žymų programos veikimo pagreitėjimą, ypač dirbant su daugiau
+skaičiavimų reikalaujančiais algoritmais. Visi algoritmai pradėjo grąžinti rezultatus per mažiau nei vieną sekundę.
+Kadangi dėl šio pakeitimo generavimo laikas saugiai tenkino nefunkcinius greitaveikos reikalavimus, buvo nuspręsta
+nelygiagretinti nuotraukų konvertavimo į ASCII meną veikimo. Detalius algoritmų greitaveikos rodikliai aprašyti testavimo skyriuje.
+
+== Nuotraukų konvertavimo į ASCII meną algoritmai
+
+=== Įvadas
 
 Ankstesniuose skyriuose aptarėme ASCII standarto pagrindus, ASCII meno istoriją ir svarbiausius pasiruošimo etapus, būtinus
 norint kokybiškai konvertuoti skaitmeninę nuotrauką į ASCII meną. Buvo išspręstos proporcijų išlaikymo problemos, aptartas
@@ -137,8 +156,8 @@ apžvelgsime du pagrindinius metodus, naudojamus nuotraukų konvertavimui į ASC
 tiesioginiu pikselių šviesumo atitikimu simbolių tankiui, ir kraštų atpažinimo algoritmą, kuris siekia išryškinti vaizdo
 struktūrą ir kontūrus. Kiekvienas algoritmas turi savo privalumų ir trūkumų, kuriuos aptarsime tolesniuose poskyriuose.
 
-==== Algoritmai
-===== Šviesumo algoritmas (angl. _Luminance_)
+=== Algoritmai
+==== Šviesumo algoritmas (angl. _Luminance_)
 
 Šviesumo algoritmas yra vienas pamatinių ir bene dažniausiai taikomų metodų skaitmeninių vaizdų transformavimui į ASCII meną.
 Jo pagrindinė idėja yra intuityvi ir tiesiogiai susijusi su tuo, kaip mes vizualiai suvokiame šviesumą ir tamsumą. Algoritmas
@@ -159,7 +178,7 @@ Pavyzdžiui, paprastas rinkinys galėtų būti „.:-=+\*\#\%\@“, kur „.“ 
 Pats konvertavimo procesas vyksta iteruojant per kiekvieną pilkų tonų nuotraukos pikselį. Kiekvienam aplankytam pikseliui
 yra nuskaitoma jo šviesumo reikšmė (skaičius tarp 0 ir 255). Ši reikšmė turi būti transformuota į indeksą, atitinkantį
 poziciją mūsų surikiuotame ASCII simbolių rinkinyje. Populiariausias ir paprasčiausias būdas tai padaryti yra tiesinis
-susiejimas (angl. _linear mapping_) (CCC https://asciieverything.com/ascii-tips/how-does-image-to-ascii-work/). Tarkime, mūsų simbolių rinkinyje yra *N* simbolių. Tuomet visą šviesumo intervalą
+susiejimas (angl. _linear mapping_) @image-to-ascii. Tarkime, mūsų simbolių rinkinyje yra *N* simbolių. Tuomet visą šviesumo intervalą
 [0, 255] galima proporcingai padalinti į *N* dalių. Kiekviena dalis atitiks vieną simbolį. Pikselio šviesumo reikšmę
 galima konvertuoti į simbolių rinkinio indeksą naudojant formulę:
 #align(center)[`i = floor( L * (N - 1) / 255 ),`]
@@ -197,14 +216,14 @@ pagrindinis ASCII meno tikslas.
 
 Vis dėlto, šis paprastumas turi savo kainą. Algoritmas linkęs prarasti smulkias detales ir ypač aštrius kontūrus, nes jis
 neanalizuoja pikselio aplinkos ar formų vaizde – kiekvienas pikselis traktuojamas izoliuotai, atsižvelgiant tik į jo paties
-šviesumą (CCC https://publications.lib.chalmers.se/records/fulltext/215545/local_215545.pdf). Todėl objektai su sudėtingomis tekstūromis ar ryškiomis ribomis gali atrodyti sulieti. Kaip minėta,
+šviesumą @ascii-mosaic-rendering. Todėl objektai su sudėtingomis tekstūromis ar ryškiomis ribomis gali atrodyti sulieti. Kaip minėta,
 rezultato kokybė kritiškai priklauso nuo simbolių rinkinio – netinkamas rinkinys gali visiškai sugadinti vaizdą.
 
 Apibendrinant, šviesumo algoritmas yra fundamentalus ASCII meno generavimo įrankis, puikiai tinkantis kaip atspirties taškas
 arba tais atvejais, kai siekiama greitai gauti bendrą vaizdo įspūdį, perteikiant jo toninius perėjimus. Nors jis gali ne
 visada išsaugoti visas detales, jo paprastumas ir efektyvumas daro jį populiariu pasirinkimu daugeliui taikymų.
 
-===== Sobelio kraštų atpažinimo algoritmas (angl. _Sobel edge detection_)
+==== Sobelio kraštų atpažinimo algoritmas (angl. _Sobel edge detection_)
 
 Kontūrų atpažinimo algoritmas siūlo alternatyvų būdą vaizdo konvertavimui į ASCII meną, lyginant su šviesumo atvaizdavimu.
 Užuot tiesiogiai konvertavus pikselių šviesumą į simbolius, šis metodas pirmiausia siekia identifikuoti ir pabrėžti vaizdo
@@ -271,7 +290,7 @@ Apibendrinant, kontūrų išryškinimo algoritmas yra vertinga ASCII meno genera
 vaizdo struktūrą ir formas, o ne fotorealistišką šviesumo atvaizdavimą. Šis algoritmas gali išryškinti detales, kurios būtų
 prarandamos naudojant šviesumo atvaizdavimo algoritmą, ypač jei vaizde yra daug panašaus šviesumo, bet aiškių ribų turinčių plotų.
 
-===== Canny kraštų atpažinimo algoritmas (angl. _Canny edge detection_)
+==== Canny kraštų atpažinimo algoritmas (angl. _Canny edge detection_)
 
 Canny kontūrų išryškinimo algoritmas yra laikomas vienu iš efektyviausių ir plačiausiai naudojamų metodų kontūrams aptikti
 skaitmeniniuose vaizduose. Lyginant su paprastesniais metodais, pavyzdžiui, pagrįstais tik Sobelio operatoriumi, Canny
@@ -350,7 +369,7 @@ Canny algoritmas yra pažangus ir galingas įrankis kontūrams išgauti, leidži
 tikslius vaizdus iš ASCII simbolių, ypač kai norima pabrėžti formas ir linijas, o ne tik bendrą šviesumą. O galimybė
 naudoti kryptinę informaciją suteikia rezultatui unikalumo
 
-===== Papildomi vaizdų konvertavimo į ASCII metodai
+==== Papildomi vaizdų konvertavimo į ASCII metodai
 
 Be šviesumo ir kontūrų atpažinimo algoritmų, kurie yra pamatiniai ir plačiausiai taikomi metodai generuojant ASCII meną
 iš skaitmeninių vaizdų, egzistuoja ir kiti, netradiciniai ir labiau eksperimentiniai, būdai atlikti šią transformaciją.
