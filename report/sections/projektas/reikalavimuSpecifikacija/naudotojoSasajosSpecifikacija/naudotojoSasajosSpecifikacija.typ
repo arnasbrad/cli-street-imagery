@@ -19,7 +19,7 @@ Programos prototipo langai:
     image("/images/main_page.png", width: 15cm),
     caption: [Pagrindinio „Street View“ lango prototipas.],
   ) <main_page>
-  Paskirtis: tai pagrindinis programos langas, kuriame vartotojas matys ir sąveikaus su pagrindiniu programos funkcionalumu -
+  Paskirtis: tai pagrindinis programos langas, kuriame vartotojas matys ir sąveikaus su pagrindiniu programos funkcionalumu --
   navigacija gatvės lygio vaizduose. Per apačioje esantį įvesties langą naudotojas galės įvesti norimos vietos koordimates
   arba adresą. Taip pat apačioje bus rodomi galimi įvesties mygtukai leidžiantys naudotojui naviguoti.
 - Konfigūracijos langas „Config“ (#ref(<config_page>))

@@ -6,7 +6,7 @@
 
 Šiuolaikiniame technologijų pasaulyje gatvių vaizdai ir geografinė informacija paprastai pateikiami per grafines sąsajas,
 tačiau komandinės eilutės (angl. _Command line interface_) aplinka išlieka svarbi daugeliui informacinių technologijų profesionalų
-ir entuziastų. Šio darbo problematika kyla iš smalsumo ir noro ištirti naujas komandinės eilutės pritaikymo galimybes -
+ir entuziastų. Šio darbo problematika kyla iš smalsumo ir noro ištirti naujas komandinės eilutės pritaikymo galimybes --
 ar įmanoma sukurti interaktyvią sąsają gatvės lygio vaizdams, ir jei taip, ar tokia sąsaja gali būti intuityvi ir
 patogi naudoti. Tai yra ne tik techninio įgyvendinamumo klausimas, bet ir žmogaus-kompiuterio sąveikos tyrimas
 neįprastoje aplinkoje.
@@ -24,7 +24,7 @@ turinys gali būti pristatomas nestandartiniais būdais.
 
 == Darbo tikslas ir uždaviniai
 
-Darbo pagrindinis tikslas - sukurti ir ištirti interaktyvią komandinės eilutės sąsają, kuri leistų naudotojams
+Darbo pagrindinis tikslas -- sukurti ir ištirti interaktyvią komandinės eilutės sąsają, kuri leistų naudotojams
 naršyti gatvių vaizdus ASCII formatu, siekiant nustatyti tokios sistemos techninį įgyvendinamumą ir naudojimo
 patogumą be tradicinės grafinės aplinkos.
 

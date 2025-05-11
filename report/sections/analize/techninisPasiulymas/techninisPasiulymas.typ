@@ -63,7 +63,7 @@ versijos buvo išleistos išskirtinai naudojant komandinės eilutės vartotojo s
 Vaizdo konvertavimas į ASCII meną yra nusistovėjusi technika, leidžianti apytiksliai atkurti vaizdinę informaciją naudojant
 standartinius spausdinamus simbolius. Egzistuoja įvairių įgyvendinimų, kurie skiriasi prieinamumu, lankstumu ir pritaikymo sritimis.
 
-Internetiniai konvertavimo įrankiai - tai labiausiai paplitę ir vartotojui draugiškiausi įrankiai, skirti greitam ir paprastam
+Internetiniai konvertavimo įrankiai -- tai labiausiai paplitę ir vartotojui draugiškiausi įrankiai, skirti greitam ir paprastam
 vienkartiniam vaizdų konvertavimui. Jie nereikalauja jokios techninės konfigūracijos ar diegimo, sugeneruotą rezultatą
 naudotojas gali nusikopijuoti į iškarpinę. Šių įrankių pavyzdžiai:
 
@@ -93,14 +93,14 @@ Komandinės eilutės konvertavimo įrankiai: Šie įrankiai yra sukurti veikti t
 lankstesni ir tinkamesni automatizavimui bei integracijai į kitas programas. Šie įrankiai lengvai įdiegiami per paketų
 tvarkykles. Šių įrankių pavyzdžiai:
 
-- „jp2a“ - vienas iš senesnių ir plačiai žinomų CLI įrankių, parašytas C kalba @jp2a.
+- „jp2a“ -- vienas iš senesnių ir plačiai žinomų CLI įrankių, parašytas C kalba @jp2a.
     - Funkcionalumas: specializuojasi JPEG konvertavime, nors dažnai palaiko ir kitus formatus per išorines bibliotekas,
       pavyzdžiui, „libpng“. Konvertuoja vaizdą į ASCII simbolius, atsižvelgdamas į pikselių šviesumą.
     - Parinktys: Leidžia nurodyti išvesties plotį, aukštį, naudoti ANSI spalvas, pasirinkti kraštinių išryškinimo algoritmus, invertuoti išvestį.
     - Taikymas: Greitas vaizdų peržiūrėjimas terminale, sistemų stebėjimo įrankių papildymas, pavyzdžiui, rodant logotipo ASCII versiją.
     - Trūkumai projekto kontekste: Sukurtas konvertuoti pavienius failus. Nors teoriškai galima nukreipti vaizdo srautą,
       jis nėra optimizuotas realaus laiko interaktyviam atvaizdavimui.
-- „libcaca“ - tai ne tik įrankis, bet ir galinga C biblioteka, skirta pažangiam tekstiniam vaizdavimui @libcaca.
+- „libcaca“ -- tai ne tik įrankis, bet ir galinga C biblioteka, skirta pažangiam tekstiniam vaizdavimui @libcaca.
     - Funkcionalumas: šis įrankis daro daugiau nei paprastas ASCII konvertavimas. Jis palaiko ne tik ASCII ar ANSI, bet
       ir „Unicode“ simbolius, įvairius spalvų maišymo algoritmus, kad pagerintų vaizdo kokybę ribotoje spalvų paletėje.
       Yra galimybė vaizdo įrašams pritaikyti ASCII simbolių filtrą.
@@ -109,7 +109,7 @@ tvarkykles. Šių įrankių pavyzdžiai:
     - Trūkumai projekto kontekste: Pati biblioteka yra labai galinga, bet ji yra orientuotas į failų konvertavimą.
       Nors biblioteka suteiktų reikiamus primityvus interaktyvumui, jį reikėtų programuoti papildomai. Realizuoti sudėtingą
       interaktyvią sąsają (kaip gatvių vaizdų naršymas) vien „libcaca“ pagalba būtų nemenkas iššūkis.
-- „ascii\_magic“ - modernesnis sprendimas, parašytas Python kalba, lengvai integruojamas į Python projektus @ascii-magic.
+- „ascii\_magic“ -- modernesnis sprendimas, parašytas Python kalba, lengvai integruojamas į Python projektus @ascii-magic.
     - Funkcionalumas: veikia kaip Python biblioteka ir kaip CLI įrankis. Leidžia konvertuoti vaizdus iš failų, URL adresų.
       Palaiko spalvotą ANSI išvestį.
     - Parinktys: galima nurodyti išvesties stulpelių skaičių, simbolių rinkinį, spalvų režimą.

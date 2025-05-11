@@ -25,7 +25,7 @@ Sprendimas: Siekiant užtikrinti projekto įgyvendinamumą, buvo pasirinkta alte
 Liekamasis apribojimas: Nors „Mapillary“ leido tęsti projektą, jos duomenų aprėptis tam tikrose geografinėse vietovėse
 gali būti mažesnė nei „Google Street View“, kas yra techninis apribojimas galutinio produkto naudojimo geografijai.
 Taip pat, dėl to kad ši sąsaja yra nemokama, ji nėra ypatingai patikima, pavyzdžiui, ribojamos dėžės (angl. _bounding box_)
-užklausos dažnai yra atmetamos dėl per didelio bendro užklausų kiekio - tenka laukti, kol „Mapillary“ serveriai bus mažiau
+užklausos dažnai yra atmetamos dėl per didelio bendro užklausų kiekio -- tenka laukti, kol „Mapillary“ serveriai bus mažiau
 naudojami. Šis laukimas yra pagrindinis veiksnys, lemiantis galimą vartotojo sąsajos vėlavimą keičiant vaizdus.
 
 ==== Terminalo aplinkos grafiniai apribojimai
