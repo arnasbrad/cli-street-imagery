@@ -118,8 +118,31 @@ Nors „Typst“ siūlo daug privalumų, kaip palyginti naujas įrankis, jis tur
 
 == Problemos, su kuriomis susidūrėme
 
-aaa
-// TODO: kas buvo sunku padaryti / sukonfiguruoti
+Kadangi „Typst“ yra sąlyginai naujas įrankis ir jis nėra plačiai naudojamas „KTU“ rašto darbų
+kūrime, kai kurie reikalavimai gali kelti iššūkių.
+
+=== Tarpai tarp eilučių
+
+Pagal rašto darbų metodinius nurodymus, tarpai tarp eilučių turėtų būti 1,15 (matavimo vienetas nėra
+nurodytas). „Typst“ įrankyje egzistuoja _leading_ nustatymas, kuris būtent tai ir nurodo.
+Tačiau su 1,15 reikšme, tarpai tarp eilučių tapo žymiai per dideli. Tai reiškia, jog
+šis įrankis naudoja kitokį tarpų skaičiavimą, nei, pavyzdžiui, „MS Word“.
+
+Rankiniu būdu testuojant, mūsų nuomone 0,65 tarpas atrodo panašus į kitus pavyzdžius.
+
+```typ
+#set par(
+    leading: 0.65em
+)
+```
+
+=== Bibliografija
+
+„KTU“ rašto darbų reikalavimai nurodo, jog bibliografija turi būti _ISO-690:2021_ formato.
+„Typst“ įrankis naudoja specialius _.csl_ formato failus bibliografijos formatavimui.
+
+Deja, bet šiuo metu neegzistuoja (arba mes nesugebėjome rasti) _.csl_ failo _ISO-690:2021_ formatui,
+todėl teko patiems adaptuoti esančias konfigūracijas, kad daugmaž atitikti reikiamą formatą.
 
 == Išvada
 

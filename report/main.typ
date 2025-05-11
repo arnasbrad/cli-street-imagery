@@ -4,7 +4,7 @@
     spacing: 10pt,
     justify: true,
     //leading: 1.15em
-    leading: 0.8975em
+    leading: 0.65em
 )
 #set page(
     paper: "a4",
