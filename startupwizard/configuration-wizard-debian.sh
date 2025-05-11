@@ -194,6 +194,8 @@ if [[ "$colors" == "true" ]]; then
       fi
     done
     echo "Using $colorFilter filter with intensity: $intensity"
+  else
+    intensity=0
   fi
 else
   colorFilter="No Filter"
@@ -267,7 +269,12 @@ $(echo "⚙️ Down sampling rate:" | gum style --foreground 212) $downSampling"
   if [[ "$colors" == "true" ]]; then
     summary+="
 $(echo "🎨 Colors:" | gum style --foreground 212) Enabled ($colorFilter)"
-$(echo "🎨 Color filter intensity:" | gum style --foreground 212) Enabled ($colorFilter)"
+
+    # Add intensity information if a filter other than "No Filter" is selected
+    if [[ "$colorFilter" != "No Filter" ]]; then
+      summary+="
+$(echo "🔆 Filter intensity:" | gum style --foreground 212) $intensity"
+    fi
   else
     summary+="
 $(echo "🎨 Colors:" | gum style --foreground 212) Disabled"
@@ -330,7 +337,7 @@ processing {
 colors {
   color = ${colors}
   color-filter = "${colorFilter}"
-  intensity = "${intensity}"
+  intensity = ${intensity}
 }
 EOF
 }

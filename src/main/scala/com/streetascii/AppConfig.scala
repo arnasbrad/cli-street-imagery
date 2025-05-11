@@ -42,7 +42,8 @@ object AppConfig {
   }
   case class ColorConfig(
       color: Boolean,
-      colorFilter: ColorFilter
+      colorFilter: ColorFilter,
+      intensity: Double
   )
 
   def load(configSource: ConfigSource): IO[AppConfig] = {

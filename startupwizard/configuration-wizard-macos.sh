@@ -158,9 +158,48 @@ if [[ "$colors" == "true" ]]; then
     "Deuteranopia" \
     )
   clear
+
+  # Add intensity input with validation if a filter other than "No Filter" is selected
+  if [[ "$colorFilter" != "No Filter" ]]; then
+    echo "Set the intensity:" | gum style --padding "1 2" --width 50
+    intensity=""
+    while [ -z "$intensity" ] || ! [[ "$intensity" =~ ^[0-9]*\.?[0-9]+$ ]] || (( $(echo "$intensity < 0.1 || $intensity > 2" | bc -l) )); do
+      # If previous input was invalid but not empty, show error message
+      if [ -n "$intensity" ]; then
+        # Clear previous error messages
+        clear
+        echo "Set the intensity:" | gum style --padding "1 2" --width 50
+
+        # Show appropriate error
+        if ! [[ "$intensity" =~ ^[0-9]*\.?[0-9]+$ ]]; then
+          echo "Invalid input! Please enter a number." | gum style --foreground 196
+        elif (( $(echo "$intensity < 0.1 || $intensity > 2" | bc -l) )); then
+          echo "Value must be between 0.1 and 2." | gum style --foreground 196
+        fi
+        # Reset the value
+        intensity=""
+      fi
+
+      # Get input
+      intensity=$(gum input --placeholder.foreground 240 --width 60 --placeholder "Enter the intensity (press [ENTER] for hint)")
+
+      # Show hint if empty (with clear to prevent stacking)
+      if [ -z "$intensity" ]; then
+        clear
+        echo "Set the intensity:" | gum style --padding "1 2" --width 50
+        echo "Please enter a number between 0.1 and 2" | gum style --foreground 208
+      fi
+    done
+    echo "Using $colorFilter filter with intensity: $intensity"
+  else
+    intensity=0
+  fi
 else
   colorFilter="No Filter"
+  intensity=0
 fi
+
+clear
 
 # Down sampling rate
 echo "Set the down sampling rate:" | gum style --padding "1 2" --width 50
@@ -227,6 +266,12 @@ $(echo "⚙️ Down sampling rate:" | gum style --foreground 212) $downSampling"
   if [[ "$colors" == "true" ]]; then
     summary+="
 $(echo "🎨 Colors:" | gum style --foreground 212) Enabled ($colorFilter)"
+
+    # Add intensity information if a filter other than "No Filter" is selected
+    if [[ "$colorFilter" != "No Filter" ]]; then
+      summary+="
+$(echo "🔆 Filter intensity:" | gum style --foreground 212) $intensity"
+    fi
   else
     summary+="
 $(echo "🎨 Colors:" | gum style --foreground 212) Disabled"
@@ -289,6 +334,7 @@ processing {
 colors {
   color = ${colors}
   color-filter = "${colorFilter}"
+  intensity = ${intensity}
 }
 EOF
 }
