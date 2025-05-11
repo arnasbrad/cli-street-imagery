@@ -143,7 +143,7 @@ def doSomething(value: Int) = {
 Ši funkcija nebėra gryna, nes ji daro daugiau, nei reikia norint gauti išvestį. Ji pažeidžia referencinį skaidrumą,
 nes jos iškvietimas ne tik grąžina reikšmę, bet ir turi šalutinį poveikį (pakeičia x reikšmę, išspausdina tekstą),
 todėl negalime jos tiesiog pakeisti rezultatu, neprarasdami šių poveikių. Kitaip tariant, turėtų būti aišku ką daro
-funkcija vien iš jos įvesties ir išvesties tipų, net neskaitant pačios funkcijos implementacijos.
+funkcija vien iš jos įvesties ir išvesties tipų, net neskaitant pačios funkcijos realizacijos.
 Tokie šalutiniai efektai žymiai apsunkina programos klaidų ieškojimą ir kodo supratimą.
 
 Tačiau kai kurios funkcijos negali būti idealiai grynos. Pavyzdžiui, spausdinimas į ekraną ar HTTP užklausa -

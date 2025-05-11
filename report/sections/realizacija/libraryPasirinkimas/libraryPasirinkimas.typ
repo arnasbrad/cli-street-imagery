@@ -50,14 +50,14 @@ Ji suteikia galimybę žemu lygiu sąveikauti su terminalu:
   - Tiesiogiai nuskaityti vartotojo įvestį (_terminal.reader().read()_).
   - Valdyti terminalo būseną, pavyzdžiui, išvalyti ekraną naudojant terminalo galimybes
   (_terminal.puts(InfoCmp.Capability.clear_screen)_).
-2. Tiesioginis ANSI spalvų kodų generavimas: siekiant įveikti 16 spalvų apribojimą, buvo implementuota funkcija,
+2. Tiesioginis ANSI spalvų kodų generavimas: siekiant įveikti 16 spalvų apribojimą, buvo realizuota funkcija,
   kuri tiesiogiai generuoja ANSI escape sekas 24 bitų „True Color“ spalvoms
   (pvz., _\u001B[38;2;r;g;bm_). Tai leido perduoti terminalui tikslią RGB informaciją kiekvienam ASCII simboliui,
   jei terminalo emuliatorius palaiko šį režimą.
 3. Efektyvus išvedimas su _BufferedWriter_: siekiant optimizuoti viso ekrano perpiešimą (kas vyksta keičiant vaizdą),
   išvedimui į terminalą buvo naudojamas _java.io.BufferedWriter_. Tai leidžia sukaupti visą perpiešiamo ekrano turinį į
   buferį (angl. _buffer_) ir išvesti jį vienu kartu, kas yra efektyviau nei rašyti kiekvieną simbolį ar eilutę atskirai.
-4. Minimalizmas: nuosavas modulis implementuoja tik būtiniausią funkcionalumą: spalvoto ASCII tinklelio atvaizdavimą,
+4. Minimalizmas: nuosavas modulis realizuoja tik būtiniausią funkcionalumą: spalvoto ASCII tinklelio atvaizdavimą,
   ekrano valymą ir klavišų nuskaitymą. Neapkraunama papildomais komponentais, kurių projektui nereikia.
 
 === Išvada

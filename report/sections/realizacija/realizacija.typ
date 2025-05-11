@@ -1,5 +1,5 @@
 #set text(lang: "lt", region: "lt")
-= Implementacija<implementacija>
+= Realizacija<realizacija>
 
 #include "komandinesEilutesTechniniaiApribojimai/komandinesEilutesTechniniaiApribojimai.typ"
 #include "apiPasirinkimas/apiPasirinkimas.typ"

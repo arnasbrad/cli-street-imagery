@@ -70,7 +70,7 @@
 #pagebreak()
 #include "sections/projektas/projektas.typ"
 #pagebreak()
-#include "sections/implementacija/implementacija.typ"
+#include "sections/realizacija/realizacija.typ"
 #pagebreak()
 #include "sections/testavimas/testavimas.typ"
 #pagebreak()
@@ -79,6 +79,6 @@
 #bibliography(
     "bibliography.yaml",
     title: "Literatūros sąrašas",
-    //style: "iso-690.csl"
+    style: "iso-690.csl"
 )
 
