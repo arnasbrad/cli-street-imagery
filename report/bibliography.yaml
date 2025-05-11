@@ -372,27 +372,27 @@ traveltime-api-docs:
     note: "Introduction page for the TravelTime API, explaining its core functionalities and use cases."
 
 imgur-homepage:
-    type: Web
-    title: "Imgur Homepage"
-    publisher:
-        name: Imgur Inc.
-        location: San Francisco, California
-    url:
-        value: https://imgur.com/
-        date: 2025-05-03
-    language: en
+  type: Web
+  title: "Imgur Homepage"
+  publisher:
+    name: Imgur Inc.
+    location: San Francisco, California
+  url:
+    value: https://imgur.com/
+    date: 2025-05-03
+  language: en
 
 imgur-api-docs:
-    type: Web
-    title: Imgur API Documentation
-    publisher:
-        name: Imgur Inc.
-        location: San Francisco, California
-    url:
-        value: https://apidocs.imgur.com/
-        date: 2025-05-03
-    language: en
-    note: "Official landing page for the Imgur API documentation, providing information on endpoints, authentication, and usage."
+  type: Web
+  title: Imgur API Documentation
+  publisher:
+    name: Imgur Inc.
+    location: San Francisco, California
+  url:
+    value: https://apidocs.imgur.com/
+    date: 2025-05-03
+  language: en
+  note: "Official landing page for the Imgur API documentation, providing information on endpoints, authentication, and usage."
 
 jre-download:
     type: Web
@@ -491,6 +491,14 @@ image-to-ascii:
   url:
     value: https://asciieverything.com/ascii-tips/how-does-image-to-ascii-work/
     date: 2025-05-11
+  language: en
+
+decline-homepage:
+  type: Web
+  title: "Composable command-line parsing for Scala"
+  url:
+    value: https://ben.kirw.in/decline/
+    date: 2025-05-03
   language: en
 
 ascii-mosaic-rendering:
