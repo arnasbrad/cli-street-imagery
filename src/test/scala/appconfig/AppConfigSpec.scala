@@ -44,6 +44,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "Contrast"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -85,6 +86,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = false
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -117,6 +119,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -140,6 +143,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -163,6 +167,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -188,6 +193,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -211,6 +217,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -234,6 +241,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -257,6 +265,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -280,6 +289,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -305,6 +315,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -328,6 +339,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "No Filter"
+        |  intensity = 2
         |}
         |""".stripMargin)
 
@@ -353,6 +365,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
            |colors {
            |  color = true
            |  color-filter = "No Filter"
+           |  intensity = 2
            |}
            |""".stripMargin)
 
@@ -387,6 +400,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
            |colors {
            |  color = true
            |  color-filter = "$filterStr"
+           |  intensity = 2
            |}
            |""".stripMargin)
 
@@ -423,6 +437,7 @@ class AppConfigSpec extends AnyFlatSpec with Matchers {
         |colors {
         |  color = true
         |  color-filter = "Contrast"
+        |  intensity = 2
         |}
         |""".stripMargin
 
