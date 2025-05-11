@@ -516,3 +516,166 @@ ascii-mosaic-rendering:
     value: https://publications.lib.chalmers.se/records/fulltext/215545/local_215545.pdf
     date: 2025-05-11
   language: en
+
+sobel-edge-detection:
+  type: Article
+  title: An Implementation of Sobel Edge Detection
+  author: Sodha, Sean
+  publisher:
+    name: Project Rhea
+  url:
+    value: https://www.projectrhea.org/rhea/index.php/An_Implementation_of_Sobel_Edge_Detection
+    date: 2025-05-11
+  language: en
+
+sobel-edge-detection-algorithm:
+  type: Article
+  title: A Descriptive Algorithm for Sobel Image Edge Detection
+  author:
+    - Vincent, O. R.
+    - Folorunso, O.
+  date: 2009
+  parent:
+    type: Conference
+    title: Proceedings of Informing Science & IT Education Conference (InSITE)
+    pages: 97-107
+  publisher:
+    name: Informing Science Institute
+  url:
+    value: https://proceedings.informingscience.org/InSITE2009/InSITE09p097-107Vincent613.pdf
+    date: 2025-05-11
+  language: en
+
+canny-edge-detection:
+  type: Article
+  title: What is Canny edge detection?
+  publisher:
+    name: Educative.io
+  url:
+    value: https://www.educative.io/answers/what-is-canny-edge-detection
+    date: 2025-05-11
+  language: en
+
+braille-alphabet:
+  type: Web
+  title: The Braille Alphabet
+  publisher:
+    name: Pharmabraille
+  url:
+    value: https://www.pharmabraille.com/pharmaceutical-braille/the-braille-alphabet/
+    date: 2025-05-11
+  language: en
+
+geoguessr:
+  type: Web
+  title: GeoGuessr - Let's explore the world!
+  publisher:
+    name: GeoGuessr AB
+  url:
+    value: https://www.geoguessr.com
+    date: 2025-05-11
+  language: en
+
+ascii-art-generator:
+  type: Web
+  title: ASCII Art Generator
+  publisher:
+    name: ASCII-Art-Generator.org
+  url:
+    value: https://www.ascii-art-generator.org/
+    date: 2025-05-11
+  language: en
+
+asciiart-eu-image-converter:
+  type: Web
+  title: Image to ASCII Art
+  publisher:
+    name: ASCII Art EU
+  url:
+    value: https://www.asciiart.eu/image-to-ascii
+    date: 2025-05-11
+  language: en
+
+manytools-ascii-converter:
+  type: Web
+  title: Convert Images to Ascii Art
+  publisher:
+    name: ManyTools
+  url:
+    value: https://manytools.org/hacker-tools/convert-images-to-ascii-art/
+    date: 2025-05-11
+  language: en
+
+jp2a:
+  type: Repository
+  title: jp2a
+  author: Larsen, Christian Stigen
+  date: 2016
+  publisher:
+    name: GitHub
+  url:
+    value: https://github.com/cslarsen/jp2a
+    date: 2025-05-11
+  language: en
+
+libcaca:
+  type: Web
+  title: libcaca
+  publisher:
+    name: caca.zoy.org
+  url:
+    value: http://caca.zoy.org/wiki/libcaca
+    date: 2025-05-11
+  language: en
+
+ascii-magic:
+  type: Web
+  title: ascii-magic
+  author: Barone, Leandro
+  date: 2023
+  publisher:
+    name: Python Package Index (PyPI)
+  url:
+    value: https://pypi.org/project/ascii-magic/
+    date: 2025-05-11
+  language: en
+
+terminal-colors:
+  type: Web
+  title: So you want to render colors in your terminal
+  author: Hagemeister, Marvin
+  date: 2023-04-23
+  publisher:
+    name: marvinh.dev
+  url:
+    value: https://marvinh.dev/blog/terminal-colors/
+    date: 2025-05-11
+  language: en
+
+terminal-unicode-test:
+  type: Web
+  title: Terminal Emulators Battle Royale – Unicode Edition!
+  date: 2023
+  publisher:
+    name: jeffquast.com
+  url:
+    value: https://www.jeffquast.com/post/ucs-detect-test-results/
+    date: 2025-05-11
+  language: en
+
+hocon-spec:
+  type: Repository
+  title: HOCON (Human-Optimized Config Object Notation)
+  author: Wijnand, Dale
+  url:
+    value: https://github.com/lightbend/config/blob/main/HOCON.md
+    date: 2025-05-11
+  language: en
+
+gum-repo:
+  type: Repository
+  title: Gum – A tool for glamorous shell scripts
+  url:
+    value: https://github.com/charmbracelet/gum
+    date: 2025-05-11
+  language: en
