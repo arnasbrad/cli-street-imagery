@@ -7,7 +7,7 @@ harry:
   page-total: 768
   date: 2003-06-21
 
-# example
+    # example
 electronic:
   type: Web
   title: Ishkur's Guide to Electronic Music
@@ -348,6 +348,64 @@ mapillary-uploader-guide:
     date: 2025-04-20
   language: en-US
 
+traveltime-homepage:
+    type: Web
+    title: TravelTime Location API
+    publisher:
+        name: TravelTime Platform Ltd.
+        location: London, United Kingdom
+    url:
+        value: https://traveltime.com/
+        date: 2025-05-03
+    language: en
+
+traveltime-api-docs:
+    type: Web
+    title: TravelTime API Documentation
+    publisher:
+        name: TravelTime Platform Ltd.
+        location: London, United Kingdom
+    url:
+        value: https://docs.traveltime.com/api/overview/introduction
+        date: 2025-05-03
+    language: en
+    note: "Introduction page for the TravelTime API, explaining its core functionalities and use cases."
+
+imgur-homepage:
+  type: Web
+  title: "Imgur Homepage"
+  publisher:
+    name: Imgur Inc.
+    location: San Francisco, California
+  url:
+    value: https://imgur.com/
+    date: 2025-05-03
+  language: en
+
+imgur-api-docs:
+  type: Web
+  title: Imgur API Documentation
+  publisher:
+    name: Imgur Inc.
+    location: San Francisco, California
+  url:
+    value: https://apidocs.imgur.com/
+    date: 2025-05-03
+  language: en
+  note: "Official landing page for the Imgur API documentation, providing information on endpoints, authentication, and usage."
+
+jre-download:
+    type: Web
+    title: Download Java
+    publisher:
+        name: Oracle Corporation
+        location: Austin, Texas
+    url:
+        value: https://www.java.com/en/download/manual.jsp
+        date: 2025-05-03
+    language: en
+    note: "Official Oracle page providing manual download options and offline installers for Java Runtime Environment (JRE) for various operating systems."
+
 cc-by-sa-4:
   type: Web
   title: Attribution-ShareAlike 4.0 International
@@ -435,6 +493,14 @@ image-to-ascii:
     date: 2025-05-11
   language: en
 
+decline-homepage:
+  type: Web
+  title: "Composable command-line parsing for Scala"
+  url:
+    value: https://ben.kirw.in/decline/
+    date: 2025-05-03
+  language: en
+
 ascii-mosaic-rendering:
   type: Article
   title: Fast Rendering of Image Mosaics and ASCII Art
@@ -444,12 +510,6 @@ ascii-mosaic-rendering:
     - Pandzi, Igor S.
     - Ahlberg, Jorgen
   date: 2015
-  parent:
-    type: Journal
-    title: Computer Graphics Forum
-    volume: 00
-    issue: 0
-    pages: 1-10
   publisher:
     name: John Wiley & Sons Ltd
   url:
