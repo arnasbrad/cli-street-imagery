@@ -14,7 +14,7 @@ filtras ypač naudingas tais atvejais, kai originalus vaizdas yra blankus ar jo 
 
 Kita itin reikšminga filtrų grupė yra skirta spalvinio matymo sutrikimų (daltonizmo) kompensavimui. Tokie sutrikimai
 kaip deuteranopija (sumažėjęs jautrumas žaliai šviesai), protanopija (sumažėjęs jautrumas raudonai šviesai) ir
-tritanopija (sumažėjęs jautrumas mėlynai šviesai) ženkliai paveikia tai, kaip žmogus suvokia spalvas (CCC https://www.allaboutvision.com/conditions/color-blindness/types/).
+tritanopija (sumažėjęs jautrumas mėlynai šviesai) ženkliai paveikia tai, kaip žmogus suvokia spalvas @color-blindness-types.
 Dėl šių sutrikimų tam tikros spalvų poros tampa sunkiai atskiriamos, kas gali lemti prastesnę naudotojo patirtį.
 
 Implementuoti daltonizmo filtrai siekia sušvelninti šias problemas. Jų tikslas nėra tiesiog atkurti trūkstamas spalvas,

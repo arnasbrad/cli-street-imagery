@@ -374,3 +374,85 @@ techtarget-ascii:
     date: 2025-05-10
   note: "The author attribution is based on external indexing; the article existed by March 2018."
   language: en
+
+color-blindness-types:
+  type: Article
+  title: What are the different types of color blindness?
+  author: Woods, Rob
+  publisher:
+    name: All About Vision
+  url:
+    value: https://www.allaboutvision.com/conditions/color-blindness/types/
+    date: 2025-05-11
+  language: en
+  date: 2021-02-24
+
+ascii-comic-sans:
+  type: Book
+  title: From ASCII Art to Comic Sans Typography and Popular Culture in the Digital Age
+  author: Wagner, Karin
+  publisher:
+    name: MIT Press
+    location: Cambridge, Massachusetts
+  url:
+    value: https://direct.mit.edu/books/oa-monograph/5649/From-ASCII-Art-to-Comic-SansTypography-and-Popular
+    date: 2025-05-11
+  language: en
+
+figure-ground-perception:
+  type: Article
+  title: Figure-ground perception and random geometry
+  author:
+    - Frisch, H.L.
+    - Julesz, B.
+  date: 1966
+  publisher:
+    name: Springer
+  url:
+    value: https://link.springer.com/article/10.3758/BF03207416
+    date: 2025-05-11
+  language: en
+
+scala-list:
+  type: Web
+  title: List API Documentation
+  publisher:
+    name: Scala
+    location: EPFL, Lausanne, Switzerland
+  url:
+    value: https://www.scala-lang.org/api/3.x/scala/collection/immutable/List.html
+    date: 2025-05-11
+  language: en
+
+image-to-ascii:
+  type: Article
+  author: Snelling, Alex
+  title: How does image to ASCII work?
+  publisher:
+    name: ASCII Everything
+  url:
+    value: https://asciieverything.com/ascii-tips/how-does-image-to-ascii-work/
+    date: 2025-05-11
+  language: en
+
+ascii-mosaic-rendering:
+  type: Article
+  title: Fast Rendering of Image Mosaics and ASCII Art
+  author:
+    - Markus, Nenad
+    - Fratarcangeli, Marco
+    - Pandzi, Igor S.
+    - Ahlberg, Jorgen
+  date: 2015
+  parent:
+    type: Journal
+    title: Computer Graphics Forum
+    volume: 00
+    issue: 0
+    pages: 1-10
+  publisher:
+    name: John Wiley & Sons Ltd
+  url:
+    value: https://publications.lib.chalmers.se/records/fulltext/215545/local_215545.pdf
+    date: 2025-05-11
+  language: en

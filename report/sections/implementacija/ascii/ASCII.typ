@@ -28,8 +28,7 @@ pirmieji egzemplioriai užfiksuoti dar prieš ASCII standarto sukūrimą (#ref(<
 ) <typewriter_art>
 
 Vaizdų iš simbolių kūrimo pradžia siejama net ne su kompiuteriais, o su XIX amžiuje plačiai naudojamomis rašymo mašinėlėmis.
-Vaizdų sudarymas iš simbolių buvo skatinamas rašymo mašinėlių gamintojų rengiamuose turnyruose
-(CCC https://direct.mit.edu/books/oa-monograph/5649/From-ASCII-Art-to-Comic-SansTypography-and-Popular).
+Vaizdų sudarymas iš simbolių buvo skatinamas rašymo mašinėlių gamintojų rengiamuose turnyruose @ascii-comic-sans.
 Antrasis ASCII meno populiarumo šuolis buvo matomas XX amžiaus viduryje, kai vis daugiau žmonių turėjo prieigą prie pirmųjų
 kompiuterių. Žinoma, tais laikais kompiuteriai dar neturėjo grafinių sąsajų, todėl vaizdus reprezentuoti buvo galima tik ASCII
 simboliais. Spausdinti ir masiškai platinti teksto simbolių meną kompiuterio pagalba buvo žymiai paprasčiau, nei naudojantis
@@ -64,7 +63,7 @@ ekraną. Šios problemos sprendimas yra elementarus - sumažinti šrifto dydį. 
 pavyzdžiui, sumažinus šriftą iki pačio mažiausio leidžiamo dydžio, rezultatas dažnu atveju kokybe neatsiliks nuo orginalaus
 rastrinio vaizdo. Taip pat, kuo mažesnis yra gaunamas paveiksliukas, tuo lengviau žmogaus smegenys geba atpažinti jo turinį.
 Mažesnį plotą užimantys objektai dažniausiai suvokiami per jų formą arba figūrą, o didesni objetai suprantami kaip fonas
-(CCC https://link.springer.com/article/10.3758/BF03207416?utm_source=chatgpt.com). Dėl to suprasti abstraktų paveikslą žiūrint
+@figure-ground-perception. Dėl to suprasti abstraktų paveikslą žiūrint
 iš toli yra lengviau, tas pats gali būti pritaikyta ir ASCII menui. Žinoma, mažesnis šriftas ne visada yra geriau. Iš teksto
 simbolių kuriamo vaizdo esmė nėra pati aukščiausia kokybė. ASCII menas yra kuriamas dėl stilistinių tikslų. Taigi sumažinti
 šrifto dydį galima tik tiek, kol vis dar bus galima įskaityti individualius simbolius. Norint pasiekti optimalų rezultatą
@@ -122,7 +121,7 @@ sudaromas iš pačių simbolių. Šalutinis šio rinkinio efektas yra labai dide
 
 Pradiniame projekto etape pasirinkome naudoti standartinę sąrašo (angl. _list_) duomenų struktūrą dėl jos patogumo ir
 funkcinio programavimo paradigmos atitikimo. Programavimo kalboje „Scala“ sąrašas iš tiesų veikia kaip susieto sąrašo
-(angl. _linked list_) tipo duomenų struktūra, kuri puikiai tinka funkcinėms operacijoms (CCC https://www.scala-lang.org/api/3.x/scala/collection/immutable/List.html). Ji taip pat užtikrina
+(angl. _linked list_) tipo duomenų struktūra, kuri puikiai tinka funkcinėms operacijoms @scala-list. Ji taip pat užtikrina
 nekintamumą (angl. _immutability_), kas atitiko mūsų pradinį projekto dizainą.
 
 Tačiau konvertuojant didelės apimties nuotraukas į ASCII meną, pastebėjome reikšmingą veikimo efektyvumo sumažėjimą. Tai
@@ -179,7 +178,7 @@ Pavyzdžiui, paprastas rinkinys galėtų būti „.:-=+\*\#\%\@“, kur „.“ 
 Pats konvertavimo procesas vyksta iteruojant per kiekvieną pilkų tonų nuotraukos pikselį. Kiekvienam aplankytam pikseliui
 yra nuskaitoma jo šviesumo reikšmė (skaičius tarp 0 ir 255). Ši reikšmė turi būti transformuota į indeksą, atitinkantį
 poziciją mūsų surikiuotame ASCII simbolių rinkinyje. Populiariausias ir paprasčiausias būdas tai padaryti yra tiesinis
-susiejimas (angl. _linear mapping_) (CCC https://asciieverything.com/ascii-tips/how-does-image-to-ascii-work/). Tarkime, mūsų simbolių rinkinyje yra *N* simbolių. Tuomet visą šviesumo intervalą
+susiejimas (angl. _linear mapping_) @image-to-ascii. Tarkime, mūsų simbolių rinkinyje yra *N* simbolių. Tuomet visą šviesumo intervalą
 [0, 255] galima proporcingai padalinti į *N* dalių. Kiekviena dalis atitiks vieną simbolį. Pikselio šviesumo reikšmę
 galima konvertuoti į simbolių rinkinio indeksą naudojant formulę:
 #align(center)[`i = floor( L * (N - 1) / 255 ),`]
@@ -217,7 +216,7 @@ pagrindinis ASCII meno tikslas.
 
 Vis dėlto, šis paprastumas turi savo kainą. Algoritmas linkęs prarasti smulkias detales ir ypač aštrius kontūrus, nes jis
 neanalizuoja pikselio aplinkos ar formų vaizde – kiekvienas pikselis traktuojamas izoliuotai, atsižvelgiant tik į jo paties
-šviesumą (CCC https://publications.lib.chalmers.se/records/fulltext/215545/local_215545.pdf). Todėl objektai su sudėtingomis tekstūromis ar ryškiomis ribomis gali atrodyti sulieti. Kaip minėta,
+šviesumą @ascii-mosaic-rendering. Todėl objektai su sudėtingomis tekstūromis ar ryškiomis ribomis gali atrodyti sulieti. Kaip minėta,
 rezultato kokybė kritiškai priklauso nuo simbolių rinkinio – netinkamas rinkinys gali visiškai sugadinti vaizdą.
 
 Apibendrinant, šviesumo algoritmas yra fundamentalus ASCII meno generavimo įrankis, puikiai tinkantis kaip atspirties taškas
