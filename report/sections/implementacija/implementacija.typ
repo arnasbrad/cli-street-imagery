@@ -3,6 +3,7 @@
 
 #include "komandinesEilutesTechniniaiApribojimai/komandinesEilutesTechniniaiApribojimai.typ"
 #include "apiPasirinkimas/apiPasirinkimas.typ"
+#include "papildomiAPIs/papildomiAPIs.typ"
 #include "libraryPasirinkimas/libraryPasirinkimas.typ"
 #include "programosKonfiguravimasPaleidimas/programosKonfiguravimasPaleidimas.typ"
 #include "vartotojoSasaja/vartotojoSasaja.typ"

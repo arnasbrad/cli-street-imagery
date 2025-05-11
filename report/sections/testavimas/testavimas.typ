@@ -5,3 +5,4 @@
 #include "unitTestavimas/unitTestavimas.typ"
 #include "UITestavimas/UITestavimas.typ"
 #include "nasumoTestavimas/nasumoTestavimas.typ"
+#include "suderinamumoTestavimas/suderinamumoTestavimas.typ"

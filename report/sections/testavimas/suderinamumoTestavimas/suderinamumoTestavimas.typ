@@ -5,9 +5,9 @@ operacinėse sistemose bei įvairiose terminalo aplinkose. Atsižvelgiant į pro
 testavimas buvo atliekamas rankiniu būdu, vykdant programą ir tikrinant jos pagrindines funkcijas šiose platformose:
 
 - Operacinės sistemos:
-  - Linux: programa buvo testuojama „Debian“ pagrindu veikiančioje distribucijoje.
-  - Windows: testavimas atliktas standartinėje „Windows“ aplinkoje (pvz., „Windows 10“ / „Windows 11“ naudojant „Command Prompt“ arba „PowerShell“).
-  - macOS: programa buvo testuojama „macOS“ operacinėje sistemoje.
+  - „Linux“: programa buvo testuojama „Debian“ pagrindu veikiančioje distribucijoje.
+  - „Windows“: testavimas atliktas standartinėje „Windows“ aplinkoje (pvz., „Windows 10“ / „Windows 11“ naudojant „Command Prompt“ arba „PowerShell“).
+  - „macOS“: programa buvo testuojama „macOS“ operacinėje sistemoje.
 
 - Terminalų emuliatoriai:
   - Nors specifiniai emuliatoriai nebuvo sistemingai dokumentuojami, testavimo metu naudoti standartiniai kiekvienos operacinės sistemos

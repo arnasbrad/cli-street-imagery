@@ -7,7 +7,7 @@ harry:
   page-total: 768
   date: 2003-06-21
 
-# example
+    # example
 electronic:
   type: Web
   title: Ishkur's Guide to Electronic Music
@@ -347,6 +347,64 @@ mapillary-uploader-guide:
     value: https://help.mapillary.com/hc/en-us/articles/360020825811-Mapillary-Desktop-Uploader-the-complete-guide
     date: 2025-04-20
   language: en-US
+
+traveltime-homepage:
+    type: Web
+    title: TravelTime Location API
+    publisher:
+        name: TravelTime Platform Ltd.
+        location: London, United Kingdom
+    url:
+        value: https://traveltime.com/
+        date: 2025-05-03
+    language: en
+
+traveltime-api-docs:
+    type: Web
+    title: TravelTime API Documentation
+    publisher:
+        name: TravelTime Platform Ltd.
+        location: London, United Kingdom
+    url:
+        value: https://docs.traveltime.com/api/overview/introduction
+        date: 2025-05-03
+    language: en
+    note: "Introduction page for the TravelTime API, explaining its core functionalities and use cases."
+
+imgur-homepage:
+    type: Web
+    title: "Imgur Homepage"
+    publisher:
+        name: Imgur Inc.
+        location: San Francisco, California
+    url:
+        value: https://imgur.com/
+        date: 2025-05-03
+    language: en
+
+imgur-api-docs:
+    type: Web
+    title: Imgur API Documentation
+    publisher:
+        name: Imgur Inc.
+        location: San Francisco, California
+    url:
+        value: https://apidocs.imgur.com/
+        date: 2025-05-03
+    language: en
+    note: "Official landing page for the Imgur API documentation, providing information on endpoints, authentication, and usage."
+
+jre-download:
+    type: Web
+    title: Download Java
+    publisher:
+        name: Oracle Corporation
+        location: Austin, Texas
+    url:
+        value: https://www.java.com/en/download/manual.jsp
+        date: 2025-05-03
+    language: en
+    note: "Official Oracle page providing manual download options and offline installers for Java Runtime Environment (JRE) for various operating systems."
 
 cc-by-sa-4:
   type: Web
