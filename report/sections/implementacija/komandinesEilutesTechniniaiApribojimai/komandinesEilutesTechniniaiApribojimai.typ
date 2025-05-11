@@ -14,7 +14,7 @@ Pagrindinės techninės limitacijos yra šios:
     vietos pasirinkimą, įvedimas reikalauja tikslaus adreso ar koordinačių įrašymo.
 - Ribotas spalvų palaikymas:
   - Skirtingi terminalų emuliatoriai ir operacinės sistemos palaiko skirtingą spalvų skaičių, nuo monochrominio vaizdo
-    iki 8, 16 ar 256 skirtingų spalvų (CCC https://marvinh.dev/blog/terminal-colors/).
+    iki 8, 16 ar 256 skirtingų spalvų @terminal-colors.
   - Kuo mažiau spalvų palaiko naudojamas terminalo emuliatorius, tuo daugiau informacijos prarandama atvaizduojant gatvės
     lygio vaizdus komandinėje eilutėje. Pateikto pavyzdžio (#ref(<color_comparison>)) kairėje nuotrauka atvaizduojama
     pasitelkiant tik 16 pagrindinių ANSI spalvų, tuo tarpu dešinėje matomos viso 16,7 milijono RGB spektro spalvų.
@@ -36,7 +36,7 @@ Pagrindinės techninės limitacijos yra šios:
     lygio fotografijų atvaizdavimas yra labai supaprastintas ir informatyvumu niekada neprilygs originalioms rastrinėms nuotraukoms.
 - Grafinių elementų trūkumas:
   - Skirtingi terminalų emuliatoriai nepalaiko įprastų grafinių elementų, tokių kaip jaustukai (angl. _emoji_), krypties
-    rodyklės (CCC https://www.jeffquast.com/post/ucs-detect-test-results/). Tai apsunkina informacijos perteikimo galimybes ir tenka ieškoti alternatyvų arba išvis atsisakyti tam
+    rodyklės @terminal-unicode-test. Tai apsunkina informacijos perteikimo galimybes ir tenka ieškoti alternatyvų arba išvis atsisakyti tam
     tikrų sprendimų.
 - Sudėtingesnė naudotojo sąsaja:
   - Naudotojai turi išmokti specifines programos komandas, jų sintaksę ir parametrus. Nėra vizualių meniu, mygtukų ar

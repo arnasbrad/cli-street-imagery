@@ -59,7 +59,7 @@ galimi keli sprendimo būdai:
 
 Modernūs fotoaparatai geba sukurti labai aukštos rezoliucijos nuotraukas. Šie vaizdai yra sudaryti iš kelių milijonų pikselių.
 Konvertuojant kiekvieną nuotraukos pikselį į atskirą ASCII simbolį, gautas rezultatas nesutips į jokį komerciškai prieinamą
-ekraną. Šios problemos sprendimas yra elementarus - sumažinti šrifto dydį. Šis sprendimas turi daug teigiamų savybių,
+ekraną. Šios problemos sprendimas yra elementarus -- sumažinti šrifto dydį. Šis sprendimas turi daug teigiamų savybių,
 pavyzdžiui, sumažinus šriftą iki pačio mažiausio leidžiamo dydžio, rezultatas dažnu atveju kokybe neatsiliks nuo orginalaus
 rastrinio vaizdo. Taip pat, kuo mažesnis yra gaunamas paveiksliukas, tuo lengviau žmogaus smegenys geba atpažinti jo turinį.
 Mažesnį plotą užimantys objektai dažniausiai suvokiami per jų formą arba figūrą, o didesni objetai suprantami kaip fonas
@@ -80,12 +80,12 @@ turėsime kiekvieną nuotraukos pikselį, tai atlikti galima pasitelkus viena i�
 #align(center)[Y=0.299×R+0.587×G+0.114×B]
 - Vidurkis – ši formulė yra pati paprasčiausia. Visos spalvos turi vienodą svorį skaičiuojant pilkos spalvos reikšmę.
 #align(center)[Y=(R+G+B)/3]
-- Reliatyvus šviesumas - naujesnė svertinio vidurkio formulės atmaina. Kaip ir ankstesnėje formulėje, koeficientai
+- Reliatyvus šviesumas -- naujesnė svertinio vidurkio formulės atmaina. Kaip ir ankstesnėje formulėje, koeficientai
   apskaičiuoti remiantis akies jautrumu šviesai. Tačiau šįkart atsižvelgiama į modernių vaizduoklių ir ekranų technologijas
   bei naujus tyrimus apie akies šviesos suvokimą.
 #align(center)[Y=0.2126×R+0.7152G+0.0722B]
 
-Čia R – raudonos RGB spalvos reikšmė, G - žalios spalvos reikšmė, o B - mėlynos.
+Čia R – raudonos RGB spalvos reikšmė, G -- žalios spalvos reikšmė, o B -- mėlynos.
 
 === ASCII simbolių rinkinio pasirinkimas
 
@@ -107,7 +107,7 @@ Pateiktuose pavyzdžiuose (#ref(<charset_comparison>)) bus naudojami šie, papra
 - Paprastas simbolių rinkinys `.:-=+\*\#\%\@`
 - Išplėstas simbolių rinkinys `.'^\",:;Il!i~+_-?][}{1)(|\\/*tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$`
 
-Kairėje pusėje matome medžio atvaizdą sugeneruotą su išplėstu simbolių rinkiniu, o dešinėje - paprastu. Naudojant paprastąjį
+Kairėje pusėje matome medžio atvaizdą sugeneruotą su išplėstu simbolių rinkiniu, o dešinėje -- paprastu. Naudojant paprastąjį
 rinkinį gauname atvaizdą, kuriame subjekto detalės skiriasi ryškiai skirtingais atspalviais. Nors detalumo nuotraukoje yra
 nedaug, palyginus su išplėstuoju simbolių rinkiniu. Šiame atspalvių skirtumai yra beveik nematomi, visas detalumo pojūtis
 sudaromas iš pačių simbolių. Šalutinis šio rinkinio efektas yra labai didelis nuotraukos triukšmingumas (angl. _noise_).
@@ -172,8 +172,8 @@ Norint pritaikyti šį algoritmą, pirmiausia reikia turėti vaizdą, paruoštą
 į pilkos spalvos tonų paletę. Tokiame vaizde kiekvienas pikselis nebeturi sudėtingos RGB spalvos informacijos, o yra apibūdinamas
 viena skaitine reikšme, nurodančia jo šviesumą. Dažniausiai ši reikšmė svyruoja intervale nuo 0 (visiškai juoda) iki 255
 (visiškai balta). Kitas būtinas komponentas yra ASCII simbolių rinkinys, kuris tarnaus kaip mūsų „ASCII paletė“. Svarbu,
-kad šis rinkinys būtų iš anksto surikiuotas pagal simbolių vizualinį tankį – nuo mažiausiai tankaus iki tankiausio.
-Pavyzdžiui, paprastas rinkinys galėtų būti „.:-=+\*\#\%\@“, kur „.“ yra mažiausio tankio, o „@“ – didžiausio.
+kad šis rinkinys būtų iš anksto surikiuotas pagal simbolių vizualinį tankį -- nuo mažiausiai tankaus iki tankiausio.
+Pavyzdžiui, paprastas rinkinys galėtų būti „.:-=+\*\#\%\@“, kur „.“ yra mažiausio tankio, o „@“ -- didžiausio.
 
 Pats konvertavimo procesas vyksta iteruojant per kiekvieną pilkų tonų nuotraukos pikselį. Kiekvienam aplankytam pikseliui
 yra nuskaitoma jo šviesumo reikšmė (skaičius tarp 0 ir 255). Ši reikšmė turi būti transformuota į indeksą, atitinkantį
@@ -233,7 +233,7 @@ technikomis, dažniausiai naudojant filtrus, tokius kaip Sobelio operatorius, si
 
 Pagrindinė algoritmo idėja yra ta, kad kontūrai vaizde atsiranda ten, kur gretimų pikselių šviesumo reikšmės smarkiai
 skiriasi. Algoritmas analizuoja kiekvieno pikselio kaimynystę, kad įvertintų šio šviesumo pokyčio stiprumą arba gradientą.
-Ten, kur pokytis yra didelis, laikoma, kad yra kontūras; kur pokytis mažas, pavyzdžiui, lygiuose, vientisos spalvos plotuose - kontūro nėra.
+Ten, kur pokytis yra didelis, laikoma, kad yra kontūras; kur pokytis mažas, pavyzdžiui, lygiuose, vientisos spalvos plotuose -- kontūro nėra.
 
 Algoritmo veikimas prasideda, kaip ir šviesumo algoritmo atveju, nuo vaizdo paruošimo – konvertavimo į pilkų atspalvių
 paletę. Kiekvienas pikselis čia taip pat apibūdinamas viena šviesumo reikšme. Toliau vykdomi šie žingsniai, siekiant
@@ -244,14 +244,14 @@ rasti kraštus nuotraukoje:
   aplink kuriuos galima suformuoti pilną 3x3 matricą. Pats kraštinis vieno pikselio pločio rėmelis dažniausiai lieka
   neapdorotas – jo pikseliai išlaiko pradinę pilko tono reikšmę.
 - Sobelio operatoriaus taikymas: kiekvienam vidiniam pikseliui (x, y) yra išskiriama jo 3x3 matrica. Šiai matricai yra
-  pritaikomi du Sobelio filtrai (angl. _kernels_) (CCC https://www.projectrhea.org/rhea/index.php/An_Implementation_of_Sobel_Edge_Detection):
+  pritaikomi du Sobelio filtrai (angl. _kernels_) @sobel-edge-detection:
   - sobelX = $mat(-1, 0, 1; -2, 0, 2; -1, 0, 1)$ – aptinka vertikalius kontūrus (pokyčius horizontalia kryptimi).
   - sobelY = $mat(-1, -2, -1; 0, 0, 0; 1, 2, 1)$ – aptinka horizontalius kontūrus (pokyčius vertikalia kryptimi).
 - Filtro reikšmių sumavimas: kiekvienas 3x3 matricos pikselio šviesumo reikšmė padauginama iš atitinkamo
   Sobelio filtro elemento, ir visi rezultatai sumuojami. Taip gaunamos dvi reikšmės: gx (gradiento X kryptimi įvertis)
   ir gy (gradiento Y kryptimi įvertis).
 - Gradiento stiprumo skaičiavimas: gautos gx ir gy reikšmės parodo, koks stiprus yra šviesumo pokytis atitinkamai
-  horizontalia ir vertikalia kryptimis. Bendra kontūro stiprumo reikšmė, apskaičiuojama naudojant Pitagoro teoremą (CCC https://proceedings.informingscience.org/InSITE2009/InSITE09p097-107Vincent613.pdf).
+  horizontalia ir vertikalia kryptimis. Bendra kontūro stiprumo reikšmė, apskaičiuojama naudojant Pitagoro teoremą @sobel-edge-detection-algorithm.
   Gauta reikšmė normalizuojama, kad tilptų į [0, 255] intervalą. Ši reikšmė parodo, kontūro ryškumą tame taške.
 - Kraštų invertavimas: algoritmas numato galimybę rezultatą invertuoti. Tai reiškia, kad ryškūs kontūrai gaus mažą reikšmę
   ir bus atvaizduojami tamsiai, o lygūs plotai gaus didelę reikšmę ir bus šviesūs. Tai dažnai yra pageidaujamas efektas
@@ -300,7 +300,7 @@ būti kuo arčiau tikrųjų kontūrų vaizde) ir minimalistinį efektą (vienas 
 kontūrą). Pritaikytas ASCII meno generavimui, šis algoritmas leidžia sukurti detalius, plonų linijų, „eskizą“ primenančius
 vaizdus, potencialiai atvaizduojant ir kontūrų kryptį.
 
-Algoritmo veikimas susideda iš kelių nuoseklių etapų (CCC https://www.educative.io/answers/what-is-canny-edge-detection), kurių kiekvienas remiasi ankstesnio etapo rezultatais:
+Algoritmo veikimas susideda iš kelių nuoseklių etapų @canny-edge-detection, kurių kiekvienas remiasi ankstesnio etapo rezultatais:
 - Pradinis paruošimas ir triukšmo mažinimas:
   - Kaip ir kitiems vaizdo apdorojimo algoritmams, pirmiausia reikalingas pilkų atspalvių vaizdas, kur kiekvienas pikselis
     turi reikšmę tarp 0 ir 255.
@@ -338,9 +338,9 @@ Algoritmo veikimas susideda iš kelių nuoseklių etapų (CCC https://www.educat
   - Rezultatas: gaunamas galutinis kontūrų žemėlapis, kuriame kontūrai yra ploni, geriau sujungti ir mažiau paveikti triukšmo.
 - Galutinis apdorojimas ir konvertavimas į ASCII meną:
   - Gautas kontūrų žemėlapis gali būti invertuojamas, jei norima, kad kontūrai būtų tamsūs šviesiame fone.
-  - Tikrinama kiekvieno pikselio kontūro reikšmė. Jei ji pakankamai didelė, kad būtų laikoma kontūru - programa parenka
+  - Tikrinama kiekvieno pikselio kontūro reikšmė. Jei ji pakankamai didelė, kad būtų laikoma kontūru -- programa parenka
     specialų ASCII simbolį, atspindintį kontūro kryptį: „-, |, /, \“ arba stipresnius jų variantus „═, ║, ╱, ╲“. Jei
-    pikselis nelaikomas kontūru ir yra fono dalis - jis paliekamas tuščias.
+    pikselis nelaikomas kontūru ir yra fono dalis -- jis paliekamas tuščias.
 
 Sugeneravus tą patį vaizdą su išplėstiniu simbolių rinkinių gauname (#ref(<canny_example>)) pateiktą rezultatą. Vėlgi
 kadangi nuotrauka neturėjo labai daug ryškių kraštinių, rezultatas vaizdo detalumu stipriai atsilieka nuo kitų algoritmų.
@@ -383,7 +383,7 @@ apžvelgsime keletą tokių papildomų konvertavimo būdų, kurie gali būti lai
 *Brailio rašto algoritmas* yra dar viena technika skaitmeniniams vaizdams konvertuoti į tekstinį meną, tačiau ji veikia iš
 esmės skirtingai nei šviesumo ar kontūrų aptikimo algoritmai. Užuot kiekvieną pikselį atvaizdavus vienu ASCII simboliu,
 šis metodas grupuoja originalaus vaizdo pikselius į mažus blokus (šiuo atveju, 2x4 pikselių) ir kiekvieną tokį bloką
-atitinka vienas specialus Brailio rašto simbolis (CCC https://www.pharmabraille.com/pharmaceutical-braille/the-braille-alphabet/). Brailio simboliai yra sudaryti iš 8 taškų matricos (2 stulpeliai, 4
+atitinka vienas specialus Brailio rašto simbolis @braille-alphabet. Brailio simboliai yra sudaryti iš 8 taškų matricos (2 stulpeliai, 4
 eilutės). Kiekvienas iš šių 8 taškų gali būti matomas arba nematomas, leidžiant sukurti 2⁸ = 256 skirtingas kombinacijas.
 Algoritmas išnaudoja šią savybę, susiedamas kiekvieno taško būseną su atitinkamo pikselio šviesumu 2x4 bloke.
 
@@ -453,7 +453,7 @@ Veikimo Principas:
 Tai reiškia, kad nepriklausomai nuo to, kas buvo pavaizduota originalioje nuotraukoje, šio metodo rezultatas visada bus
 vientisas stačiakampis, sudarytas iš identiškų simbolių. Iš pirmo žvilgsnio gali atrodyti, kad toks algoritmas yra
 bevertis, nes jis neperteikia jokios vizualinės informacijos iš pradinio vaizdo per simbolių variaciją. Tačiau jo tikroji
-paskirtis atsiskleidžia specifiniame kontekste - spalvoto ASCII meno generavime. Anksčiau išvardinti veiksmai naudojami
+paskirtis atsiskleidžia specifiniame kontekste -- spalvoto ASCII meno generavime. Anksčiau išvardinti veiksmai naudojami
 kaip paruošiamasis žingsnis, sukuriant tekstinį „drobės“ pagrindą. Nors patys simboliai yra vienodi, spausdinimo į
 komandinę eilutę etape kiekvienam simboliui bus priskiriama spalva, paimta iš atitinkamos originalaus vaizdo vietos.
 Tokiu būdu, nors tekstūra yra visiškai vienoda, spalvų variacijos sukuria galutinį vaizdą. Rezultatas primena pikselių
