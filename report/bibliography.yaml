@@ -502,12 +502,6 @@ ascii-mosaic-rendering:
     - Pandzi, Igor S.
     - Ahlberg, Jorgen
   date: 2015
-  parent:
-    type: Journal
-    title: Computer Graphics Forum
-    volume: 00
-    issue: 0
-    pages: 1-10
   publisher:
     name: John Wiley & Sons Ltd
   url:
