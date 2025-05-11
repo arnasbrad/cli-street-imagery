@@ -105,7 +105,7 @@ privalumai šio darbo kontekste:
 Nors „Typst“ siūlo daug privalumų, kaip palyginti naujas įrankis, jis turi ir tam tikrų aspektų,
 į kuriuos reikėjo atsižvelgti:
 
-- Ekosistema ir bendruomenė: „Typst“ paketų ir šablonų ekosistema bei vartotojų bendruomenė
+- Ekosistema ir bendruomenė: „Typst“ paketų ir šablonų ekosistema bei naudotojų bendruomenė
   yra mažesnė nei „LaTeX“. Tai reiškia, kad kai kuriems labai specifiniams poreikiams gali
   nebūti paruošto sprendimo (nors integruotas programavimas dažnai leidžia jį sukurti).
 - Institucijų įpratimas: kai kuriose akademinėse institucijose ar leidyklose „LaTeX“ gali

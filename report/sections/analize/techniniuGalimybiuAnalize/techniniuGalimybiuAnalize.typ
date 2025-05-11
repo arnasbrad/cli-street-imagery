@@ -26,15 +26,15 @@ Liekamasis apribojimas: Nors „Mapillary“ leido tęsti projektą, jos duomen�
 gali būti mažesnė nei „Google Street View“, kas yra techninis apribojimas galutinio produkto naudojimo geografijai.
 Taip pat, dėl to kad ši sąsaja yra nemokama, ji nėra ypatingai patikima, pavyzdžiui, ribojamos dėžės (angl. _bounding box_)
 užklausos dažnai yra atmetamos dėl per didelio bendro užklausų kiekio -- tenka laukti, kol „Mapillary“ serveriai bus mažiau
-naudojami. Šis laukimas yra pagrindinis veiksnys, lemiantis galimą vartotojo sąsajos vėlavimą keičiant vaizdus.
+naudojami. Šis laukimas yra pagrindinis veiksnys, lemiantis galimą naudotojo sąsajos vėlavimą keičiant vaizdus.
 
 ==== Terminalo aplinkos grafiniai apribojimai
 
 Kliūtis: Standartinė komandinės eilutės (terminalo) aplinka turi esminių grafinių galimybių apribojimų,
-lyginant su grafinėmis vartotojo sąsajomis (angl. _graphical user interface_ arba _GUI_). Tai tiesiogiai paveikė
-galimybes atvaizduoti „Street View“ vaizdus ir kurti vartotojo sąsają:
+lyginant su grafinėmis naudotojo sąsajomis (angl. _graphical user interface_ arba _GUI_). Tai tiesiogiai paveikė
+galimybes atvaizduoti „Street View“ vaizdus ir kurti naudotojo sąsają:
 
-Spalvų palaikymas: Daugelis standartinių terminalų emuliatorių ir populiarių terminalo vartotojo sąsajos
+Spalvų palaikymas: Daugelis standartinių terminalų emuliatorių ir populiarių terminalo naudotojo sąsajos
 (angl. _terminal user interface_ arba _TUI_) bibliotekų dėl atgalinio suderinamumo arba paprastumo dažnai palaiko ribotą
 spalvų paletę (pvz., 16 spalvų) arba neleidžia pilnai išnaudoti modernesnių terminalų galimybių
 (pavyzdžiui, 256 spalvų palaikymo).
@@ -42,7 +42,7 @@ Tai ženkliai apribotų galimybes tiksliai ir detaliai konvertuoti fotografinius
 išlaikant vizualinį aiškumą, jei būtų pasikliauta tik standartiniais įrankiais.
 
 Šrifto dydžio ir stiliaus variacijos: Terminalai natūraliai nepalaiko skirtingų šrifto dydžių ar stilių
-naudojimo viename ekrano lange, kas apsunkino intuityvios ir vizualiai struktūruotos vartotojo sąsajos elementų
+naudojimo viename ekrano lange, kas apsunkino intuityvios ir vizualiai struktūruotos naudotojo sąsajos elementų
 (pavyzdžiui, antraščių, mygtukų, informacinių blokų) kūrimą.
 
 Sprendimas/Poveikis:

@@ -1,7 +1,7 @@
 == Testavimo planas
 
 Šiame skyriuje apibrėžiamas programos testavimo planas, siekiant užtikrinti jos kokybę, funkcionalumą ir patogumą naudoti.
-Testavimas bus atliekamas keliais lygiais, apimant vienetinius testus, vartotojo sąsajos testavimą ir našumo
+Testavimas bus atliekamas keliais lygiais, apimant vienetinius testus, naudotojo sąsajos testavimą ir našumo
 bei suderinamumo patikrinimus.
 
 === Vienetiniai testai (angl. _unit tests_)

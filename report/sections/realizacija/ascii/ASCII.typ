@@ -32,7 +32,7 @@ Vaizdų sudarymas iš simbolių buvo skatinamas rašymo mašinėlių gamintojų 
 Antrasis ASCII meno populiarumo šuolis buvo matomas XX amžiaus viduryje, kai vis daugiau žmonių turėjo prieigą prie pirmųjų
 kompiuterių. Žinoma, tais laikais kompiuteriai dar neturėjo grafinių sąsajų, todėl vaizdus reprezentuoti buvo galima tik ASCII
 simboliais. Spausdinti ir masiškai platinti teksto simbolių meną kompiuterio pagalba buvo žymiai paprasčiau, nei naudojantis
-spausdinimo mašinėle. Tačiau sparčiai populiarėjant grafinėms vartotojo sąsajoms, ASCII menas buvo pakeistas rastrinės grafikos.
+spausdinimo mašinėle. Tačiau sparčiai populiarėjant grafinėms naudotojo sąsajoms, ASCII menas buvo pakeistas rastrinės grafikos.
 Šiomis dienomis ASCII menas naudojimas nišiniuose sistemose ir programose dėl savo stilistinių priežasčių ir nostalgijos.
 
 == Pasiruošimas konvertuoti nuotraukas Į ASCII

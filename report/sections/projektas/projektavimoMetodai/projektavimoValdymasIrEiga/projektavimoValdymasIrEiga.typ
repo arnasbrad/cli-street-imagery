@@ -12,7 +12,7 @@ Projekto eiga buvo valdoma dinamiškai, reaguojant į kylančius iššūkius ir 
   (ASCII generavimo metodai, „Street View“ tipo sąsajų galimybės ir apribojimai), siekiant įvertinti bendrą
   idėjos įgyvendinamumą.
 2. Komponentų identifikavimas: pagrindinės sistemos dalys (pvz., prieiga prie „Mapillary“, vaizdo konvertavimas į ASCII,
-  terminalo vartotojo sąsajos (TUI) modulis, navigacijos logika) buvo identifikuotos kaip atskiri funkciniai blokai.
+  terminalo naudotojo sąsajos (TUI) modulis, navigacijos logika) buvo identifikuotos kaip atskiri funkciniai blokai.
 3. Iteracinis kūrimas ir integravimas:
   - Buvo kuriamos ir testuojamos nedidelės, atskiros funkcionalumo dalys (pvz., pirminis užklausų siuntimas, 
     bazinis ASCII generavimas).

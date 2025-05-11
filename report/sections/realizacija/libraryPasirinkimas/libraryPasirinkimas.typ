@@ -1,9 +1,9 @@
 #set text(lang: "lt", region: "lt")
 == Vartotojo sąsajos bibliotekos pasirinkimas<tui-bibliotekos-pasirinkimas>
 
-Kuriant komandinės eilutės aplikaciją, ypač interaktyvią, svarbus sprendimas yra vartotojo sąsajos
+Kuriant komandinės eilutės aplikaciją, ypač interaktyvią, svarbus sprendimas yra naudotojo sąsajos
 (angl. _Terminal User Interface_ – TUI) realizavimo būdas. Nors projekto pagrindinis tikslas buvo atvaizduoti
-gatvių vaizdus ASCII formatu, reikėjo mechanizmo vartotojo įvesties (navigacijos komandų) apdorojimui ir
+gatvių vaizdus ASCII formatu, reikėjo mechanizmo naudotojo įvesties (navigacijos komandų) apdorojimui ir
 informacijos (pvz., pagalbos, būsenos pranešimų) pateikimui. Šiame skyriuje aptariamas TUI sprendimo pasirinkimo
 procesas. Kaip minėta ankstesniuose skyriuose, pagrindiniu aplikacijos karkasu buvo pasirinktas
 „Cats Effect“, todėl TUI sprendimas turėjo derėti prie šios ekosistemos.
@@ -11,12 +11,12 @@ procesas. Kaip minėta ankstesniuose skyriuose, pagrindiniu aplikacijos karkasu 
 === Pradinis bandymas: „tui-scala“
 
 Pradiniame etape buvo svarstoma galimybė naudoti egzistuojančią TUI biblioteką, siekiant paspartinti
-kūrimo procesą ir pasinaudoti paruoštais vartotojo sąsajos komponentais (langais, lentelėmis, sąrašais).
+kūrimo procesą ir pasinaudoti paruoštais naudotojo sąsajos komponentais (langais, lentelėmis, sąrašais).
 Buvo pasirinkta išbandyti biblioteką „tui-scala“ @tui-scala-repo. Tai yra „Scala“
 kalbai skirta sąsaja (angl. _wrapper_) populiariai „Rust“ kalbos bibliotekai „tui-rs“, kuri siūlo deklaratyvų
 būdą kurti sudėtingas terminalo sąsajas.
 
-Tikėtasi, kad „tui-scala“ leis lengvai sukurti struktūrizuotą vartotojo sąsają, galbūt su atskirais langais
+Tikėtasi, kad „tui-scala“ leis lengvai sukurti struktūrizuotą naudotojo sąsają, galbūt su atskirais langais
 informacijai ar navigacijos parinktims.
 
 === „tui-scala“ apribojimai ir iššūkiai
@@ -34,7 +34,7 @@ Tai ženkliai sumažino generuojamo ASCII vaizdo detalumą ir vizualinį patrauk
 išnaudoti terminalo ekrano plotą pačiam ASCII vaizdui. Kuo didesnė skiriamoji geba (simbolių skaičius), tuo detalesnį
 vaizdą galima pavaizduoti. Sudėtingesni „tui-scala“ komponentai (pvz., rėmeliai, atskiri langai meniu) būtų užėmę
 brangų ekrano plotą, kuris galėjo būti panaudotas pačiam vaizdui. Kadangi pagrindinė aplikacijos funkcija –
-vaizdo atvaizdavimas, o vartotojo sąveika apsiriboja keliomis paprastomis komandomis (navigacija, pagalba, išėjimas),
+vaizdo atvaizdavimas, o naudotojo sąveika apsiriboja keliomis paprastomis komandomis (navigacija, pagalba, išėjimas),
 pilnavertės TUI bibliotekos teikiamos galimybės tapo nebereikalingos ir netgi trukdančios.
 
 === Sprendimas: nuosavas TUI modulis
@@ -47,7 +47,7 @@ kode, remiasi keliomis pagrindinėmis technologijomis ir principais:
 Ji suteikia galimybę žemu lygiu sąveikauti su terminalu:
   - Įjungti „raw“ režimą (_terminal.enterRawMode()_), kuris leidžia nuskaityti kiekvieną klavišo paspaudimą iš karto,
   neatliekant standartinio eilutės buferizavimo ar redagavimo.
-  - Tiesiogiai nuskaityti vartotojo įvestį (_terminal.reader().read()_).
+  - Tiesiogiai nuskaityti naudotojo įvestį (_terminal.reader().read()_).
   - Valdyti terminalo būseną, pavyzdžiui, išvalyti ekraną naudojant terminalo galimybes
   (_terminal.puts(InfoCmp.Capability.clear_screen)_).
 2. Tiesioginis ANSI spalvų kodų generavimas: siekiant įveikti 16 spalvų apribojimą, buvo realizuota funkcija,

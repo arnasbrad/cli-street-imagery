@@ -4,7 +4,7 @@
 ASCII menas, paremtas tekstiniais simboliais vaizdui kurti, nebūtinai reikalauja spalvų. Monochromatinės jo variacijos,
 kuriose šviesumo lygiai perteikiami skirtingais simboliais ar jų tankiu, išlieka populiarios ir efektyvios. Vis dėlto,
 spalvų integravimas į ASCII meną suteikia papildomą dimensiją, leidžiančią lengviau atpažinti nuotraukoje vaizduojamus
-objektus ir detales. Norint užtikrinti optimalų vaizdo aiškumą ir pritaikyti vaizdą platesniam vartotojų ratui,
+objektus ir detales. Norint užtikrinti optimalų vaizdo aiškumą ir pritaikyti vaizdą platesniam naudotojų ratui,
 įskaitant tuos, kurie susiduria su spalvų matymo iššūkiais, į pagalbą pasitelkiami spalvų filtrai.
 
 Vienas iš esminių vaizdo aiškumo aspektų yra kontrastas. Padidinto kontrasto filtras būtent tam ir skirtas. Jis

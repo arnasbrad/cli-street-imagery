@@ -6,9 +6,9 @@
 Kuriama sistema yra specializuota komandinės eilutės (angl. _Command line interface_) aplikacija, skirta interaktyviam gatvės lygio panoraminių
 vaizdų naršymui. Pagrindinė jos funkcija – gauti geografinės vietovės panoraminį vaizdą per išorinę paslaugą (konkrečiai,
 planuojama naudoti „Mapillary“ API), apdoroti gautą vaizdinę medžiagą realiu laiku konvertuojant ją į tekstinį
-ASCII formatą, ir atvaizduoti šį rezultatą tiesiogiai vartotojo terminalo lange.
+ASCII formatą, ir atvaizduoti šį rezultatą tiesiogiai naudotojo terminalo lange.
 
-Sistema neapsiribos vien statišku vaizdų rodymu. Ji suteiks vartotojui galimybę interaktyviai naviguoti po virtualią
+Sistema neapsiribos vien statišku vaizdų rodymu. Ji suteiks naudotojui galimybę interaktyviai naviguoti po virtualią
 erdvę: judėti pirmyn ir atgal numanoma kelio kryptimi. Ši navigacija bus valdoma per klaviatūros komandas, pritaikytas
 specifinei CLI aplinkai. ASCII konvertavimo procesas bus optimizuotas siekiant ne tik greitaveikos, bet ir kuo aiškesnio
 erdvinės informacijos bei objektų kontūrų perteikimo naudojant ribotą simbolių rinkinį.
@@ -18,7 +18,7 @@ primenantį populiarų internetinį žaidimą „Geoguessr“ @geoguessr. Šio r
 pademonstruoti visas programos galimybes (judėjimą, sąveiką), bet ir padaryti pirmąją pažintį su įrankiu įdomesne bei intuityvesne.
 
 Šiame projekte kuriama visa sistema nuo pradžios iki galo: nuo sąsajos su išoriniu API, vaizdų apdorojimo algoritmo,
-ASCII atvaizdavimo logikos iki vartotojo sąsajos ir navigacijos valdymo komandinėje eilutėje. Sistema kuriama kaip
+ASCII atvaizdavimo logikos iki naudotojo sąsajos ir navigacijos valdymo komandinėje eilutėje. Sistema kuriama kaip
 savarankiškas įrankis, nereikalaujantis papildomų grafinių bibliotekų ar aplinkų, išskyrus standartinį terminalą.
 
 === Bendras veiklos tikslas ir pagrįstumas
@@ -26,13 +26,13 @@ savarankiškas įrankis, nereikalaujantis papildomų grafinių bibliotekų ar ap
 Pagrindinis šio projekto veiklos tikslas yra ištirti ir praplėsti komandinės eilutės sąsajos (CLI) taikymo ribas,
 demonstruojant, kaip sudėtinga vizualinė ir geografinė informacija gali būti interaktyviai pateikiama ir valdoma
 netradicinėje, tekstinėje aplinkoje. Siekiama ne tik įrodyti techninį tokios sistemos įgyvendinamumą, bet ir įvertinti
-jos potencialų naudojimo patogumą bei praktiškumą specifinei vartotojų grupei – informacinių technologijų profesionalams
+jos potencialų naudojimo patogumą bei praktiškumą specifinei naudotojų grupei – informacinių technologijų profesionalams
 ir entuziastams, kurie dažnai dirba terminalo aplinkoje.
 
 Numatoma nauda yra daugiausia nekomercinė:
 - Technologinis eksperimentas ir ribų tyrimas: projektas praplės supratimą apie CLI galimybes ir ASCII meno potencialą
   atvaizduojant dinamišką vizualinę informaciją, aktyviai ieškant taškų, kur ši technologija pasiekia savo limitus.
-- Žmogaus-kompiuterio sąveikos tyrimas: bus gauta įžvalgų apie vartotojo patirtį sąveikaujant su geografine informacija
+- Žmogaus-kompiuterio sąveikos tyrimas: bus gauta įžvalgų apie naudotojo patirtį sąveikaujant su geografine informacija
   neįprastoje sąsajoje.
 - Potencialus nišinis įrankis: sukurta programa, įskaitant jos žaidimo režimą, galėtų tapti įdomiu ir galbūt net naudingu
   įrankiu tiems, kas vertina galimybę greitai pasiekti informaciją ir pramogauti nepaliekant komandinės eilutės aplinkos.
@@ -47,7 +47,7 @@ gali būti sėkmingai realizuota pasitelkiant ASCII reprezentaciją komandinės 
 Toks precedentas turi potencialą įkvėpti platesnę kūrėjų ir technologijų entuziastų bendruomenę permąstyti komandinės
 eilutės dizaino galimybes ir jos taikymo sritis. Tai gali pasireikšti įvairiai: nuo
 interaktyvesnių duomenų analizės ir vizualizavimo įrankių kūrimo, vaizdingesnių ir informatyvesnių serverių ar procesų
-stebėjimo sąsajų iki prieinamesnių alternatyvų vartotojams, dirbantiems riboto pralaidumo tinkluose ar naudojantiems
+stebėjimo sąsajų iki prieinamesnių alternatyvų naudotojams, dirbantiems riboto pralaidumo tinkluose ar naudojantiems
 specializuotą įrangą. Galiausiai, šis projektas, nors ir nišinis, gali prisidėti prie subtilaus komandinės eilutės suvokimo
 pokyčio – iš grynai utilitaraus, kartais bauginančio įrankio į lanksčią, galingą ir potencialiai labai kūrybišką platformą inovacijoms.
 
@@ -56,18 +56,18 @@ pokyčio – iš grynai utilitaraus, kartais bauginančio įrankio į lanksčią
 Šiame skyriuje apžvelgiami egzistuojantys sprendimai, susiję su projekto tikslais. Analizė padalinta į dvi dalis: pirmojoje
 nagrinėjami kiti vaizdų į ASCII meną konvertavimo įrankiai, kurie sudaro technologinį pagrindą vizualinės informacijos
 pateikimui tekstinėje aplinkoje. Antrojoje dalyje bus analizuojami populiarios egzistuojančios programos, kurių alternatyvios
-versijos buvo išleistos išskirtinai naudojant komandinės eilutės vartotojo sąsajas.
+versijos buvo išleistos išskirtinai naudojant komandinės eilutės naudotojo sąsajas.
 
 ==== Nuotraukų konvertavimo į ASCII įrankiai
 
 Vaizdo konvertavimas į ASCII meną yra nusistovėjusi technika, leidžianti apytiksliai atkurti vaizdinę informaciją naudojant
 standartinius spausdinamus simbolius. Egzistuoja įvairių įgyvendinimų, kurie skiriasi prieinamumu, lankstumu ir pritaikymo sritimis.
 
-Internetiniai konvertavimo įrankiai -- tai labiausiai paplitę ir vartotojui draugiškiausi įrankiai, skirti greitam ir paprastam
+Internetiniai konvertavimo įrankiai -- tai labiausiai paplitę ir naudotojui draugiškiausi įrankiai, skirti greitam ir paprastam
 vienkartiniam vaizdų konvertavimui. Jie nereikalauja jokios techninės konfigūracijos ar diegimo, sugeneruotą rezultatą
 naudotojas gali nusikopijuoti į iškarpinę. Šių įrankių pavyzdžiai:
 
-- „Ascii-art-generator.org“ @ascii-art-generator: Ši svetainė yra tipiškas pavyzdys, leidžiantis vartotojui įkelti
+- „Ascii-art-generator.org“ @ascii-art-generator: Ši svetainė yra tipiškas pavyzdys, leidžiantis naudotojui įkelti
   paveikslėlį (pvz., JPG, PNG, GIF) arba pateikti jo URL. Vartotojas gali pasirinkti keletą pagrindinių parametrų:
     - Išvesties dydis: nurodomas pasirenkant norimą rezultato plotį, kas lemia detalumo lygį.
     - Simbolių rinkinys: nėra simbolių rinkinio pasirinkimo.
@@ -135,7 +135,7 @@ geografiniu turiniu, taip praplečiant suvokimą apie komandinės eilutės galim
 
 Pirmojoje dalyje išnagrinėjus specifinius vaizdo konvertavimo į ASCII meną įrankius, antrojoje dalyje dėmesys krypsta į
 platesnį kontekstą – egzistuojančias komandinės eilutės (angl. _Command-line interface_) alternatyvas plačiai naudojamoms paslaugoms,
-kurios tradiciškai pasiekiamos per grafines vartotojo sąsajas (angl. _Graphical user interfaces_) arba interneto naršykles.
+kurios tradiciškai pasiekiamos per grafines naudotojo sąsajas (angl. _Graphical user interfaces_) arba interneto naršykles.
 Šios analizės tikslas – įvertinti, kaip sudėtingos, interaktyvios ir dažnai vizualiai turtingos paslaugos adaptuojamos
 ribotai, tekstinei komandinės eilutės aplinkai, kokie yra tokių sprendimų privalumai, trūkumai ir pritaikymo sritys.
 Tai padės geriau suprasti šio projekto (interaktyvaus gatvių vaizdų naršymo komandinėje eilutėje) potencialą ir iššūkius,
@@ -149,12 +149,12 @@ egzistuoja ir komandinės eilutės alternatyvos, skirtos el. pašto valdymui tie
 - „mutt“: klasikinis, itin konfigūruojama komandinės eilutės el. pašto klientinė programa, dažnai naudojama su „Gmail“ per IMAP ar
   SMTP protokolus. Nors senas, jis vis dar populiarus tarp programuotojų ir sistemų administratorių dėl savo efektyvumo ir lankstumo.
 - „himalaya“: modernus, Rust kalba parašyta el. pašto klientinė programa, palaikanti „Gmail“ ir kitas IMAP paslaugas,
-  galinti pasiūlyti patogesnę vartotojo patirtį nei tradiciniai įrankiai.
+  galinti pasiūlyti patogesnę naudotojo patirtį nei tradiciniai įrankiai.
 - „lieer“: įrankis, skirtas „Gmail“ sinchronizavimui ir darbui neprisijungus, integruojamas su kitais komandinės eilutės įrankiais.
 
 Spotify“ paslauga yra neatsiejama nuo vizualiai turtingos grafinės sąsajos – albumų viršeliai, atlikėjų nuotraukos,
 kuruojami grojaraščiai su paveikslėliais, dinamiškos rekomendacijos. Atrodytų, kad tokia paslauga sunkiai įsivaizduojama
-tekstinėje aplinkoje, tačiau egzistuoja keletas populiarių tekstinės vartotojo sąsajos klientinių programų:
+tekstinėje aplinkoje, tačiau egzistuoja keletas populiarių tekstinės naudotojo sąsajos klientinių programų:
 - „spotify-tui“: populiari klientinė programa, veikianti terminale bei siūlanti į grafinę panašią sąsają, kuri yra valdomą
   klaviatūra. Reikalauja oficialaus „Spotify“ demono (angl. _daemon_) veikimui fone.
 - „ncspot“: panašus į „spotify-tui“, naudojantis „ncurses“ biblioteką ir siūlantis grojaraščių naršymo, paieškos ir grojimo valdymo funkcijas.
@@ -163,9 +163,9 @@ tekstinėje aplinkoje, tačiau egzistuoja keletas populiarių tekstinės vartoto
 
 Palyginimas su grafinėmis „Gmail“ ir „Spotify“ sąsajomis:
 - Vartotojo sąsaja ir patirtis: šios klientinės programos naudoja tekstinę sąsają, valdomą klaviatūra. Tai reikalauja
-  išmokti komandas ir klavišų kombinacijas, tačiau patyrusiems vartotojams leidžia dirbti labai greitai ir efektyviai.
+  išmokti komandas ir klavišų kombinacijas, tačiau patyrusiems naudotojams leidžia dirbti labai greitai ir efektyviai.
   Trūksta vizualinio patrauklumo, sudėtinga atvaizduoti HTML formato turinį ar peržiūrėti įterptus paveikslėlius. Tuo tarpu grafinė
-  vartotojo sąsaja siūlo intuityvią, pelės valdomą sąsają, lengvai suprantamą pradedantiesiems, ir pilną vizualinį turinio atvaizdavimą.
+  naudotojo sąsaja siūlo intuityvią, pelės valdomą sąsają, lengvai suprantamą pradedantiesiems, ir pilną vizualinį turinio atvaizdavimą.
 - Funkcionalumas: pagrindinės funkcijos originalių programų funkcijos yra prieinamos komandinės eilutės alternatyvose.
   Tačiau pažangesnės funkcijos dažnai paremtos sudėtingomis grafinėmis sąsajomis gali būti neprieinamos arba sunkiau naudojamos.
 - Našumas ir resursų naudojimas: lyginant su grafinių sąsajų programomis, komandinės eilutės alternatyvos naudoja minimaliai
@@ -176,11 +176,11 @@ Palyginimas su grafinėmis „Gmail“ ir „Spotify“ sąsajomis:
 Analizė rodo, kad net sudėtingos, į grafines varotojo sąsajas orientuotos paslaugos kaip „Gmail“ ir „Spotify“ gali būti
 sėkmingai adaptuotos komandinei eilutei. Šios alternatyvos dažniausiai siūlo didesnį našumą, mažesnį resursų naudojimą,
 geresnes automatizavimo galimybes ir klaviatūra paremtą naudojimą. Tačiau tai pasiekiama aukojant vizualinį patrauklumą,
-intuityvumą pradedantiesiems vartotojams ir kartais dalį grafinės sąsajos siūlomo funkcionalumo, ypač susijusio su įvairiu
+intuityvumą pradedantiesiems naudotojams ir kartais dalį grafinės sąsajos siūlomo funkcionalumo, ypač susijusio su įvairiu
 medijos turiniu ar sudėtingomis vizualinėmis sąveikomis. Šie pavyzdžiai yra svarbūs šio projekto kontekste, nes jie įrodo,
 jog interaktyvios ir funkcionalios patirtys yra įmanomos komandinėje eilutėje net ir toms užduotims, kurios atrodo
 neatsiejamos nuo grafinių sąsajų. Nors gatvių vaizdų naršymas yra itin vizuali užduotis, egzistuojantys komandinės eilutės
 sprendimai rodo, kad tekstinė reprezentacija (šiuo atveju, ASCII menas) kartu su gerai apgalvota interaktyvia navigacija
 gali sukurti veikiančią ir potencialiai naudingą alternatyvą grafinėmis sąsajomis pagrįstoms sistemoms, užpildant nišą
-vartotojams, vertinantiems komandinės eilutės privalumus. Iššūkis lieka efektyviai perteikti vizualinę informaciją ir
+naudotojams, vertinantiems komandinės eilutės privalumus. Iššūkis lieka efektyviai perteikti vizualinę informaciją ir
 sukurti intuityvią navigacijos sistemą tekstinėje aplinkoje.
