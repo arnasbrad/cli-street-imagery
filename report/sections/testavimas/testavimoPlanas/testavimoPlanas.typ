@@ -1,7 +1,7 @@
 == Testavimo planas
 
 Šiame skyriuje apibrėžiamas programos testavimo planas, siekiant užtikrinti jos kokybę, funkcionalumą ir patogumą naudoti.
-Testavimas bus atliekamas keliais lygiais, apimant vienetinius testus, vartotojo sąsajos testavimą ir našumo
+Testavimas bus atliekamas keliais lygiais, apimant vienetinius testus, naudotojo sąsajos testavimą ir našumo
 bei suderinamumo patikrinimus.
 
 === Vienetiniai testai (angl. _unit tests_)
@@ -19,9 +19,9 @@ izoliuotai. Bus siekiama padengti svarbiausias programos dalis:
 - Pagalbinių funkcijų testavimas: kitos svarbios loginės dalys, tokios kaip navigacijos logika,
   koordinačių apdorojimas, bus tikrinamos atskirais vienetiniais testais.
 
-=== Vartotojo sąsajos (TUI) testavimas
+=== Naudotojo sąsajos (TUI) testavimas
 
-Vartotojo sąsajos testavimas bus orientuotas į naudojimo patogumą ir intuityvumą komandinės eilutės aplinkoje:
+Naudotojo sąsajos testavimas bus orientuotas į naudojimo patogumą ir intuityvumą komandinės eilutės aplinkoje:
 
 - Intuityvumas ir valdymas: bus tikrinama, ar programos valdymas klaviatūra yra aiškus, ar komandos yra lengvai
   įsimenamos ir ar naudotojas gali lengvai atlikti norimus veiksmus (pvz., naršyti, keisti nustatymus, gauti pagalbą).

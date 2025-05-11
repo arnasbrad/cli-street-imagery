@@ -1,10 +1,10 @@
 #set text(lang: "lt", region: "lt")
 
-== Vartotojo sąsajos ir navigacijos projektavimas<ui-navigacijos-projektavimas>
+== Naudotojo sąsajos ir navigacijos projektavimas<ui-navigacijos-projektavimas>
 
-Sukūrus nuosavą TUI modulį, kitas svarbus etapas buvo suprojektuoti vartotojo sąsają (UI) ir sąveikos (UX) modelį,
+Sukūrus nuosavą TUI modulį, kitas svarbus etapas buvo suprojektuoti naudotojo sąsają (UI) ir sąveikos (UX) modelį,
 kuris leistų intuityviai naršyti gatvių vaizdus ASCII formatu komandinės eilutės aplinkoje. Pagrindinis iššūkis –
-suderinti poreikį pateikti kuo detalesnį vaizdą su būtinybe suteikti vartotojui valdymo įrankius ir grįžtamąjį ryšį,
+suderinti poreikį pateikti kuo detalesnį vaizdą su būtinybe suteikti naudotojui valdymo įrankius ir grįžtamąjį ryšį,
 visa tai darant tekstinėje aplinkoje be tradicinių grafinių elementų.
 
 === Pagrindiniai projektavimo principai
@@ -24,14 +24,14 @@ Projektuojant sąsają, vadovautasi keliais pagrindiniais principais:
 === Sąveikos modelis
 
 Pasirinktas sąveikos modelis yra pagrįstas būsenomis (angl. _state-based_) ir valdomas vieno simbolio komandomis.
-Pagrindinė būsena yra ASCII gatvės vaizdo rodymas. Vartotojui paspaudus tam tikrą klavišą, programa pereina į kitą
+Pagrindinė būsena yra ASCII gatvės vaizdo rodymas. Naudotojui paspaudus tam tikrą klavišą, programa pereina į kitą
 būseną arba atlieka veiksmą:
 
-- Vaizdo rodymas (pagrindinė būsena): rodydamas vaizdą, programa laukia vartotojo įvesties.
+- Vaizdo rodymas (pagrindinė būsena): rodydamas vaizdą, programa laukia naudotojo įvesties.
 - Veiksmo sužadinimas: klavišo paspaudimas (pvz., _n_, _h_, _g_, _q_) inicijuoja perėjimą.
 - Informacijos pateikimas bei parinkčių rodymas: paspaudus pagalbos (_h_) ar navigacijos (_n_) klavišą, ekranas
   išvalomas, ir vietoje pagrindinio vaizdo laikinai parodoma tekstinė informacija arba galimų veiksmų sąrašas
-  (pvz., navigacijos krypčių), sugeneruotas kaip ASCII tekstas. Programa pereina į laukimo būseną, kol vartotojas
+  (pvz., navigacijos krypčių), sugeneruotas kaip ASCII tekstas. Programa pereina į laukimo būseną, kol naudotojas
   pasirenka vieną iš pateiktų parinkčių arba grįžta.
 - Navigacija: pasirinkus navigacijos kryptį, inicijuojamas naujo vaizdo duomenų gavimas, po kurio vėl perpiešiamas
   pagrindinis vaizdas su nauja lokacija.
@@ -41,7 +41,7 @@ būseną arba atlieka veiksmą:
 
 Šis modelis leidžia išlaikyti švarią pagrindinę sąsają (tik vaizdas) ir pateikti papildomas funkcijas pagal poreikį.
 
-=== Vartotojo sąsajos elementai
+=== Naudotojo sąsajos elementai
 
 Dėl pasirinkto minimalistinio požiūrio, sąsajos elementai yra labai paprasti:
 
@@ -54,26 +54,26 @@ Dėl pasirinkto minimalistinio požiūrio, sąsajos elementai yra labai paprasti
 
 Navigacija yra viena pagrindinių interaktyvių funkcijų. Ji realizuota taip:
 
-1. Vartotojas inicijuoja navigacijos režimą paspausdamas tam skirtą klavišą (_n_).
+1. Naudotojas inicijuoja navigacijos režimą paspausdamas tam skirtą klavišą (_n_).
 2. Sistema, priklausomai nuo konfigūracijos ar aptiktų „Mapillary“ duomenų tipo, pateikia galimų judėjimo krypčių sąrašą
   (kaip tekstinį ASCII vaizdą).
-3. Vartotojas pasirenka vieną iš krypčių paspausdamas atitinkamą klavišą (pvz., skaičių ar raidę).
+3. Naudotojas pasirenka vieną iš krypčių paspausdamas atitinkamą klavišą (pvz., skaičių ar raidę).
 4. Programa kreipiasi į „Mapillary“, gauna naujos vietos vaizdo duomenis ir perpiešia ekraną su nauju ASCII vaizdu.
 
-=== Grįžtamasis ryšys vartotojui
+=== Grįžtamasis ryšys naudotojui
 
 Grįžtamasis ryšys tekstinėje sąsajoje yra ribotas, bet užtikrinamas keliais būdais:
 
 - Ekrano pokyčiai: ekrano išvalymas ir naujo turinio (vaizdo ar tekstinės informacijos) atvaizdavimas aiškiai parodo,
   kad įvyko perėjimas tarp būsenų ar įvykdytas veiksmas.
-- Tiesioginis atsakas: dėl „raw“ režimo, vartotojas mato greitą reakciją į klavišų paspaudimus
+- Tiesioginis atsakas: dėl „raw“ režimo, naudotojas mato greitą reakciją į klavišų paspaudimus
   (nors duomenų gavimas iš „Mapillary“ gali užtrukti).
 - Klaidų pranešimai: įvykus klaidai (pvz., nepavykus gauti duomenų iš „API“), pateikiamas tekstinis klaidos pranešimas.
 
 === Išvada
 
-Projektuojant šios ASCII „Street View“ aplikacijos vartotojo sąsają ir navigaciją, pagrindinis dėmesys skirtas
+Projektuojant šios ASCII „Street View“ aplikacijos naudotojo sąsają ir navigaciją, pagrindinis dėmesys skirtas
 balansui tarp maksimalaus informatyvumo (detalaus ASCII vaizdo) ir naudojimo paprastumo komandinės eilutės aplinkoje.
 Pasirinktas minimalistinis, būsenomis paremtas sąveikos modelis su laikinomis tekstinėmis persidengimo sritimis leido
 įgyvendinti pagrindines naršymo funkcijas, neaukojant ekrano ploto pagrindiniam vaizdui. Nors toks sprendimas
-reikalauja vartotojo adaptacijos prie neįprastos sąsajos, jis atspindi komandinės eilutės aplinkos specifiką ir galimybes.
+reikalauja naudotojo adaptacijos prie neįprastos sąsajos, jis atspindi komandinės eilutės aplinkos specifiką ir galimybes.

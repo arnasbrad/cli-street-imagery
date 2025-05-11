@@ -1,6 +1,6 @@
 === Naudotojo sąsajos specifikacija
 
-Šiame skyriuje pristatysime kuriamos komandinės eilutės programos vartotojo sąsajos prototipą. Prototipas parodo
+Šiame skyriuje pristatysime kuriamos komandinės eilutės programos naudotojo sąsajos prototipą. Prototipas parodo
 pagrindines sistemos dalis: pagrindinį „Street View" vaizdą, „Config" nustatymų langą ir „Help" pagalbos skiltį. Šie
 prototipai padeda perteikti esminę programos struktūrą, navigacijos elementus ir bendrą stilių, kurį matysime galutiniame
 produkte. Prototipo dizainas yra pritaikytas komandinei eilutei: minimalistinis, tekstinis, su vienspalve spalvų gama.
@@ -19,7 +19,7 @@ Programos prototipo langai:
     image("/images/main_page.png", width: 15cm),
     caption: [Pagrindinio „Street View“ lango prototipas.],
   ) <main_page>
-  Paskirtis: tai pagrindinis programos langas, kuriame vartotojas matys ir sąveikaus su pagrindiniu programos funkcionalumu --
+  Paskirtis: tai pagrindinis programos langas, kuriame naudotojas matys ir sąveikaus su pagrindiniu programos funkcionalumu --
   navigacija gatvės lygio vaizduose. Per apačioje esantį įvesties langą naudotojas galės įvesti norimos vietos koordimates
   arba adresą. Taip pat apačioje bus rodomi galimi įvesties mygtukai leidžiantys naudotojui naviguoti.
 - Konfigūracijos langas „Config“ (#ref(<config_page>))
@@ -27,7 +27,7 @@ Programos prototipo langai:
     image("/images/config_page.png", width: 15cm),
     caption: [Konfigūracijos „Config“ lango prototipas.],
   ) <config_page>
-  Paskirtis: šis langas, leidžia vartotojui keisti įvairius programos nustatymus. Čia bus galima konfigūruoti programą:
+  Paskirtis: šis langas, leidžia naudotojui keisti įvairius programos nustatymus. Čia bus galima konfigūruoti programą:
   įvesti API raktus, pasirinkti programos vizualinį stilių bei įjungti kitas programos funkcijas. Apačioje esantys
   mygtukai leis išsaugoti arba sugrąžinti konfigūraciją į pradinį tašką.
 - Pagalbos langas „Help“ (#ref(<help_page>))
@@ -35,7 +35,7 @@ Programos prototipo langai:
     image("/images/help_page.png", width: 15cm),
     caption: [Pagalbos „Help“ lango prototipas.],
   ) <help_page>
-  Paskirtis: šis langas suteikia vartotojui informaciją apie programos naudojimą ir valdymą.
+  Paskirtis: šis langas suteikia naudotojui informaciją apie programos naudojimą ir valdymą.
 
 Programos stilius yra specifiškai pritaikytas naudojimui komandinėje eilutėje, kur svarbiau funkcionalumas ir našumas, o
 ne moderni vizualinė estetika. Visi trys langų prototipai demonstruoja nuoseklų dizaino sprendimą:

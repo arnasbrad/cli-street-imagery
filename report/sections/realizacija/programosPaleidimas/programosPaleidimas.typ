@@ -1,7 +1,7 @@
 == Programos paleidimas
 
 Programos paleidimas per komandinę eilutę yra fundamentalus interakcijos būdas, suteikiantis lankstumo ir galimybę automatizuoti
-užduotis. Mūsų kuriama „StreetAscii“ programa nėra išimtis – jai reikalinga sistema, leidžianti vartotojui nurodyti
+užduotis. Mūsų kuriama „StreetAscii“ programa nėra išimtis – jai reikalinga sistema, leidžianti naudotojui nurodyti
 įvairius paleidimo parametrus. Programa palaiko keturis pagrindinius veikimo režimus:
 1. Pagal „Mapillary“ nuotraukos identifikatorių.
 2. Pagal geografines koordinates.
@@ -9,7 +9,7 @@ užduotis. Mūsų kuriama „StreetAscii“ programa nėra išimtis – jai reik
 4. Lokacijos spėliojimo režimu.
 
 Kiekvienas iš šių režimų gali turėti specifinius, jam būdingus argumentus. Pavyzdžiui, visi režimai leidžia nurodyti
-kelią iki konfigūracinio failo naudojant _-\-config_ (arba _-c_) parinktį. Be to, vartotojui turi būti prieinama aiški
+kelią iki konfigūracinio failo naudojant _-\-config_ (arba _-c_) parinktį. Be to, naudotojui turi būti prieinama aiški
 ir struktūrizuota pagalbos informacija (_-\-help_), detalizuojanti galimas komandas, jų parinktis ir vėliavėles (angl. _flags_).
 
 === Techninių reikalavimų analizė ir bibliotekos pasirinkimas
@@ -20,7 +20,7 @@ Pagrindiniai reikalavimai tokiai bibliotekai buvo šie:
 - Tipų saugumas: biblioteka turėtų užtikrinti, kad išanalizuoti argumentai atitiktų nurodytus tipus
   (pvz., _String_, _Int_, pasirinktinis tipas), taip sumažinant klaidų tikimybę programos vykdymo metu.
 - Automatinis pagalbos generavimas: gebėjimas automatiškai sukurti informatyvius pagalbos pranešimus pagal apibrėžtą komandų struktūrą.
-- Klaidingo įvedimo valdymas: aiškūs ir naudingi pranešimai vartotojui, jei argumentai įvesti neteisingai.
+- Klaidingo įvedimo valdymas: aiškūs ir naudingi pranešimai naudotojui, jei argumentai įvesti neteisingai.
 - Kompoziciškumas: galimybė lengvai derinti ir komponuoti skirtingas komandų dalis, ypač dirbant su subkomandomis.
 - Integracija su funkcinio programavimo paradigma: kadangi projektas kuriamas naudojant Scala ir funkcinio programavimo
   principus (pvz., „Cats Effect“ biblioteką efektams valdyti), pageidautina, kad argumentų analizės biblioteka
@@ -34,7 +34,7 @@ Pagrindiniai „Decline“ privalumai, lėmę jos pasirinkimą:
    aplikatyvinius funktorius (angl. _applicative functors_) ir kitus funkcinio programavimo konstruktus. Tai užtikrina
    aukštą kompoziciškumo lygį ir leidžia elegantiškai apibrėžti sudėtingas komandų struktūras. Užuot rašius imperatyvų kodą
    argumentams tikrinti ir išrinkinėti, su „Decline“ komandų struktūra aprašoma deklaratyviai, o biblioteka pasirūpina analizės logika.
-2. Tipų saugumas: analizuojant argumentus, „Decline“ grąžina reikšmes su Scala tipais. Jei vartotojas pateikia argumentą,
+2. Tipų saugumas: analizuojant argumentus, „Decline“ grąžina reikšmes su Scala tipais. Jei naudotojas pateikia argumentą,
    neatitinkantį laukiamo tipo (pvz., tekstą vietoj skaičiaus), biblioteka automatiškai sugeneruos klaidą dar prieš programos
    logikai pradedant vykdyti pagrindines užduotis. Tai padeda anksti aptikti klaidas ir užtikrina didesnį programos patikimumą.
 3. Automatinis pagalbos meniu: biblioteka automatiškai generuoja _-\-help_ išvestį, kuri yra nuosekli ir pritaikyta apibrėžtoms
@@ -58,17 +58,17 @@ ar vėliavėlę (pvz., _-\-help_) kaip atskirą analizatorių. Šie individualū
 į sudėtingesnes struktūras, atitinkančias subkomandas, o galiausiai – į vieną bendrą komandos analizatorių.
 
 Šis deklaratyvus būdas aprašyti komandinės eilutės sąsają ne tik supaprastina patį argumentų analizės logikos kūrimą,
-bet ir užtikrina, kad vartotojui pateikiama pagalbos informacija bei klaidų pranešimai būtų nuoseklūs ir automatiškai
+bet ir užtikrina, kad naudotojui pateikiama pagalbos informacija bei klaidų pranešimai būtų nuoseklūs ir automatiškai
 atnaujinami pasikeitus komandų struktūrai.
 
 Naudojant „Decline“, programos pagrindinė paleidimo logika gali tiesiog perduoti komandinės eilutės argumentus
 (_args: Array[String]_) bibliotekai. „Decline“ atlieka analizę ir, sėkmės atveju, grąžina tipizuotą objektą, reprezentuojantį
 pasirinktą veikimo režimą ir jo parametrus (pvz., objektą, nurodantį, kad pasirinktas _guessing_ režimas ir pateiktas
 konkretus konfigūracijos failo kelias). Nesėkmės atveju (pvz., trūksta privalomo argumento arba pateiktas neteisingas formatas),
-„Decline“ grąžina klaidą, kurią programa gali tvarkingai apdoroti ir parodyti vartotojui informatyvų pranešimą, dažnai kartu su
+„Decline“ grąžina klaidą, kurią programa gali tvarkingai apdoroti ir parodyti naudotojui informatyvų pranešimą, dažnai kartu su
 pasiūlymu pasinaudoti _-\-help_.
 
-Apibendrinant, „Decline“ pasirinkimas leido sukurti tvirtą, tipų saugią ir vartotojui draugišką komandinės eilutės sąsają,
+Apibendrinant, „Decline“ pasirinkimas leido sukurti tvirtą, tipų saugią ir naudotojui draugišką komandinės eilutės sąsają,
 minimaliomis pastangomis įgyvendinant sudėtingus reikalavimus dėl skirtingų paleidimo režimų ir jų parametrų.
 Tai leido kūrėjams labiau susikoncentruoti į pagrindinę programos funkcionalumą, o ne į komandinės eilutės argumentų analizės subtilybes.
 

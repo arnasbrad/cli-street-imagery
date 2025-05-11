@@ -7,16 +7,16 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
 
 === Reikalavimai panaudojamumui<reikalavimai-panaudojamumui>
 
-- Intuityvi navigacija: sistema turi leisti vartotojui naršyti (judėti pirmyn/atgal arba į aplinkines lokacijas)
+- Intuityvi navigacija: sistema turi leisti naudotojui naršyti (judėti pirmyn/atgal arba į aplinkines lokacijas)
   naudojant aiškius ir lengvai įsimenamus klaviatūros klavišus, įprastus komandinės eilutės aplinkoje
   (pvz., rodyklių klavišai, WASD ar panašiai).
-- Aiškus atsakas: sąsaja turi aiškiai informuoti vartotoją apie dabartinę būseną
+- Aiškus atsakas: sąsaja turi aiškiai informuoti naudotoją apie dabartinę būseną
   (pvz., vaizdo krovimas, klaida gaunant duomenis iš „Mapillary“ sąsajos).
 - Mokymosi paprastumas: bazinis sistemos naudojimas (paleidimas, pagrindinė navigacija) turėtų būti lengvai perprantamas
   tikslinei auditorijai (komandinės eilutės naudotojams), pateikiant trumpą pagalbos informaciją paleidimo metu
   arba per specialią komandą (pvz., _-\-help_).
 - Klaidų apdorojimas: sistema turi korektiškai apdoroti numatomas klaidas (pvz., „Mapillary“ nepasiekiamumas,
-  neteisingos koordinatės, interneto ryšio nebuvimas) ir pateikti vartotojui suprantamą klaidos pranešimą,
+  neteisingos koordinatės, interneto ryšio nebuvimas) ir pateikti naudotojui suprantamą klaidos pranešimą,
   neužlūžtant pačiai programai.
 
 === Reikalavimai vykdymo charakteristikoms<reikalavimai-vykdymo-charakteristikoms>
@@ -42,7 +42,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
 - Vizualinis aiškumas (angl. _visual clarity_): ASCII menas, nors ir riboto detalumo, turėtų būti generuojamas
   taip, kad pagrindiniai objektai ir erdvės kryptis būtų bent apytiksliai atpažįstami. Spalvų naudojimas (kai palaikoma)
   turėtų didinti aiškumą.
-- Sąsajos konsistencija (angl. _interface consistency_): tekstiniai vartotojo sąsajos elementai 
+- Sąsajos konsistencija (angl. _interface consistency_): tekstiniai naudotojo sąsajos elementai 
   (pranešimai, meniu, pagalba) turėtų naudoti nuoseklų formatavimą ir stilių visoje aplikacijoje.
 
 === Reikalavimai sistemos priežiūrai<reikalavimai-sistemos-prieziurai>
@@ -57,7 +57,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
 - Išorinės sąsajos raktų apsauga (angl. _API key protection_): jei naudojamas „Mapillary“ ar kitokios sąsajos raktas,
   jis neturėtų būti tiesiogiai įkoduotas viešai prieinamame kode. Rekomenduojama naudoti konfigūracijos failą
   ar aplinkos kintamąjį.
-- Duomenų privatumas (angl. _data privacy_): sistema neturėtų rinkti, saugoti ar perduoti jokių vartotojo asmeninių 
+- Duomenų privatumas (angl. _data privacy_): sistema neturėtų rinkti, saugoti ar perduoti jokių naudotojo asmeninių 
   duomenų, išskyrus tuos, kurie būtini išorinės sąsajos užklausoms (pvz., geografinės koordinatės).
 
 === Teisiniai reikalavimai<teisiniai-reikalavimai>

@@ -1,6 +1,6 @@
-== Vartotojo sąsajos (TUI) testavimas
+== Naudotojo sąsajos (TUI) testavimas
 
-Terminalo vartotojo sąsajos (angl. _Terminal User Interface_ – TUI) testavimas šiame projekte yra itin svarbus, nes
+Terminalo naudotojo sąsajos (angl. _Terminal User Interface_ – TUI) testavimas šiame projekte yra itin svarbus, nes
 programa yra skirta naudoti išskirtinai komandinėje eilutėje. Pagrindinis tikslas – užtikrinti, kad sąveika
 su programa būtų intuityvi, efektyvi ir neklaidintų naudotojo, nepaisant tekstinės aplinkos ribojimų.
 TUI testavimas daugiausia buvo atliekamas rankiniu būdu, imituojant realius naudotojo veiksmus ir scenarijus.

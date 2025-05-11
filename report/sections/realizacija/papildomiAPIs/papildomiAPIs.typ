@@ -12,7 +12,7 @@ bei atlikti kitas su lokacija susijusias operacijas.
 Šiame projekte pagrindinis „TravelTime“ platformos panaudojimas yra susijęs su jos teikiama geokodavimo
 (angl. _geocoding_) paslauga. Geokodavimas – tai procesas, kurio metu tekstinis adresas (pvz., gatvė, namo numeris, miestas)
 yra paverčiamas tiksliomis geografinėmis koordinatėmis (platuma ir ilguma). Ši funkcija yra prieinama per „TravelTime“ programavimo
-sąsają (API) @traveltime-api-docs. Mūsų kuriamoje programoje šis funkcionalumas yra kritiškai svarbus vartotojo patogumui:
+sąsają (API) @traveltime-api-docs. Mūsų kuriamoje programoje šis funkcionalumas yra kritiškai svarbus naudotojo patogumui:
 jis leidžia naudotojui tiesiog įvesti norimos vietos adresą, o programa, pasinaudodama „TravelTime“ paslauga, automatiškai
 nustato tos vietos koordinates. Šios koordinatės vėliau naudojamos kitoms programos funkcijoms, pavyzdžiui,
 pradinio taško nustatymui žemėlapyje ar gatvės vaizdų paieškai aplink nurodytą adresą.
@@ -22,7 +22,7 @@ Sprendimą integruoti būtent „TravelTime“ platformą lėmė keli esminiai v
    Ši aplinkybė suteikė unikalią galimybę gauti tiesioginę techninę pagalbą, gilesnį API veikimo principų supratimą ir greitesnį
    galimų problemų sprendimą. Tai ypač vertinga vykdant projektą su ribotais laiko ištekliais.
 2. Funkcionalumo tikslumas ir patikimumas: „TravelTime“ geokodavimo paslauga pasižymi aukštu tikslumu ir patikimumu, kas
-   yra būtina sąlyga norint užtikrinti kokybišką programos veikimą ir teigiamą vartotojo patirtį. Netikslus adresų konvertavimas
+   yra būtina sąlyga norint užtikrinti kokybišką programos veikimą ir teigiamą naudotojo patirtį. Netikslus adresų konvertavimas
    galėtų lemti klaidingą programos elgseną ir prastus rezultatus.
 3. Specializuota paskirtis: nors egzistuoja ir kitų geokodavimo paslaugų teikėjų, „TravelTime“ specializacija lokacijos analizės
    srityje ir jų įsipareigojimas teikti kokybiškus geografinius duomenis padarė šią platformą patraukliu pasirinkimu projektui,
@@ -35,15 +35,15 @@ svarbia programos dalimi, užtikrinančia sklandų adresų pavertimą koordinat�
 
 „Imgur“ @imgur-homepage yra plačiai žinoma ir viena populiariausių internetinių platformų, skirta vaizdinei medžiagai
 – nuotraukoms, GIF animacijoms ir trumpiems vaizdo klipams – talpinti, saugoti bei ja dalintis su kitais interneto
-vartotojais. Platforma pasižymi paprastu naudojimu ir didele vartotojų bendruomene.
+naudotojais. Platforma pasižymi paprastu naudojimu ir didele naudotojų bendruomene.
 
 Projekto kontekste „Imgur“ platforma yra pasitelkiama kaip išorinė paslauga, leidžianti automatizuoti nuotraukų
 įkėlimo procesą ir gauti stabilias, viešai prieinamas nuorodas į įkeltus vaizdus. Šiam tikslui naudojama „Imgur“
 programavimo sąsaja (API) @imgur-api-docs, kuri suteikia galimybę programiškai valdyti nuotraukų įkėlimą be tiesioginio
-vartotojo įsikišimo į „Imgur“ svetainę. Mūsų programoje ši funkcija veikia taip: sugeneruota ar apdorota nuotrauka
+naudotojo įsikišimo į „Imgur“ svetainę. Mūsų programoje ši funkcija veikia taip: sugeneruota ar apdorota nuotrauka
 yra automatiškai įkeliama į „Imgur“ serverius. Sėkmingai įkėlus, „Imgur“ API grąžina unikalią, tiesioginę nuorodą į tą nuotrauką.
 
-Gauta nuoroda yra itin svarbi įgyvendinant programos socialinės medijos pasidalinimo funkcionalumą. Kai vartotojas nori
+Gauta nuoroda yra itin svarbi įgyvendinant programos socialinės medijos pasidalinimo funkcionalumą. Kai naudotojas nori
 pasidalinti programos turiniu (pvz., įdomiu rastu vaizdu) socialiniuose tinkluose, būtina turėti viešai prieinamą nuorodą į
 vaizdą. „Imgur“ suteikta nuoroda užtikrina, kad dalinantis informacija socialiniuose tinkluose būtų korektiškai
 atvaizduojama nuotraukos peržiūra (angl. _rich preview_), taip padidinant įrašo patrauklumą ir informatyvumą.

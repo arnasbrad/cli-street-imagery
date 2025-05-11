@@ -1,6 +1,6 @@
 === Sistemos funkcijos
 
-Ši UML panaudojimo atvejų diagrama (#ref(<use_cases>)) vaizduoja kuriamos programos funkcionalumą ir pagrindines sąveikas tarp vartotojo
+Ši UML panaudojimo atvejų diagrama (#ref(<use_cases>)) vaizduoja kuriamos programos funkcionalumą ir pagrindines sąveikas tarp naudotojo
 ir programos bei išorinių sistemų: „Mapillary API“, „Imgur API“, „TravelTime API“. Sistema yra padalinta į dvi pagrindines
 posistemes: gatvės vaizdo ir konfigūracijos.
 
@@ -20,12 +20,12 @@ Aktoriai:
 Gatvės vaizdo posistemė -- atsakinga už pagrindinį programos veikimą – gatvės vaizdų gavimą, atvaizdavimą ir programos valdymą.
 
 Pagrindiniai programos paleidimo būdai (tiesiogiai kviečiami naudotojo):
-- Paleisti programą naudojant paveiksliuko ID: vartotojas paleidžia programą nurodydamas konkretų „Mapillary“ vaizdo indeksą,
+- Paleisti programą naudojant paveiksliuko ID: naudotojas paleidžia programą nurodydamas konkretų „Mapillary“ vaizdo indeksą,
   taip pasirinkdamas pradinį navigacijos tašką.
-- Paleisti programą naudojant koordinatėmis: vartotojas paleidžia programą nurodydamas geografines koordinates.
-- Paleisti programą naudojant lokacijos pavadinimą / adresą: vartotojas paleidžia programą nurodydamas vietos pavadinimą
+- Paleisti programą naudojant koordinatėmis: naudotojas paleidžia programą nurodydamas geografines koordinates.
+- Paleisti programą naudojant lokacijos pavadinimą / adresą: naudotojas paleidžia programą nurodydamas vietos pavadinimą
   ar adresą. „TravelTime API“ naudojamas įvestos vietovės geolokacijai.
-- Paleisti programą šalies spėliojimo režimu: vartotojas paleidžia programą specialiu režimu, skirtu žaisti šalies atpažinimo
+- Paleisti programą šalies spėliojimo režimu: naudotojas paleidžia programą specialiu režimu, skirtu žaisti šalies atpažinimo
   žaidimą. Šis režimas papildomai suteikia šalies spėjimo funkciją.
 
 Pagrindinis panaudojimo atvejis:
@@ -34,17 +34,17 @@ Tai reiškia, kad norint paleisti programą su indeksu, koordinatėmis, adresu a
 gatvės vaizdą. Šis atvejis sąveikauja su „Mapillary API“.
 
 Veiksmai, papildantys gatvės vaizdo gavimo panaudojimo atvejį (galimi po vaizdo gavimo):
-- Naviguoti į šalia esančias vietas: vartotojas gali judėti į gretimus vaizdus.
-- Išsaugoti ASCII paveiksliuką PNG formatu: vartotojas gali išsaugoti sugeneruotą ASCII vaizdą kaip PNG failą.
+- Naviguoti į šalia esančias vietas: naudotojas gali judėti į gretimus vaizdus.
+- Išsaugoti ASCII paveiksliuką PNG formatu: naudotojas gali išsaugoti sugeneruotą ASCII vaizdą kaip PNG failą.
 - Dalintis paveiksliuku socialinėje medijoje: naudotojas gali pasidalinti vaizdu socialinėje medijoje naudodamas
   sugeneruotą nuorodą.
-- Atidaryti pagalbos meniu: vartotojas gali išsikviesti pagalbos informaciją, kuri talpina programos paaiškinimus ir
+- Atidaryti pagalbos meniu: naudotojas gali išsikviesti pagalbos informaciją, kuri talpina programos paaiškinimus ir
   galimas įvestis.
 - Išeiti iš aplikacijos: naudotojas gali uždaryti programą.
 
 Žaidimo režimo funkcionalumas:
 Bandyti atspėti šalį: šis atvejis yra galimas jei programa yra šalies spėliojimo režime. Tai reiškia, kad paleidus žaidimo
-režimą, vartotojas gali bandyti atspėti šalį, kurios vaizdas yra pateikiamas programos.
+režimą, naudotojas gali bandyti atspėti šalį, kurios vaizdas yra pateikiamas programos.
 
 Konfigūracijos posistemė yra atsakinga už programos nustatymų valdymą ir konfigūracinio failo sukūrimą.
 
@@ -66,8 +66,8 @@ Parametrų pasirinkimas:
 - Pasirinkti simbolių rinkinį: naudotojas privalo pasirinkti simbolių rinkinį, iš kurio bus sudarytas galutinis ASCII vaizdas.
 
 Konfigūracijos failo valdymas (papildo konfigūravimo scenarijaus paleidimo panaudojimo atvejį):
-- Išsaugoti suformuotą konfigūracinį failą: vartotojas gali išsaugoti nustatymus į CONF failą.
-- Pamatyti suformuotą konfigūracinį failą: vartotojas gali peržiūrėti esamus nustatymus konfigūraciniame faile.
+- Išsaugoti suformuotą konfigūracinį failą: naudotojas gali išsaugoti nustatymus į CONF failą.
+- Pamatyti suformuotą konfigūracinį failą: naudotojas gali peržiūrėti esamus nustatymus konfigūraciniame faile.
 
 Diagrama aiškiai parodo, kaip naudotojas gali sąveikauti su sistema paleidžiant ją skirtingais režimais (peržiūros, žaidimo,
 konfigūravimo, žaidimo), kokios pagrindinės funkcijos yra prieinamos kiekviename režime (vaizdo gavimas, navigacija,

@@ -9,7 +9,7 @@ Sėkmingas testavimas bus laikomas tada, kai programa atitiks šiuos kriterijus:
   - Navigacijos funkcijos (judėjimas pirmyn/atgal, tarp artimų taškų) veikia patikimai.
   - Spėliojimo žaidimo logika yra korektiška.
   - Pagalbos funkcija pateikia teisingą ir aktualią informaciją.
-- Vartotojo sąsajos kokybė
+- Naudotojo sąsajos kokybė
   - TUI yra intuityvi ir lengvai perprantama tikslinei auditorijai (komandinės eilutės naudotojams).
   - Pagalbos informacija (_h_ mygtukas) yra visada pasiekiama ir aiški.
   - Naudotojas negali „užstrigti“ programoje -- visada yra aiškus kelias tęsti veiksmus arba išeiti.

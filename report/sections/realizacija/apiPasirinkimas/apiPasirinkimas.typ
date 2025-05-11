@@ -2,7 +2,7 @@
 == Gatvės vaizdo sąsajos pasirinkimas<api-pasirinkimas>
 
 Vienas iš esminių šio projekto reikalavimų – prieiga prie gatvės lygio panoraminės vaizdinės medžiagos.
-Tokie duomenys leidžia vartotojui virtualiai „keliauti“ ir tyrinėti aplinką. Rinkoje egzistuoja keletas platformų,
+Tokie duomenys leidžia naudotojui virtualiai „keliauti“ ir tyrinėti aplinką. Rinkoje egzistuoja keletas platformų,
 teikiančių tokius duomenis per programavimo sąsajas (API), tačiau jų prieigos modeliai, duomenų aprėptis ir kainodara
 ženkliai skiriasi. Šiame skyriuje aptariamas sąsajos pasirinkimo procesas ir pagrindiniai motyvai, lėmę galutinį sprendimą.
 

@@ -7,6 +7,6 @@
 #include "libraryPasirinkimas/libraryPasirinkimas.typ"
 #include "programosKonfiguravimas/programosKonfiguravimas.typ"
 #include "programosPaleidimas/programosPaleidimas.typ"
-#include "vartotojoSasaja/vartotojoSasaja.typ"
+#include "naudotojoSasaja/naudotojoSasaja.typ"
 #include "ascii/ASCII.typ"
 #include "asciiSpalvos/asciiSpalvos.typ"

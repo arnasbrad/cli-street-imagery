@@ -45,11 +45,11 @@ Kai kurios programos dalys yra sudėtingos arba mažiau naudingos testuoti tradi
 prigimties ir sąsajų su išorine aplinka.
 
 - Tiesioginis terminalo išvedimas (TUI)
-  - Vartotojo sąsajos elementų atvaizdavimas tiesiogiai terminale, įskaitant ASCII meno spausdinimą ir interaktyvius meniu,
+  - Naudotojo sąsajos elementų atvaizdavimas tiesiogiai terminale, įskaitant ASCII meno spausdinimą ir interaktyvius meniu,
     nėra tikrinamas vienetų testais. Tokio testavimo automatizavimas yra sudėtingas ir dažnai trapus.
   - Vietoj to, vienetų testais tikrinama logika, kuri paruošia duomenis atvaizdavimui (pvz., teisingų simbolių
     sekų ir spalvų ANSI kodų generavimas). Pats vizualinis pateikimas ir sąveika tikrinami rankinio testavimo
-    ir vartotojo sąsajos testavimo metu.
+    ir naudotojo sąsajos testavimo metu.
 
 - Tiesioginės API užklausos ir atsakymai
   - Vienetų testai neturėtų priklausyti nuo išorinių tinklo paslaugų (pvz., „Mapillary“ API serverių pasiekiamumo

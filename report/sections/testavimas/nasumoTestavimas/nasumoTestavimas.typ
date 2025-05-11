@@ -39,7 +39,7 @@ Testavimo metu buvo stebimi šie našumo aspektai:
     užkraunant vaizdą, labiausiai priklauso nuo „Mapillary“ API atsako greičio. Esant normalioms tinklo sąlygoms ir serverio apkrovai,
     atsakas gaunamas pakankamai greitai, tačiau retais atvejais, kai „Mapillary“ atsakas vėluoja, tai tiesiogiai įtakoja ir bendrą
     programos reakcijos laiką. Šis aspektas yra už programos tiesioginės kontrolės ribų.
-  - Vartotojo sąsajos reakcija: tiesioginė sąveika su vartotojo sąsaja, pvz., klavišų paspaudimų registravimas,
+  - Naudotojo sąsajos reakcija: tiesioginė sąveika su naudotojo sąsaja, pvz., klavišų paspaudimų registravimas,
     yra momentinė, suteikiant gerą tiesioginės kontrolės pojūtį.
 
 Apibendrinant, našumo testavimas parodė, kad programa, neįskaitant išorinių API priklausomybių, veikia pakankamai efektyviai ir
