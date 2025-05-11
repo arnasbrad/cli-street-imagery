@@ -16,11 +16,16 @@
     )
 )
 
-#set figure(supplement: none)
+#set figure(
+  supplement: none,
+  numbering: n => {
+    [#n pav.]
+  }
+)
 #show figure.caption: it => {
     set text(size: 10pt)
     if it.kind == image {
-        [#text(weight: "bold")[#context it.counter.display(it.numbering) pav.] #it.body]
+        [#text(weight: "bold")[#context it.counter.display(it.numbering)] #it.body]
     } else {
         [#it.supplement #context it.counter.display(it.numbering): #it.body]
     }
