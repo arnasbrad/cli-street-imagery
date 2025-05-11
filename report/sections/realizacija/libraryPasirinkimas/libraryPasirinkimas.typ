@@ -1,5 +1,5 @@
 #set text(lang: "lt", region: "lt")
-== Vartotojo sąsajos bibliotekos pasirinkimas<tui-bibliotekos-pasirinkimas>
+== Naudotojo sąsajos bibliotekos pasirinkimas<tui-bibliotekos-pasirinkimas>
 
 Kuriant komandinės eilutės aplikaciją, ypač interaktyvią, svarbus sprendimas yra naudotojo sąsajos
 (angl. _Terminal User Interface_ – TUI) realizavimo būdas. Nors projekto pagrindinis tikslas buvo atvaizduoti

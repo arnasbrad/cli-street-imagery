@@ -1,6 +1,6 @@
 #set text(lang: "lt", region: "lt")
 
-== Vartotojo sąsajos ir navigacijos projektavimas<ui-navigacijos-projektavimas>
+== Naudotojo sąsajos ir navigacijos projektavimas<ui-navigacijos-projektavimas>
 
 Sukūrus nuosavą TUI modulį, kitas svarbus etapas buvo suprojektuoti naudotojo sąsają (UI) ir sąveikos (UX) modelį,
 kuris leistų intuityviai naršyti gatvių vaizdus ASCII formatu komandinės eilutės aplinkoje. Pagrindinis iššūkis –
@@ -24,7 +24,7 @@ Projektuojant sąsają, vadovautasi keliais pagrindiniais principais:
 === Sąveikos modelis
 
 Pasirinktas sąveikos modelis yra pagrįstas būsenomis (angl. _state-based_) ir valdomas vieno simbolio komandomis.
-Pagrindinė būsena yra ASCII gatvės vaizdo rodymas. Vartotojui paspaudus tam tikrą klavišą, programa pereina į kitą
+Pagrindinė būsena yra ASCII gatvės vaizdo rodymas. Naudotojui paspaudus tam tikrą klavišą, programa pereina į kitą
 būseną arba atlieka veiksmą:
 
 - Vaizdo rodymas (pagrindinė būsena): rodydamas vaizdą, programa laukia naudotojo įvesties.
@@ -41,7 +41,7 @@ būseną arba atlieka veiksmą:
 
 Šis modelis leidžia išlaikyti švarią pagrindinę sąsają (tik vaizdas) ir pateikti papildomas funkcijas pagal poreikį.
 
-=== Vartotojo sąsajos elementai
+=== Naudotojo sąsajos elementai
 
 Dėl pasirinkto minimalistinio požiūrio, sąsajos elementai yra labai paprasti:
 
@@ -54,10 +54,10 @@ Dėl pasirinkto minimalistinio požiūrio, sąsajos elementai yra labai paprasti
 
 Navigacija yra viena pagrindinių interaktyvių funkcijų. Ji realizuota taip:
 
-1. Vartotojas inicijuoja navigacijos režimą paspausdamas tam skirtą klavišą (_n_).
+1. Naudotojas inicijuoja navigacijos režimą paspausdamas tam skirtą klavišą (_n_).
 2. Sistema, priklausomai nuo konfigūracijos ar aptiktų „Mapillary“ duomenų tipo, pateikia galimų judėjimo krypčių sąrašą
   (kaip tekstinį ASCII vaizdą).
-3. Vartotojas pasirenka vieną iš krypčių paspausdamas atitinkamą klavišą (pvz., skaičių ar raidę).
+3. Naudotojas pasirenka vieną iš krypčių paspausdamas atitinkamą klavišą (pvz., skaičių ar raidę).
 4. Programa kreipiasi į „Mapillary“, gauna naujos vietos vaizdo duomenis ir perpiešia ekraną su nauju ASCII vaizdu.
 
 === Grįžtamasis ryšys naudotojui

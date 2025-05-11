@@ -27,7 +27,7 @@ spalvų palaikymo nustatymas. Skirtingos operacinės sistemos naudoja skirtingus
 arba metodus terminalo savybėms nustatyti. Pavyzdžiui, kintamieji kaip _TERM_ ar _COLORTERM_ yra labiau paplitę „Linux“ ir „macOS“
 aplinkose, tuo tarpu „Windows“ terminalai gali reikalauti kitokių patikrinimų. Dėl šios priežasties, nors programa stengiasi automatiškai
 nustatyti spalvų palaikymą, galutinis spalvoto ASCII meno atvaizdavimas priklauso nuo konkretaus terminalo emuliatoriaus ir jo
-konfigūracijos. Vartotojui suteikiama galimybė konfigūracijos faile rankiniu būdu įjungti arba išjungti spalvotą išvestį.
+konfigūracijos. Naudotojui suteikiama galimybė konfigūracijos faile rankiniu būdu įjungti arba išjungti spalvotą išvestį.
 
 - Simbolių atvaizdavimas: specialūs simboliai, naudojami išplėstiniuose ASCII rinkiniuose ir Brailio rašte,
   buvo atvaizduojami korektiškai terminaluose, palaikančiuose UTF-8 koduotę (kas yra standartas daugumoje modernių terminalų).

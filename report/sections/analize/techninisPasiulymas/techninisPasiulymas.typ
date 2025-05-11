@@ -68,7 +68,7 @@ vienkartiniam vaizdų konvertavimui. Jie nereikalauja jokios techninės konfigū
 naudotojas gali nusikopijuoti į iškarpinę. Šių įrankių pavyzdžiai:
 
 - „Ascii-art-generator.org“ @ascii-art-generator: Ši svetainė yra tipiškas pavyzdys, leidžiantis naudotojui įkelti
-  paveikslėlį (pvz., JPG, PNG, GIF) arba pateikti jo URL. Vartotojas gali pasirinkti keletą pagrindinių parametrų:
+  paveikslėlį (pvz., JPG, PNG, GIF) arba pateikti jo URL. Naudotojas gali pasirinkti keletą pagrindinių parametrų:
     - Išvesties dydis: nurodomas pasirenkant norimą rezultato plotį, kas lemia detalumo lygį.
     - Simbolių rinkinys: nėra simbolių rinkinio pasirinkimo.
     - Algoritmai: nėra algoritmų pasirinkimo galimybės.
@@ -162,7 +162,7 @@ tekstinėje aplinkoje, tačiau egzistuoja keletas populiarių tekstinės naudoto
   grafinės programos, dažnai naudojamas kartu su paprastesniais komandinės eilutės valdymo įrankiais.
 
 Palyginimas su grafinėmis „Gmail“ ir „Spotify“ sąsajomis:
-- Vartotojo sąsaja ir patirtis: šios klientinės programos naudoja tekstinę sąsają, valdomą klaviatūra. Tai reikalauja
+- Naudotojo sąsaja ir patirtis: šios klientinės programos naudoja tekstinę sąsają, valdomą klaviatūra. Tai reikalauja
   išmokti komandas ir klavišų kombinacijas, tačiau patyrusiems naudotojams leidžia dirbti labai greitai ir efektyviai.
   Trūksta vizualinio patrauklumo, sudėtinga atvaizduoti HTML formato turinį ar peržiūrėti įterptus paveikslėlius. Tuo tarpu grafinė
   naudotojo sąsaja siūlo intuityvią, pelės valdomą sąsają, lengvai suprantamą pradedantiesiems, ir pilną vizualinį turinio atvaizdavimą.

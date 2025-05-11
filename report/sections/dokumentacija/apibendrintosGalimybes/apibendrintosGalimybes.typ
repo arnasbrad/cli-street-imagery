@@ -15,7 +15,7 @@ Pradėjus naršymą ar žaidimą, naudotojas gali judėti virtualioje aplinkoje:
 artimiausių aplinkinių vaizdų (navigacija pagal spindulį), arba keliaudamas pirmyn ir atgal pagal
 „Mapillary“ vaizdų seką.
 
-Be naršymo, sistema suteikia papildomų galimybių. Vartotojas gali bet kuriuo metu išsikviesti pagalbos
+Be naršymo, sistema suteikia papildomų galimybių. Naudotojas gali bet kuriuo metu išsikviesti pagalbos
 meniu, kuriame rodomos tuo metu aktyvios klaviatūros komandos. Jei naudotojui patinka konkretus ASCII
 formatu sugeneruotas vaizdas, jį galima išsaugoti kaip standartinį PNG formato paveikslėlį arba gauti nuorodą,
 tinkamą dalintis socialiniuose tinkluose (naudojant „Imgur“ paslaugą). Galiausiai, naudotojas gali bet kada
