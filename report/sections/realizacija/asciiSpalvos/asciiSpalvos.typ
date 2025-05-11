@@ -17,7 +17,7 @@ kaip deuteranopija (sumažėjęs jautrumas žaliai šviesai), protanopija (suma�
 tritanopija (sumažėjęs jautrumas mėlynai šviesai) ženkliai paveikia tai, kaip žmogus suvokia spalvas @color-blindness-types.
 Dėl šių sutrikimų tam tikros spalvų poros tampa sunkiai atskiriamos, kas gali lemti prastesnę naudotojo patirtį.
 
-Implementuoti daltonizmo filtrai siekia sušvelninti šias problemas. Jų tikslas nėra tiesiog atkurti trūkstamas spalvas,
+Realizuoti daltonizmo filtrai siekia sušvelninti šias problemas. Jų tikslas nėra tiesiog atkurti trūkstamas spalvas,
 nes tai yra neįmanoma. Vietoj to, jie modifikuoja esamas vaizdo spalvas taip, kad probleminės spalvų poros būtų
 transformuotos į tokias, kurias asmuo su konkrečiu sutrikimu galėtų lengviau atskirti. Tai dažnai pasiekiama keliais būdais:
 - Perkeliant informaciją: pavyzdžiui, raudonos ir žalios spalvų skirtumai gali būti subtiliai perkelti į mėlynus ir

@@ -51,7 +51,7 @@ Pagrindinės techninės limitacijos yra šios:
 
 Kaip matome, pasirinkimas kurti komandinės eilutės programą verčia apsvartyti daug naujų aspektų, į kuriuos neturėtume
 kreipti dėmesio naudojant grafinę sąsają. Programos veikimas priklauso nuo didelio kiekio kintamųjų, kurių dalis net
-neprikauso nuo mūsų - programos kūrėjų. Programos išvaizda ir elgsena gali nežymiai skirtis priklausomai nuo naudojamo
+neprikauso nuo mūsų -- programos kūrėjų. Programos išvaizda ir elgsena gali nežymiai skirtis priklausomai nuo naudojamo
 terminalo emuliatoriaus ir jo konfigūracijos (šriftai, spalvų schemos, Unicode palaikymas). Užtikrinti visiškai vienodą
 patirtį visose platformose ir terminaluose yra sudėtinga, tačiau būtina, jog programa galėtų būti paleista ir jos bazinės
 funkcijos veiktų teisingai.

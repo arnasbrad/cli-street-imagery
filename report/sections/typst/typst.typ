@@ -113,8 +113,8 @@ Nors „Typst“ siūlo daug privalumų, kaip palyginti naujas įrankis, jis tur
   ir kūrimo efektyvumas buvo laikomi svarbesniais veiksniais. Taip pat mums buvo įdomu
   išbandyti mažiau naudojamą įrankį, įvertinti jo galimybes ir galbūt palikti veikiantį
   bei reikalavimus atitinkantį šabloną kitoms kartoms.
-- Produktas dar nebaigtas: šios ataskaitos rašymo metu, naujausia „Typst“ versija yra 0.13.1 -
-  tai reiškia, jog įrankis gali būti nepilnai implementuotas bei gali turėti spragų.
+- Produktas dar nebaigtas: šios ataskaitos rašymo metu, naujausia „Typst“ versija yra 0.13.1 --
+  tai reiškia, jog įrankis gali būti nepilnai realizuotas bei gali turėti spragų.
 
 == Problemos, su kuriomis susidūrėme
 

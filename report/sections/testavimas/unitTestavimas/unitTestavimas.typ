@@ -56,7 +56,7 @@ prigimties ir sąsajų su išorine aplinka.
     ar atsako laiko). Tokia priklausomybė padarytų testus nestabilius ir lėtus.
   - Todėl API klientų sąsajos (_traits_) vienetų testuose yra imituojamos (angl. _mocked_). Testuojama, ar pagrindinė
     programos logika teisingai sąveikauja su šiomis imitacijomis – t.y., ar ji teisingai formuoja užklausas imitacijai
-    ir ar teisingai apdoroja imituotus atsakymus (tiek sėkmingus, tiek klaidingus). Patys API klientai (jų implementacijos) ir jų
+    ir ar teisingai apdoroja imituotus atsakymus (tiek sėkmingus, tiek klaidingus). Patys API klientai (jų realizacijos) ir jų
     reali sąveika su išorinėmis API yra labiau integracinių testų objektas, nors šio projekto rėmuose tokie testai
     nebuvo formaliai rašomi.
 

@@ -3,7 +3,7 @@
 ==== Apie „Scala“
 
 „Scala“ programavimo kalba, taip pat kaip ir „Java“, yra skirta dirbti su „JVM“
-(_Java Virtual Machine_) platforma - tai reiškia, jog programinis kodas yra kompiliuojamas
+(_Java Virtual Machine_) platforma -- tai reiškia, jog programinis kodas yra kompiliuojamas
 ne tiesiai į dvejetainį kodą, o į specialų bitų kodą (angl. _bytecode_), kuris
 gali veikti bet kokioje operacinėje sistemoje. Taip pat tai reiškia, jog „Scala“
 kode galima naudotis ne tik „Scala“ įskiepiais, viskuo, ką mums suteikia „Java“
@@ -15,7 +15,7 @@ gali trūkti norimų įskiepių.
 funkcinė. Joje, priešingai nei kalboje kaip „Haskell“, galime kurti kintamas reikšmes,
 nors tai nėra rekomenduojama. Taip pat „Scala“ turi klases, bruožus (angl. _trait_) ir
 daugybę kitų kodo projektavimo modėlių, kuriuos dažnai matome objektinio stiliaus
-kalbose - tai stipriai palengvina darbą žmogui, pirmą kartą bandančiam funkcinį
+kalbose -- tai stipriai palengvina darbą žmogui, pirmą kartą bandančiam funkcinį
 programavimą.
 
 „Scala“ buvo sukurta 2004 metais Martino Odersky @history-and-purposes-of-scala,
@@ -23,7 +23,7 @@ siekiant sukurti modernią programavimo kalbą, kuri apjungtų objektinio ir fun
 programavimo privalumus. Vienas didžiausių „Scala“ privalumų yra jos išraiškingumas
 – dažnai galima parašyti daugiau funkcionalumo su mažiau kodo eilučių, palyginus
 su „Java“ ar kitomis tradicinėmis kalbomis. Štai pavyzdys, kaip paprasčiau gali
-atrodyti funkcinis kodas. Šių kodo tikslas - išfiltruoti iš skaičių sąrašo tik tuos
+atrodyti funkcinis kodas. Šių kodo tikslas -- išfiltruoti iš skaičių sąrašo tik tuos
 skaičius, kurie dalinasi iš dviejų, ir gauti jų kvadratus.
 
 „Java“ pavyzdys:
@@ -83,7 +83,7 @@ objektinio programavimo aplinką.
 ==== „Cats-Effect“ karkasas
 
 Kaip minėjome anksčiau, „Scala“ nėra idealiai funkcinė kalba. Vienas pagrindinis funkcionalumas,
-kurio nėra šioje programavimo kalboje, kuris dažnai randamas kitose funkcinėse programavimo kalbose - 
+kurio nėra šioje programavimo kalboje, kuris dažnai randamas kitose funkcinėse programavimo kalbose -- 
 efektų valdymas.
 
 Prieš aiškinantis kaip reikia valdyti šalutinius efektus, reikia suprasti, kas tiksliai yra funkcinis programavimas.
@@ -97,7 +97,7 @@ funkcinio programavimo paradigmą. Štai pažiūrėkime į šią funkciją:
 Tokia funkcija yra tarytum sujungimas tarp dviejų skaičių sarašų. Pavyzdžiui, sąrašas (1, 2, 3) patampa sąrašu (3, 6, 9).
 Kieviena įvestis turi vieną ir tik vieną išvestį. Nesvarbu kokia yra išvestis, jai visada bus išvestis (nėra jokių išimčių).
 Funkcijos rezultatas yra tiesiogiai išvedamas iš įvesties ir iš nieko daugiau (neskaitant žinoma kitokių konstantų, kaip 3).
-Funkcija tik apskaičiuoja išvestį ir nieko daugiau - ji nekeičia kažkokių kitų reikšmių, nesiunčia laiško, neperka obuolių - 
+Funkcija tik apskaičiuoja išvestį ir nieko daugiau -- ji nekeičia kažkokių kitų reikšmių, nesiunčia laiško, neperka obuolių -- 
 ji tik įvestį paverčia išvestimi. Tai ir yra visa esmė funkcinio programavimo.
 
 Svarbi tokių grynų funkcijų savybė yra referencinis skaidrumas (angl. _referential transparency_).
@@ -113,7 +113,7 @@ Panagrinėkime kelis pavyzdžius.
 def doSomething(value: Int) = value * 3
 ```
 
-Štai čia matome funkciniame programavime vadinamą gryną (angl. _pure_) funkciją - ji įvestį paverčiame išvestimi
+Štai čia matome funkciniame programavime vadinamą gryną (angl. _pure_) funkciją -- ji įvestį paverčiame išvestimi
 ir nieko daugiau. Ji yra referenciškai skaidri.
 Pasižiūrėkime, kokie pavyzdžiai nebūtų grynos funkcijos ir kaip galėtume jas paversti grynomis funkcijomis.
 
@@ -121,7 +121,7 @@ Pasižiūrėkime, kokie pavyzdžiai nebūtų grynos funkcijos ir kaip galėtume 
 def doSomething(value: Int) = 5 / value
 ```
 
-Ši funkcija dalina iš įvesties - tai reiškia, jog ne kiekvienai reikšmei yra išvestis. T.y. reikšmei 0 išvesties nėra -
+Ši funkcija dalina iš įvesties -- tai reiškia, jog ne kiekvienai reikšmei yra išvestis. T.y. reikšmei 0 išvesties nėra --
 programoje įvyks dalybos iš nulio klaida. Tai galima išspręsti pridėję papildomą sąlygą, kuri patikrintų įvestį:
 
 ```scala
@@ -143,10 +143,10 @@ def doSomething(value: Int) = {
 Ši funkcija nebėra gryna, nes ji daro daugiau, nei reikia norint gauti išvestį. Ji pažeidžia referencinį skaidrumą,
 nes jos iškvietimas ne tik grąžina reikšmę, bet ir turi šalutinį poveikį (pakeičia x reikšmę, išspausdina tekstą),
 todėl negalime jos tiesiog pakeisti rezultatu, neprarasdami šių poveikių. Kitaip tariant, turėtų būti aišku ką daro
-funkcija vien iš jos įvesties ir išvesties tipų, net neskaitant pačios funkcijos implementacijos.
+funkcija vien iš jos įvesties ir išvesties tipų, net neskaitant pačios funkcijos realizacijos.
 Tokie šalutiniai efektai žymiai apsunkina programos klaidų ieškojimą ir kodo supratimą.
 
-Tačiau kai kurios funkcijos negali būti idealiai grynos. Pavyzdžiui, spausdinimas į ekraną ar HTTP užklausa -
+Tačiau kai kurios funkcijos negali būti idealiai grynos. Pavyzdžiui, spausdinimas į ekraną ar HTTP užklausa --
 abi šios funkcijos priklauso nuo išorinės aplinkos. Jei programa neturi kur spausdinti, ji neveiks. Jei
 serveris į kurį siunčiame užklausą neegzistuoja ar neveikia, mūsų programa taip pat neveiks. Šiai problemai spręsti
 funkcinėse programavimo kalbose paprastai yra kažkokia forma efektų valdymo.
@@ -166,9 +166,9 @@ jis padeda išspręsti.
 
 Esminė šio karkaso abstrakcija yra pluoštai (angl. _Fibers_) @cats-effect-docs-concepts.
 Tai yra „Cats-Effect“ paralelizmo pagrindas. Pluoštai yra lengvos gijos, skirtos reprezentuoti seką veiksmų, kurie
-programos veikimo metu galiausiai bus realizuoti. Pluoštai yra ypatingai lengvi - vienas pluoštas užima vos 150 baitų atminties.
+programos veikimo metu galiausiai bus realizuoti. Pluoštai yra ypatingai lengvi -- vienas pluoštas užima vos 150 baitų atminties.
 Tai reiškia, jog mes galima sukurti dešimtis milijonų pluoštų be jokių problemų. Per daug nelendant į technines detales,
-galima jų naudą apibendrinti taip - pluoštai leidžia mums lengvai, be papildomo vargo, valdyti paralelizmą bei suteikia
+galima jų naudą apibendrinti taip -- pluoštai leidžia mums lengvai, be papildomo vargo, valdyti paralelizmą bei suteikia
 mums galimybę bet kurį skaičiavimo procesą sustabdyti ar atšaukti, net jei jis jau yra vykdomas.
 
 Šio karkaso konteksta efektas (angl. _effect_) @cats-effect-docs-concepts yra veiksmo
@@ -191,14 +191,14 @@ printer
 Šis kodas neišspausdins teksto nė karto, nes mes dar nenurodėme, jog efektą reikia įvykdyti.
 Jei nurodytume, jog efektas turi būti įvykdytas, tekstas būtų išspausdintas kiekvieną kartą.
 Tai mums leidžia dirbti su bet kokiomis reikšmėmis, net tokiomis kaip _Unit_ (kitose kalbose dažniau naudojamas terminas
-yra _void_) taip pat, kaip dirbtume su paprastomis reikšmėmis, kaip _Int_, _String_ ar kitomis - jas galime naudoti,
+yra _void_) taip pat, kaip dirbtume su paprastomis reikšmėmis, kaip _Int_, _String_ ar kitomis -- jas galime naudoti,
 perpanaudoti, grąžinti naują reikšmę ir panašiai. Tai yra galima todėl, nes mes programiniame kode dirbame ne su pačia
 šalutine reikšme, o su jos apibūdinimu.
 
 Dažnas IO monados apibūdinimas skamba taip: IO aprašo transformaciją iš vienos pasaulio būsenos į kitą.
 Kiekvienas veiksmas IO viduje yra ne pats veiksmas, o receptas naujai pasaulio būsenai, kuri gautųsi įvykdžius
-tą veiksmą. Kaip matome, šitoks apibūdinimas nepažeidžia funkcinio programavimo taisyklių - nebuvo jokių kintamų
-reikšmių ar tiesioginių šalutinių efektų pačiame aprašyme, tik dvi atskiros, nekintamos koncepcijos - pasaulis prieš
+tą veiksmą. Kaip matome, šitoks apibūdinimas nepažeidžia funkcinio programavimo taisyklių -- nebuvo jokių kintamų
+reikšmių ar tiesioginių šalutinių efektų pačiame aprašyme, tik dvi atskiros, nekintamos koncepcijos -- pasaulis prieš
 ir po veiksmo aprašymo.
 
 Tuo tarpu „Scala“ paralelizmo monada „Future“ to negali.

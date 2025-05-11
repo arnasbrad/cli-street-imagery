@@ -14,7 +14,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
   (pvz., vaizdo krovimas, klaida gaunant duomenis iš „Mapillary“ sąsajos).
 - Mokymosi paprastumas: bazinis sistemos naudojimas (paleidimas, pagrindinė navigacija) turėtų būti lengvai perprantamas
   tikslinei auditorijai (komandinės eilutės naudotojams), pateikiant trumpą pagalbos informaciją paleidimo metu
-  arba per specialią komandą (pvz., _--help_).
+  arba per specialią komandą (pvz., _-\-help_).
 - Klaidų apdorojimas: sistema turi korektiškai apdoroti numatomas klaidas (pvz., „Mapillary“ nepasiekiamumas,
   neteisingos koordinatės, interneto ryšio nebuvimas) ir pateikti vartotojui suprantamą klaidos pranešimą,
   neužlūžtant pačiai programai.

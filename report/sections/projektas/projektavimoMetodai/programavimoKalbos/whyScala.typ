@@ -5,7 +5,7 @@
 ==== Įvadas
 
 Programavimo kalbos yra pagrindinis tarpininkas tarp žmogiškos logikos ir mašininio
-kodo - jos leidžia programuotojams paversti abstrakčias idėjas
+kodo -- jos leidžia programuotojams paversti abstrakčias idėjas
 ir problemų sprendimo metodus į instrukcijas, kurias kompiuteriai gali vykdyti.
 Tinkamos programavimo kalbos pasirinkimas projektui yra kritinis sprendimas,
 kuris daro įtaką kūrimo efektyvumui, sistemos veikimui, priežiūrai ir galiausiai
@@ -27,7 +27,7 @@ buvo labai varginantis ir linkęs į klaidas.
 
 Taigi šis programavimo metodas yra sudėtingas, juo parašytas programinis kodas yra
 praktiškai kalbant neįskaitomas, bei jį naudojant yra labai lengva padaryti klaidų.
-Ar yra bent vienas tikslas programuoti mašininiu kodu? Teoriškai, taip - mašininis kodas
+Ar yra bent vienas tikslas programuoti mašininiu kodu? Teoriškai, taip -- mašininis kodas
 suteikia programuotojui paties žemiausio lygio prieigą prie procesoriaus instrukcijų.
 Tai leidžia patyrusiam programuotojui pasiekti didesnę greitaveiką, tikslesnį veikimą
 bei mažesnį galutinio failo dydį. Visa tai yra labai naudinga specifinėse situacijose,
@@ -48,7 +48,7 @@ tiek daug aukštesnio lygio kalbų, Asemblerio kalbos naudojamos tik esant labai
 griežtiems resursų ir greičio reikalavimams – panašiai kaip mašininis kodas.
 Vienas pavyzdys tokio panaudojimo – „Apollo-11“ orientacinio kompiuterio
 programinis kodas @apollo11.
-Šis kompiuteris turėjo labai ribotą atminties kiekį - 2048 žodžius atsitiktinės
+Šis kompiuteris turėjo labai ribotą atminties kiekį -- 2048 žodžius atsitiktinės
 prieigos atminties bei 36 864 žodžius pagrindinės atminties @agc-wiki. Taip pat, žinoma,
 kompiuterio procesorius lyginant su šių dienų standartais buvo ypatingai silpnas,
 dėl ko reikėjo parašyti patį optimaliausią kodą.
@@ -141,12 +141,12 @@ rašymo metu būtų galima daugiau dėmėsio telkti programos funkcionalumui.
 Programavimo kalbos paprastai yra skirstomos į 2 pagrindinius tipus priklausomai nuo to,
 kaip jų kodas yra paleidžiamas:
 
-- Kompiliuojamos kalbos - programinis kodas yra paverčiamas mašininiu (arba kokiu nors
+- Kompiliuojamos kalbos -- programinis kodas yra paverčiamas mašininiu (arba kokiu nors
   tarpiniu kodu, kuris po to verčiamas mašininiu, kaip „Java Virtual Machine“).
-  To rezultatas - ilgesnis programos paleidimas programuojant, bet greitesnis veikimas,
+  To rezultatas -- ilgesnis programos paleidimas programuojant, bet greitesnis veikimas,
   nes kompiliatorius gali optimizuoti mašininį kodą prieš jo įvykdymą. Taip pat dauguma
   sintaksės ar kitokių klaidų aptinkama prieš programos paleidimą, kompiliavimo metu.
-- Interpretuojamos kalbos - programinis kodas yra vykdomas eilutė po eilutės, iš eilės,
+- Interpretuojamos kalbos -- programinis kodas yra vykdomas eilutė po eilutės, iš eilės,
   nėra jokio tarpinio žingsnio tarp kodo parašymo ir paleidimo. Tai puikiai tinka
   įvairiems scenarijams (angl. _scripts_), tačiau stipriai nukenčia programos greitąveika.
 
@@ -158,7 +158,7 @@ kompiliuojąmą programavimo kalbą.
 Programavimo kalbos yra skirstomos į 2 pagrindines grupes pagal tai, kaip jos kontroliuoja
 kintamųjų tipus:
 
-- Statiniai tipai - kiekviena reikšmė ar kintamasis programiniame kode turi savo
+- Statiniai tipai -- kiekviena reikšmė ar kintamasis programiniame kode turi savo
   tipą (_int_, _char_ ir t.t.), tas tipas negali keistis programos eigoje.
   Tai suteikia savotinio saugumo, neleidžia programuotojui daryti žmogiškų klaidų.
   Taip pat turint statinę tipų sistemą, galima kurti savo tipus, taip pridedant dar
@@ -184,7 +184,7 @@ kintamųjų tipus:
   Šiuo atveju kompiliavimo metu matytume klaidą, kuri išgelbėtų mus nuo atsitiktinio
   funkcijos argumentų sumaišymo.
 
-- Dinaminiai tipai - kiekvienos reikšmės ar kintamojo tipas gali kisti programos
+- Dinaminiai tipai -- kiekvienos reikšmės ar kintamojo tipas gali kisti programos
   vykdymo metu, pavydžiui:
 
   ```python
@@ -204,7 +204,7 @@ su statiniais tipais.
 
 Robert Cecil Martin savo knygoje „Clean Architecture“ @clean-architecture išskiria tris
 pagrindines programavimo paradigmas: struktūrinis, objektinis bei funkcinis
-programavimas. Pagal autorių, kiekviena paradigma ne suteikia mums kažką, o priešingai -jos atima galimybę iš programuotojų rašyti kodą, kuris lengvai priveda prie klaidų.
+programavimas. Pagal autorių, kiekviena paradigma ne suteikia mums kažką, o priešingai -- jos atima galimybę iš programuotojų rašyti kodą, kuris lengvai priveda prie klaidų.
 
 - „Pirmoji priimta (bet ne pirmoji išrasta) paradigma buvo struktūrinis
   programavimas, kurį 1968 m. atrado Edsger Wybe Dijkstra. Dijkstra
@@ -222,7 +222,7 @@ programavimas. Pagal autorių, kiekviena paradigma ne suteikia mums kažką, o p
   taip sudarant galimybę funkcijos deklaruotiems vietiniams kintamiesiems
   egzistuoti ilgą laiką po to, kai funkcijos reikšmė buvo grąžinta.
   Funkcija tapo klasės konstruktoriumi, o vietiniai kintamieji
-  tapo egzemplioriaus kintamaisiais, o įterptinės funkcijos - metodais. Tai
+  tapo egzemplioriaus kintamaisiais, o įterptinės funkcijos -- metodais. Tai
   neišvengiamai privedė prie polimorfizmo atradimo disciplinuotai naudojant funkcijų
   rodykles.
 
@@ -282,4 +282,4 @@ ir mūsų projektui:
 sprendžiant pačias įvairiausias problemas, galutiniame kalbos pasirinkime labiausiai
 vadovavomės esama pažintimi su kalba. Pasirinkę kalbą, kurios pagrindus jau žinome,
 galime sutelkti daugiau dėmesio pačiam programos veikimui. Šitaip mąstant, prieš
-akis iškyla pagrindinis favoritas - „Scala“.
+akis iškyla pagrindinis favoritas -- „Scala“.

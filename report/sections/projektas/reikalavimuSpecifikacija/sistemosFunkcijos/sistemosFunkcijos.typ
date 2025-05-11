@@ -17,7 +17,7 @@ Aktoriai:
 - „TravelTime API“: išorinė sistema, naudojama kartu su „Mapillary API“ suteikia naudotojui galimybę ieškoti vietovių pagal
   adresą ar žymias vietas.
 
-Gatvės vaizdo posistemė -atsakinga už pagrindinį programos veikimą – gatvės vaizdų gavimą, atvaizdavimą ir programos valdymą.
+Gatvės vaizdo posistemė -- atsakinga už pagrindinį programos veikimą – gatvės vaizdų gavimą, atvaizdavimą ir programos valdymą.
 
 Pagrindiniai programos paleidimo būdai (tiesiogiai kviečiami naudotojo):
 - Paleisti programą naudojant paveiksliuko ID: vartotojas paleidžia programą nurodydamas konkretų „Mapillary“ vaizdo indeksą,
