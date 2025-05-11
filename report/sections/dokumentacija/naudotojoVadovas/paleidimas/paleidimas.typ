@@ -8,7 +8,7 @@ nurodžius konkrečias koordinates koordinates programa ieškos esamų paveiksli
 platformoje, nubrėždama nedidelį stačiakampį aplink nurodytas koordinates.
 
 ```bash
-java -jar street-ascii.jar coordinates 54.901300696008846,11.892028147030498"
+java -jar street-ascii.jar coordinates 54.901300696008846,11.892028147030498
 ```
 
 Sėkmingai radus paveiksliuką, programoje matysite ASCII atvaizduotą jo vaizdą. Įvykus
@@ -59,7 +59,7 @@ nurodžius konkretų identifikatorių, programa suras atitinkampą paveiksliuka
 jog kiekvieną kartą bus gautas tas pats paveiksliukas.
 
 ```bash
-java -jar street-ascii.jar id 1688256144933335"
+java -jar street-ascii.jar id 1688256144933335
 ```
 
 Sėkmingai radus nurodytą paveiksliuką, programoje matysite ASCII atvaizduotą jo vaizdą. Įvykus
@@ -72,7 +72,7 @@ atsitiktinai parinks lokaciją, o naudotojas turės atspėti, kokioje šalyje ji
 yra.
 
 ```bash
-java -jar street-ascii.jar guessing"
+java -jar street-ascii.jar guessing
 ```
 
 Sėkmingai radus nurodytą paveiksliuką, programoje matysite ASCII atvaizduotą jo vaizdą bei
@@ -86,9 +86,9 @@ scenarijai, aprašyti konfigūracijos dokumentacijoje. Paleidžiant programą, n
 gali pateikti kelią iki konfigūracinio failo.
 
 ```bash
-java -jar street-ascii.jar guessing --config ./mano_configuracija.conf"
+java -jar street-ascii.jar guessing --config ./mano_configuracija.conf
 
-java -jar street-ascii.jar guessing -c ./mano_configuracija.conf"
+java -jar street-ascii.jar guessing -c ./mano_configuracija.conf
 ```
 
 Jei _-\-config_ arba _-c_ parametras nėra nurodytas, bus naudojama numatytoji (angl. _default_) reikšmė
