@@ -77,6 +77,8 @@
 #pagebreak()
 #include "sections/dokumentacija/dokumentacija.typ"
 #pagebreak()
+#include "sections/isvados/isvados.typ"
+#pagebreak()
 #bibliography(
     "bibliography.yaml",
     title: "Literatūros sąrašas",
