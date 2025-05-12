@@ -9,6 +9,44 @@ Doc. – docentas;\
 Lekt. – lektorius;\
 Prof. – profesorius.\
 
+API (angl. _Application Programming Interface_) – programų sąsaja, leidžianti skirtingoms programoms sąveikauti tarpusavyje.
+
+ASCII (angl. _American Standard Code for Information Interchange_) – standartizuotas simbolių kodavimo rinkinys, naudojamas
+tekstui vaizduoti kompiuteriuose.
+
+CLI (angl. _Command Line Interface_) – komandinės eilutės sąsaja, leidžianti vartotojui sąveikauti su kompiuterio programa
+tekstinių komandų pagalba.
+
+GUI (angl. _Graphical User Interface_) – grafinė vartotojo sąsaja, leidžianti vartotojui sąveikauti su programa per
+grafinius elementus (langus, mygtukus ir pan.).
+
+HOCON (angl. _Human-Optimized Config Object Notation_) – žmogui optimizuotas konfigūracijos objektų žymėjimas, konfigūracijos
+failų formatas.
+
+IO – įvesties ir išvesties operacijos. „Cats-Effect“ bibliotekoje taip pat reiškia monadą šalutiniams efektams valdyti.
+
+JSON (angl. _JavaScript Object Notation_) – lengvas duomenų mainų formatas, dažnai naudojamas API atsakuose.
+
+JVM (angl. _Java Virtual Machine_) – Java virtuali mašina bei aplinka, kurioje vykdomos Java ir kitomis JVM kalbomis parašytos programos.
+
+RGB (angl. _Red, Green, Blue_) – raudonos, žalios ir mėlynos spalvų modelis, naudojamas spalvoms atvaizduoti ekranuose.
+
+TUI (angl. _Terminal User Interface_) – terminalo vartotojo sąsaja, tekstinė sąsaja veikianti komandinės eilutės aplinkoje.
+
+UI (angl. _User Interfac_) – vartotojo sąsaja.
+
+UML (angl. _Unified Modeling Language_) – unifikuota modeliavimo kalba, standartizuota grafinė kalba programinės įrangos
+sistemoms vizualizuoti, specifikuoti ir dokumentuoti.
+
+URL (angl. _Uniform Resource Locator_) – universalus naršyklių adresas, interneto adresas.
+
+UTF-8 – populiarus kintamo ilgio simbolių kodavimo standartas, palaikantis daugumą pasaulio rašmenų.
+
+UX (angl. _User Experience_) – vartotojo patirtis.
+
+WYSIWYG (angl. _What You See Is What You Get_) – „Ką matai, tą ir gauni“ redagavimo principas, kai turinys redagavimo
+metu atrodo taip pat, kaip galutiniame rezultate.
+
 *Terminai:*
 ANSI escape koduotė – specialios simbolių sekos, naudojamos terminale valdyti teksto spalvas, formatavimą ir žymeklio poziciją.
 
@@ -43,7 +81,7 @@ Terminalo emuliatorius – programa, imituojanti fizinio kompiuterio terminalo v
 Geokodavimas (angl. _geocoding_) – procesas, kurio metu tekstinis adresas (pvz., gatvė, miestas) paverčiamas
 geografinėmis koordinatėmis (platuma ir ilguma).
 
-„Geoguessr“– internetinis žaidimas, kuriame žaidėjai turi atspėti geografinę vietą pagal pateiktus gatvės lygio vaizdus.
+„Geoguessr“ – internetinis žaidimas, kuriame žaidėjai turi atspėti geografinę vietą pagal pateiktus gatvės lygio vaizdus.
 
 „Git“ – paskirstyta versijų kontrolės sistema, plačiai naudojama programinės įrangos kūrime.
 
