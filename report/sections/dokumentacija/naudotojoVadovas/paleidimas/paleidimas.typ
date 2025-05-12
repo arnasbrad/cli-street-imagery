@@ -2,7 +2,7 @@
 
 Paleisti programą galima keturiais būdais.
 
-==== Pagal koordinates:
+*Pagal koordinates*
 
 nurodžius konkrečias koordinates koordinates programa ieškos esamų paveiksliukų „Mapillary“
 platformoje, nubrėždama nedidelį stačiakampį aplink nurodytas koordinates.
@@ -27,7 +27,7 @@ klaidai, ektrane matysite atitinkamą klaidos tekstą, pavyzdžiui:
   ```
 Ir panašios klaidos.
 
-==== Pagal vietovės adresą:
+*Pagal vietovės adresą*
 
 nurodžius vietovės adresą programa kreipsis į „TravelTime“ programavimo sąsają
 ir bandys paversti adresą į to adreso koordinates. Jei koordinatės bus rastos,
@@ -52,7 +52,7 @@ klaidai, ektrane matysite atitinkamą klaidos tekstą, pavyzdžiui:
   ```
 Ir panašios klaidos.
 
-==== Pagal „Mapillary“ paveksliuko unikalų identifikatorių (angl. _id_):
+*Pagal „Mapillary“ paveksliuko unikalų identifikatorių (angl. _id_)*
 
 nurodžius konkretų identifikatorių, programa suras atitinkampą paveiksliuka
 „Mapillary“ platformoje ir jį matysite ekrane. Šis funkcionalumas užtikrina,
@@ -65,7 +65,7 @@ java -jar street-ascii.jar id 1688256144933335
 Sėkmingai radus nurodytą paveiksliuką, programoje matysite ASCII atvaizduotą jo vaizdą. Įvykus
 klaidai, ektrane matysite atitinkamą klaidos tekstą.
 
-==== Lokacijos spėliojimo režimu
+*Lokacijos spėliojimo režimu*
 
 Programą galima paleisti lokacijos spėliojimo režimu. Taip paleidus, programa
 atsitiktinai parinks lokaciją, o naudotojas turės atspėti, kokioje šalyje jis
@@ -79,7 +79,7 @@ Sėkmingai radus nurodytą paveiksliuką, programoje matysite ASCII atvaizduotą
 galėsite spėti šalį. Daugiau apie tai, kaip spėlioti, bus aprašyta vėlesniuose dokumentacijos
 skyriuose.
 
-==== Konfigūracinio failo nurodymas
+*Konfigūracinio failo nurodymas*
 
 Programai veikti reikalingas konfigūracinis failas, kuriam sukurti yra pateikti specialūs
 scenarijai, aprašyti konfigūracijos dokumentacijoje. Paleidžiant programą, naudotojas

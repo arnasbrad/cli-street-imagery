@@ -2,8 +2,6 @@
 
 === Kodėl „Scala“?<why-scala>
 
-==== Įvadas
-
 Programavimo kalbos yra pagrindinis tarpininkas tarp žmogiškos logikos ir mašininio
 kodo -- jos leidžia programuotojams paversti abstrakčias idėjas
 ir problemų sprendimo metodus į instrukcijas, kurias kompiuteriai gali vykdyti.
@@ -13,12 +11,10 @@ projekto sėkmei. Šiame skyriuje pateikiamas kontekstas „Scala“ pasirinkimu
 disertacijos įgyvendinimo kalbai, nagrinėjant platesnį programavimo kalbų kraštovaizdį,
 jų evoliuciją ir įvairias paradigmas, kurias jos atstovauja.
 
-==== Istorinė programavimo kalbų raida
-
 Manome, jog galima išskirti kelis tipus programavimo kalbų, priklausomai nuo jų
 sukūrimo laiko bei paskirties.
 
-===== Mašininis kodas
+*Mašininis kodas*
 
 Ankstyviausi kompiuteriai reikalavo programavimo dvejetainiu
 mašininiu kodu – 1 ir 0 sekomis, tiesiogiai atitinkančiomis procesoriaus instrukcijas.
@@ -34,7 +30,7 @@ bei mažesnį galutinio failo dydį. Visa tai yra labai naudinga specifinėse si
 kai resursai yra ypatingai riboti. Tačiau net tokiu atveju, dauguma profesionalų
 rinktūsi įrankį, suteikiantį šiek tiek daugiau abstrakcijos.
 
-===== Asemblerio kalbos
+*Asemblerio kalbos*
 
 Asemblerio kalbos pristatė simbolinius mašininių instrukcijų atvaizdavimus,
 leidžiančius programuotojams naudoti žmogui suprantamą kodą vietoje dvejetainių
@@ -58,7 +54,7 @@ tačiau ir šiomis dienomis jos vis dar yra naudojamos operacinių sistemų bran
 realaus laiko programose, įrenginių tvarkyklėse ir kitose programose, kur greitis
 ir resursų valdymas yra kritinis taškas.
 
-===== Ankstyvosios aukšto lygio kalbos
+*Ankstyvosios aukšto lygio kalbos*
 
 Šešto dešimtmečio pabaigoje ir septinto dešimtmečio pradžioje įvyko proveržis
 programavimo kalbų srityje – buvo sukurtos pirmosios tuo metu vadinamos aukšto
@@ -88,7 +84,7 @@ aprašymo kalba.
 Ji įvedė blokų struktūrą, lokalius kintamuosius ir procedūras su parametrais.
 „ALGOL“ tapo daugelio vėlesnių kalbų, tokių kaip „Pascal“, „C“ ir „Java“ protėviu.
 
-===== „C“ kalba ir sisteminės kalbos
+*„C“ kalba ir sisteminės kalbos*
 
 „C“ kalba, sukurta „Bell“ laboratorijose 1972 metais
 (https://www.geeksforgeeks.org/c-language-introduction/),
@@ -105,7 +101,7 @@ operacinių sistemų, įskaitant „Linux“ ir „Windows“, yra parašytos �
 įtaka matoma beveik visose vėlesnėse programavimo kalbose,
 įskaitant „C++“, „Java“, „C\#“ ir net „Python“.
 
-===== Modernios kalbos
+*Modernios kalbos*
 
 Šiais laikais programavimo kalbų pasirinkimas yra beveik begalinis. Yra įvairiausių
 kalbų visokioms problemoms spręsti. Interpretuojamos kalbos kaip „Python“ idealiai
@@ -116,9 +112,7 @@ programavimo standartui „C“. Turint tiek daug pasirinkimo laisvės,
 renkantis programavimo kalbą galima daugiau galvoti apie jos stilių
 bei abstrakcijos lygį.
 
-==== Kalbos rinkimasis
-
-===== Abstrakcijos lygmuo
+*Abstrakcijos lygmuo*
 
 Renkantis programavimo kalbą svarbu nuspręsti, kiek žemo lygio kontrolės reikės
 mūsų kuriamam projektui. Pavyzdžiui, jei pasirinksime tai, ką šiais laikais vadintume
@@ -136,7 +130,7 @@ tikrai galima rašyti ir aukšto, ir žemo lygio kalbomis.
 todėl pasirinkome naudoti aukštesnio lygio kalbą, kad programinio kodo
 rašymo metu būtų galima daugiau dėmėsio telkti programos funkcionalumui.
 
-===== Kompiliuojama ar interpretuojama kalba?
+*Kompiliuojama ar interpretuojama kalba?*
 
 Programavimo kalbos paprastai yra skirstomos į 2 pagrindinius tipus priklausomai nuo to,
 kaip jų kodas yra paleidžiamas:
@@ -153,7 +147,7 @@ kaip jų kodas yra paleidžiamas:
 Siekdami neprarasti per daug programos veikimo spartumo, nusprendėme pasirinkti
 kompiliuojąmą programavimo kalbą.
 
-===== Statiniai ar dinaminiai tipai?
+*Statiniai ar dinaminiai tipai?*
 
 Programavimo kalbos yra skirstomos į 2 pagrindines grupes pagal tai, kaip jos kontroliuoja
 kintamųjų tipus:
@@ -200,7 +194,7 @@ kintamųjų tipus:
 Mūsų programos apimtis būs sąlyginai didelė, todėl mes pasirinkome nudoti kalbą
 su statiniais tipais.
 
-===== Programavimo paradigma
+*Programavimo paradigma*
 
 Robert Cecil Martin savo knygoje „Clean Architecture“ @clean-architecture išskiria tris
 pagrindines programavimo paradigmas: struktūrinis, objektinis bei funkcinis
@@ -252,7 +246,7 @@ ir padeda tą pačią problemą išspręsti greičiau ir suprantamiau. Dėl šio
 savo programai kurti pasirinkome funkcinio stiliaus kalbą. Detaliau apie funkcinį
 programavimą ir jo privalumus kalbėsime tolimesniuose skyriuose.
 
-===== Programavimo kalba 
+*Programavimo kalba*
 
 Po šios nuoseklios analizės mes turime bendrą idėją, ko tikimės iš pasirinktos
 programavimo kalbos:
