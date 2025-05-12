@@ -52,13 +52,63 @@ Dėl pasirinkto minimalistinio požiūrio, sąsajos elementai yra labai paprasti
 
 === Navigacijos realizacija
 
-Navigacija yra viena pagrindinių interaktyvių funkcijų. Ji realizuota taip:
+Navigacija yra viena pagrindinių interaktyvių programos funkcijų, leidžianti naudotojui virtualiai
+judėti po aplinką. Ji realizuota taip, kad suteiktų lankstumo priklausomai nuo turimų duomenų ir naudotojo
+pageidavimų. Programa palaiko du pagrindinius navigacijos tipus, kuriuos galima pasirinkti konfigūracijos faile:
+navigaciją pagal sekas (angl. _sequence-based_) ir navigaciją pagal atstumą (angl. _proximity-based_ arba _radius-based_).
 
+Bendras navigacijos procesas vyksta taip:
 1. Naudotojas inicijuoja navigacijos režimą paspausdamas tam skirtą klavišą (_n_).
-2. Sistema, priklausomai nuo konfigūracijos ar aptiktų „Mapillary“ duomenų tipo, pateikia galimų judėjimo krypčių sąrašą
-  (kaip tekstinį ASCII vaizdą).
-3. Naudotojas pasirenka vieną iš krypčių paspausdamas atitinkamą klavišą (pvz., skaičių ar raidę).
-4. Programa kreipiasi į „Mapillary“, gauna naujos vietos vaizdo duomenis ir perpiešia ekraną su nauju ASCII vaizdu.
+2. Sistema, atsižvelgdama į konfigūracijoje nustatytą navigacijos tipą ir esamos „Mapillary“ nuotraukos
+   metaduomenis, pateikia galimų judėjimo krypčių sąrašą. Šis sąrašas rodomas kaip
+   tekstinis ASCII menas, persidengiantis su pagrindiniu vaizdu.
+3. Naudotojas pasirenka vieną iš pateiktų krypčių paspausdamas atitinkamą klavišą (pvz., skaičių ar raidę, nurodytą sąraše).
+4. Programa kreipiasi į „Mapillary“ API, prašydama naujos vietos vaizdo duomenų pagal pasirinktą kryptį
+   (t.y., naują nuotraukos identifikatorių).
+5. Gavus naujus duomenis, ekranas yra perpiešiamas su nauju ASCII vaizdu, atitinkančiu naująją lokaciją.
+
+Detaliau apie kiekvieną navigacijos tipą ir jo realizaciją:
+
+- Navigacija pagal sekas (angl. _Sequence-based navigation_):
+    - Logika: šis navigacijos tipas remiasi „Mapillary“ nuotraukų sekomis. Seka – tai eilė nuotraukų, padarytų
+      judant tam tikra trajektorija (pvz., važiuojant gatve). Jei dabartinė rodoma nuotrauka priklauso sekai,
+      programa bando rasti ankstesnę ir vėlesnę nuotrauką toje pačioje sekoje.
+    - Įgyvendinimas:
+        1. Pirmiausia kreipiamasi į „Mapillary“ API, prašoma visų nuotraukų identifikatorių (ID), priklausančių
+           dabartinės nuotraukos sekai.
+        2. Gavus visų sekos nuotraukų ID sąrašą, nustatoma dabartinės nuotraukos pozicija šiame sąraše.
+        3. Remiantis šia pozicija, identifikuojamas ankstesnis (jei yra) ir vėlesnis (jei yra) nuotraukos ID sekoje.
+        4. Naudotojui pateikiamos parinktys judėti pirmyn (angl. _forwards_) arba atgal (angl. _backwards_) seka.
+    - Privalumai: dažniausiai užtikrina sklandų ir logišką judėjimą ta pačia gatve ar keliu. Nuotraukos dydis
+      naviguojant visuomet yra toks pats, dienos laikas taip pat pastovus.
+    - Trūkumai: veikia tik tada, kai nuotrauka priklauso sekai -- kitu atveju nei pirmyn, nei atgal paeiti nebus galima.
+      Neleidžia pasukti į šonines gatves ar tyrinėti aplinkos laisviau, jei nėra tiesioginės sekos jungties.
+
+- Navigacija pagal atstumą/artumą (angl. _Proximity-based navigation_):
+    - Logika: šis tipas leidžia naudotojui judėti į artimiausias aplinkines nuotraukas, nepriklausomai nuo sekų.
+      Paieška atliekama tam tikru spinduliu aplink dabartinę naudotojo poziciją.
+    - Įgyvendinimas:
+        1. Kreipiamasi į „Mapillary“ API, pateikiant dabartinės nuotraukos koordinates ir paieškos spindulį.
+        2. API grąžina sąrašą nuotraukų, esančių nurodytame spindulyje. Iš šio sąrašo pašalinama pati dabartinė
+           nuotrauka, kad nebūtų siūloma judėti į tą pačią vietą.
+        3. Kiekvienai likusiai aplinkinei nuotraukai, taikant Haversine @haversine-wiki formulę, apskaičiuojamas
+           atstumas nuo dabartinės pozicijos.
+        4. Nuotraukos surūšiuojamos pagal atstumą (nuo artimiausios iki tolimiausios).
+        5. Paimamas ribotas kiekis (5) artimiausių nuotraukų.
+        6. Naudotojui pateikiamas šių artimiausių lokacijų sąrašas, dažnai nurodant atstumą ir apytikslę kryptį.
+           Kryptis apskaičiuojama lyginant dabartinį kompaso kampą su guoliu (angl. _bearing_) į tikslinę koordinatę.
+    - Privalumai: suteikia daugiau laisvės tyrinėti aplinką, leidžia pereiti į šonines gatves ar kitus objektus,
+      kurie nėra tiesiogiai sujungti seka.
+    - Trūkumai: kartais gali pasiūlyti judėjimą, kuris nėra logiškas kelio atžvilgiu (pvz., peršokti į kitą gatvės pusę
+      ar į paralelinę gatvę). Rezultatų kokybė priklauso nuo „Mapillary“ padengimo tankumo toje vietoje. Galima gauti
+      kitokio dydžio nuotrauką ar vaizdą kitokiu dienos laiku (pvz. iš dienos perėjimas į naktį).
+
+Pasirinkus navigacijos kryptį, programa gauna naujosios nuotraukos identifikatorių ir inicijuoja naujo vaizdo
+gavimo bei atvaizdavimo procesą, kaip aprašyta bendroje navigacijos eigoje.
+
+Taip pat patogesniam demonstravimui sukūrėme greitesnį sekos navigacijos režimą, kuris kaskart nerodo
+pasirinkimų judėti pirmyn ar atgal. Taip padarėme todėl, nes naviguojant kaskart matyti šiuos du pasirinkimus
+yra nebūtina bei sunkiau matyti pasikeitimus tarp dabartinio ir praeito paveiksliuko.
 
 === Grįžtamasis ryšys naudotojui
 

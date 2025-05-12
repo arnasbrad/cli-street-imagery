@@ -679,3 +679,13 @@ gum-repo:
     value: https://github.com/charmbracelet/gum
     date: 2025-05-11
   language: en
+
+haversine-wiki:
+  type: Entry
+  title: Haversine formula
+  date: 2025-05-03
+  language: en
+  url:
+    value: https://en.wikipedia.org/wiki/Haversine_formula
+    date: 2025-05-10
+  note: "Wikipedia article detailing the Haversine formula, commonly used to calculate the great-circle distance between two points on a sphere given their longitudes and latitudes."
