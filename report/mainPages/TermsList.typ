@@ -48,6 +48,7 @@ WYSIWYG (angl. _What You See Is What You Get_) – „Ką matai, tą ir gauni“
 metu atrodo taip pat, kaip galutiniame rezultate.
 
 *Terminai:*
+
 ANSI escape koduotė – specialios simbolių sekos, naudojamos terminale valdyti teksto spalvas, formatavimą ir žymeklio poziciją.
 
 ASCII menas – grafinio dizaino technika, kai vaizdai kuriami naudojant ASCII simbolius.
