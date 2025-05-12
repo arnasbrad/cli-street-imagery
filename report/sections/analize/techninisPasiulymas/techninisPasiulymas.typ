@@ -58,7 +58,7 @@ nagrinėjami kiti vaizdų į ASCII meną konvertavimo įrankiai, kurie sudaro te
 pateikimui tekstinėje aplinkoje. Antrojoje dalyje bus analizuojami populiarios egzistuojančios programos, kurių alternatyvios
 versijos buvo išleistos išskirtinai naudojant komandinės eilutės naudotojo sąsajas.
 
-==== Nuotraukų konvertavimo į ASCII įrankiai
+*Nuotraukų konvertavimo į ASCII įrankiai*
 
 Vaizdo konvertavimas į ASCII meną yra nusistovėjusi technika, leidžianti apytiksliai atkurti vaizdinę informaciją naudojant
 standartinius spausdinamus simbolius. Egzistuoja įvairių įgyvendinimų, kurie skiriasi prieinamumu, lankstumu ir pritaikymo sritimis.
@@ -131,7 +131,7 @@ bet ne interaktyvios, dinamiškos, į gatvės vaizdo reprezentavimą orientuotos
 Šis projektas siekia užpildyti šią nišą, sujungdamas ASCII vizualizavimo technikas su interaktyviu valdymu ir specifiniu
 geografiniu turiniu, taip praplečiant suvokimą apie komandinės eilutės galimybes.
 
-==== Programos naudojančios komandinės eilutės sąsają
+*Programos naudojančios komandinės eilutės sąsają*
 
 Pirmojoje dalyje išnagrinėjus specifinius vaizdo konvertavimo į ASCII meną įrankius, antrojoje dalyje dėmesys krypsta į
 platesnį kontekstą – egzistuojančias komandinės eilutės (angl. _Command-line interface_) alternatyvas plačiai naudojamoms paslaugoms,
