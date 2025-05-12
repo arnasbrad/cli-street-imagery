@@ -3,7 +3,7 @@
 #page(header: none)[
   #set text(size: 12pt)
   #AuthorName.at(1).
-  #ProjectName.
+  #ProjectTitle.
   #ProjectType.
   #ProjectSupervisor.join(" ").
   #ProjectFaculty, Kauno technologijos universitetas.
@@ -19,8 +19,26 @@
     *Santrauka*
   
   #set align(start)
-  // TODO: wtf is santrauka
-  #lorem(30)\
-  \
-  #lorem(40)
+
+  Šis baigiamasis bakalauro studijų projektas pristato inovatyvų sprendimą – programą, skirtą
+  interaktyviai naršyti pasaulio gatves naudojant tik komandinės eilutės sąsają. Darbo epicentre –
+  fundamentalus klausimas apie komandinės eilutės, kaip terpės, tinkamumą vizualiai turtingoms aplikacijoms.
+  Pagrindinis projekto tikslas yra dvejopas: pirma, atlikti išsamią komandinės eilutės aplinkos
+  techninių ir vartotojo sąsajos apribojimų analizę tokio tipo programos kontekste. Antra, remiantis šia analize,
+  suprojektuoti ir realizuoti veikiantį prototipą, demonstruojantį gatvės lygio vaizdų peržiūrą ASCII formatu.
+
+  Projekte detaliai gilinamasi į praktinius iššūkius, su kuriais susidurta implementuojant sprendimą:
+  pradedant ribotu spalvų ir grafinių elementų palaikymu terminale, baigiant poreikiu sukurti intuityvią
+  navigacijos sistemą be tradicinių grafinių valdiklių. Aprašomi pasirinkti kompromisai ir kūrybiniai sprendimai,
+  leidusieji šiuos apribojimus apeiti ar sušvelninti. Svarbi darbo dalis yra išorinių paslaugų, tokių kaip
+  „Mapillary“ API gatvės vaizdų tiekimui, ir kitų programinės įrangos bibliotekų („JLine“ terminalo valdymui,
+  „Cats Effect“ pašalinių efektų valdymui) integravimo analizė ir praktinis pritaikymas. Ypatingas dėmesys
+  skiriamas įvairių ASCII meno generavimo algoritmų (šviesumo, kraštinių detekcijos) tyrimui ir jų
+  efektyvumui dinamiškai konvertuojant fotografinius vaizdus į tekstinę reprezentaciją.
+
+  Techninė projekto realizacija atlikta naudojant „Scala“ programavimo kalbą, kuri pasirinkta dėl jos galingos
+  tipų sistemos, funkcinio programavimo paradigmos palaikymo ir geros integracijos su „Java“ ekosistema.
+  Projektinė ataskaita, savo ruožtu, parengta naudojant „Typst“ – modernią, kodu pagrįstą dokumentų rengimo sistemą.
+  Siekiant atitikti akademinius reikalavimus ir užtikrinti dokumento kokybę, šiam darbui buvo sukurtas specialus
+  „Typst“ šablonas.
 ]

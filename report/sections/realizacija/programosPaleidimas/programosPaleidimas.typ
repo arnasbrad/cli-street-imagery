@@ -50,7 +50,8 @@ Pagrindiniai „Decline“ privalumai, lėmę jos pasirinkimą:
 
 Programoje „StreetAscii“ „Decline“ biblioteka naudojama apibrėžti pagrindinę komandų struktūrą. Yra viena pagrindinė komanda
 (_StreetAscii_), kuri gali būti iškviesta su viena iš keturių subkomandų: _id_, _coordinates_, _address_ arba _guessing_.
-Kiekviena subkomanda gali turėti savo specifines parinktis. Pavyzdžiui, visos subkomandos priima neprivalomą _-\-config_ (arba _-c_)
+Kiekviena subkomanda gali turėti savo specifines parinktis. Pavyzdžiui, _coordinates_ ir _address_ subkomandos papildomai priima _-\-radius_
+parinktį paieškos spinduliui nurodyti, o visos subkomandos priima neprivalomą _-\-config_ (arba _-c_)
 parinktį konfigūracijos failo kelio nurodymui.
 
 Biblioteka leidžia apibrėžti kiekvieną parinktį (pvz., _-\-config_), argumentą (pvz., konkretus ID _id_ subkomandai)
@@ -72,3 +73,16 @@ Apibendrinant, „Decline“ pasirinkimas leido sukurti tvirtą, tipų saugią i
 minimaliomis pastangomis įgyvendinant sudėtingus reikalavimus dėl skirtingų paleidimo režimų ir jų parametrų.
 Tai leido kūrėjams labiau susikoncentruoti į pagrindinę programos funkcionalumą, o ne į komandinės eilutės argumentų analizės subtilybes.
 
+=== Išvados
+
+Praktikoje, kuriant _address_ subkomandą, paaiškėjo tam tikras jos naudojimo ypatumas. Nors galimybė paleisti programą nurodant
+vietovės adresą yra patogi, geokodavimo paslauga (šiuo atveju „TravelTime API“) paprastai grąžina koordinates, atitinkančias
+objekto ar pastato centrą. Kadangi „Mapillary“ gatvės lygio vaizdų padengimas retai būna pačiame pastato centre (dažniau aplinkinėse
+gatvėse), tiesioginis šių koordinačių naudojimas su numatytuoju mažu paieškos spinduliu dažnai neduoda rezultatų. Dėl šios
+priežasties, naudojant paleidimą pagal adresą, naudotojui dažnai tenka rankiniu būdu padidinti paieškos spindulį per _-\-radius_
+parinktį, kad programa rastų artimiausius padengtus gatvės vaizdus aplink geokoduotą tašką. Tai šiek tiek sumažina pradinį
+šios funkcijos patogumą, tačiau galimybė reguliuoti spindulį išlieka svarbi.
+
+Be šio vieno nepatogumo, visos kitos subkomandos veikė kaip tikėtasi, nes naudotojas turi nurodyti arba konkrečias koordinates,
+arba nuotraukos identifikatorių -- tokiu atveju naudotojas turi galimybę tiksliai valdyti, ką jis nori pamatyti, nepriklausomai
+nuo geokodavimo rezultato.

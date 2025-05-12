@@ -9,7 +9,7 @@ Analizė apima tiek išorinius veiksnius (pavyzdžiui, priklausomybes nuo treči
 
 === Pagrindinės techninės kliūtys ir sprendimai
 
-==== Prieiga prie „Street View“ duomenų ir API kainodara
+*Prieiga prie „Street View“ duomenų ir API kainodara*
 
 Pradinė idėja: Idealus variantas būtų buvęs naudoti plačiausiai paplitusią ir didžiausią aprėptį turinčią
 „Google Street View“ platformą.
@@ -28,7 +28,7 @@ Taip pat, dėl to kad ši sąsaja yra nemokama, ji nėra ypatingai patikima, pav
 užklausos dažnai yra atmetamos dėl per didelio bendro užklausų kiekio -- tenka laukti, kol „Mapillary“ serveriai bus mažiau
 naudojami. Šis laukimas yra pagrindinis veiksnys, lemiantis galimą naudotojo sąsajos vėlavimą keičiant vaizdus.
 
-==== Terminalo aplinkos grafiniai apribojimai
+*Terminalo aplinkos grafiniai apribojimai*
 
 Kliūtis: Standartinė komandinės eilutės (terminalo) aplinka turi esminių grafinių galimybių apribojimų,
 lyginant su grafinėmis naudotojo sąsajomis (angl. _graphical user interface_ arba _GUI_). Tai tiesiogiai paveikė
@@ -53,7 +53,7 @@ Sprendimas/Poveikis:
   (pavadinimai, meniu punktai), taip pat buvo realizuoti kaip ASCII menas, leidžiantis vizualiai juos atskirti
   ir struktūruoti sąsają, tačiau padidinant generuojamo vaizdo sudėtingumą.
 
-==== Vaizdo reprezentacijos tikslumas
+*Vaizdo reprezentacijos tikslumas*
 
 Kliūtis: Pats fotografinio vaizdo konvertavimas į ASCII meną yra techniškai ribotas procesas.
 Nepriklausomai nuo algoritmų, ASCII reprezentacija visada bus ženkliai žemesnės raiškos ir detalumo nei pradinis vaizdas.

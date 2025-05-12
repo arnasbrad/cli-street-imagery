@@ -1,6 +1,6 @@
 === Funkcinis programavimas su „Scala“
 
-==== Apie „Scala“
+*Apie „Scala“*
 
 „Scala“ programavimo kalba, taip pat kaip ir „Java“, yra skirta dirbti su „JVM“
 (_Java Virtual Machine_) platforma -- tai reiškia, jog programinis kodas yra kompiliuojamas
@@ -80,7 +80,7 @@ Tai yra puikus pasirinkimas programuotojams, norintiems išplėsti savo įgūdž
 ir įsisavinti funkcinio programavimo koncepcijas, išlaikant pažįstamą
 objektinio programavimo aplinką.
 
-==== „Cats-Effect“ karkasas
+*„Cats-Effect“ karkasas*
 
 Kaip minėjome anksčiau, „Scala“ nėra idealiai funkcinė kalba. Vienas pagrindinis funkcionalumas,
 kurio nėra šioje programavimo kalboje, kuris dažnai randamas kitose funkcinėse programavimo kalbose -- 
@@ -183,13 +183,68 @@ val spausdintuvas: IO[Unit] = IO.println("Labas, pasauli!")
 Nesvarbu, kiek kartų mes iškviesime šią reikšmę, spausdinimas nebus įvykdytas nė karto, pavyzdžiui:
 
 ```scala
-printer
-printer
-printer
+def function(): IO[Unit] = {
+  spausdintuvas
+  spausdintuvas
+  spausdintuvas
+}
+
+function()
+
+// Nespausdina nieko
 ```
 
 Šis kodas neišspausdins teksto nė karto, nes mes dar nenurodėme, jog efektą reikia įvykdyti.
-Jei nurodytume, jog efektas turi būti įvykdytas, tekstas būtų išspausdintas kiekvieną kartą.
+
+Jei įvykdytume visą funkciją, spausdinimas įvyktų tik vieną kartą, nes paskutinė reikšmė funkcijoje
+yra jos rezultatas:
+
+```scala
+def function(): IO[Unit] = {
+  spausdintuvas
+  spausdintuvas
+  spausdintuvas
+}
+
+function().unsafeRunSync()
+
+// Labas, pasauli!
+```
+
+Jei nurodytume, jog efektas turi būti įvykdytas, tekstas būtų išspausdintas kiekvieną kartą:
+
+```scala
+def function(): Unit = {
+  spausdintuvas.unsafeRunSync()
+  spausdintuvas.unsafeRunSync()
+  spausdintuvas.unsafeRunSync()
+}
+
+function()
+
+// Labas, pasauli!
+// Labas, pasauli!
+// Labas, pasauli!
+```
+
+Arba apjungiant efektus:
+
+```scala
+def function(): IO[Unit] = {
+  for {
+    _ <- spausdintuvas
+    _ <- spausdintuvas
+    _ <- spausdintuvas
+  } yield ()
+}
+
+function().unsafeRunSync()
+
+// Labas, pasauli!
+// Labas, pasauli!
+// Labas, pasauli!
+```
+
 Tai mums leidžia dirbti su bet kokiomis reikšmėmis, net tokiomis kaip _Unit_ (kitose kalbose dažniau naudojamas terminas
 yra _void_) taip pat, kaip dirbtume su paprastomis reikšmėmis, kaip _Int_, _String_ ar kitomis -- jas galime naudoti,
 perpanaudoti, grąžinti naują reikšmę ir panašiai. Tai yra galima todėl, nes mes programiniame kode dirbame ne su pačia
