@@ -58,7 +58,7 @@ lėmė keli pagrindiniai veiksniai:
   kurios projektui yra aktualios, bet „Mapillary“ aprėptis yra nepakankama. Šis aspektas ypač svarbus nišiniams
   ar lokaliems projektams.
 
-4. Pakankamas funkcionalumas projektui: Nors „Mapillary“ sąsaja galbūt nėra tokia išplėtota ar turinti tiek pagalbinių
+4. Pakankamas funkcionalumas projektui: nors „Mapillary“ sąsaja galbūt nėra tokia išplėtota ar turinti tiek pagalbinių
   funkcijų kaip „Google Maps Platform“, ji suteikė visas projektui būtinas pagrindines galimybes: gauti vaizdus pagal
   geografines koordinates, naršyti vaizdų sekas (judėti pirmyn ir atgal) ir gauti reikalingus metaduomenis (pvz., vaizdo kryptį).
 
