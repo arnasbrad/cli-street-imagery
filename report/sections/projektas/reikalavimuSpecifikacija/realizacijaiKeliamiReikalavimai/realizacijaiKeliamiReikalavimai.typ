@@ -1,4 +1,4 @@
-=== Realizacijai keliami reikalavimai
+=== Realizacijai keliami nefunkciniai reikalavimai
 
 Be funkcinių reikalavimų, kurie apibrėžia, ką sistema turi atlikti, lygiai taip pat svarbu apibrėžti, kaip sistema tai
 darys ir kokie kokybiniai kriterijai jai keliami. Nefunkciniai reikalavimai nusako esminius programos atributus, tokius

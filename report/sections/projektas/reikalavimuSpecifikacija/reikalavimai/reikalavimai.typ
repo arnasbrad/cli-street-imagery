@@ -1,11 +1,9 @@
-#set text(lang: "lt", region: "lt")
-
-== Realizacijai keliami reikalavimai<realizacijai-keliami-reikalavimai>
+=== Realizacijai keliami funkciniai reikalavimai<realizacijai-keliami-reikalavimai>
 
 Šiame skyriuje apibrėžiami pagrindiniai nefunkciniai reikalavimai, keliami kuriamai sistemai, apimantys jos naudojimo
 patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektus.
 
-=== Reikalavimai panaudojamumui<reikalavimai-panaudojamumui>
+*Reikalavimai panaudojamumui*
 
 - Intuityvi navigacija: sistema turi leisti naudotojui naršyti (judėti pirmyn/atgal arba į aplinkines lokacijas)
   naudojant aiškius ir lengvai įsimenamus klaviatūros klavišus, įprastus komandinės eilutės aplinkoje
@@ -19,7 +17,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
   neteisingos koordinatės, interneto ryšio nebuvimas) ir pateikti naudotojui suprantamą klaidos pranešimą,
   neužlūžtant pačiai programai.
 
-=== Reikalavimai vykdymo charakteristikoms<reikalavimai-vykdymo-charakteristikoms>
+*Reikalavimai vykdymo charakteristikoms*
 
 - Atsako laikas (angl. _response time_): nors bendras atsako laikas priklauso nuo „Mapillary“, pati ASCII vaizdo
   generavimo ir atvaizdavimo terminale operacija turėtų būti pakankamai sparti, kad nesukeltų reikšmingo papildomo
@@ -27,7 +25,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
 - Resursų naudojimas (angl. _resource usage_): programa neturėtų nepagrįstai apkrauti sistemos resursų, veikdama kaip
   tipinė komandinės eilutės aplikacija.
 
-=== Reikalavimai veikimo sąlygoms<reikalavimai-veikimo-sąlygoms>
+*Reikalavimai veikimo sąlygoms*
 
 - Terminalo suderinamumas (angl. _terminal compatibility_): sistema turi siekti veikti populiariuose terminalų
   emuliatoriuose, palaikančiuose bent 256 spalvas (pvz., „GNOME Terminal“, „Konsole“, „iTerm2“, „Windows Terminal“),
@@ -37,7 +35,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
 - Programinės įrangos priklausomybės (angl. _software dependencies_): reikalingos priklausomybės (pvz., specifinė „JVM“
   versija, „Docker“ ir panašiai) turi būti aiškiai dokumentuotos.
 
-=== Reikalavimai sistemos išvaizdai<reikalavimai-sistemos-isvaizdai>
+*Reikalavimai sistemos išvaizdai*
 
 - Vizualinis aiškumas (angl. _visual clarity_): ASCII menas, nors ir riboto detalumo, turėtų būti generuojamas
   taip, kad pagrindiniai objektai ir erdvės kryptis būtų bent apytiksliai atpažįstami. Spalvų naudojimas (kai palaikoma)
@@ -45,14 +43,14 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
 - Sąsajos konsistencija (angl. _interface consistency_): tekstiniai naudotojo sąsajos elementai 
   (pranešimai, meniu, pagalba) turėtų naudoti nuoseklų formatavimą ir stilių visoje aplikacijoje.
 
-=== Reikalavimai sistemos priežiūrai<reikalavimai-sistemos-prieziurai>
+*Reikalavimai sistemos priežiūrai*
 
 - Kodo struktūra ir skaitymas (angl. _code structure and readability_): kodas turi būti logiškai struktūrizuotas
   (pvz., pagal modulius ar klases) ir parašytas laikantis bendrų programavimo gerosios praktikos principų
   (pvz., prasmingi pavadinimai, komentarai sudėtingesnėse vietose), kad būtų lengviau jį suprasti ir modifikuoti ateityje,
   kas ypač svarbu akademiniam darbui.
 
-=== Reikalavimai saugumui<reikalavimai-saugumui>
+*Reikalavimai saugumui*
 
 - Išorinės sąsajos raktų apsauga (angl. _API key protection_): jei naudojamas „Mapillary“ ar kitokios sąsajos raktas,
   jis neturėtų būti tiesiogiai įkoduotas viešai prieinamame kode. Rekomenduojama naudoti konfigūracijos failą
@@ -60,7 +58,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
 - Duomenų privatumas (angl. _data privacy_): sistema neturėtų rinkti, saugoti ar perduoti jokių naudotojo asmeninių 
   duomenų, išskyrus tuos, kurie būtini išorinės sąsajos užklausoms (pvz., geografinės koordinatės).
 
-=== Teisiniai reikalavimai<teisiniai-reikalavimai>
+*Teisiniai reikalavimai*
 
 - Išorinės programavimo sąsajos naudojimo sąlygos (angl. _API Terms of Service_): sistemos naudojimas turi 
   nepažeisti „Mapillary“ naudojimo sąlygų ir politikos.
