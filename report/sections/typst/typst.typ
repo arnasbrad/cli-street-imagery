@@ -10,13 +10,13 @@ lankstesnio rengimo proceso, buvo pasirinktas alternatyvus, modernus įrankis �
 Šiame skyriuje argumentuojamas šis pasirinkimas, lyginant
 wwjį su labiau įprastomis alternatyvomis.
 
-== Tradicinių Įrankių Apžvalga ir Jų Trūkumai Projekto Kontekste
+== Tradicinių įrankių apžvalga ir jų trūkumai projekto kontekste
 
 1. WYSIWYG (angl. _What you see is what you get_) ( redaktoriai („Microsoft Word“ ir kt.): šie
   įrankiai yra populiarūs dėl savo vizualios sąsajos („ką matai, tą ir gauni“) ir palyginti žemo
   pradinio naudojimo slenksčio. Jie tinka paprastesniems dokumentams, tačiau rengiant sudėtingos
   struktūros mokslinį darbą, ypač informacinių technologijų srityje, išryškėja jų trūkumai:
-  - Formatavimo konsistencijos išlaikymas: didelės apimties darbe rankiniu būdu užtikrinti vienodą
+  - Formatavimo nuoseklumo išlaikymas: didelės apimties darbe rankiniu būdu užtikrinti vienodą
     stilių antraštėms, citatoms, kodų pavyzdžiams, paveikslėliams ir lentelėms yra sudėtinga ir
     atima daug laiko. Stilių sistemos padeda, bet dažnai reikalauja nuolatinės priežiūros.
   - Struktūros valdymas: dokumento dalių pertvarkymas, skyrių pernumeravimas, kryžminių nuorodų
@@ -31,7 +31,7 @@ wwjį su labiau įprastomis alternatyvomis.
   „LaTeX“ yra tipografinė sistema, pagrįsta ženklinimo kalba (angl. _markup language_), leidžianti autoriui
   sutelkti dėmesį į turinį, o formatavimą patikėti sistemai. Jos privalumai sprendžia daugelį „Word“ problemų:
   - Puiki tipografinė kokybė: ypač matematinių formulių ir sudėtingų maketų atveju.
-  - Struktūra ir konsistencija: griežta struktūra ir stilių valdymas užtikrina dokumento vientisumą.
+  - Struktūra ir stiliaus nuoseklumas: griežta struktūra ir stilių valdymas užtikrina dokumento vientisumą.
   - Automatizavimas: bibliografijos, turinio, paveikslų sąrašų, kryžminių nuorodų generavimas yra
     standartinė funkcijos dalis.
   - Tekstinis formatas: _.tex_ failai yra paprasto teksto, todėl puikiai tinka versijų kontrolei su „Git“.
@@ -98,7 +98,7 @@ privalumai šio darbo kontekste:
   kitas pagalbos funkcijas, kurios ženkliai padidina produktyvumą.
 7. Tekstinis formatas ir „Git“ suderinamumas: kaip ir „LaTeX“, „Typst“ naudoja paprasto teksto _.typ_
   failus, kurie idealiai tinka versijų kontrolei su „Git“.
-8. Dokument konfigūracija: sistema leidžia lengvai keisti viso dokumento stilių ir įvairius parametrus vienoje vietoje.
+8. Dokumento konfigūracija: sistema leidžia lengvai keisti viso dokumento stilių ir įvairius parametrus vienoje vietoje.
 
 == Galimi trūkumai ir kompromisai
 

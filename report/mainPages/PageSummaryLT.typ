@@ -25,9 +25,9 @@
   fundamentalus klausimas apie komandinės eilutės, kaip terpės, tinkamumą vizualiai turtingoms aplikacijoms.
   Pagrindinis projekto tikslas yra dvejopas: pirma, atlikti išsamią komandinės eilutės aplinkos
   techninių ir vartotojo sąsajos apribojimų analizę tokio tipo programos kontekste. Antra, remiantis šia analize,
-  suprojektuoti ir realizuoti veikiantį prototipą, demonstruojantį gatvės lygio vaizdų peržiūrą ASCII formatu.
+  suprojektuoti ir realizuoti veikiančia programą, demonstruojančią gatvės lygio vaizdų peržiūrą ASCII formatu.
 
-  Projekte detaliai gilinamasi į praktinius iššūkius, su kuriais susidurta implementuojant sprendimą:
+  Projekte detaliai gilinamasi į praktinius iššūkius, su kuriais susidurta realizuojant sprendimą:
   pradedant ribotu spalvų ir grafinių elementų palaikymu terminale, baigiant poreikiu sukurti intuityvią
   navigacijos sistemą be tradicinių grafinių valdiklių. Aprašomi pasirinkti kompromisai ir kūrybiniai sprendimai,
   leidusieji šiuos apribojimus apeiti ar sušvelninti. Svarbi darbo dalis yra išorinių paslaugų, tokių kaip

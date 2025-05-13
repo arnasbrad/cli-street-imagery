@@ -61,12 +61,12 @@ programavimo kalbų srityje – buvo sukurtos pirmosios tuo metu vadinamos aukš
 lygio kalbos: „FORTRAN“, „COBOL“, „LISP“ ir „ALGOL“. Šios kalbos pristatė
 revoliucinį pokytį programavimo procesuose, nes jos leido programuotojams:
 
-- Rašyti kodą, kuris buvo nepriklausomas nuo konkretaus kompiuterio architektūros
-- Naudoti abstrakčias matematines išraiškas vietoj procesoriaus instrukcijų
-- Struktūrizuoti programas į funkcijas ir procedūras
-- Kurti programas, kurios buvo žymiai lengviau skaitomos ir suprantamos žmonėms
+- Rašyti kodą, kuris buvo nepriklausomas nuo konkretaus kompiuterio architektūros.
+- Naudoti abstrakčias matematines išraiškas vietoj procesoriaus instrukcijų.
+- Struktūrizuoti programas į funkcijas ir procedūras.
+- Kurti programas, kurios buvo žymiai lengviau skaitomos ir suprantamos žmonėms.
 
-„FORTRAN“ (angl. _Formula Translation_) buvo sukurta moksliniams skaičiavimams 
+„FORTRAN“ (angl. _Formula Translation_) buvo sukurta moksliniams skaičiavimams
 ir tapo pirmąja plačiai naudojama aukšto lygio kalba. Ji leido mokslininkams ir
 inžinieriams rašyti programas matematinėmis formulėmis, o ne mašininėmis instrukcijomis.
 „COBOL“ (angl. _Common Business-Oriented Language_) buvo sukurta verslo
@@ -86,15 +86,14 @@ Ji įvedė blokų struktūrą, lokalius kintamuosius ir procedūras su parametra
 
 *„C“ kalba ir sisteminės kalbos*
 
-„C“ kalba, sukurta „Bell“ laboratorijose 1972 metais
-(https://www.geeksforgeeks.org/c-language-introduction/),
+„C“ kalba, sukurta „Bell“ laboratorijose 1972 metais @gfg-c-introduction,
 tapo viena įtakingiausių programavimo kalbų istorijoje.
 Ji užėmė unikalią nišą tarp žemo lygio asemblerio kalbų ir aukšto lygio kalbų,
 siūlydama išskirtinį balansą tarp efektyvumo ir abstrakcijos.
 „C“ buvo sukurta „UNIX“ operacinei sistemai kurti ir greitai tapo standartu
 sisteminiam programavimui. Ji suteikė programuotojams galimybę tiesiogiai
 manipuliuoti kompiuterio atmintimi naudojant rodykles, bet tuo pačiu siūlė
-struktūrinę sintaksę ir modulinę struktūrą. C kalba pasižymėjo perkeliamumu –
+struktūrinę sintaksę ir modulinę struktūrą. „C“ kalba pasižymėjo perkeliamumu –
 programos, parašytos viename kompiuteryje, galėjo būti nesunkiai adaptuotos
 kitam, kas buvo revoliucinis pokytis to meto kontekste. Daugelis šiuolaikinių
 operacinių sistemų, įskaitant „Linux“ ir „Windows“, yra parašytos „C“ kalba, o jos
@@ -251,10 +250,10 @@ programavimą ir jo privalumus kalbėsime tolimesniuose skyriuose.
 Po šios nuoseklios analizės mes turime bendrą idėją, ko tikimės iš pasirinktos
 programavimo kalbos:
 
-- sąlyginai aukšto abstrakcijos lygio;
-- galimybės kodą kompiliuoti;
-- griežtų statinių tipų;
-- funkcinio programavimo stiliaus;
+- Sąlyginai aukšto abstrakcijos lygio.
+- Galimybės kodą kompiliuoti.
+- Griežtų statinių tipų.
+- Funkcinio programavimo stiliaus.
 
 Yra daugybė pasirinkimų, atitinkančių šiuos kriterijus, kaip „Haskell“, „Clojure“,
 „Scala“, „F\#“, „OCaml“ bei daugybė kitų. Visos šios kalbos yra plačiai naudojamos

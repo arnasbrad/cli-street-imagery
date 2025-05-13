@@ -32,7 +32,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
   pagrindinėse operacinėse sistemose („Linux“, „macOS“, „Windows“).
 - Priklausomybė nuo tinklo (angl. _network dependency_): veikimui būtinas aktyvus interneto ryšys prieigai
   prie „Mapillary“ programavimo sąsajos.
-- Programinės įrangos priklausomybės (angl. _software dependencies_): reikalingos priklausomybės (pvz., specifinė „JVM“
+- Programinės įrangos priklausomybės (angl. _software dependencies_): reikalingos priklausomybės (pvz., specifinė JVM
   versija, „Docker“ ir panašiai) turi būti aiškiai dokumentuotos.
 
 *Reikalavimai sistemos išvaizdai*

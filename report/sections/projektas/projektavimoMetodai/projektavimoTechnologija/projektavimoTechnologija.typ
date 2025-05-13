@@ -19,7 +19,7 @@ Nors formalūs projektavimo įrankiai nebuvo naudojami, kūrimo procese pasitelk
 įrangos kūrimo įrankiai:
 - Programavimo kalba: „Scala“ (su „Java“ virtualia mašina).
 - Kūrimo aplinka (angl. _Integrated development environment_ arba _IDE_): „IntelliJ IDEA“ su „Scala“ įskiepiu.
-- Versijų kontrolės sistema: „Git“, kodui saugoti ir versijuoti, tikėtina, naudojant platformą „GitHub“.
+- Versijų kontrolės sistema: „Git“, kodui saugoti ir versijuoti, naudojant platformą „GitHub“.
 - Bibliotekų valdymas ir projekto kompiliavimas: „sbt“ („Scala Build Tool“) – standartinis įrankis „Scala“ projektams.
 - Tikslinė aplinka: įvairūs terminalų emuliatoriai („Linux“, „macOS“, „Windows“ sistemose), palaikantys 256 spalvas.
 
