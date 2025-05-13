@@ -22,7 +22,7 @@
 
   Šis baigiamasis bakalauro studijų projektas pristato inovatyvų sprendimą – programą, skirtą
   interaktyviai naršyti pasaulio gatves naudojant tik komandinės eilutės sąsają. Darbo epicentre –
-  fundamentalus klausimas apie komandinės eilutės, kaip terpės, tinkamumą vizualiai turtingoms aplikacijoms.
+  fundamentalus klausimas apie komandinės eilutės, kaip terpės, tinkamumą vizualiai turtingoms programoms.
   Pagrindinis projekto tikslas yra dvejopas: pirma, atlikti išsamią komandinės eilutės aplinkos
   techninių ir vartotojo sąsajos apribojimų analizę tokio tipo programos kontekste. Antra, remiantis šia analize,
   suprojektuoti ir realizuoti veikiančia programą, demonstruojančią gatvės lygio vaizdų peržiūrą ASCII formatu.

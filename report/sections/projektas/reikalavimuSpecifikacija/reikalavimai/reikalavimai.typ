@@ -23,7 +23,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
   generavimo ir atvaizdavimo terminale operacija turėtų būti pakankamai sparti, kad nesukeltų reikšmingo papildomo
   vėlavimo modernioje techninėje įrangoje po atsakymo gavimo.
 - Resursų naudojimas (angl. _resource usage_): programa neturėtų nepagrįstai apkrauti sistemos resursų, veikdama kaip
-  tipinė komandinės eilutės aplikacija.
+  tipinė komandinės eilutės programa.
 
 *Reikalavimai veikimo sąlygoms*
 
@@ -41,7 +41,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
   taip, kad pagrindiniai objektai ir erdvės kryptis būtų bent apytiksliai atpažįstami. Spalvų naudojimas (kai palaikoma)
   turėtų didinti aiškumą.
 - Sąsajos konsistencija (angl. _interface consistency_): tekstiniai naudotojo sąsajos elementai 
-  (pranešimai, meniu, pagalba) turėtų naudoti nuoseklų formatavimą ir stilių visoje aplikacijoje.
+  (pranešimai, meniu, pagalba) turėtų naudoti nuoseklų formatavimą ir stilių visoje programoje.
 
 *Reikalavimai sistemos priežiūrai*
 

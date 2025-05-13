@@ -19,11 +19,11 @@ Pagrindiniai „Google Street View“ privalumai projektui būtų buvę:
 - Išplėtota sąsaja: palyginti gerai dokumentuota ir plačiai naudojama sąsaja.
 
 Tačiau pagrindinė kliūtis, sutrukdžiusi pasirinkti „Google Street View“, buvo jos kainodaros modelis.
-Nors „Google Maps Platform“ galbūt gal suteikti nemokamo naudojimo galimybes, pats kainodaros modelis
+Nors „Google Maps Platform“ galbūt gali suteikti nemokamo naudojimo galimybes, pats kainodaros modelis
 (angl. _pay-as-you-go_) ir jo stebėjimas gali būti painus akademinio projekto kontekste, kur biudžetas yra itin ribotas
 arba jo nėra visai. Projektui, kurio metu vykdomas intensyvus kūrimas, eksperimentavimas ir testavimas
-(ypač naršant ir nuolat keičiant vaizdus), egzistavo reali rizika greitai išnaudoti nemokamą mėnesinį kreditą (jei toks išvis
-yra) ir netikėtai patirti išlaidų. Kadangi mokami planai viršijo projekto finansines galimybes @gmaps-sv-billing,
+(ypač naršant ir nuolat keičiant vaizdus), egzistavo reali rizika
+netikėtai patirti išlaidų. Kadangi mokami planai viršijo projekto finansines galimybes @gmaps-sv-billing,
 o dalinai nemokamas modelis kėlė
 neapibrėžtumo, buvo nuspręsta ieškoti alternatyvos, kuri siūlytų visiškai nemokamą ir aiškesnę prieigą prie duomenų.
 Šis poreikis išvengti bet kokios finansinės rizikos ir sudėtingumo tapo esminiu veiksniu ieškant kitos platformos.

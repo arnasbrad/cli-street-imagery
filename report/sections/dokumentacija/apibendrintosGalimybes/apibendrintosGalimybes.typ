@@ -20,6 +20,6 @@ meniu, kuriame rodomos tuo metu aktyvios klaviatūros komandos. Jei naudotojui p
 formatu sugeneruotas vaizdas, jį galima išsaugoti kaip standartinį PNG formato paveikslėlį arba gauti nuorodą,
 tinkamą dalintis socialiniuose tinkluose (naudojant „Imgur“ paslaugą). Galiausiai, naudotojas gali bet kada
 baigti darbą su programa. Taip pat numatyta galimybė naudotis specialiu scenarijumi („vedliu“), kuris palengvina
-pradinės programos konfigūracijos (Programavimo sąsajų raktų, vaizdo generavimo parinkčių ir kt.) sukūrimą,
+pradinės programos konfigūracijos (programavimo sąsajų raktų, vaizdo generavimo parinkčių ir kt.) sukūrimą,
 nors konfigūracijos failą galima redaguoti ir rankiniu būdu.
 

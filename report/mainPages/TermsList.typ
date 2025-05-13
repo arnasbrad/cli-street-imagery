@@ -66,7 +66,7 @@ geografinėmis koordinatėmis (platuma ir ilguma).
 *Iteracinis programavimas (angl. _iterative development_)* – programinės įrangos kūrimo metodologija, kai produktas kuriamas
 palaipsniui, mažomis dalimis, kiekvieną jų testuojant ir tobulinant per kelias iteracijas.
 
-*Karkasas (angl. _framework_)* – programinės įrangos struktūra, teikianti bendrą funkcionalumą ir nurodanti, kaip kurti aplikacijas.
+*Karkasas (angl. _framework_)* – programinės įrangos struktūra, teikianti bendrą funkcionalumą ir nurodanti, kaip kurti programas.
 
 *Kodo biblioteka* – iš anksto parašyto kodo rinkinys (funkcijų, klasių), kurį programuotojai gali naudoti savo
 programose, siekdami pagreitinti kūrimo procesą.

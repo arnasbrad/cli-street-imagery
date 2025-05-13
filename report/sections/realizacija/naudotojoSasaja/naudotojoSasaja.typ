@@ -84,7 +84,7 @@ Detaliau apie kiekvieną navigacijos tipą ir jo realizaciją:
     - Trūkumai: veikia tik tada, kai nuotrauka priklauso sekai -- kitu atveju nei pirmyn, nei atgal paeiti nebus galima.
       Neleidžia pasukti į šonines gatves ar tyrinėti aplinkos laisviau, jei nėra tiesioginės sekos jungties.
 
-- Navigacija pagal atstumą/artumą (angl. _Proximity-based navigation_):
+- Navigacija pagal atstumą (angl. _Proximity-based navigation_):
     - Logika: šis tipas leidžia naudotojui judėti į artimiausias aplinkines nuotraukas, nepriklausomai nuo sekų.
       Paieška atliekama tam tikru spinduliu aplink dabartinę naudotojo poziciją.
     - Įgyvendinimas:
@@ -118,11 +118,11 @@ Grįžtamasis ryšys tekstinėje sąsajoje yra ribotas, bet užtikrinamas keliai
   kad įvyko perėjimas tarp būsenų ar įvykdytas veiksmas.
 - Tiesioginis atsakas: dėl „raw“ režimo, naudotojas mato greitą reakciją į klavišų paspaudimus
   (nors duomenų gavimas iš „Mapillary“ gali užtrukti).
-- Klaidų pranešimai: įvykus klaidai (pvz., nepavykus gauti duomenų iš „API“), pateikiamas tekstinis klaidos pranešimas.
+- Klaidų pranešimai: įvykus klaidai (pvz., nepavykus gauti duomenų iš API), pateikiamas tekstinis klaidos pranešimas.
 
 === Išvada
 
-Projektuojant šios ASCII „Street View“ aplikacijos naudotojo sąsają ir navigaciją, pagrindinis dėmesys skirtas
+Projektuojant šios ASCII „Street View“ programos naudotojo sąsają ir navigaciją, pagrindinis dėmesys skirtas
 balansui tarp maksimalaus informatyvumo (detalaus ASCII vaizdo) ir naudojimo paprastumo komandinės eilutės aplinkoje.
 Pasirinktas minimalistinis, būsenomis paremtas sąveikos modelis su laikinomis tekstinėmis persidengimo sritimis leido
 įgyvendinti pagrindines naršymo funkcijas, neaukojant ekrano ploto pagrindiniam vaizdui. Nors toks sprendimas

@@ -14,7 +14,7 @@ ir struktūrizuota pagalbos informacija (_-\-help_), detalizuojanti galimas koma
 
 === Techninių reikalavimų analizė ir bibliotekos pasirinkimas
 
-Siekiant efektyviai valdyti komandinės eilutės argumentus Scala programoje, patogu naudoti tam skirtą įskiepį.
+Siekiant efektyviai valdyti komandinės eilutės argumentus „Scala“ programoje, patogu naudoti tam skirtą įskiepį.
 Pagrindiniai reikalavimai tokiai bibliotekai buvo šie:
 - Deklaratyvi sąsaja: galimybė apibrėžti komandų struktūrą (subkomandas, parinktis, argumentus) aiškiai ir glaustai.
 - Tipų saugumas: biblioteka turėtų užtikrinti, kad išanalizuoti argumentai atitiktų nurodytus tipus
@@ -22,19 +22,19 @@ Pagrindiniai reikalavimai tokiai bibliotekai buvo šie:
 - Automatinis pagalbos generavimas: gebėjimas automatiškai sukurti informatyvius pagalbos pranešimus pagal apibrėžtą komandų struktūrą.
 - Klaidingo įvedimo valdymas: aiškūs ir naudingi pranešimai naudotojui, jei argumentai įvesti neteisingai.
 - Kompoziciškumas: galimybė lengvai derinti ir komponuoti skirtingas komandų dalis, ypač dirbant su subkomandomis.
-- Integracija su funkcinio programavimo paradigma: kadangi projektas kuriamas naudojant Scala ir funkcinio programavimo
+- Integracija su funkcinio programavimo paradigma: kadangi projektas kuriamas naudojant „Scala“ ir funkcinio programavimo
   principus (pvz., „Cats Effect“ biblioteką efektams valdyti), pageidautina, kad argumentų analizės biblioteka
   natūraliai įsilietų į šią ekosistemą.
 
 Atsižvelgiant į šiuos kriterijus, projekte buvo pasirinkta „Decline“ @decline-homepage biblioteka. „Decline“ yra kompozicinė
-komandinės eilutės argumentų analizės biblioteka Scala kalbai, įkvėpta „Haskell“ bibliotekos „optparse-applicative“.
+komandinės eilutės argumentų analizės biblioteka „Scala“ kalbai, įkvėpta „Haskell“ bibliotekos „optparse-applicative“.
 
 Pagrindiniai „Decline“ privalumai, lėmę jos pasirinkimą:
 1. Funkcinis ir kompozicinis dizainas: „Decline“ leidžia konstruoti komandų analizatorius (angl. _parsers_) naudojant
    aplikatyvinius funktorius (angl. _applicative functors_) ir kitus funkcinio programavimo konstruktus. Tai užtikrina
    aukštą kompoziciškumo lygį ir leidžia elegantiškai apibrėžti sudėtingas komandų struktūras. Užuot rašius imperatyvų kodą
    argumentams tikrinti ir išrinkinėti, su „Decline“ komandų struktūra aprašoma deklaratyviai, o biblioteka pasirūpina analizės logika.
-2. Tipų saugumas: analizuojant argumentus, „Decline“ grąžina reikšmes su Scala tipais. Jei naudotojas pateikia argumentą,
+2. Tipų saugumas: analizuojant argumentus, „Decline“ grąžina reikšmes su „Scala“ tipais. Jei naudotojas pateikia argumentą,
    neatitinkantį laukiamo tipo (pvz., tekstą vietoj skaičiaus), biblioteka automatiškai sugeneruos klaidą dar prieš programos
    logikai pradedant vykdyti pagrindines užduotis. Tai padeda anksti aptikti klaidas ir užtikrina didesnį programos patikimumą.
 3. Automatinis pagalbos meniu: biblioteka automatiškai generuoja _-\-help_ išvestį, kuri yra nuosekli ir pritaikyta apibrėžtoms

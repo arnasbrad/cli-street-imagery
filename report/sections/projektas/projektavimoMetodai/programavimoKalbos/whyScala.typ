@@ -70,7 +70,7 @@ revoliucinį pokytį programavimo procesuose, nes jos leido programuotojams:
 ir tapo pirmąja plačiai naudojama aukšto lygio kalba. Ji leido mokslininkams ir
 inžinieriams rašyti programas matematinėmis formulėmis, o ne mašininėmis instrukcijomis.
 „COBOL“ (angl. _Common Business-Oriented Language_) buvo sukurta verslo
-aplikacijoms ir pasižymėjo itin skaitoma angliška sintakse.
+programoms ir pasižymėjo itin skaitoma angliška sintakse.
 Ji buvo specialiai sukurta taip, kad netechninio išsilavinimo žmonės galėtų
 skaityti ir suprasti programinį kodą. Nepaisant savo amžiaus, „COBOL“
 vis dar naudojama kai kuriose finansų ir vyriausybinėse sistemose.

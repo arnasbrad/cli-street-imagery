@@ -3,7 +3,7 @@
 
 === Sistemos apibrėžimas
 
-Kuriama sistema yra specializuota komandinės eilutės (angl. _Command line interface_) aplikacija, skirta interaktyviam gatvės lygio panoraminių
+Kuriama sistema yra specializuota komandinės eilutės (angl. _Command line interface_) programa, skirta interaktyviam gatvės lygio panoraminių
 vaizdų naršymui. Pagrindinė jos funkcija – gauti geografinės vietovės panoraminį vaizdą per išorinę paslaugą (konkrečiai,
 planuojama naudoti „Mapillary“ API), apdoroti gautą vaizdinę medžiagą realiu laiku konvertuojant ją į tekstinį
 ASCII formatą, ir atvaizduoti šį rezultatą tiesiogiai naudotojo terminalo lange.
@@ -127,7 +127,7 @@ komandinėje eilutėje, įskaitant spalvotą ANSI meną. Tačiau jie vis dar yra
 Jų panaudojimas projekte reikalautų papildomų įrankių interaktyvumui valdyti. Vis dėlto, nė vienas iš analizuotų sprendimų
 tiesiogiai nesiūlo pilnai integruotos sistemos, kuri leistų interaktyviai naršyti gatvių vaizdus vien tik komandinės
 eilutės sąsajoje, naudojant ASCII reprezentaciją. Egzistuojantys įrankiai sprendžia tik vaizdo konvertavimo problemą,
-bet ne interaktyvios, dinamiškos, į gatvės vaizdo reprezentavimą orientuotos komandinės eilutės aplikacijos kūrimo iššūkį.
+bet ne interaktyvios, dinamiškos, į gatvės vaizdo reprezentavimą orientuotos komandinės eilutės programos kūrimo iššūkį.
 Šis projektas siekia užpildyti šią nišą, sujungdamas ASCII vizualizavimo technikas su interaktyviu valdymu ir specifiniu
 geografiniu turiniu, taip praplečiant suvokimą apie komandinės eilutės galimybes.
 
