@@ -1,5 +1,7 @@
 == Programos paleidimas
 
+_Rašė: Arnas Bradauskas._
+
 Programos paleidimas per komandinę eilutę yra fundamentalus interakcijos būdas, suteikiantis lankstumo ir galimybę automatizuoti
 užduotis. Mūsų kuriama „StreetAscii“ programa nėra išimtis – jai reikalinga sistema, leidžianti naudotojui nurodyti
 įvairius paleidimo parametrus. Programa palaiko keturis pagrindinius veikimo režimus:

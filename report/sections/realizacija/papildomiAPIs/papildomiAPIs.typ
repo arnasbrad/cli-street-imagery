@@ -1,5 +1,7 @@
 == Papildomai naudotos sąsajos<extra-apis>
 
+_Rašė: Arnas Bradauskas._
+
 Taip pat naudojome dvi papildomas išorines sąsajas, siekiant suteikti papildomo funkcionalumo mūsų programai.
 
 === „TravelTime“ -- geokodavimo ir kelionės laiko analizės platforma

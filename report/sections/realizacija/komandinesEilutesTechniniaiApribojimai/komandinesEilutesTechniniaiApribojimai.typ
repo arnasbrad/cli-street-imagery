@@ -1,6 +1,8 @@
 #set text(lang: "lt", region: "lt")
 == Komandinės eilutės techniniai apribojimai
 
+_Rašė: Ignas Survila._
+
 Kuriant gatvės lygio vaizdų peržiūros programą komandinės eilutės sąsajoje, susiduriama su tam tikrais techniniais
 apribojimais, kurie būdingi šiai aplinkai ir daro įtaką tiek programos funkcionalumui, tiek naudotojo patirčiai. Nors
 komandinės eilutės pasirinkimas gali turėti savų privalumų, pavyzdžiui, resursų taupymas, automatizavimo galimybės,

@@ -1,5 +1,7 @@
 = Įvadas<ivadas>
 
+_Rašė: 50% Arnas Bradauskas, 50% Ignas Survila._
+
 == Darbo problematika ir aktualumas
 
 // „“
@@ -38,12 +40,37 @@ Uždaviniai:
 
 == Darbo strukrūra
 
-aaa
+Dokumentas susideda iš penkių skyrių:
 
-// TODO: pridėti darbo strukrūrą kai ji bus aiški
++ Pirmajame skyriuje „Analizė“ pateikiamas kuriamo „Street View“ tipo programos techninis pasiūlymas, apibrėžiantis sistemos architektūrą
+  ir pagrindines funkcijas. Atliekama detali egzistuojančių sprendimų analizė, apžvelgiant tiek nuotraukų konvertavimo į ASCII meną įrankius,
+  tiek kitas komandinės eilutės sąsajas naudojančias programas. Taip pat nagrinėjamos techninės galimybės ir apribojimai, susiję su „Street View“
+  tipo duomenų prieiga ir terminalo aplinkos grafinėmis ypatybėmis.
+
++ Antrajame skyriuje „Projektas“ detaliai aprašoma reikalavimų specifikacija, pristatomi pasirinkti projektavimo metodai, argumentuojamas „Scala“
+  programavimo kalbos ir funkcinio programavimo principų pasirinkimas. Skyrius užbaigiamas sistemos statiniu vaizdu, pateikiant diegimo ir paketų diagramas.
+
++ Trečiajame skyriuje „Realizacija“ gilinamasi į praktinius komandinės eilutės techninius apribojimus ir jų įtaką projekto sprendimams.
+  Aptariamas gatvės vaizdo duomenų tiekėjo („Mapillary“) ir papildomų sąsajų („TravelTime“, „Imgur“) pasirinkimas bei integravimas.
+  Detaliai nagrinėjamas naudotojo sąsajos bibliotekos pasirinkimo procesas, lėmęs nuosavo TUI modulio kūrimą. Ypatingas dėmesys skiriamas
+  įvairių nuotraukų konvertavimo į ASCII meną algoritmų realizacijai bei ASCII spalvų pritaikymui.
+
++ Ketvirtajame skyriuje „Testavimas“ pristatomas parengtas testavimo planas, apimantis vienetinius testus, naudotojo sąsajos (TUI) testavimą,
+  našumo ir suderinamumo patikrinimus. Nurodomi testavimo kriterijai ir apžvelgiami testuotų programos dalių rezultatai, įskaitant ASCII
+  meno generavimo algoritmų našumo palyginimą ir programos resursų naudojimo analizę.
+
++ Penktajame skyriuje „Dokumentacija naudotojui“ pateikiamas apibendrintas sistemos galimybių aprašymas ir išsamus naudotojo vadovas.
+  Jame paaiškinama programos konfigūracija, įskaitant API raktų ir kitų parametrų nustatymą, programos paleidimas skirtingais režimais,
+  pagalbos sistemos naudojimas ir pagrindinės valdymo komandos naršant vaizdus.
+
+Galiausiai pateiktose išvadose apibendrinami projekto metu gauti rezultatai, įvertinama,
+kaip pavyko pasiekti iškeltus tikslus ir įgyvendinti uždavinius.
+Pateikiamos pagrindinės įžvalgos ir rekomendacijos galimam tolimesniam darbo plėtojimui.
 
 == Sistemos apimtis
 
-aaa
+Kodo eilučių skaičius -- 10391. Iš jų:
+- 5276 „Scala“ -- pagrindinis programos kodas.
+- 1000 „sh“ ir „bat“ -- konfigūraciniai scenarjai.
+- 5115 „Scala“ testai -- programos vienetų testai.
 
-// TODO: pridėti sistemos apimtį kai ji bus aiški

@@ -1,6 +1,8 @@
 #set text(lang: "lt", region: "lt")
 == Techninis pasiūlymas
 
+_Rašė: Ignas Survila._
+
 === Sistemos apibrėžimas
 
 Kuriama sistema yra specializuota komandinės eilutės (angl. _Command line interface_) programa, skirta interaktyviam gatvės lygio panoraminių

@@ -1,6 +1,8 @@
 #set text(lang: "lt", region: "lt")
 == Gatvės vaizdo sąsajos pasirinkimas<api-pasirinkimas>
 
+_Rašė: Arnas Bradauskas._
+
 Vienas iš esminių šio projekto reikalavimų – prieiga prie gatvės lygio panoraminės vaizdinės medžiagos.
 Tokie duomenys leidžia naudotojui virtualiai „keliauti“ ir tyrinėti aplinką. Rinkoje egzistuoja keletas platformų,
 teikiančių tokius duomenis per programavimo sąsajas (API), tačiau jų prieigos modeliai, duomenų aprėptis ir kainodara

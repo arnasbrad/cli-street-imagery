@@ -2,6 +2,8 @@
 
 == Naudotojo sąsajos ir navigacijos projektavimas<ui-navigacijos-projektavimas>
 
+_Rašė: Arnas Bradauskas._
+
 Sukūrus nuosavą TUI modulį, kitas svarbus etapas buvo suprojektuoti naudotojo sąsają (UI) ir sąveikos (UX) modelį,
 kuris leistų intuityviai naršyti gatvių vaizdus ASCII formatu komandinės eilutės aplinkoje. Pagrindinis iššūkis –
 suderinti poreikį pateikti kuo detalesnį vaizdą su būtinybe suteikti naudotojui valdymo įrankius ir grįžtamąjį ryšį,
@@ -11,15 +13,15 @@ visa tai darant tekstinėje aplinkoje be tradicinių grafinių elementų.
 
 Projektuojant sąsają, vadovautasi keliais pagrindiniais principais:
 
-1. Vaizdo Prioritetas: svarbiausias tikslas buvo maksimaliai išnaudoti terminalo lango plotą pačiam ASCII gatvės vaizdui.
-  Dėl šios priežasties atsisakyta nuolat matomų sąsajos elementų (pvz., meniu juostų, būsenos eilučių), kurie atimtų
-  vietą iš vaizdo.
-2. Minimalizmas ir Paprastumas: valdymas turėjo būti kuo paprastesnis, naudojant nedidelį kiekį lengvai įsimenamų
-  komandų (klavišų). Vengta sudėtingų komandų sekų ar daugiapakopių meniu.
-3. Tiesioginė Sąveika: naudojant „JLine“ bibliotekos „raw“ režimą, siekta, kad sistema reaguotų į kiekvieną
-  klavišo paspaudimą nedelsiant, suteikiant tiesioginės kontrolės pojūtį.
-4. Kontekstinė Informacija: papildoma informacija (pvz., pagalba, navigacijos parinktys) turėjo būti pateikiama tik tada,
-  kai jos reikia, laikinai uždengiant pagrindinį vaizdą, o ne būnant matomai nuolat.
+1. Vaizdo prioritetas: svarbiausias tikslas buvo maksimaliai išnaudoti terminalo lango plotą pačiam ASCII gatvės vaizdui.
+   Dėl šios priežasties atsisakyta nuolat matomų sąsajos elementų (pvz., meniu juostų, būsenos eilučių), kurie atimtų
+   vietą iš vaizdo.
+2. Minimalizmas ir paprastumas: valdymas turėjo būti kuo paprastesnis, naudojant nedidelį kiekį lengvai įsimenamų
+   komandų (klavišų). Vengta sudėtingų komandų sekų ar daugiapakopių meniu.
+3. Tiesioginė sąveika: naudojant „JLine“ bibliotekos „raw“ režimą, siekta, kad sistema reaguotų į kiekvieną
+   klavišo paspaudimą nedelsiant, suteikiant tiesioginės kontrolės pojūtį.
+4. Kontekstinė informacija: papildoma informacija (pvz., pagalba, navigacijos parinktys) turėjo būti pateikiama tik tada,
+   kai jos reikia, laikinai uždengiant pagrindinį vaizdą, o ne būnant matomai nuolat.
 
 === Sąveikos modelis
 
@@ -35,7 +37,7 @@ būseną arba atlieka veiksmą:
   pasirenka vieną iš pateiktų parinkčių arba grįžta.
 - Navigacija: pasirinkus navigacijos kryptį, inicijuojamas naujo vaizdo duomenų gavimas, po kurio vėl perpiešiamas
   pagrindinis vaizdas su nauja lokacija.
-- Kiti Veiksmai: kitos komandos (pvz., ekrano perpiešimas _r_, dalinimasis _s_) atlieka atitinkamą veiksmą ir
+- Kiti veiksmai: kitos komandos (pvz., ekrano perpiešimas _r_, dalinimasis _s_) atlieka atitinkamą veiksmą ir
   dažniausiai grįžta į pagrindinę vaizdo rodymo būseną.
 - Išėjimas: paspaudus išėjimo klavišą (_q_), programa baigia darbą.
 
@@ -45,7 +47,7 @@ būseną arba atlieka veiksmą:
 
 Dėl pasirinkto minimalistinio požiūrio, sąsajos elementai yra labai paprasti:
 
-- Pagrindinis ASCII Vaizdas: užima visą terminalo plotą, atvaizduojamas naudojant spalvotus ANSI valdymo kodus.
+- Pagrindinis ASCII vaizdas: užima visą terminalo plotą, atvaizduojamas naudojant spalvotus ANSI valdymo kodus.
 - Laikinos tekstinės persidengimo sritys (angl. _overlays_): pagalba, navigacijos parinktys, žaidimo klausimai ar
   kiti pranešimai yra dinamiškai generuojami kaip tekstas ir paverčiami į ASCII meną, laikinai pakeičiantys pagrindinį
   gatvės vaizdą. Tai leidžia pateikti informaciją nenaudojant nuolatinių UI valdiklių.

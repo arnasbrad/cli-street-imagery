@@ -1,6 +1,9 @@
 #set text(lang: "lt", region: "lt")
 
 == Nuotraukų konvertavimas į ASCII
+
+_Rašė: Ignas Survila._
+
 === ASCII
 
 Ascii (angl. _American Standard Code for Information interchange_) yra vienas iš populiariausių teksto simbolių kodavimo formatų,
@@ -36,6 +39,8 @@ spausdinimo mašinėle. Tačiau sparčiai populiarėjant grafinėms naudotojo s�
 Šiomis dienomis ASCII menas naudojimas nišiniuose sistemose ir programose dėl savo stilistinių priežasčių ir nostalgijos.
 
 == Pasiruošimas konvertuoti nuotraukas Į ASCII
+
+_Rašė: Ignas Survila._
 
 === Nuotraukos proporcijų išlaikymas
 
@@ -142,6 +147,8 @@ Kadangi dėl šio pakeitimo generavimo laikas saugiai tenkino nefunkcinius greit
 nelygiagretinti nuotraukų konvertavimo į ASCII meną veikimo. Detalūs algoritmų greitaveikos rodikliai aprašyti testavimo skyriuje.
 
 == Nuotraukų konvertavimo į ASCII meną algoritmai
+
+_Rašė: Ignas Survila._
 
 Ankstesniuose skyriuose aptarėme ASCII standarto pagrindus, ASCII meno istoriją ir svarbiausius pasiruošimo etapus, būtinus
 norint kokybiškai konvertuoti skaitmeninę nuotrauką į ASCII meną. Buvo išspręstos proporcijų išlaikymo problemos, aptartas

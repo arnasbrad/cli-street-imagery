@@ -1,5 +1,7 @@
 == Vienetų testavimas
 
+=== Testuotos programos dalys
+
 Vienetų testai yra esminė programinės įrangos kūrimo dalis, skirta patikrinti mažiausias logines programos dalis – atskiras
 funkcijas ar metodus – izoliuotai nuo likusios sistemos. Pagrindinis tikslas yra anksti aptikti klaidas,
 užtikrinti kodo korektiškumą ir palengvinti kodo priežiūrą bei refaktorizavimą ateityje.

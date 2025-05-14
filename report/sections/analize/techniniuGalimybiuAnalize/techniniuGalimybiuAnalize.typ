@@ -1,12 +1,12 @@
 #set text(lang: "lt", region: "lt")
 == Techninių galimybių analizė<techniniu-galimybiu-analize>
 
+_Rašė: Arnas Bradauskas._
+
 Šiame skyriuje analizuojamos techninės kliūtys ir apribojimai, su kuriais susidurta
 kuriant komandinės eilutės sąsają „Street View“ tipo platformai, naudojant ASCII meną vaizdams atvaizduoti.
 Analizė apima tiek išorinius veiksnius (pavyzdžiui, priklausomybes nuo trečiųjų šalių paslaugų), tiek vidinius
 (pavyzdžiui, pasirinktos technologinės aplinkos apribojimus).
-
-=== Pagrindinės techninės kliūtys ir sprendimai
 
 *Prieiga prie „Street View“ duomenų ir API kainodara*
 

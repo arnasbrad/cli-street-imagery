@@ -231,7 +231,7 @@ object ColorFilter {
           val errorR = r - tr
           val errorG = g - tg
           val errorB = b - tb
-          
+
           // For tritanopia (blue-yellow confusion), we need to enhance those differences
 
           // Calculate blue-yellow axis (blue vs red+green)

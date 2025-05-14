@@ -1,6 +1,8 @@
 #set text(lang: "lt", region: "lt")
 == ASCII spalvų filtrai
 
+_Rašė: Ignas Survila._
+
 ASCII menas, paremtas tekstiniais simboliais vaizdui kurti, nebūtinai reikalauja spalvų. Monochromatinės jo variacijos,
 kuriose šviesumo lygiai perteikiami skirtingais simboliais ar jų tankiu, išlieka populiarios ir efektyvios. Vis dėlto,
 spalvų integravimas į ASCII meną suteikia papildomą dimensiją, leidžiančią lengviau atpažinti nuotraukoje vaizduojamus
