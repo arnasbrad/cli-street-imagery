@@ -32,11 +32,14 @@ Atliekant sistemingą algoritmų analizę, demonstracinio prototipo kūrimą bei
 nustatyti tokios sąsajos techninius privalumus ir apribojimus, lyginant su įprasta grafine aplinka.
 
 Uždaviniai:
-1. Išanalizuoti algoritmus, skirtus vaizdiniam turiniui konvertuoti į ASCII formatą,
-   bei įvertinti jų tinkamumą atvaizduoti gatvės lygio vaizdus.
-2. Sukurti interaktyvų demonstracinį prototipą su žaidybiniais elementais, leidžiantį pademonstruoti sistemos galimybes.
-3. Sukurti patogią navigaciją komandinėje eilutėje, leidžiančią sklandžiai pereiti tarp gatvės lygio vaizdų.
-4. Įvertinti komandinės eilutės aplinkos apribojimus ir galimybes, bei aprašyti pagrindines tobulinimo kryptis.
++ Išanalizuoti algoritmus, skirtus vaizdiniam turiniui konvertuoti į ASCII formatą,
+  bei įvertinti jų tinkamumą atvaizduoti gatvės lygio vaizdus.
++ Palyginti ir pasirinkti tinkamiausią „Street View“ API, įvertinti jos galimybes ir apribojimus.
++ Sukurti interaktyvų demonstracinį prototipą su žaidybiniais elementais, leidžiantį pademonstruoti sistemos galimybes.
++ Sukurti patogią navigaciją komandinėje eilutėje, leidžiančią sklandžiai pereiti tarp gatvės lygio vaizdų.
++ Įvertinti komandinės eilutės aplinkos apribojimus ir galimybes, bei aprašyti pagrindines tobulinimo kryptis.
++ Atlikti sukurtos sistemos testavimą, vertinant techninį veikimą, naudotojo sąsajos intuityvumą,
+  greitaveiką bei veikimą skirtingose operacinėse sistemose.
 
 == Darbo strukrūra
 
