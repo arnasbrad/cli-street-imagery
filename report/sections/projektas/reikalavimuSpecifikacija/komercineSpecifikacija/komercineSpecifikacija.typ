@@ -2,6 +2,8 @@
 
 === Komercinė specifikacija
 
+_Rašė: Ignas Survila._
+
 Šiame skyrelyje apibrėžiami pagrindiniai projekto tikslai, naudotojai ir apribojimai. Projektas neturi formalaus išorinio
 užsakovo. Tai yra akademinis darbas, vykdomas, siekiant ištirti komandinės eilutės sąsajų galimybes atvaizduojant
 sudėtingą vizualinę informaciją, šiuo atveju – gatvės lygio vaizdus, ir įvertinti tokios sąsajos efektyvumą bei panaudojamumą

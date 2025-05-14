@@ -1,5 +1,7 @@
 === Techninė specifikacija
 
+_Rašė: Ignas Survila._
+
 Šiame skyriuje apibrėžiama techninė aplinka ir išoriniai resursai, būtini kuriamos programos veikimui. Programos
 paleidimui ir naudojimui reikalinga komandinės eilutės sąsaja, kuri yra prieinama daugumoje šiuolaikinių operacinių
 sistemų, tokių kaip „Windows“, „Linux“, „MacOS“. Terminalo aplinka turi palaikyti UTF-8 koduotę, kadangi ASCII menui

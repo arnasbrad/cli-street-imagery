@@ -70,7 +70,7 @@ Pateikiamos pagrindinės įžvalgos ir rekomendacijos galimam tolimesniam darbo 
 == Sistemos apimtis
 
 Kodo eilučių skaičius -- 10391. Iš jų:
-- 5276 „Scala“ -- pagrindinis programos kodas.
-- 1000 „sh“ ir „bat“ -- konfigūraciniai scenarjai.
-- 5115 „Scala“ testai -- programos vienetų testai.
+- 5276 _.scala_ -- pagrindinis programos kodas.
+- 1000 _.sh_ ir _.bat_ -- konfigūraciniai scenarjai.
+- 5115 _.scala_ testai -- programos vienetų testai.
 

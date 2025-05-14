@@ -1,4 +1,6 @@
-=== Realizacijai keliami funkciniai reikalavimai<realizacijai-keliami-reikalavimai>
+=== Realizacijai keliami nefunkciniai reikalavimai<realizacijai-keliami-reikalavimai>
+
+_Rašė: Arnas Bradauskas._
 
 Šiame skyriuje apibrėžiami pagrindiniai nefunkciniai reikalavimai, keliami kuriamai sistemai, apimantys jos naudojimo
 patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektus.
