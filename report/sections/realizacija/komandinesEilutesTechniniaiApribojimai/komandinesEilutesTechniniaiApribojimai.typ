@@ -14,7 +14,13 @@ Pagrindinės techninės limitacijos yra šios:
     vietos pasirinkimą, įvedimas reikalauja tikslaus adreso ar koordinačių įrašymo.
 - Ribotas spalvų palaikymas:
   - Skirtingi terminalų emuliatoriai ir operacinės sistemos palaiko skirtingą spalvų skaičių, nuo monochrominio vaizdo
-    iki 8, 16 ar 256 skirtingų spalvų @terminal-colors.
+    iki 8, 16 ar 256 skirtingų spalvų (#ref(<terminal-colors-table>)) @terminal-colors.
+
+    #figure(
+      image("/images/terminal-colors-table.png", width: 15cm),
+      caption: [Populiarių terminalo emuliatorių palaikomų spalvų kiekio palyginimas [31].],
+    ) <terminal-colors-table>
+
   - Kuo mažiau spalvų palaiko naudojamas terminalo emuliatorius, tuo daugiau informacijos prarandama atvaizduojant gatvės
     lygio vaizdus komandinėje eilutėje. Pateikto pavyzdžio (#ref(<color_comparison>)) kairėje nuotrauka atvaizduojama
     pasitelkiant tik 16 pagrindinių ANSI spalvų, tuo tarpu dešinėje matomos viso 16,7 milijono RGB spektro spalvų.

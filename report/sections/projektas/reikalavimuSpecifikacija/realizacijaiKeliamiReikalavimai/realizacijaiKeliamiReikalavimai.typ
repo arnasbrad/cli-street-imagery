@@ -27,7 +27,7 @@ reikalavimai, keliami kuriamos programos realizacijai, siekiant užtikrinti ger�
   - Programos kodas turi būti pakankamai komentuotas, kad būtų suprantama jo logika ir struktūra.
   - Programos struktūra turėtų būti modulinė, atskiriant skirtingas funkcijas, pavyzdžiui, argumentų apdorojimas,
     nuotraukos nuskaitymas, konvertavimo logika, išvesties formavimas).
-  - Programos vystymui turi būti naudojama versijų kontrolės sistema, pavyzdžiui, Git.
+  - Programos vystymui turi būti naudojama versijų kontrolės sistema, pavyzdžiui, „Git“.
 - Reikalavimai saugumui:
   - Programa turi saugiai apdoroti naudotojo pateiktus API raktus, vengiant jų paviešinimo trečiosioms šalims.
   - Komandinės eilutės argumentai turi būti tinkamai validuojami, siekiant išvengti neplanuotų programos panaudojimo atvejų.
@@ -35,9 +35,6 @@ reikalavimai, keliami kuriamos programos realizacijai, siekiant užtikrinti ger�
   - Programai paleisti neturi būti reikalingos administratoriaus teisės.
 - Kultūriniai-politiniai reikalavimai:
   - Programa turi veikti nepriklausomai nuo sistemos lokalizacijos nustatymų (angl. _locale_).
-- Teisiniai reikalavimai:
-  - Programa turi būti platinama su aiškiai nurodyta licencija nekomenciniams tikslams.
-  - Turi būti laikomasi visų naudojamų trečiųjų šalių bibliotekų licencijų reikalavimų.
 
 Baigiant nefunkcinių reikalavimų apžvalgą, svarbu pabrėžti jų įtaką galutiniam produktui. Nors kuriama programa yra
 terminalo įrankis, reikalavimai panaudojamumui ir ASCII meno kokybei tiesiogiai lemia naudotojo patirtį. Vykdymo

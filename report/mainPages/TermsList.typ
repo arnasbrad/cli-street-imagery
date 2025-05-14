@@ -37,6 +37,7 @@ sistemoms vizualizuoti, specifikuoti ir dokumentuoti.
 *WYSIWYG (angl. _What You See Is What You Get_)* – „Ką matai, tą ir gauni“ redagavimo principas, kai turinys redagavimo
 metu atrodo taip pat, kaip galutiniame rezultate.
 
+#pagebreak()
 *Terminai:*
 
 *ANSI escape koduotė* – specialios simbolių sekos, naudojamos terminale valdyti teksto spalvas, formatavimą ir žymeklio poziciją.

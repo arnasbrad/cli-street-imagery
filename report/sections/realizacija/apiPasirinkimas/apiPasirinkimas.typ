@@ -10,7 +10,7 @@ teikiančių tokius duomenis per programavimo sąsajas (API), tačiau jų prieig
 
 Natūralus pirmasis pasirinkimas daugeliui projektų, susijusių su gatvių vaizdais, yra „Google Street View“.
 Ši platforma yra plačiausiai žinoma ir pasižymi bene didžiausia geografine duomenų aprėptimi pasaulyje.
-„Google“ teikia prieigą prie šių duomenų per „Google Maps Platform“ paslaugų rinkinį, įskaitant „Street View Static API“
+„Google“ teikia prieigą prie šių duomenų per „Google Maps Platform“ paslaugų rinkinį, įskaitant „Street View Static“ API
 @gmaps-sv-overview.
 
 Pagrindiniai „Google Street View“ privalumai projektui būtų buvę:

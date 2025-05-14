@@ -20,27 +20,27 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
 *Reikalavimai vykdymo charakteristikoms*
 
 - Atsako laikas (angl. _response time_): nors bendras atsako laikas priklauso nuo „Mapillary“, pati ASCII vaizdo
-  generavimo ir atvaizdavimo terminale operacija turėtų būti pakankamai sparti, kad nesukeltų reikšmingo papildomo
+  generavimo ir atvaizdavimo terminale operacija neturėtų užtrukti ilgiau nei 5 sekundės, kad nesukeltų reikšmingo papildomo
   vėlavimo modernioje techninėje įrangoje po atsakymo gavimo.
 - Resursų naudojimas (angl. _resource usage_): programa neturėtų nepagrįstai apkrauti sistemos resursų, veikdama kaip
   tipinė komandinės eilutės programa.
 
 *Reikalavimai veikimo sąlygoms*
 
-- Terminalo suderinamumas (angl. _terminal compatibility_): sistema turi siekti veikti populiariuose terminalų
+- Terminalo suderinamumas (angl. _terminal compatibility_): sistema turi veikti populiariuose terminalų
   emuliatoriuose, palaikančiuose bent 256 spalvas (pvz., „GNOME Terminal“, „Konsole“, „iTerm2“, „Windows Terminal“),
   pagrindinėse operacinėse sistemose („Linux“, „macOS“, „Windows“).
 - Priklausomybė nuo tinklo (angl. _network dependency_): veikimui būtinas aktyvus interneto ryšys prieigai
   prie „Mapillary“ programavimo sąsajos.
 - Programinės įrangos priklausomybės (angl. _software dependencies_): reikalingos priklausomybės (pvz., specifinė JVM
-  versija, „Docker“ ir panašiai) turi būti aiškiai dokumentuotos.
+  versija ir panašiai) turi būti aiškiai dokumentuotos.
 
 *Reikalavimai sistemos išvaizdai*
 
 - Vizualinis aiškumas (angl. _visual clarity_): ASCII menas, nors ir riboto detalumo, turėtų būti generuojamas
-  taip, kad pagrindiniai objektai ir erdvės kryptis būtų bent apytiksliai atpažįstami. Spalvų naudojimas (kai palaikoma)
+  taip, kad pagrindiniai objektai būtų bent atpažįstami. Spalvų naudojimas (kai palaikoma)
   turėtų didinti aiškumą.
-- Sąsajos konsistencija (angl. _interface consistency_): tekstiniai naudotojo sąsajos elementai 
+- Sąsajos nuoseklumas (angl. _interface consistency_): tekstiniai naudotojo sąsajos elementai
   (pranešimai, meniu, pagalba) turėtų naudoti nuoseklų formatavimą ir stilių visoje programoje.
 
 *Reikalavimai sistemos priežiūrai*
@@ -62,6 +62,12 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
 
 - Išorinės programavimo sąsajos naudojimo sąlygos (angl. _API Terms of Service_): sistemos naudojimas turi 
   nepažeisti „Mapillary“ naudojimo sąlygų ir politikos.
-- Bibliotekų licencijos (angl. _library licensing_): Naudojamos trečiųjų šalių bibliotekos turi turėti su
+- Bibliotekų licencijos (angl. _library licensing_): naudojamos trečiųjų šalių bibliotekos turi turėti su
   projekto tikslais (pvz., akademinis, galimai atviras kodas) suderinamas licencijas, ir turi būti laikomasi
   tų licencijų reikalavimų.
+
+Baigiant nefunkcinių reikalavimų apžvalgą, svarbu pabrėžti jų įtaką galutiniam produktui. Reikalavimai panaudojamumui
+ir ASCII meno kokybei tiesiogiai lemia naudotojo patirtį. Vykdymo charakteristikų reikalavimai užtikrina, kad nuotraukų
+apdorojimas vyktų per priimtiną laiką, neapkraunant sistemos resursų. Tuo tarpu reikalavimai priežiūrai, saugumui ir
+veikimo sąlygoms garantuoja programos ilgaamžiškumą, patikimumą ir pritaikomumą skirtingose aplinkose. Visų šių
+aspektų visuma formuoja galutinio produkto kokybę ir praktinę vertę.

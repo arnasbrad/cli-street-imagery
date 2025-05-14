@@ -1,12 +1,12 @@
 === Naudotojo sąsajos specifikacija
 
 Šiame skyriuje pristatysime kuriamos komandinės eilutės programos naudotojo sąsajos prototipą. Prototipas parodo
-pagrindines sistemos dalis: pagrindinį „Street View" vaizdą, „Config" nustatymų langą ir „Help" pagalbos skiltį. Šie
+pagrindines sistemos dalis: pagrindinį „Street View“ vaizdą, „Config“ nustatymų langą ir „Help“ pagalbos skiltį. Šie
 prototipai padeda perteikti esminę programos struktūrą, navigacijos elementus ir bendrą stilių, kurį matysime galutiniame
 produkte. Prototipo dizainas yra pritaikytas komandinei eilutei: minimalistinis, tekstinis, su vienspalve spalvų gama.
 
 Bendra langų struktūra:
-- Viršutiniai skirtukai: ekrano viršuje yra trys pagrindiniai navigacijos žymekliai: „CONFIG“, „MAIN“ ir „HELP“, naudojantis
+- Viršutiniai skirtukai: ekrano viršuje yra trys pagrindiniai navigacijos žymekliai: _CONFIG_, _MAIN_ ir _HELP_, naudojantis
   jais bus galima naviguoti tarp skirtingų langų. Dabartinis langas vizualiai išsiskirs iš kitų.
 - Lango turinys: didžiąją lango dalį užims pagrindinė lankomo lango funkcija, ar tai gatvės lygio atvaizdavimas, ar pagalbinė
   informacija su programos valdymu.
@@ -14,7 +14,7 @@ Bendra langų struktūra:
   grįžimo atgal mygtukai ir t.t.
 
 Programos prototipo langai:
-- Pagrindinis langas „Street View“ (#ref(<main_page>))
+- Pagrindinis langas _Street View_ (#ref(<main_page>))
   #figure(
     image("/images/main_page.png", width: 15cm),
     caption: [Pagrindinio „Street View“ lango prototipas.],
@@ -22,7 +22,7 @@ Programos prototipo langai:
   Paskirtis: tai pagrindinis programos langas, kuriame naudotojas matys ir sąveikaus su pagrindiniu programos funkcionalumu --
   navigacija gatvės lygio vaizduose. Per apačioje esantį įvesties langą naudotojas galės įvesti norimos vietos koordimates
   arba adresą. Taip pat apačioje bus rodomi galimi įvesties mygtukai leidžiantys naudotojui naviguoti.
-- Konfigūracijos langas „Config“ (#ref(<config_page>))
+- Konfigūracijos langas _Config_ (#ref(<config_page>))
   #figure(
     image("/images/config_page.png", width: 15cm),
     caption: [Konfigūracijos „Config“ lango prototipas.],
@@ -30,7 +30,7 @@ Programos prototipo langai:
   Paskirtis: šis langas, leidžia naudotojui keisti įvairius programos nustatymus. Čia bus galima konfigūruoti programą:
   įvesti API raktus, pasirinkti programos vizualinį stilių bei įjungti kitas programos funkcijas. Apačioje esantys
   mygtukai leis išsaugoti arba sugrąžinti konfigūraciją į pradinį tašką.
-- Pagalbos langas „Help“ (#ref(<help_page>))
+- Pagalbos langas _Help_ (#ref(<help_page>))
   #figure(
     image("/images/help_page.png", width: 15cm),
     caption: [Pagalbos „Help“ lango prototipas.],
@@ -46,4 +46,4 @@ ne moderni vizualinė estetika. Visi trys langų prototipai demonstruoja nuosekl
 
 Šis programos vaizdas buvo suplanuotas įgyvendinti projekto pradžioje. Tačiau dėl terminalo naudotojo sąsajos apribojimų,
 projekto eigo buvo pakankamai žymiai nukrypta nuo pradinės vizijos. Plačiau problemos, su kuriomis buvo susidurta aprašomos
-skyriuje „Komandinės eilutės techniniai apriborimai“.
+4.1 skyriuje.

@@ -76,7 +76,7 @@ Tai leido kūrėjams labiau susikoncentruoti į pagrindinę programos funkcional
 === Išvados
 
 Praktikoje, kuriant _address_ subkomandą, paaiškėjo tam tikras jos naudojimo ypatumas. Nors galimybė paleisti programą nurodant
-vietovės adresą yra patogi, geokodavimo paslauga (šiuo atveju „TravelTime API“) paprastai grąžina koordinates, atitinkančias
+vietovės adresą yra patogi, geokodavimo paslauga (šiuo atveju „TravelTime“ API) paprastai grąžina koordinates, atitinkančias
 objekto ar pastato centrą. Kadangi „Mapillary“ gatvės lygio vaizdų padengimas retai būna pačiame pastato centre (dažniau aplinkinėse
 gatvėse), tiesioginis šių koordinačių naudojimas su numatytuoju mažu paieškos spinduliu dažnai neduoda rezultatų. Dėl šios
 priežasties, naudojant paleidimą pagal adresą, naudotojui dažnai tenka rankiniu būdu padidinti paieškos spindulį per _-\-radius_

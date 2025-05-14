@@ -1,5 +1,5 @@
 #set text(lang: "lt", region: "lt")
-== ASCII spalvos
+== ASCII spalvų filtrai
 
 ASCII menas, paremtas tekstiniais simboliais vaizdui kurti, nebūtinai reikalauja spalvų. Monochromatinės jo variacijos,
 kuriose šviesumo lygiai perteikiami skirtingais simboliais ar jų tankiu, išlieka populiarios ir efektyvios. Vis dėlto,

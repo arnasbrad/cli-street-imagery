@@ -21,7 +21,7 @@ Projekto eiga buvo valdoma dinamiškai, reaguojant į kylančius iššūkius ir 
     (pvz., „Mapillary“ patikimumo problemos, terminalo spalvų palaikymo iššūkiai).
 4. Adaptacija ir krypties koregavimas: remiantis iteracijų rezultatais ir techninių galimybių analize,
   buvo priimami sprendimai dėl tolimesnės eigos. Pavyzdžiui, paaiškėjus standartinių TUI bibliotekų apribojimams,
-  buvo nuspręsta kurti nuosavą TUI komponentą. Susidūrus su „Google Street View“ „API“ kainodaros kliūtimis, 
+  buvo nuspręsta kurti nuosavą TUI komponentą. Susidūrus su „Google Street View“ API kainodaros kliūtimis,
   buvo pereita prie „Mapillary“.
 5. Funkcionalumo plėtra: įsitikinus pagrindinių dalių veikimu, buvo pridedamos papildomos funkcijos 
   (pvz., navigacijos patobulinimai, žaidybinis elementas).

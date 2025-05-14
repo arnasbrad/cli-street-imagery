@@ -38,8 +38,8 @@ Nuotraukos konvertavimo į ASCII meną nustatymai:
 - _navigation-type_ -- pasirenkamas gatvės lygio navigacijos tipas:
   - _Sequence Navigation_ -- navigacijos tipas leidžiantis naudotojams vaikščioti pirmyn ir atgal vienoje nuoseklioje
     vaizdų sekoje. Navigacija leidžiama, tol kol vaizdų sekoje yra naujų nuotraukų.
-  - _Proximity Navigation_ -- navigacijos tipas leidžiantis vaikščioti į 8 skirtingas kryptis, pasirenkant vieną iš 5 galimų
-    sekančių lokacijų. Šiame režime galima judėti tarp skirtingų sekų.
+  - _Proximity Navigation_ -- navigacijos tipas leidžiantis vaikščioti į 8 skirtingas kryptis, pasirenkant vieną iš 5
+    arti esančių lokacijų. Šiame režime galima judėti tarp skirtingų sekų.
 - _algorithm_ -- pasirenkamas algoritmas ASCII konvertavimui:
   - _Luminance_ -- naudojamas šviesumo algoritmas.
   - _Edge Detection Sobel_ -- naudojamas Sobelio kraštų atpažinimo algoritmas.
@@ -70,9 +70,9 @@ Ne visos nustatymų kombinacijos grąžins kokybišką rezultatą. Todėl siekia
 buvo sukurti konfigūraciniai scenarijai, kurie veda naudotoją per per programos nustatymų pasirinkimus. Pirmąkart paleidus
 scenarijų jis susiinstaliuos reikiamus įskiepius, todėl svarbu pasirinkti tinkamą scenarijaus versiją priklausomai nuo
 naudojamos operacinės sistemos:
-- Windows operacinei sistemai -- _windowsScript.bat_
-- Linux operacinei sistemai -- _linuxScript.sh_
-- MacOS operacinei sistemai -- _macosScript.sh_
+- Windows operacinei sistemai -- _configuration-wizard-windows.bat_.
+- Linux operacinei sistemai -- _configuration-wizard-debian.sh_.
+- MacOS operacinei sistemai -- _configuration-wizard-macos.sh_.
 
 Nors šių scenarijų technologijos skiriasi, bendras veikimas atrodys panašiai. Iš eilės bus prašoma įvesti nustatymų
 reikšmes, scenarijus pasirūpins, jog pasirinkti nustatymai gerai veiktų tarpusavyje.

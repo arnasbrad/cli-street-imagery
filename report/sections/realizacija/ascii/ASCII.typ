@@ -15,7 +15,7 @@ priklausomai ar naudojama išplėstinių ASCII simbolių aibė. Šis paprastumas
 nes palaikomi yra tik 255 unikalūs simboliai. Tai lėmė, jog 2003 metais standartų organizacija
 IETF (angl. _Internet Engineering Task Force_) įvedė naująjį „Unicode“ simbolių kodavimo standartą. Šis standartas pakeitė
 ASCII, tačiau naujasis formatas pilnai palaiko ASCII atgalinio suderinamumo pagalba. Nors šiomis
-dienomis naudojame „Unicode“ standartą, 255 simbolių rinkinys, anksčiau priklausęs ASCII formatui, vis dar vadinamas ASCII.
+dienomis naudojame Unicode standartą, 255 simbolių rinkinys, anksčiau priklausęs ASCII formatui, vis dar vadinamas ASCII.
 
 === ASCII menas
 
@@ -42,7 +42,7 @@ spausdinimo mašinėle. Tačiau sparčiai populiarėjant grafinėms naudotojo s�
 Siekiant konvertuoti nuotraukos pikselius į ASCII simbolius, susiduriame su proporcijų išlaikymo problema. Kitaip nei
 rastrinėje grafikoje, kurioje nuotraukos atvaizduojamos vienodo pločio ir aukščio pikseliais, teksto simboliai yra nevienodų
 dimensijų. Todėl tiesiogiai konvertuojant nuotrauką gausime vaizdą ištemptą vertikaliai. Pavyzdžiui, šrifto stiliaus
-„Courrier New“ simbolių dimensijos turi santikį 1:0,6, tai yra plotis sudaro 60% aukščio. Žinoma, teigti apie šį santikį
+„Courrier New“ simbolių dimensijos turi santikį 1:0,6, tai yra plotis sudaro 60% aukščio. Žinoma, teigti apie šį santykį
 galime tik dėl to, nes visi šio, konsolėms pritaikyto šrifto stiliaus simbolių plotis yra vienodas. Dėl paprastumo ir
 minimaliaus poveikio galutiniam rezultatui buvo laikoma, jog šis santykis yra 1:0,5, kitaip tariant aukštis yra du kartus
 didesnis už plotį. Siekiant išspręsti šią problemą būtina du kartus sumažinti vertikalią orginalios nuotraukos rezoliuciją,
@@ -71,19 +71,19 @@ būtina suderinti abu anksčiau aptartus reikalavimus.
 
 === Nuotraukos reprezentacija pilkos spalvos tonais
 
-ASCII meną galima skirstyti į 2 grupes: spalvotąjį ir nespalvotąjį. Kadangi visi kadrai gaunami iš gatvės lygio platformų
-„Google Maps“ ir „Mapillary“ jau bus spalvoti, pasirūpinti reikės tik konvertavimu iš RGB į pilkus atspalvius. Kovertuoti
+ASCII meną galima skirstyti į 2 grupes: spalvotąjį ir nespalvotąjį. Kadangi visi kadrai gaunami iš gatvės lygio platformos
+„Mapillary“ jau bus spalvoti, pasirūpinti reikės tik konvertavimu iš RGB į pilkus atspalvius. Kovertuoti
 turėsime kiekvieną nuotraukos pikselį, tai atlikti galima pasitelkus viena iš trijų galimų formulių:
 
 - Svertinis vidurkis – remiasi žmogaus akies jautrumu skirtingoms spalvoms. Kadangi žalia spalva žmogaus akiai atrodo
   šviesiausia, jos koeficientas yra didžiausias. Toliau mažėjimo tvarka seka raudona ir galiausiai mėlyna spalvos.
-#align(center)[Y=0.299×R+0.587×G+0.114×B]
+  $ Y=0.299×R+0.587×G+0.114×B $
 - Vidurkis – ši formulė yra pati paprasčiausia. Visos spalvos turi vienodą svorį skaičiuojant pilkos spalvos reikšmę.
-#align(center)[Y=(R+G+B)/3]
+  $ Y=(R+G+B)/3 $
 - Reliatyvus šviesumas -- naujesnė svertinio vidurkio formulės atmaina. Kaip ir ankstesnėje formulėje, koeficientai
   apskaičiuoti remiantis akies jautrumu šviesai. Tačiau šįkart atsižvelgiama į modernių vaizduoklių ir ekranų technologijas
   bei naujus tyrimus apie akies šviesos suvokimą.
-#align(center)[Y=0.2126×R+0.7152G+0.0722B]
+  $ Y=0.2126×R+0.7152G+0.0722B $
 
 Čia R – raudonos RGB spalvos reikšmė, G -- žalios spalvos reikšmė, o B -- mėlynos.
 
@@ -120,7 +120,7 @@ sudaromas iš pačių simbolių. Šalutinis šio rinkinio efektas yra labai dide
 === Tinkamos duomenų strukūros pasirinkimas
 
 Pradiniame projekto etape pasirinkome naudoti standartinę sąrašo (angl. _list_) duomenų struktūrą dėl jos patogumo ir
-funkcinio programavimo paradigmos atitikimo. Programavimo kalboje „Scala“ sąrašas iš tiesų veikia kaip susieto sąrašo
+funkcinio programavimo paradigmos atitikimo. Programavimo kalboje „Scala“ sąrašas _List_ iš tiesų veikia kaip susieto sąrašo
 (angl. _linked list_) tipo duomenų struktūra, kuri puikiai tinka funkcinėms operacijoms @scala-list. Ji taip pat užtikrina
 nekintamumą (angl. _immutability_), kas atitiko mūsų pradinį projekto dizainą.
 
@@ -130,7 +130,8 @@ pasiekti nuosekliai einant nuo sąrašo pradžios. Su kai kuriais ASCII konverta
 keliolika sekundžių, kol būdavo sugeneruotas vaizdas. Toks laukimo laikas buvo nepriimtinas, kadangi nefunkciniai
 reikalavimai nurodė maksimalų 5 sekundes trunkantį vaizdų apdorojimą.
 
-Sprendžiant šią problemą, nusprendėme naudoti masyvo duomenų struktūrą. „Scala“ masyvas užtikrina O(1) sudėtingumo
+Sprendžiant šią problemą, nusprendėme naudoti „Scala Array“ masyvo duomenų struktūrą, kuri yra indeksuota ir pasižymi greitomis
+operacijomis su masyvo elementais. „Scala“ masyvas užtikrina O(1) sudėtingumo
 prieigą prie bet kurio elemento pagal indeksą. Nors ši duomenų struktūra yra kintama (angl. _mutable_) ir mažiau atitinka
 funkcinio programavimo principus, jo našumo privalumai mūsų atveju buvo svarbesni. Perėjimas prie masyvo struktūros
 pareikalavo tam tikrų kodo architektūros pakeitimų, tačiau rezultatai buvo įspūdingi.
@@ -138,21 +139,20 @@ pareikalavo tam tikrų kodo architektūros pakeitimų, tačiau rezultatai buvo �
 Po migracijos prie masyvo duomenų struktūros, pastebėjome žymų programos veikimo pagreitėjimą, ypač dirbant su daugiau
 skaičiavimų reikalaujančiais algoritmais. Visi algoritmai pradėjo grąžinti rezultatus per mažiau nei vieną sekundę.
 Kadangi dėl šio pakeitimo generavimo laikas saugiai tenkino nefunkcinius greitaveikos reikalavimus, buvo nuspręsta
-nelygiagretinti nuotraukų konvertavimo į ASCII meną veikimo. Detalius algoritmų greitaveikos rodikliai aprašyti testavimo skyriuje.
+nelygiagretinti nuotraukų konvertavimo į ASCII meną veikimo. Detalūs algoritmų greitaveikos rodikliai aprašyti testavimo skyriuje.
 
 == Nuotraukų konvertavimo į ASCII meną algoritmai
 
 Ankstesniuose skyriuose aptarėme ASCII standarto pagrindus, ASCII meno istoriją ir svarbiausius pasiruošimo etapus, būtinus
 norint kokybiškai konvertuoti skaitmeninę nuotrauką į ASCII meną. Buvo išspręstos proporcijų išlaikymo problemos, aptartas
 šrifto dydžio parinkimo klausimas, nuotraukos konvertuotos į pilkų tonų paletę ir pasirinkti tinkami ASCII simbolių rinkiniai,
-kurie veikia kaip mūsų „spalvų“ paletė. Dabar pereisime prie pagrindinės konvertavimo proceso dalies – algoritmų, kurie
+kurie veikia kaip mūsų monochrominių „spalvų“ paletė. Dabar pereisime prie pagrindinės konvertavimo proceso dalies – algoritmų, kurie
 atlieka faktinį vaizdo duomenų pavertimą teksto simboliais. Pagrindinis iššūkis yra sukurti metodą, kuris kiekvienam nuotraukos
 pikseliui (arba pikselių grupei) priskirtų tinkamiausią ASCII simbolį iš pasirinkto rinkinio, atsižvelgiant į to pikselio
 šviesumą ar kitas vaizdo savybes. Skirtingi algoritmai naudoja skirtingas strategijas šiam susiejimui atlikti, todėl
 gaunami rezultatai gali skirtis savo stiliumi, detalumu ir akcentuojamomis vaizdo ypatybėmis. Šiame skyriuje detaliau
-apžvelgsime du pagrindinius metodus, naudojamus nuotraukų konvertavimui į ASCII meną: šviesumo algoritmą, kuris remiasi
-tiesioginiu pikselių šviesumo atitikimu simbolių tankiui, ir kraštų atpažinimo algoritmą, kuris siekia išryškinti vaizdo
-struktūrą ir kontūrus. Kiekvienas algoritmas turi savo privalumų ir trūkumų, kuriuos aptarsime tolesniuose poskyriuose.
+apžvelgsime penkis metodus, naudotus nuotraukų konvertavimui į ASCII meną. Kiekvienas algoritmas turi savo privalumų
+ir trūkumų, kuriuos aptarsime tolesniuose poskyriuose.
 
 === Šviesumo algoritmas (angl. _Luminance_)
 
@@ -160,9 +160,9 @@ struktūrą ir kontūrus. Kiekvienas algoritmas turi savo privalumų ir trūkum�
 Jo pagrindinė idėja yra intuityvi ir tiesiogiai susijusi su tuo, kaip mes vizualiai suvokiame šviesumą ir tamsumą. Algoritmas
 veikia remdamasis tiesioginiu atitikimu tarp kiekvieno nuotraukos taško (pikselio) šviesumo lygio ir pasirinkto ASCII
 simbolio vizualinio „svorio“ arba „tankio“. Paprastai tariant, tamsesniems vaizdo fragmentams atvaizduoti parenkami simboliai,
-kurie užima mažiau vietos arba atrodo „lengvesni“ (pavyzdžiui, taškas „.“, kablelis „,“), tuo tarpu šviesesnės sritys
-reprezentuojamos „tankesniais“ ar daugiau ploto padengiančiais simboliais (pvz., dolerių ženklas „\$“, procento ženklas „\%“ ar
-net pilnas blokas „█“). Žinoma, šis principas gali būti ir atvirkštinis, jei pasirenkamas šviesus fonas ir tamsūs
+kurie užima mažiau vietos (pavyzdžiui, taškas, kablelis), tuo tarpu šviesesnės sritys
+reprezentuojamos „tankesniais“ ar daugiau ploto padengiančiais simboliais (pvz., dolerių ženklas _\$_, procento ženklas _\%_ ar
+net pilnas blokas _█_). Žinoma, šis principas gali būti ir atvirkštinis, jei pasirenkamas šviesus fonas ir tamsūs
 simboliai – tuomet tankiausi simboliai atitiks tamsiausias vaizdo dalis.
 
 Norint pritaikyti šį algoritmą, pirmiausia reikia turėti vaizdą, paruoštą pagal anksčiau aptartus principus: konvertuotą
@@ -170,7 +170,7 @@ Norint pritaikyti šį algoritmą, pirmiausia reikia turėti vaizdą, paruoštą
 viena skaitine reikšme, nurodančia jo šviesumą. Dažniausiai ši reikšmė svyruoja intervale nuo 0 (visiškai juoda) iki 255
 (visiškai balta). Kitas būtinas komponentas yra ASCII simbolių rinkinys, kuris tarnaus kaip mūsų „ASCII paletė“. Svarbu,
 kad šis rinkinys būtų iš anksto surikiuotas pagal simbolių vizualinį tankį -- nuo mažiausiai tankaus iki tankiausio.
-Pavyzdžiui, paprastas rinkinys galėtų būti „.:-=+\*\#\%\@“, kur „.“ yra mažiausio tankio, o „@“ -- didžiausio.
+Pavyzdžiui, paprastas rinkinys galėtų būti _.:-=+\*\#\%\@_, kur _._ yra mažiausio tankio, o _\@_ -- didžiausio.
 
 Pats konvertavimo procesas vyksta iteruojant per kiekvieną pilkų tonų nuotraukos pikselį. Kiekvienam aplankytam pikseliui
 yra nuskaitoma jo šviesumo reikšmė (skaičius tarp 0 ir 255). Ši reikšmė turi būti transformuota į indeksą, atitinkantį
@@ -178,12 +178,14 @@ poziciją mūsų surikiuotame ASCII simbolių rinkinyje. Populiariausias ir papr
 susiejimas (angl. _linear mapping_) @image-to-ascii. Tarkime, mūsų simbolių rinkinyje yra *N* simbolių. Tuomet visą šviesumo intervalą
 [0, 255] galima proporcingai padalinti į *N* dalių. Kiekviena dalis atitiks vieną simbolį. Pikselio šviesumo reikšmę
 galima konvertuoti į simbolių rinkinio indeksą naudojant formulę:
-#align(center)[`i = floor( L * (N - 1) / 255 ),`]
-čia L yra pikselio šviesumo reikšmė, N yra bendras simbolių skaičius pasirinktame ASCII rinkinyje, (N - 1) yra didžiausias
+
+$ i = floor( L \* (N - 1) / 255 ) $
+
+čia _L_ yra pikselio šviesumo reikšmė, _N_ yra bendras simbolių skaičius pasirinktame ASCII rinkinyje, _(N - 1)_ yra didžiausias
 galimas indekso numeris simbolių rinkinyje, dalijymas iš 255 normalizuoja šviesumo reikšmę į intervalą [0, N-1].
 
 Kai kiekvienam pikseliui priskiriamas atitinkamas ASCII simbolis, šie simboliai yra išdėstomi į dvimatę struktūrą,
-atkartojančią pradinės nuotraukos matmenis. Eilutės atskiriamos naujos eilutės simboliais („_\\n_“), taip suformuojant
+atkartojančią pradinės nuotraukos matmenis. Eilutės atskiriamos naujos eilutės simboliais _\\n_, taip suformuojant
 galutinį ASCII meno kūrinį, paruoštą atvaizdavimui ekrane ar faile.
 
 Galutinio rezultato kokybė, naudojant šviesumo algoritmą, labai priklauso nuo kelių veiksnių. Esminę įtaką daro pasirinktas
@@ -245,8 +247,8 @@ rasti kraštus nuotraukoje:
   - sobelX = $mat(-1, 0, 1; -2, 0, 2; -1, 0, 1)$ – aptinka vertikalius kontūrus (pokyčius horizontalia kryptimi).
   - sobelY = $mat(-1, -2, -1; 0, 0, 0; 1, 2, 1)$ – aptinka horizontalius kontūrus (pokyčius vertikalia kryptimi).
 - Filtro reikšmių sumavimas: kiekvienas 3x3 matricos pikselio šviesumo reikšmė padauginama iš atitinkamo
-  Sobelio filtro elemento, ir visi rezultatai sumuojami. Taip gaunamos dvi reikšmės: gx (gradiento X kryptimi įvertis)
-  ir gy (gradiento Y kryptimi įvertis).
+  Sobelio filtro elemento, ir visi rezultatai sumuojami. Taip gaunamos dvi reikšmės: _gx_ (gradiento X kryptimi įvertis)
+  ir _gy_ (gradiento Y kryptimi įvertis).
 - Gradiento stiprumo skaičiavimas: gautos gx ir gy reikšmės parodo, koks stiprus yra šviesumo pokytis atitinkamai
   horizontalia ir vertikalia kryptimis. Bendra kontūro stiprumo reikšmė, apskaičiuojama naudojant Pitagoro teoremą @sobel-edge-detection-algorithm.
   Gauta reikšmė normalizuojama, kad tilptų į [0, 255] intervalą. Ši reikšmė parodo, kontūro ryškumą tame taške.
@@ -258,8 +260,10 @@ rasti kraštus nuotraukoje:
 
 Galiausiai, programa naudoja šį kontūrų stiprumo masyvą ir konvertuoja jį į ASCII simbolius. Šis konvertavimo etapas yra
 identiškas tam, kuris naudojamas šviesumo algoritme, vienintelis skirtumas, jog šįkart formulėje pridėta ir kontūro stiprumo reikšmė:
-#align(center)[`i = floor( E * (N - 1) / 255 ),`]
-čia E yra pikselio kontūro stiprumo reikšmė (0-255), N yra simbolių skaičius rinkinyje. Kiekvienam pikseliui parenkamas
+
+$ i = floor( E \* (N - 1)/255 ) $
+
+čia _E_ yra pikselio kontūro stiprumo reikšmė (0-255), _N_ yra simbolių skaičius rinkinyje. Kiekvienam pikseliui parenkamas
 atitinkamas simbolis, suformuojant galutinį ASCII meno kūrinį.
 
 Rezultato kokybė, naudojant šį kraštų atpažinimo algoritmą, priklauso nuo kelių veiksnių. Sobelio operatorius yra gana
@@ -307,14 +311,14 @@ Algoritmo veikimas susideda iš kelių nuoseklių etapų @canny-edge-detection, 
     leidžia efektyviau sumažinti triukšmą, nors ir šiek tiek labiau sulieja vaizdą. Kraštiniai 2 pikselių pločio
     rėmeliai lieka neapdoroti.
 - Gradiento intensyvumo ir krypties radimas:
-  - Šiame žingsnyje naudojami 3x3 Sobelio operatoriai (sobelX ir sobelY), kad būtų apskaičiuotas šviesumo pokyčio
+  - Šiame žingsnyje naudojami 3x3 Sobelio operatoriai (_sobelX_ ir _sobelY_), kad būtų apskaičiuotas šviesumo pokyčio
     (gradiento) stiprumas ir kryptis kiekvienam sulieto vaizdo pikseliui.
   - Stiprumas parodo, kiek stiprus yra kontūras tame taške. Ji normalizuojama intervale [0, 255].
   - Kryptis parodo kontūro orientaciją. Ši kryptis yra esminė Canny algoritmo dalis, nes ji naudojama vėlesniame etapuose
     siekiant atvaizduoti kraštinių kryptį ASCII simboliais. Kryptis yra supaprastinama į vieną iš keturių pagrindinių
     krypčių: 0° (horizontali), 45° (linkstanti į dešinę), 90° (vertikali) arba 135° (linkstanti į kairę).
   - Rezultatas yra du masyvai: vienas su gradiento reikšmėmis ir kitas su supaprastintomis kryptimis.
-- Ne maksimumų slopinimas:
+- Triukšmo sukeltų kraštų naikinimas:
   - Kontūrai, gauti po gradiento skaičiavimo, dažnai būna storesni nei vienas pikselis. Šio etapo tikslas yra suploninti
     šiuos kontūrus iki vieno pikselio pločio linijų.
   - Kiekvienam pikseliui tikrinama jo gradiento reikšmė. Ji lyginama su dviejų kaimyninių pikselių reikšmėmis išilgai
@@ -336,7 +340,7 @@ Algoritmo veikimas susideda iš kelių nuoseklių etapų @canny-edge-detection, 
 - Galutinis apdorojimas ir konvertavimas į ASCII meną:
   - Gautas kontūrų žemėlapis gali būti invertuojamas, jei norima, kad kontūrai būtų tamsūs šviesiame fone.
   - Tikrinama kiekvieno pikselio kontūro reikšmė. Jei ji pakankamai didelė, kad būtų laikoma kontūru -- programa parenka
-    specialų ASCII simbolį, atspindintį kontūro kryptį: „-, |, /, \“ arba stipresnius jų variantus „═, ║, ╱, ╲“. Jei
+    specialų ASCII simbolį, atspindintį kontūro kryptį: _-, |, /, \\_ arba stipresnius jų variantus _═, ║, ╱, ╲_. Jei
     pikselis nelaikomas kontūru ir yra fono dalis -- jis paliekamas tuščias.
 
 Sugeneravus tą patį vaizdą su išplėstiniu simbolių rinkinių gauname (#ref(<canny_example>)) pateiktą rezultatą. Vėlgi
@@ -355,7 +359,7 @@ sužibėtų. Žemiau pateikiama nuotrauka yra optimali pasirinktam algoritmui (#
   caption: [Optimalus Canny algoritmo pavyzdys.],
 ) <canny_example2>
 
-Canny kraštų atpažinimo algoritmo rezultatas labai priklauso nuo parinktų parametrų: Gauso filtro dydžio ir nuo
+Canny kraštų atpažinimo algoritmo rezultatas labai priklauso nuo parinktų parametrų: Gauso filtro dydžio ir
 slenkstinių ribų reikšmių. Per aukšti slenksčiai gali praleisti svarbius kontūrus, per žemi – įtraukti daug triukšmo.
 Pagrindinis šio algoritmo pranašumas, lyginant su Sobelio algortimu, yra geresnis triukšmo valdymas, dėl pradinio Gauso
 filtravimo algoritmas yra atsparesnis triukšmui. Algoritmas natūraliai apskaičiuoja kontūro kryptį, kurią galima panaudoti
@@ -377,7 +381,9 @@ ir dažnai turi specifinių apribojimų ar geriausiai tinka tik tam tikro tipo v
 naudinga, nes praplečia supratimą apie galimas vaizdo konvertavimo į tekstą strategijas ir iššūkius. Šiame skyriuje
 apžvelgsime keletą tokių papildomų konvertavimo būdų, kurie gali būti laikomi labiau eksperimentiniais ar nišiniais.
 
-*Brailio rašto algoritmas* yra dar viena technika skaitmeniniams vaizdams konvertuoti į tekstinį meną, tačiau ji veikia iš
+*Brailio rašto algoritmas*
+
+Dar viena technika skaitmeniniams vaizdams konvertuoti į tekstinį meną, tačiau ji veikia iš
 esmės skirtingai nei šviesumo ar kontūrų aptikimo algoritmai. Užuot kiekvieną pikselį atvaizdavus vienu ASCII simboliu,
 šis metodas grupuoja originalaus vaizdo pikselius į mažus blokus (šiuo atveju, 2x4 pikselių) ir kiekvieną tokį bloką
 atitinka vienas specialus Brailio rašto simbolis @braille-alphabet. Brailio simboliai yra sudaryti iš 8 taškų matricos (2 stulpeliai, 4
@@ -438,7 +444,9 @@ kurioje būtų naudingas šis konvertavimo metodas (#ref(<ideal_braille_example>
 Brailio metodas yra nišinis ASCII reprezentavimo būdas, turintis unikalių privalumų. Tačiau jo pritaikymas šio projekto
 ribose yra ribotas dėl ypatingai didelio prarandamos informacijos kiekio atvaizduojant chaotiškas gatvės fotografijas.
 
-*Vieno simbolio užpildymo metodas* yra bene pats minimalistiškiausias. Jo veikimo principas radikaliai skiriasi nuo anksčiau
+*Vieno simbolio užpildymo metodas*
+
+Jo veikimo principas radikaliai skiriasi nuo anksčiau
 aptartų algoritmų kadangi šis algoritmas visiškai ignoruoja originalaus vaizdo turinį, išskyrus jo matmenis.
 
 Veikimo Principas:

@@ -67,21 +67,21 @@ Internetiniai konvertavimo įrankiai -- tai labiausiai paplitę ir naudotojui dr
 vienkartiniam vaizdų konvertavimui. Jie nereikalauja jokios techninės konfigūracijos ar diegimo, sugeneruotą rezultatą
 naudotojas gali nusikopijuoti į iškarpinę. Šių įrankių pavyzdžiai:
 
-- „Ascii-art-generator.org“ @ascii-art-generator: Ši svetainė yra tipiškas pavyzdys, leidžiantis naudotojui įkelti
+- „Ascii-art-generator.org“ @ascii-art-generator: ši svetainė yra tipiškas pavyzdys, leidžiantis naudotojui įkelti
   paveikslėlį (pvz., JPG, PNG, GIF) arba pateikti jo URL. Naudotojas gali pasirinkti keletą pagrindinių parametrų:
     - Išvesties dydis: nurodomas pasirenkant norimą rezultato plotį, kas lemia detalumo lygį.
     - Simbolių rinkinys: nėra simbolių rinkinio pasirinkimo.
     - Algoritmai: nėra algoritmų pasirinkimo galimybės.
     - Spalvos: įrankis palaiko spalvoto ir monochromatinio ASCII generavimą, naudojant HTML spalvas fone ar pačius simbolius.
     - Taikymas: tinka greitam vizualiniam efektui gauti, socialinių tinklų įrašams ar kaip pramoga.
-- „Asciiart.eu“ @asciiart-eu-image-converter: Veikia panašiai kaip ankstesnis pavyzdys, tačiau šįkart daug
+- „Asciiart.eu“ @asciiart-eu-image-converter: veikia panašiai kaip ankstesnis pavyzdys, tačiau šįkart daug
   dėmesio sutelkiama į rezultato sudedamųjų dalių modifikavimą. Įkėlus vaizdą puslapis leidžia eksperimentuoti su plačiu nustatymų pasirinkimu.
     - Išvesties dydis: nurodomas pasirenkant norimą rezultato plotį, kas lemia detalumo lygį.
     - Simbolių rinkinys: platus simbolių aibių pasirinkimas.
     - Algoritmai: puslapis leidžia pasirinkti spalvų maišymo ir kraštų atpažinimo algoritmus.
     - Spalvos: platus spalvų reprezentavimo nustatymai, leidžiantys keisti kontrastą, atspalvį, invertuoti spalvas.
     - Taikymas: paprastas įrankis atliekantis ASCII konvertaciją, tačiau pažengusiems naudotojams suteikiama didelė konfigūravimo laisvė.
-- „Manytools.org“ @manytools-ascii-converter: Šis įrankis dažnai siūlo šiek tiek daugiau techninių parinkčių nei kiti internetiniai konverteriai:
+- „Manytools.org“ @manytools-ascii-converter: šis įrankis dažnai siūlo šiek tiek daugiau techninių parinkčių nei kiti internetiniai konverteriai:
     - Išvesties dydis: nurodomas pasirenkant norimą rezultato plotį, kas lemia detalumo lygį.
     - Simbolių rinkinys: nėra simbolių rinkinio pasirinkimo.
     - Algoritmai: puslapis leidžia pasirinkti spalvų maišymo ir kraštų atpažinimo algoritmus.
@@ -89,32 +89,32 @@ naudotojas gali nusikopijuoti į iškarpinę. Šių įrankių pavyzdžiai:
       kodus (angl. _ANSII escape codes_), kurie leidžia atvaizduoti spalvas standartiniuose terminaluose.
     - Taikymas: paprastas įrankis atliekantis ASCII konvertaciją, pasižymintis minimaliomis konfigūravimo galimybėmis
 
-Komandinės eilutės konvertavimo įrankiai: Šie įrankiai yra sukurti veikti tiesiogiai terminalo aplinkoje, todėl yra žymiai
+Komandinės eilutės konvertavimo įrankiai: šie įrankiai yra sukurti veikti tiesiogiai terminalo aplinkoje, todėl yra žymiai
 lankstesni ir tinkamesni automatizavimui bei integracijai į kitas programas. Šie įrankiai lengvai įdiegiami per paketų
 tvarkykles. Šių įrankių pavyzdžiai:
 
 - „jp2a“ -- vienas iš senesnių ir plačiai žinomų CLI įrankių, parašytas C kalba @jp2a.
     - Funkcionalumas: specializuojasi JPEG konvertavime, nors dažnai palaiko ir kitus formatus per išorines bibliotekas,
       pavyzdžiui, „libpng“. Konvertuoja vaizdą į ASCII simbolius, atsižvelgdamas į pikselių šviesumą.
-    - Parinktys: Leidžia nurodyti išvesties plotį, aukštį, naudoti ANSI spalvas, pasirinkti kraštinių išryškinimo algoritmus, invertuoti išvestį.
-    - Taikymas: Greitas vaizdų peržiūrėjimas terminale, sistemų stebėjimo įrankių papildymas, pavyzdžiui, rodant logotipo ASCII versiją.
-    - Trūkumai projekto kontekste: Sukurtas konvertuoti pavienius failus. Nors teoriškai galima nukreipti vaizdo srautą,
+    - Parinktys: leidžia nurodyti išvesties plotį, aukštį, naudoti ANSI spalvas, pasirinkti kraštinių išryškinimo algoritmus, invertuoti išvestį.
+    - Taikymas: greitas vaizdų peržiūrėjimas terminale, sistemų stebėjimo įrankių papildymas, pavyzdžiui, rodant logotipo ASCII versiją.
+    - Trūkumai projekto kontekste: sukurtas konvertuoti pavienius failus. Nors teoriškai galima nukreipti vaizdo srautą,
       jis nėra optimizuotas realaus laiko interaktyviam atvaizdavimui.
 - „libcaca“ -- tai ne tik įrankis, bet ir galinga C biblioteka, skirta pažangiam tekstiniam vaizdavimui @libcaca.
     - Funkcionalumas: šis įrankis daro daugiau nei paprastas ASCII konvertavimas. Jis palaiko ne tik ASCII ar ANSI, bet
       ir „Unicode“ simbolius, įvairius spalvų maišymo algoritmus, kad pagerintų vaizdo kokybę ribotoje spalvų paletėje.
       Yra galimybė vaizdo įrašams pritaikyti ASCII simbolių filtrą.
-    - Parinktys: Leidžia pasirinkti šriftą, spalvų maišymo algoritmą, spalvų režimą, išvesties formatą (ANSI, HTML ir kt.).
-    - Taikymas: Aukštesnės kokybės spalvoto ASCII meno generavimas, vaizdo įrašų peržiūra terminale, demonstracinės programos.
-    - Trūkumai projekto kontekste: Pati biblioteka yra labai galinga, bet ji yra orientuotas į failų konvertavimą.
+    - Parinktys: leidžia pasirinkti šriftą, spalvų maišymo algoritmą, spalvų režimą, išvesties formatą (ANSI, HTML ir kt.).
+    - Taikymas: aukštesnės kokybės spalvoto ASCII meno generavimas, vaizdo įrašų peržiūra terminale, demonstracinės programos.
+    - Trūkumai projekto kontekste: pati biblioteka yra labai galinga, bet ji yra orientuotas į failų konvertavimą.
       Nors biblioteka suteiktų reikiamus primityvus interaktyvumui, jį reikėtų programuoti papildomai. Realizuoti sudėtingą
       interaktyvią sąsają (kaip gatvių vaizdų naršymas) vien „libcaca“ pagalba būtų nemenkas iššūkis.
-- „ascii\_magic“ -- modernesnis sprendimas, parašytas Python kalba, lengvai integruojamas į Python projektus @ascii-magic.
-    - Funkcionalumas: veikia kaip Python biblioteka ir kaip CLI įrankis. Leidžia konvertuoti vaizdus iš failų, URL adresų.
+- „ascii\_magic“ -- modernesnis sprendimas, parašytas „Python“ kalba, lengvai integruojamas į „Python“ projektus @ascii-magic.
+    - Funkcionalumas: veikia kaip „Python“ biblioteka ir kaip CLI įrankis. Leidžia konvertuoti vaizdus iš failų, URL adresų.
       Palaiko spalvotą ANSI išvestį.
     - Parinktys: galima nurodyti išvesties stulpelių skaičių, simbolių rinkinį, spalvų režimą.
-    - Taikymas: Lengvai integruojamas į Python programas, greitas prototipavimas, automatizuotos užduotys.
-    - Trūkumai projekto kontekste: Kaip ir kiti CLI įrankiai, pats savaime nesuteikia interaktyvios sąsajos. Tai labiau
+    - Taikymas: lengvai integruojamas į „Python“ programas, greitas prototipavimas, automatizuotos užduotys.
+    - Trūkumai projekto kontekste: kaip ir kiti CLI įrankiai, pats savaime nesuteikia interaktyvios sąsajos. Tai labiau
       statinio konvertavimo biblioteka. Interaktyvumas (naršymas, žaidimas) reikalautų papildomos logikos, naudojant šią
       biblioteką kaip vieną iš komponentų.
 
@@ -152,7 +152,7 @@ egzistuoja ir komandinės eilutės alternatyvos, skirtos el. pašto valdymui tie
   galinti pasiūlyti patogesnę naudotojo patirtį nei tradiciniai įrankiai.
 - „lieer“: įrankis, skirtas „Gmail“ sinchronizavimui ir darbui neprisijungus, integruojamas su kitais komandinės eilutės įrankiais.
 
-Spotify“ paslauga yra neatsiejama nuo vizualiai turtingos grafinės sąsajos – albumų viršeliai, atlikėjų nuotraukos,
+„Spotify“ paslauga yra neatsiejama nuo vizualiai turtingos grafinės sąsajos – albumų viršeliai, atlikėjų nuotraukos,
 kuruojami grojaraščiai su paveikslėliais, dinamiškos rekomendacijos. Atrodytų, kad tokia paslauga sunkiai įsivaizduojama
 tekstinėje aplinkoje, tačiau egzistuoja keletas populiarių tekstinės naudotojo sąsajos klientinių programų:
 - „spotify-tui“: populiari klientinė programa, veikianti terminale bei siūlanti į grafinę panašią sąsają, kuri yra valdomą
