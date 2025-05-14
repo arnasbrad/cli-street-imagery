@@ -1,5 +1,7 @@
 === Sistemos funkcijos
 
+_Rašė: Ignas Survila._
+
 Ši UML panaudojimo atvejų diagrama (#ref(<use_cases>)) vaizduoja kuriamos programos funkcinius reikalavimus ir pagrindines sąveikas tarp naudotojo
 ir programos bei išorinių sistemų: „Mapillary“ API, „Imgur“ API, „TravelTime“ API. Sistema yra padalinta į dvi pagrindines
 posistemes: gatvės vaizdo ir konfigūracijos.

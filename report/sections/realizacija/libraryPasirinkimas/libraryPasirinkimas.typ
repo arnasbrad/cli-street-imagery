@@ -1,6 +1,8 @@
 #set text(lang: "lt", region: "lt")
 == Naudotojo sąsajos bibliotekos pasirinkimas<tui-bibliotekos-pasirinkimas>
 
+_Rašė: Arnas Bradauskas._
+
 Kuriant komandinės eilutės programą, ypač interaktyvią, svarbus sprendimas yra naudotojo sąsajos
 (angl. _Terminal User Interface_ – TUI) realizavimo būdas. Nors projekto pagrindinis tikslas buvo atvaizduoti
 gatvių vaizdus ASCII formatu, reikėjo mechanizmo naudotojo įvesties (navigacijos komandų) apdorojimui ir

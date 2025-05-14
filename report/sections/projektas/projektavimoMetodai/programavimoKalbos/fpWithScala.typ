@@ -90,9 +90,7 @@ Prieš aiškinantis kaip reikia valdyti šalutinius efektus, reikia suprasti, ka
 Funkcinis programavimas yra pagrįstas matematinėmis funkcijomis, taigi jomis ir galime pasinaudoti apibūdinant
 funkcinio programavimo paradigmą. Štai pažiūrėkime į šią funkciją:
 
-#math.equation(block: true)[
-  f(x) = 3x
-]
+$ f(x) = 3x $
 
 Tokia funkcija yra tarytum sujungimas tarp dviejų skaičių sarašų. Pavyzdžiui, sąrašas (1, 2, 3) patampa sąrašu (3, 6, 9).
 Kieviena įvestis turi vieną ir tik vieną išvestį. Nesvarbu kokia yra išvestis, jai visada bus išvestis (nėra jokių išimčių).

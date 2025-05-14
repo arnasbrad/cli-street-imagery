@@ -1,6 +1,8 @@
 #set text(lang: "lt", region: "lt")
 == Programos konfigūravimas
 
+_Rašė: Ignas Survila._
+
 Kadangi gatvės lygio navigavimo programa turi daug skirtingų nustatymų, kaip algoritmai, simbolių rinkiniai, spalvų
 filtrai ir kiti, kiekviną kartą pasirinkti juos per programos parametrus būtų nepatogu. Todėl buvo priimtas sprendimas
 programos nustatymus importuoti iš HOCON konfigūracinio failo. Visa šio failo tipo esmė yra naudoti JSON semantiką,

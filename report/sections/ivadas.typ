@@ -1,5 +1,7 @@
 = Įvadas<ivadas>
 
+_Rašė: 50% Arnas Bradauskas, 50% Ignas Survila._
+
 == Darbo problematika ir aktualumas
 
 // „“
@@ -24,33 +26,54 @@ turinys gali būti pristatomas nestandartiniais būdais.
 
 == Darbo tikslas ir uždaviniai
 
-Darbo pagrindinis tikslas -- sukurti ir ištirti interaktyvią komandinės eilutės sąsają, kuri leistų naudotojams
-naršyti gatvių vaizdus ASCII formatu, siekiant nustatyti tokios sistemos techninį įgyvendinamumą ir naudojimo
-patogumą be tradicinės grafinės aplinkos.
+Darbo pagrindinis tikslas -- sukurti ir įvertinti komandinės eilutės pagrindu veikiantį prototipą,
+leidžiantį interaktyviai naršyti gatvės lygio vaizdus (angl. street-level view) ASCII grafikos formatu.
+Atliekant sistemingą algoritmų analizę, demonstracinio prototipo kūrimą bei naudotojo patirties vertinimą,
+nustatyti tokios sąsajos techninius privalumus ir apribojimus, lyginant su įprasta grafine aplinka.
 
 Uždaviniai:
-1. Išanalizuoti esamas technologijas ir metodus, skirtus vaizdiniam turiniui konvertuoti į ASCII formatą,
-  bei įvertinti jų tinkamumą interaktyviai gatvių vaizdų sistemai.
-2. Ištirti „Street View“ programavimo sąsajos (API) galimybes ir apribojimus, siekiant efektyviai gauti ir apdoroti gatvių
-  vaizdų duomenis komandinės eilutės aplinkoje.
-3. Sukurti prototipą, demonstruojantį ASCII formatu pateikiamų gatvių vaizdų naršymą, įskaitant judėjimą erdvėje.
-4. Parengti ir įgyvendinti intuityvią navigacijos sistemą, pritaikytą specifiniams komandinės eilutės aplinkos
-  apribojimams ir galimybėms.
-5. Įgyvendinti žaidybinę programos funkciją, kuri leistų naudotojui lengvai pamatyti esamą funkcionalumą.
-6. Atlikti sukurtos sistemos testavimą, vertinant tiek techninį veikimą, tiek naudotojo patirties aspektus
-  skirtingose naudojimo aplinkose.
-7. Nustatyti ir dokumentuoti šio tipo sąsajos praktinio taikymo ribas, galimybes ir tobulinimo kryptis.
-8. Įvertinti projekto rezultatus ir suformuluoti išvadas apie ASCII komandinės eilutės sąsajų potencialą
-  interaktyvioms geografinėms sistemoms.
++ Išanalizuoti algoritmus, skirtus vaizdiniam turiniui konvertuoti į ASCII formatą,
+  bei įvertinti jų tinkamumą atvaizduoti gatvės lygio vaizdus.
++ Palyginti ir pasirinkti tinkamiausią „Street View“ API, įvertinti jos galimybes ir apribojimus.
++ Sukurti interaktyvų demonstracinį prototipą su žaidybiniais elementais, leidžiantį pademonstruoti sistemos galimybes.
++ Sukurti patogią navigaciją komandinėje eilutėje, leidžiančią sklandžiai pereiti tarp gatvės lygio vaizdų.
++ Įvertinti komandinės eilutės aplinkos apribojimus ir galimybes, bei aprašyti pagrindines tobulinimo kryptis.
++ Atlikti sukurtos sistemos testavimą, vertinant techninį veikimą, naudotojo sąsajos intuityvumą,
+  greitaveiką bei veikimą skirtingose operacinėse sistemose.
 
 == Darbo strukrūra
 
-aaa
+Dokumentas susideda iš penkių skyrių:
 
-// TODO: pridėti darbo strukrūrą kai ji bus aiški
++ Pirmajame skyriuje „Analizė“ pateikiamas kuriamo „Street View“ tipo programos techninis pasiūlymas, apibrėžiantis sistemos architektūrą
+  ir pagrindines funkcijas. Atliekama detali egzistuojančių sprendimų analizė, apžvelgiant tiek nuotraukų konvertavimo į ASCII meną įrankius,
+  tiek kitas komandinės eilutės sąsajas naudojančias programas. Taip pat nagrinėjamos techninės galimybės ir apribojimai, susiję su „Street View“
+  tipo duomenų prieiga ir terminalo aplinkos grafinėmis ypatybėmis.
+
++ Antrajame skyriuje „Projektas“ detaliai aprašoma reikalavimų specifikacija, pristatomi pasirinkti projektavimo metodai, argumentuojamas „Scala“
+  programavimo kalbos ir funkcinio programavimo principų pasirinkimas. Skyrius užbaigiamas sistemos statiniu vaizdu, pateikiant diegimo ir paketų diagramas.
+
++ Trečiajame skyriuje „Realizacija“ gilinamasi į praktinius komandinės eilutės techninius apribojimus ir jų įtaką projekto sprendimams.
+  Aptariamas gatvės vaizdo duomenų tiekėjo („Mapillary“) ir papildomų sąsajų („TravelTime“, „Imgur“) pasirinkimas bei integravimas.
+  Detaliai nagrinėjamas naudotojo sąsajos bibliotekos pasirinkimo procesas, lėmęs nuosavo TUI modulio kūrimą. Ypatingas dėmesys skiriamas
+  įvairių nuotraukų konvertavimo į ASCII meną algoritmų realizacijai bei ASCII spalvų pritaikymui.
+
++ Ketvirtajame skyriuje „Testavimas“ pristatomas parengtas testavimo planas, apimantis vienetinius testus, naudotojo sąsajos (TUI) testavimą,
+  našumo ir suderinamumo patikrinimus. Nurodomi testavimo kriterijai ir apžvelgiami testuotų programos dalių rezultatai, įskaitant ASCII
+  meno generavimo algoritmų našumo palyginimą ir programos resursų naudojimo analizę.
+
++ Penktajame skyriuje „Dokumentacija naudotojui“ pateikiamas apibendrintas sistemos galimybių aprašymas ir išsamus naudotojo vadovas.
+  Jame paaiškinama programos konfigūracija, įskaitant API raktų ir kitų parametrų nustatymą, programos paleidimas skirtingais režimais,
+  pagalbos sistemos naudojimas ir pagrindinės valdymo komandos naršant vaizdus.
+
+Galiausiai pateiktose išvadose apibendrinami projekto metu gauti rezultatai, įvertinama,
+kaip pavyko pasiekti iškeltus tikslus ir įgyvendinti uždavinius.
+Pateikiamos pagrindinės įžvalgos ir rekomendacijos galimam tolimesniam darbo plėtojimui.
 
 == Sistemos apimtis
 
-aaa
+Kodo eilučių skaičius -- 10391. Iš jų:
+- 5276 _.scala_ -- pagrindinis programos kodas.
+- 1000 _.sh_ ir _.bat_ -- konfigūraciniai scenarjai.
+- 5115 _.scala_ testai -- programos vienetų testai.
 
-// TODO: pridėti sistemos apimtį kai ji bus aiški

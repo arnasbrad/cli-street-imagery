@@ -1,5 +1,7 @@
 === Naudotojo sąsajos specifikacija
 
+_Rašė: Ignas Survila._
+
 Šiame skyriuje pristatysime kuriamos komandinės eilutės programos naudotojo sąsajos prototipą. Prototipas parodo
 pagrindines sistemos dalis: pagrindinį „Street View“ vaizdą, „Config“ nustatymų langą ir „Help“ pagalbos skiltį. Šie
 prototipai padeda perteikti esminę programos struktūrą, navigacijos elementus ir bendrą stilių, kurį matysime galutiniame

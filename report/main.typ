@@ -16,6 +16,15 @@
     )
 )
 
+#set list(
+    indent: 8pt,
+    marker: [•]
+)
+
+#set enum(
+    indent: 8pt
+)
+
 #set figure(
   supplement: none,
   numbering: n => {
@@ -64,8 +73,8 @@
     numbering: "1."
 )
 
-#pagebreak()
-#include "sections/typst/typst.typ" 
+// #pagebreak()
+// #include "sections/typst/typst.typ" 
 #pagebreak()
 #include "sections/analize/analize.typ" 
 #pagebreak()
@@ -77,6 +86,11 @@
 #pagebreak()
 #include "sections/dokumentacija/dokumentacija.typ"
 #pagebreak()
+
+#set heading(
+    numbering: none
+)
+
 #include "sections/isvados/isvados.typ"
 #pagebreak()
 #bibliography(

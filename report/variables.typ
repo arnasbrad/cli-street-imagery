@@ -13,8 +13,7 @@
 #let ProjectTypeEN = "Bachelor's Final Degree Project"
 
 #let ProjectSupervisor = ("Vadovas", "doc. prakt. Evaldas Guogis")
-// TODO: koks english title
-#let ProjectSupervisorEN = ("Supervisor", "doc. prakt. Evaldas Guogis")
+#let ProjectSupervisorEN = ("Supervisor", "assoc. prof. Evaldas Guogis")
 #let ProjectReviewer = ("Recenzentas", "prof. Tomas Blažauskas")
 #let ProjectReviewerEN = ("Reviewer", "prof. Tomas Blažauskas")
 
