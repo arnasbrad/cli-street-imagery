@@ -23,7 +23,7 @@
   command-line interface. At the core of this work lies a fundamental inquiry into the suitability of the command-line environment as a medium
   for visually rich applications. The primary objective of the project is twofold: firstly, to conduct a comprehensive analysis of the technical and
   user interface limitations of the command-line environment within the context of such an application. Secondly, based on this analysis,
-  to design and implement a functional prototype demonstrating street-level image viewing in ASCII format.
+  to design and implement a functional application demonstrating street-level image viewing in ASCII format.
 
   The project delves into the practical challenges encountered during the implementation of the solution, ranging from the limited support for
   colors and graphical elements in the terminal to the necessity of creating an intuitive navigation system without traditional graphical widgets.

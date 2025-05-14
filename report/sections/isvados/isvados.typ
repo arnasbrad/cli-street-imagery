@@ -48,3 +48,6 @@ Atlikus projektinį darbą padarėme išvadas:
   „Mapillary“ duomenų bazėje dažnai nebūdavo nuotraukų tiksliai tose koordinatėse, nes nuotraukos paprastai fiksuojamos
   iš gatvės perspektyvos. Tai reikalavo papildomos logikos, kad būtų rastos artimiausios nuotraukos aplink nurodytą
   adresą, tačiau šis sprendimas nėra tikslus ir ne visada grąžindavo norimą rezultatą.
+
+// TODO: isvados apie typst
+// TODO: guogio

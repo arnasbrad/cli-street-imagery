@@ -40,7 +40,7 @@ Veiksmai, papildantys gatvės vaizdo gavimo panaudojimo atvejį (galimi po vaizd
   sugeneruotą nuorodą.
 - Atidaryti pagalbos meniu: naudotojas gali išsikviesti pagalbos informaciją, kuri talpina programos paaiškinimus ir
   galimas įvestis.
-- Išeiti iš aplikacijos: naudotojas gali uždaryti programą.
+- Išeiti iš programos: naudotojas gali uždaryti programą.
 
 Žaidimo režimo funkcionalumas:
 Bandyti atspėti šalį: šis atvejis yra galimas jei programa yra šalies spėliojimo režime. Tai reiškia, kad paleidus žaidimo

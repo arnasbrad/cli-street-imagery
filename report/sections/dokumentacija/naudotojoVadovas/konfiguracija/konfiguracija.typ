@@ -29,7 +29,7 @@ Toliau aptariamos konfigūracinio failo reikšmės, pradedant nuo API nustatymų
 - _mapillary-key_ -- įvedama „Mapillary“ API rakto reikšmė, ji yra būtina programos veikimui.
 - _imgur-client-id_ -- įvedama „Imgur“ naudotojo įdentifikacinė reikšmė. Funkcija yra nebūtina ir gali būti išjungta
   konfigūracijoje nustačius reikšmę _Disabled_.
-- _traveltime-app-id_ -- įvedama „TravelTime“ aplikacijos įdentifikacinė reikšmė. Funkcija yra nebūtina ir gali būti išjungta
+- _traveltime-app-id_ -- įvedama „TravelTime“ programos įdentifikacinė reikšmė. Funkcija yra nebūtina ir gali būti išjungta
   konfigūracijoje nustačius reikšmę _Disabled_.
 - _traveltime-key_ -- įvedama „TravelTime“ API rakto reikšmė. Funkcija yra nebūtina ir gali būti išjungta konfigūracijoje
   nustačius reikšmę _Disabled_.

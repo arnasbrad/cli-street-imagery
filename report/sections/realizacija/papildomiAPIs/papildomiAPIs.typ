@@ -2,7 +2,7 @@
 
 Taip pat naudojome dvi papildomas išorines sąsajas, siekiant suteikti papildomo funkcionalumo mūsų programai.
 
-=== „TravelTime“: Geokodavimo ir kelionės laiko analizės platforma
+=== „TravelTime“ -- geokodavimo ir kelionės laiko analizės platforma
 
 „TravelTime“ @traveltime-homepage yra specializuota platforma, teikianti pažangius įrankius darbui su geografine informacija,
 ypač orientuotus į kelionės laikų skaičiavimą ir maršrutizavimą įvairiomis transporto priemonėmis.
@@ -26,12 +26,12 @@ Sprendimą integruoti būtent „TravelTime“ platformą lėmė keli esminiai v
    galėtų lemti klaidingą programos elgseną ir prastus rezultatus.
 3. Specializuota paskirtis: nors egzistuoja ir kitų geokodavimo paslaugų teikėjų, „TravelTime“ specializacija lokacijos analizės
    srityje ir jų įsipareigojimas teikti kokybiškus geografinius duomenis padarė šią platformą patraukliu pasirinkimu projektui,
-   kurio viena iš kerninių funkcijų yra darbas su adresais ir koordinatėmis.
+   kurio viena iš pagrindinių funkcijų yra darbas su adresais ir koordinatėmis.
 
 Nors projekte tiesiogiai neišnaudojamos visos „TravelTime“ kelionių laikų skaičiavimo galimybės, jos geokodavimo funkcionalumas tapo
 svarbia programos dalimi, užtikrinančia sklandų adresų pavertimą koordinatėmis.
 
-=== „Imgur“: Vaizdų talpinimo ir dalinimosi paslauga
+=== „Imgur“ -- vaizdų talpinimo ir dalinimosi paslauga
 
 „Imgur“ @imgur-homepage yra plačiai žinoma ir viena populiariausių internetinių platformų, skirta vaizdinei medžiagai
 – nuotraukoms, GIF animacijoms ir trumpiems vaizdo klipams – talpinti, saugoti bei ja dalintis su kitais interneto

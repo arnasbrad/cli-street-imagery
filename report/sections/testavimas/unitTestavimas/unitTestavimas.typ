@@ -54,7 +54,7 @@ prigimties ir sąsajų su išorine aplinka.
 - Tiesioginės API užklausos ir atsakymai
   - Vienetų testai neturėtų priklausyti nuo išorinių tinklo paslaugų (pvz., „Mapillary“ API serverių pasiekiamumo
     ar atsako laiko). Tokia priklausomybė padarytų testus nestabilius ir lėtus.
-  - Todėl API klientų sąsajos (_traits_) vienetų testuose yra imituojamos (angl. _mocked_). Testuojama, ar pagrindinė
+  - Todėl API klientų sąsajos (angl. _traits_) vienetų testuose yra imituojamos (angl. _mocked_). Testuojama, ar pagrindinė
     programos logika teisingai sąveikauja su šiomis imitacijomis – t.y., ar ji teisingai formuoja užklausas imitacijai
     ir ar teisingai apdoroja imituotus atsakymus (tiek sėkmingus, tiek klaidingus). Patys API klientai (jų realizacijos) ir jų
     reali sąveika su išorinėmis API yra labiau integracinių testų objektas, nors šio projekto rėmuose tokie testai

@@ -2,8 +2,8 @@
 
 *Apie „Scala“*
 
-„Scala“ programavimo kalba, taip pat kaip ir „Java“, yra skirta dirbti su „JVM“
-(_Java Virtual Machine_) platforma -- tai reiškia, jog programinis kodas yra kompiliuojamas
+„Scala“ programavimo kalba, taip pat kaip ir „Java“, yra skirta dirbti su JVM
+platforma -- tai reiškia, jog programinis kodas yra kompiliuojamas
 ne tiesiai į dvejetainį kodą, o į specialų bitų kodą (angl. _bytecode_), kuris
 gali veikti bet kokioje operacinėje sistemoje. Taip pat tai reiškia, jog „Scala“
 kode galima naudotis ne tik „Scala“ įskiepiais, viskuo, ką mums suteikia „Java“
@@ -55,7 +55,7 @@ o ne vykdymo metu. Tai padeda išvengti daugelio klaidų dar prieš paleidžiant
 
 „Scala“ turi turtingą sintaksę, kuri leidžia kurti aiškias, glaustas ir elegantiškas
 duomenų struktūras bei algoritmus. Šabloninis atitikimas (angl. _pattern matching_),
-aukštesnės eilės funkcijos, tingi (angl _lazy_) inicializacija ir nemutuojamų duomenų
+aukštesnės eilės funkcijos, tingi (angl. _lazy_) inicializacija ir nemutuojamų duomenų
 struktūrų palaikymas – tai tik keletas funkcinio programavimo bruožų,
 kuriuos egzistuoja „Scala“ kalboje.
 
@@ -90,7 +90,7 @@ Prieš aiškinantis kaip reikia valdyti šalutinius efektus, reikia suprasti, ka
 Funkcinis programavimas yra pagrįstas matematinėmis funkcijomis, taigi jomis ir galime pasinaudoti apibūdinant
 funkcinio programavimo paradigmą. Štai pažiūrėkime į šią funkciją:
 
-#math.equation[
+#math.equation(block: true)[
   f(x) = 3x
 ]
 
@@ -113,7 +113,7 @@ Panagrinėkime kelis pavyzdžius.
 def doSomething(value: Int) = value * 3
 ```
 
-Štai čia matome funkciniame programavime vadinamą gryną (angl. _pure_) funkciją -- ji įvestį paverčiame išvestimi
+Štai čia matome funkciniame programavime vadinamą gryną (angl. _pure_) funkciją -- ji įvestį paverčia išvestimi
 ir nieko daugiau. Ji yra referenciškai skaidri.
 Pasižiūrėkime, kokie pavyzdžiai nebūtų grynos funkcijos ir kaip galėtume jas paversti grynomis funkcijomis.
 
@@ -284,7 +284,8 @@ val apdorotaKlaida: IO[Int] = galimaiKlaidingas.handleErrorWith { klaida =>
 Dar vienas ypatingai patogus dalykas, kurį suteikia šis karkasas, yra resursų valdymas. 
 Daugelis šalutinių efektų apima darbą su resursais, kuriuos reikia ne tik atidaryti ar įsigyti, bet ir saugiai uždaryti
 ar paleisti, nepriklausomai nuo to, ar operacijos su jais pavyko, ar įvyko klaida (pavyzdžiui, failų skaitytuvai,
-duomenų bazių prisijungimai, tinklo lizdai). Rankiniu būdu tai užtikrinti sudėtinga ir linkę į klaidas (resursų nutekėjimą).
+duomenų bazių prisijungimai, tinklo lizdai). Rankiniu būdu tai užtikrinti yra nepatikima -- programuotojai
+dažnai padaro resursų nutekėjimo klaidas.
 „Cats-Effect“ siūlo elegantišką sprendimą – _Resource_ duomenų tipą. Jis aprašo, kaip įsigyti (angl. _acquire_) resursą ir kaip
 jį paleisti (angl. _release_).
 

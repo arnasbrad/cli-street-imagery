@@ -23,7 +23,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
   generavimo ir atvaizdavimo terminale operacija turėtų būti pakankamai sparti, kad nesukeltų reikšmingo papildomo
   vėlavimo modernioje techninėje įrangoje po atsakymo gavimo.
 - Resursų naudojimas (angl. _resource usage_): programa neturėtų nepagrįstai apkrauti sistemos resursų, veikdama kaip
-  tipinė komandinės eilutės aplikacija.
+  tipinė komandinės eilutės programa.
 
 *Reikalavimai veikimo sąlygoms*
 
@@ -32,7 +32,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
   pagrindinėse operacinėse sistemose („Linux“, „macOS“, „Windows“).
 - Priklausomybė nuo tinklo (angl. _network dependency_): veikimui būtinas aktyvus interneto ryšys prieigai
   prie „Mapillary“ programavimo sąsajos.
-- Programinės įrangos priklausomybės (angl. _software dependencies_): reikalingos priklausomybės (pvz., specifinė „JVM“
+- Programinės įrangos priklausomybės (angl. _software dependencies_): reikalingos priklausomybės (pvz., specifinė JVM
   versija, „Docker“ ir panašiai) turi būti aiškiai dokumentuotos.
 
 *Reikalavimai sistemos išvaizdai*
@@ -41,7 +41,7 @@ patogumą, veikimo charakteristikas, aplinkos sąlygas ir kitus svarbius aspektu
   taip, kad pagrindiniai objektai ir erdvės kryptis būtų bent apytiksliai atpažįstami. Spalvų naudojimas (kai palaikoma)
   turėtų didinti aiškumą.
 - Sąsajos konsistencija (angl. _interface consistency_): tekstiniai naudotojo sąsajos elementai 
-  (pranešimai, meniu, pagalba) turėtų naudoti nuoseklų formatavimą ir stilių visoje aplikacijoje.
+  (pranešimai, meniu, pagalba) turėtų naudoti nuoseklų formatavimą ir stilių visoje programoje.
 
 *Reikalavimai sistemos priežiūrai*
 

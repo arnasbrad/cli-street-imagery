@@ -9,7 +9,7 @@ bei suderinamumo patikrinimus.
 Pagrindinis vienetinių testų tikslas – patikrinti individualių programos komponentų ir funkcijų teisingumą
 izoliuotai. Bus siekiama padengti svarbiausias programos dalis:
 
-- Algoritmų testavimas: bus tikrinamas kiekvieno ASCII meno generavimo algoritmo (pvz., šviesumo, Sobelio, Canny, Breilio) veikimas su
+- Algoritmų testavimas: bus tikrinamas kiekvieno ASCII meno generavimo algoritmo (pvz., šviesumo, Sobelio, Canny, Brailio) veikimas su
   įvairiais įvesties duomenimis, siekiant užtikrinti teisingą vaizdų konvertavimą ir kraštinių atpažinimą.
 - JSON skaitymo (angl. _parsing_) testavimas: bus tikrinamas atsako iš išorinių API
   („Mapillary“, „Imgur“, „TravelTime“) JSON duomenų formatų teisingas nuskaitymas ir interpretavimas,

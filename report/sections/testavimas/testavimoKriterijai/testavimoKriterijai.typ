@@ -6,7 +6,7 @@ Sėkmingas testavimas bus laikomas tada, kai programa atitiks šiuos kriterijus:
 - Funkcinis korektiškumas
   - Visi programos komponentai, ypač ASCII konvertavimo algoritmai ir JSON duomenų skaitymas, veikia teisingai pagal numatytą
     logiką ir pateikia tikslius rezultatus.
-  - Navigacijos funkcijos (judėjimas pirmyn/atgal, tarp artimų taškų) veikia patikimai.
+  - Navigacijos funkcijos (judėjimas pirmyn ir atgal, tarp artimų taškų) veikia patikimai.
   - Spėliojimo žaidimo logika yra korektiška.
   - Pagalbos funkcija pateikia teisingą ir aktualią informaciją.
 - Naudotojo sąsajos kokybė
