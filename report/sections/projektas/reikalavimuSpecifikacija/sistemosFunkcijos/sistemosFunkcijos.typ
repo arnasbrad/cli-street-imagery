@@ -1,7 +1,7 @@
 === Sistemos funkcijos
 
-Ši UML panaudojimo atvejų diagrama (#ref(<use_cases>)) vaizduoja kuriamos programos funkcionalumą ir pagrindines sąveikas tarp naudotojo
-ir programos bei išorinių sistemų: „Mapillary API“, „Imgur API“, „TravelTime API“. Sistema yra padalinta į dvi pagrindines
+Ši UML panaudojimo atvejų diagrama (#ref(<use_cases>)) vaizduoja kuriamos programos funkcinius reikalavimus ir pagrindines sąveikas tarp naudotojo
+ir programos bei išorinių sistemų: „Mapillary“ API, „Imgur“ API, „TravelTime“ API. Sistema yra padalinta į dvi pagrindines
 posistemes: gatvės vaizdo ir konfigūracijos.
 
 #figure(
@@ -12,9 +12,9 @@ posistemes: gatvės vaizdo ir konfigūracijos.
 Aktoriai:
 - Naudotojas: pagrindinis sistemos aktorius – žmogus, kuris sąveikauja su programa per komandinę eilutę, norėdamas
   peržiūrėti gatvės vaizdus, žaisti spėliojimo žaidimą ar konfigūruoti programą.
-- „Mapillary API“: išorinė sistema, kuri yra naudojama gatvės lygio vaizdams gauti pagal indeksą, koordinates ar adresą.
-- „Imgur API“: išorinė sistema, naudojama dalinimuisi sugeneruotais ASCII paveiksliukais socialinėje medijoje.
-- „TravelTime API“: išorinė sistema, naudojama kartu su „Mapillary API“ suteikia naudotojui galimybę ieškoti vietovių pagal
+- „Mapillary“ API: išorinė sistema, kuri yra naudojama gatvės lygio vaizdams gauti pagal indeksą, koordinates ar adresą.
+- „Imgur“ API: išorinė sistema, naudojama dalinimuisi sugeneruotais ASCII paveiksliukais socialinėje medijoje.
+- „TravelTime“ API: išorinė sistema, naudojama kartu su „Mapillary“ API suteikia naudotojui galimybę ieškoti vietovių pagal
   adresą ar žymias vietas.
 
 Gatvės vaizdo posistemė -- atsakinga už pagrindinį programos veikimą, gatvės vaizdų gavimą bei atvaizdavimą ir programos valdymą.
@@ -55,8 +55,8 @@ Paleisti konfigūravimo scenarijų: naudotojas inicijuoja programos konfigūravi
 scenarijų, programa automatiškai įdiegs trūkstamus paketus, priklausomai nuo naudojamos operacinės sistemos.
 
 Konfigūravimo veiksmai (vykdomi konfigūravimo scenarijaus metu):
-- „Mapillary API“ rakto įvedimas: naudotojo prašoma įvesti „Mapillary“ raktą, tai yra standartinė ir būtina konfigūravimo dalis.
-- „Imgur API“ ir „TravelTime API“ raktų įvedimas: naudotojo klausiama, ar šis nori įvesti papildomus raktus. Šie raktai
+- „Mapillary“ API rakto įvedimas: naudotojo prašoma įvesti „Mapillary“ raktą, tai yra standartinė ir būtina konfigūravimo dalis.
+- „Imgur“ API ir „TravelTime“ API raktų įvedimas: naudotojo klausiama, ar šis nori įvesti papildomus raktus. Šie raktai
   nėra būtini programos veikimui.
 
 Parametrų pasirinkimas:
