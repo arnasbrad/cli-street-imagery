@@ -35,6 +35,5 @@
 
   The technical implementation of the project was carried out using the Scala programming language, chosen for its powerful type system, support
   for functional programming paradigms, and good integration with the Java ecosystem. The project report, in turn, was prepared using Typst –
-  a modern, code-based document preparation system. To meet academic requirements and ensure the quality of the document, a custom Typst
-  template was developed specifically for this work.
+  a modern, code-based document preparation system.
 ]

@@ -39,6 +39,4 @@
   Techninė projekto realizacija atlikta naudojant „Scala“ programavimo kalbą, kuri pasirinkta dėl jos galingos
   tipų sistemos, funkcinio programavimo paradigmos palaikymo ir geros integracijos su „Java“ ekosistema.
   Projektinė ataskaita, savo ruožtu, parengta naudojant „Typst“ – modernią, kodu pagrįstą dokumentų rengimo sistemą.
-  Siekiant atitikti akademinius reikalavimus ir užtikrinti dokumento kokybę, šiam darbui buvo sukurtas specialus
-  „Typst“ šablonas.
 ]

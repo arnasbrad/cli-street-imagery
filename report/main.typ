@@ -64,8 +64,8 @@
     numbering: "1."
 )
 
-#pagebreak()
-#include "sections/typst/typst.typ" 
+// #pagebreak()
+// #include "sections/typst/typst.typ" 
 #pagebreak()
 #include "sections/analize/analize.typ" 
 #pagebreak()
