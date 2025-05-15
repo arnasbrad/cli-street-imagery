@@ -1,4 +1,6 @@
-= Įvadas<ivadas>
+#align(center)[
+  = Įvadas<ivadas>
+]
 
 _Rašė: 50% Arnas Bradauskas, 50% Ignas Survila._
 

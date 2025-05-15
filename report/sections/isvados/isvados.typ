@@ -1,5 +1,6 @@
-#set text(lang: "lt", region: "lt")
-= Išvados
+#align(center)[
+  = Išvados
+]
 
 _Rašė: 50% Arnas Bradauskas, 50% Ignas Survila._
 
@@ -19,7 +20,7 @@ Atlikus projektinį darbą padarėme išvadas:
     ir mastelio, vaizdai visuomet būna užfiksuoti vienu laikotarpiu, todėl peržiūra vyksta sklandžiai.
     Tuo tarpu artumo režime to paties objekto kadrai gali smarkiai skirtis – naudotojas dažnai gauna skirtingo
     formato nuotraukas, gali naviguodamas matysi besikeičiantį paros laiką ar net metų laikus.
-6.  Mapillary API ribojamo lango (angl. bounding box) užklausos kartais neįvykdomos dėl serverių apkrovos, todėl
+6.  Mapillary API ribojamo lango (angl. _bounding box_) užklausos kartais neįvykdomos dėl serverių apkrovos, todėl
     koordinačių ir adreso paleidimo režimai, taip pat ir atstumo navigacijos režimas, gali neveikti --
     programai reikalingas patikimas klaidų valdymas arba alternatyvus gatvės lygio vaizdų šaltinis.
 7.  Geokodavimas pagal adresą (naudojamas adreso paleidimo režime) dažnai grąžina pastato centro koordinates,

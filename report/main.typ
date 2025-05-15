@@ -1,7 +1,7 @@
 #set text(lang: "lt", region: "lt")
 #set text(font: "Times New Roman", size: 12pt)
 #set par(
-    spacing: 10pt,
+    spacing: 20pt,
     justify: true,
     //leading: 1.15em
     leading: 0.65em
@@ -29,10 +29,11 @@
   supplement: none,
   numbering: n => {
     [#n pav.]
-  }
+  },
+  gap: 6pt
 )
 #show figure.caption: it => {
-    set text(size: 10pt)
+    set text(size: 11pt)
     if it.kind == image {
         [#text(weight: "bold")[#context it.counter.display(it.numbering)] #it.body]
     } else {
@@ -50,15 +51,21 @@
 #import "variables.typ": *
 #include "mainPages/TitlePage.typ"
 
+#include "mainPages/SecondPage.typ"
+#include "mainPages/ThirdPage.typ"
+#include "mainPages/PageSummaryLT.typ"
+#include "mainPages/PageSummaryEN.typ"
+
 #set page(
     numbering: "1",
     number-align: right
 )
 
-#include "mainPages/SecondPage.typ"
-#include "mainPages/ThirdPage.typ"
-#include "mainPages/PageSummaryLT.typ"
-#include "mainPages/PageSummaryEN.typ"
+#show heading: it => {
+  set text(size: 12pt, weight: "bold")
+  set block(spacing: 20pt)
+  it
+}
 
 #include "mainPages/TableOfContents.typ"
 //#include "mainPages/TableList.typ"
@@ -72,7 +79,6 @@
 #set heading(
     numbering: "1."
 )
-
 // #pagebreak()
 // #include "sections/typst/typst.typ" 
 #pagebreak()
@@ -93,9 +99,8 @@
 
 #include "sections/isvados/isvados.typ"
 #pagebreak()
-#bibliography(
-    "bibliography.yaml",
-    title: "Literatūros sąrašas",
-    style: "iso-690.csl"
-)
+
+#set par(spacing: 10pt)
+#include "mainPages/biblio.typ"
+
 

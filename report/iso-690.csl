@@ -27,7 +27,7 @@
     <terms>
       <term name="no date">[no date]</term>
       <term name="in">in</term>
-      <term name="online">Interaktyvus</term>
+      <term name="online">[interaktyvus]</term>
       <term name="accessed">žiūrėta</term>
       <term name="retrieved">Prieiga</term>
       <term name="from">per</term>
@@ -119,7 +119,7 @@
         <text variable="title" font-style="italic" suffix=". "/>
       </if>
       <else-if type="paper-conference speech chapter article-journal article-magazine article-newspaper entry entry-dictionary entry-encyclopedia post-weblog post webpage broadcast" match="any">
-        <text variable="title" suffix=". "/>
+        <text variable="title" font-style="italic" suffix=". "/>
         <choose>
           <if type="chapter paper-conference" match="any">
             <text term="in" text-case="capitalize-first" suffix="&#160;: "/>
@@ -229,11 +229,11 @@
     <choose>
       <if variable="URL">
         <group prefix=" [" suffix="]">
-          <text term="accessed" text-case="capitalize-first"/>
+          <text term="accessed" text-case="lowercase"/>
           <date variable="accessed">
-            <date-part name="day" prefix="&#160;"/>
-            <date-part name="month" prefix="&#160;"/>
-            <date-part name="year" prefix="&#160;"/>
+            <date-part name="year" prefix="&#160;"  form="numeric-leading-zeros" />
+            <date-part name="month" prefix="-" form="numeric-leading-zeros" />
+            <date-part name="day" prefix="-" form="numeric-leading-zeros" />
           </date>
         </group>
       </if>
