@@ -25,21 +25,21 @@ vertę ir gali būti efektyviai testuojamos izoliuotai.
   - ASCII meno generavimo algoritmai (pvz., šviesumo, Sobelio, Canny, Brailio) kelia unikalų iššūkį
     vienetų testavimui, nes jų „teisingumas“ dažnai yra subjektyvus ir pirmiausia vertinamas vizualiai.
   - Testavimo strategija
-    - Etaloninio rezultato sukūrimas: naudojant programą su konkrečiu, žinomu įvesties vaizdu, vizualiai
+    - Etaloninio rezultato sukūrimas -- naudojant programą su konkrečiu, žinomu įvesties vaizdu, vizualiai
       patikrinamas ir atrenkamas algoritmiškai sugeneruotas ASCII rezultatas, kuris laikomas „geru“ arba „teisingu“.
-    - Rezultato išsaugojimas: šis etaloninis ASCII rezultatas (arba jo reprezentatyvi, lengvai patikrinama dalis)
+    - Rezultato išsaugojimas -- šis etaloninis ASCII rezultatas (arba jo reprezentatyvi, lengvai patikrinama dalis)
       yra išsaugomas kaip testo duomenų dalis.
-    - Automatinis palyginimas: vienetų testas tada vykdo atitinkamą algoritmą su ta pačia pradine įvestimi ir
+    - Automatinis palyginimas -- vienetų testas tada vykdo atitinkamą algoritmą su ta pačia pradine įvestimi ir
       lygina gautą ASCII išvestį su išsaugotu etaloniniu rezultatu. Sutapimas laikomas sėkmingu testu.
     - Ši strategija leidžia automatizuoti algoritmo veikimo patikrinimą po kodo pakeitimų, nors pirminis
       etalono nustatymas remiasi vizualiu vertinimu.
   - Papildomai, buvo testuojami algoritmai su ribiniais atvejais, pavyzdžiui, visiškai juodu ar baltu
     įvesties vaizdu, kur ASCII išvestis yra lengvai nuspėjama ir be vizualaus patvirtinimo.
 
-- Pagalbinės funkcijos ir vidinė logika:
-  - Testuotos įvairios mažesnės, grynos funkcijos (angl. _pure functions_), atsakingos už duomenų transformacijas,
-    koordinačių skaičiavimus, navigacijos logikos dalis (pvz., artimiausių taškų radimas, sekos elementų identifikavimas)
-    ir kitus vidinius skaičiavimus.
+- Pagalbinės funkcijos ir vidinė logika -- testuotos įvairios mažesnės, grynos funkcijos (angl. _pure functions_),
+  atsakingos už duomenų transformacijas,
+  koordinačių skaičiavimus, navigacijos logikos dalis (pvz., artimiausių taškų radimas, sekos elementų identifikavimas)
+  ir kitus vidinius skaičiavimus.
 
 === Ribojimai ir netaikyti vienetų testai
 

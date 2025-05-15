@@ -8,7 +8,7 @@ Tokie duomenys leidžia naudotojui virtualiai „keliauti“ ir tyrinėti aplink
 teikiančių tokius duomenis per programavimo sąsajas (API), tačiau jų prieigos modeliai, duomenų aprėptis ir kainodara
 ženkliai skiriasi. Šiame skyriuje aptariamas sąsajos pasirinkimo procesas ir pagrindiniai motyvai, lėmę galutinį sprendimą.
 
-=== Pirminis kandidatas: „Google Street View“
+=== Pirminis kandidatas -- „Google Street View“
 
 Natūralus pirmasis pasirinkimas daugeliui projektų, susijusių su gatvių vaizdais, yra „Google Street View“.
 Ši platforma yra plačiausiai žinoma ir pasižymi bene didžiausia geografine duomenų aprėptimi pasaulyje.
@@ -16,9 +16,9 @@ Natūralus pirmasis pasirinkimas daugeliui projektų, susijusių su gatvių vaiz
 @gmaps-sv-overview.
 
 Pagrindiniai „Google Street View“ privalumai projektui būtų buvę:
-- Didžiulė aprėptis: galimybė naudotis vaizdais iš daugybės vietovių visame pasaulyje.
-- Duomenų kokybė ir aktualumas: dažnai atnaujinami ir aukštos raiškos vaizdai.
-- Išplėtota sąsaja: palyginti gerai dokumentuota ir plačiai naudojama sąsaja.
+- Didžiulė aprėptis -- galimybė naudotis vaizdais iš daugybės vietovių visame pasaulyje.
+- Duomenų kokybė ir aktualumas -- dažnai atnaujinami ir aukštos raiškos vaizdai.
+- Išplėtota sąsaja -- palyginti gerai dokumentuota ir plačiai naudojama sąsaja.
 
 Tačiau pagrindinė kliūtis, sutrukdžiusi pasirinkti „Google Street View“, buvo jos kainodaros modelis.
 Nors „Google Maps Platform“ galbūt gali suteikti nemokamo naudojimo galimybes, pats kainodaros modelis
@@ -40,13 +40,13 @@ Po analizės buvo pasirinkta platforma „Mapillary“ @mapillary-homepage.
 yra bendruomenės principais paremta platforma, skirta gatvės lygio vaizdams rinkti ir dalintis. Jos pasirinkimą
 lėmė keli pagrindiniai veiksniai:
 
-1. Nemokama progamavimo sąsajos prieiga: „Mapillary“ teikia programavimo sąsają („Mapillary API v4“), kuri leidžia nemokamai
+1. Nemokama progamavimo sąsajos prieiga -- „Mapillary“ teikia programavimo sąsają („Mapillary API v4“), kuri leidžia nemokamai
   gauti prieigą prie vaizdų sekų, metaduomenų ir pačių vaizdų @mapillary-api-docs.
   Nors ir egzistuoja tam tikri naudojimo limitai bei, kaip pastebėta techninių galimybių analizėje, kartais pasitaiko patikimumo
   problemų dėl didelio serverių apkrovimo, nemokamas prieigos modelis buvo esminis veiksnys, leidęs tęsti projektą
   neperžengiant biudžeto ribų.
 
-2. Atvirų duomenų aspektai ir bendruomenės indėlis: nors pati „Mapillary“ platforma ir jos pagrindinė programinė įranga
+2. Atvirų duomenų aspektai ir bendruomenės indėlis -- nors pati „Mapillary“ platforma ir jos pagrindinė programinė įranga
   nėra atviro kodo (angl. _open source_), jos veikimo principas remiasi bendruomenės kuriamais duomenimis. Didelė dalis
   į „Mapillary“ įkeltų vaizdų yra licencijuojami pagal atvirą „Creative Commons Attribution-ShareAlike 4.0 International“
   (CC BY-SA) licenciją @mapillary-terms @cc-by-sa-4.
@@ -54,14 +54,14 @@ lėmė keli pagrindiniai veiksniai:
   kas atitinka akademinio projekto dvasią. Be to, „Mapillary“ aktyviai integruojasi su „OpenStreetMap“ projektu,
   papildydama jį gatvių vaizdais.
 
-3. Galimybė prisidėti prie duomenų rinkimo: „Mapillary“ leidžia bet kam įkelti savo surinktus gatvių vaizdus naudojant
+3. Galimybė prisidėti prie duomenų rinkimo -- „Mapillary“ leidžia bet kam įkelti savo surinktus gatvių vaizdus naudojant
   išmanųjį telefoną ar kitas kameras @mapillary-uploader-guide.
   Tai suteikia potencialią galimybę patiems projekto autoriams ar kitiems entuziastams papildyti duomenų bazę tose vietovėse,
   kurios projektui yra aktualios, bet „Mapillary“ aprėptis yra nepakankama. Šis aspektas ypač svarbus nišiniams
   ar lokaliems projektams.
 
-4. Pakankamas funkcionalumas projektui: nors „Mapillary“ sąsaja galbūt nėra tokia išplėtota ar turinti tiek pagalbinių
-  funkcijų kaip „Google Maps Platform“, ji suteikė visas projektui būtinas pagrindines galimybes: gauti vaizdus pagal
+4. Pakankamas funkcionalumas projektui -- nors „Mapillary“ sąsaja galbūt nėra tokia išplėtota ar turinti tiek pagalbinių
+  funkcijų kaip „Google Maps Platform“, ji suteikė visas projektui būtinas pagrindines galimybes -- gauti vaizdus pagal
   geografines koordinates, naršyti vaizdų sekas (judėti pirmyn ir atgal) ir gauti reikalingus metaduomenis (pvz., vaizdo kryptį).
 
 === Išvada

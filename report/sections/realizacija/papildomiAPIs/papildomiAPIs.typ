@@ -14,19 +14,19 @@ bei atlikti kitas su lokacija susijusias operacijas.
 Šiame projekte pagrindinis „TravelTime“ platformos panaudojimas yra susijęs su jos teikiama geokodavimo
 (angl. _geocoding_) paslauga. Geokodavimas – tai procesas, kurio metu tekstinis adresas (pvz., gatvė, namo numeris, miestas)
 yra paverčiamas tiksliomis geografinėmis koordinatėmis (platuma ir ilguma). Ši funkcija yra prieinama per „TravelTime“ programavimo
-sąsają (API) @traveltime-api-docs. Mūsų kuriamoje programoje šis funkcionalumas yra kritiškai svarbus naudotojo patogumui:
+sąsają (API) @traveltime-api-docs. Mūsų kuriamoje programoje šis funkcionalumas yra kritiškai svarbus naudotojo patogumui --
 jis leidžia naudotojui tiesiog įvesti norimos vietos adresą, o programa, pasinaudodama „TravelTime“ paslauga, automatiškai
 nustato tos vietos koordinates. Šios koordinatės vėliau naudojamos kitoms programos funkcijoms, pavyzdžiui,
 pradinio taško nustatymui žemėlapyje ar gatvės vaizdų paieškai aplink nurodytą adresą.
 
 Sprendimą integruoti būtent „TravelTime“ platformą lėmė keli esminiai veiksniai:
-1. Komandos nario patirtis ir prieiga: vienas iš projekto komandos narių (Arnas Bradauskas) dirba „TravelTime“ įmonėje.
+1. Komandos nario patirtis ir prieiga -- vienas iš projekto komandos narių (Arnas Bradauskas) dirba „TravelTime“ įmonėje.
    Ši aplinkybė suteikė unikalią galimybę gauti tiesioginę techninę pagalbą, gilesnį API veikimo principų supratimą ir greitesnį
    galimų problemų sprendimą. Tai ypač vertinga vykdant projektą su ribotais laiko ištekliais.
-2. Funkcionalumo tikslumas ir patikimumas: „TravelTime“ geokodavimo paslauga pasižymi aukštu tikslumu ir patikimumu, kas
+2. Funkcionalumo tikslumas ir patikimumas -- „TravelTime“ geokodavimo paslauga pasižymi aukštu tikslumu ir patikimumu, kas
    yra būtina sąlyga norint užtikrinti kokybišką programos veikimą ir teigiamą naudotojo patirtį. Netikslus adresų konvertavimas
    galėtų lemti klaidingą programos elgseną ir prastus rezultatus.
-3. Specializuota paskirtis: nors egzistuoja ir kitų geokodavimo paslaugų teikėjų, „TravelTime“ specializacija lokacijos analizės
+3. Specializuota paskirtis -- nors egzistuoja ir kitų geokodavimo paslaugų teikėjų, „TravelTime“ specializacija lokacijos analizės
    srityje ir jų įsipareigojimas teikti kokybiškus geografinius duomenis padarė šią platformą patraukliu pasirinkimu projektui,
    kurio viena iš pagrindinių funkcijų yra darbas su adresais ir koordinatėmis.
 
@@ -51,10 +51,10 @@ vaizdą. „Imgur“ suteikta nuoroda užtikrina, kad dalinantis informacija soc
 atvaizduojama nuotraukos peržiūra (angl. _rich preview_), taip padidinant įrašo patrauklumą ir informatyvumą.
 
 „Imgur“ platformos pasirinkimą šiam tikslui lėmė šie pagrindiniai privalumai:
-1. Nemokamas naudojimas ir prieinamumas: „Imgur“ leidžia nemokamai talpinti didelį kiekį vaizdų ir naudotis jos API
+1. Nemokamas naudojimas ir prieinamumas -- „Imgur“ leidžia nemokamai talpinti didelį kiekį vaizdų ir naudotis jos API
    (su tam tikrais užklausų limitais), kas yra ypač aktualu akademinio ar asmeninio projekto kontekste,
    kur biudžetas dažnai yra ribotas arba jo nėra.
-2. Paprasta ir gerai dokumentuota API: „Imgur“ API yra palyginti nesudėtinga integruoti į įvairias programavimo kalbas ir platformas.
+2. Paprasta ir gerai dokumentuota API -- „Imgur“ API yra palyginti nesudėtinga integruoti į įvairias programavimo kalbas ir platformas.
    Jos dokumentacija yra aiški, o pats integracijos procesas nereikalauja didelių laiko sąnaudų.
 
 Atsižvelgiant į šiuos veiksnius, „Imgur“ buvo pasirinkta kaip efektyvus ir praktiškas sprendimas projekto poreikiams,

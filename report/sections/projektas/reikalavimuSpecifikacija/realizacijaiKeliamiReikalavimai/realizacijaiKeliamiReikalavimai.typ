@@ -21,7 +21,7 @@ reikalavimai, keliami kuriamos programos realizacijai, siekiant užtikrinti ger�
   - Programa neturi naudoti neproporcingai daug operatyviosios atminties (angl. _random access memory_) ar procesoriaus
     resursų. Atminties naudojimas neturėtų drastiškai augti naudojantis programa ilgą laiką.
 - Reikalavimai veikimo sąlygoms:
-  - Programa turi veikti visose populiariose operacinėse sistemose: „Windows“, „Linux“, „MacOS“.
+  - Programa turi veikti visose populiariose operacinėse sistemose -- „Windows“, „Linux“, „MacOS“.
   - Programos veikimui reikalingos bibliotekos turi būti aiškiai nurodytos dokumentacijoje.
 - Reikalavimai sistemos priežiūrai:
   - Programos kodas turi būti pakankamai komentuotas, kad būtų suprantama jo logika ir struktūra.

@@ -9,7 +9,7 @@ programos nustatymus importuoti iš HOCON konfigūracinio failo. Visa šio failo
 tačiau atvaiduoti jį lengviau žmogui įskaitomu stiliumi @hocon-spec.
 Sekant naudotojo dokumentaciją šį failą tūrėtų būti nesunku keisti rankiniu būdu. Žinoma, taip naudotojai gali pasirinkti
 neoptimalius nustatymus. Dėl šios priežasties buvo sukurti konfigūraciniai scenarijai dar labiau palengvinantys konfigūravimą.
-Šie scenarijai buvo pritaikyti populiariausioms operacinėms sistemoms: „Windows“, „Macos“, „Linux Debian“. Šie naudoja
+Šie scenarijai buvo pritaikyti populiariausioms operacinėms sistemoms -- „Windows“, „Macos“, „Linux Debian“. Šie naudoja
 „Gum“ TUI biblioteką skirtą pagražinti konfigūracinius vedlio scenarijus @gum-repo. Naudotojui pačiam instaliuoti jokių papildomų
 bibliotekų nereikės, visa tai atliekama automatiškai pirmąkart paleidus scenarijų.
 

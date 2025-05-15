@@ -17,11 +17,11 @@ Paleidus programą:
   keliai:
   - _r_ -- parodyti dabartinę lokaciją dar kartą.
   - _h_ -- parodyti pagalbinį tekstą.
-  - _n_ -- parodyti navigavimo pasirinkimus, priklausomai nuo navigavimo tipo:
+  - _n_ -- parodyti navigavimo pasirinkimus, priklausomai nuo navigavimo tipo.
   - _c_ -- išsaugoti matomą vaizdą kompiuteryje.
   - _s_ -- sugeneruoti paveiksliuko pasidalinimo soc. medijoje nuorodą.
   - _g_ -- parodyti galimus valstybės spėjimo variantus.
-  - _q_ -- procesas baigiasi "Pabaiga" taške
+  - _q_ -- procesas baigiasi "Pabaiga" taške.
 
 Jei naudotojas pasirenka naviguoti gatvės lygio vaizduose, galimi du sąsajų variantai:
 - Sėkos -- parodomos galimos judėjimo kryptis, toliau reikia pasirinkti vieną iš jų.

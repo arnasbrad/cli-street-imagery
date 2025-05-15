@@ -36,7 +36,7 @@ for (Integer number : numbers) {
 }
 ```
 
-„Scala“ pavydzys:
+„Scala“ pavyzdys:
 ```scala
 val result = numbers.filter(_ % 2 == 0).map(x => x * x)
 ```
@@ -248,7 +248,7 @@ yra _void_) taip pat, kaip dirbtume su paprastomis reikšmėmis, kaip _Int_, _St
 perpanaudoti, grąžinti naują reikšmę ir panašiai. Tai yra galima todėl, nes mes programiniame kode dirbame ne su pačia
 šalutine reikšme, o su jos apibūdinimu.
 
-Dažnas IO monados apibūdinimas skamba taip: IO aprašo transformaciją iš vienos pasaulio būsenos į kitą.
+Dažnas IO monados apibūdinimas skamba taip -- IO aprašo transformaciją iš vienos pasaulio būsenos į kitą.
 Kiekvienas veiksmas IO viduje yra ne pats veiksmas, o receptas naujai pasaulio būsenai, kuri gautųsi įvykdžius
 tą veiksmą. Kaip matome, šitoks apibūdinimas nepažeidžia funkcinio programavimo taisyklių -- nebuvo jokių kintamų
 reikšmių ar tiesioginių šalutinių efektų pačiame aprašyme, tik dvi atskiros, nekintamos koncepcijos -- pasaulis prieš

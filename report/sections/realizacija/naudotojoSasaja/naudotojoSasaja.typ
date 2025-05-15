@@ -13,14 +13,14 @@ visa tai darant tekstinėje aplinkoje be tradicinių grafinių elementų.
 
 Projektuojant sąsają, vadovautasi keliais pagrindiniais principais:
 
-1. Vaizdo prioritetas: svarbiausias tikslas buvo maksimaliai išnaudoti terminalo lango plotą pačiam ASCII gatvės vaizdui.
+1. Vaizdo prioritetas -- svarbiausias tikslas buvo maksimaliai išnaudoti terminalo lango plotą pačiam ASCII gatvės vaizdui.
    Dėl šios priežasties atsisakyta nuolat matomų sąsajos elementų (pvz., meniu juostų, būsenos eilučių), kurie atimtų
    vietą iš vaizdo.
-2. Minimalizmas ir paprastumas: valdymas turėjo būti kuo paprastesnis, naudojant nedidelį kiekį lengvai įsimenamų
+2. Minimalizmas ir paprastumas -- valdymas turėjo būti kuo paprastesnis, naudojant nedidelį kiekį lengvai įsimenamų
    komandų (klavišų). Vengta sudėtingų komandų sekų ar daugiapakopių meniu.
-3. Tiesioginė sąveika: naudojant „JLine“ bibliotekos „raw“ režimą, siekta, kad sistema reaguotų į kiekvieną
+3. Tiesioginė sąveika -- naudojant „JLine“ bibliotekos „raw“ režimą, siekta, kad sistema reaguotų į kiekvieną
    klavišo paspaudimą nedelsiant, suteikiant tiesioginės kontrolės pojūtį.
-4. Kontekstinė informacija: papildoma informacija (pvz., pagalba, navigacijos parinktys) turėjo būti pateikiama tik tada,
+4. Kontekstinė informacija -- papildoma informacija (pvz., pagalba, navigacijos parinktys) turėjo būti pateikiama tik tada,
    kai jos reikia, laikinai uždengiant pagrindinį vaizdą, o ne būnant matomai nuolat.
 
 === Sąveikos modelis
@@ -29,17 +29,17 @@ Pasirinktas sąveikos modelis yra pagrįstas būsenomis (angl. _state-based_) ir
 Pagrindinė būsena yra ASCII gatvės vaizdo rodymas. Naudotojui paspaudus tam tikrą klavišą, programa pereina į kitą
 būseną arba atlieka veiksmą:
 
-- Vaizdo rodymas (pagrindinė būsena): rodydamas vaizdą, programa laukia naudotojo įvesties.
-- Veiksmo sužadinimas: klavišo paspaudimas (pvz., _n_, _h_, _g_, _q_) inicijuoja perėjimą.
-- Informacijos pateikimas bei parinkčių rodymas: paspaudus pagalbos (_h_) ar navigacijos (_n_) klavišą, ekranas
+- Vaizdo rodymas (pagrindinė būsena) -- rodydamas vaizdą, programa laukia naudotojo įvesties.
+- Veiksmo sužadinimas -- klavišo paspaudimas (pvz., _n_, _h_, _g_, _q_) inicijuoja perėjimą.
+- Informacijos pateikimas bei parinkčių rodymas -- paspaudus pagalbos (_h_) ar navigacijos (_n_) klavišą, ekranas
   išvalomas, ir vietoje pagrindinio vaizdo laikinai parodoma tekstinė informacija arba galimų veiksmų sąrašas
   (pvz., navigacijos krypčių), sugeneruotas kaip ASCII tekstas. Programa pereina į laukimo būseną, kol naudotojas
   pasirenka vieną iš pateiktų parinkčių arba grįžta.
-- Navigacija: pasirinkus navigacijos kryptį, inicijuojamas naujo vaizdo duomenų gavimas, po kurio vėl perpiešiamas
+- Navigacija -- pasirinkus navigacijos kryptį, inicijuojamas naujo vaizdo duomenų gavimas, po kurio vėl perpiešiamas
   pagrindinis vaizdas su nauja lokacija.
-- Kiti veiksmai: kitos komandos (pvz., ekrano perpiešimas _r_, dalinimasis _s_) atlieka atitinkamą veiksmą ir
+- Kiti veiksmai -- kitos komandos (pvz., ekrano perpiešimas _r_, dalinimasis _s_) atlieka atitinkamą veiksmą ir
   dažniausiai grįžta į pagrindinę vaizdo rodymo būseną.
-- Išėjimas: paspaudus išėjimo klavišą (_q_), programa baigia darbą.
+- Išėjimas -- paspaudus išėjimo klavišą (_q_), programa baigia darbą.
 
 Šis modelis leidžia išlaikyti švarią pagrindinę sąsają (tik vaizdas) ir pateikti papildomas funkcijas pagal poreikį.
 
@@ -47,8 +47,8 @@ būseną arba atlieka veiksmą:
 
 Dėl pasirinkto minimalistinio požiūrio, sąsajos elementai yra labai paprasti:
 
-- Pagrindinis ASCII vaizdas: užima visą terminalo plotą, atvaizduojamas naudojant spalvotus ANSI valdymo kodus.
-- Laikinos tekstinės persidengimo sritys (angl. _overlays_): pagalba, navigacijos parinktys, žaidimo klausimai ar
+- Pagrindinis ASCII vaizdas -- užima visą terminalo plotą, atvaizduojamas naudojant spalvotus ANSI valdymo kodus.
+- Laikinos tekstinės persidengimo sritys (angl. _overlays_) -- pagalba, navigacijos parinktys, žaidimo klausimai ar
   kiti pranešimai yra dinamiškai generuojami kaip tekstas ir paverčiami į ASCII meną, laikinai pakeičiantys pagrindinį
   gatvės vaizdą. Tai leidžia pateikti informaciją nenaudojant nuolatinių UI valdiklių.
 
@@ -56,7 +56,7 @@ Dėl pasirinkto minimalistinio požiūrio, sąsajos elementai yra labai paprasti
 
 Navigacija yra viena pagrindinių interaktyvių programos funkcijų, leidžianti naudotojui virtualiai
 judėti po aplinką. Ji realizuota taip, kad suteiktų lankstumo priklausomai nuo turimų duomenų ir naudotojo
-pageidavimų. Programa palaiko du pagrindinius navigacijos tipus, kuriuos galima pasirinkti konfigūracijos faile:
+pageidavimų. Programa palaiko du pagrindinius navigacijos tipus, kuriuos galima pasirinkti konfigūracijos faile --
 navigaciją pagal sekas (angl. _sequence-based_) ir navigaciją pagal atstumą (angl. _proximity-based_ arba _radius-based_).
 
 Bendras navigacijos procesas vyksta taip:
@@ -72,24 +72,24 @@ Bendras navigacijos procesas vyksta taip:
 Detaliau apie kiekvieną navigacijos tipą ir jo realizaciją:
 
 - Navigacija pagal sekas (angl. _Sequence-based navigation_):
-    - Logika: šis navigacijos tipas remiasi „Mapillary“ nuotraukų sekomis. Seka – tai eilė nuotraukų, padarytų
+    - Logika -- šis navigacijos tipas remiasi „Mapillary“ nuotraukų sekomis. Seka – tai eilė nuotraukų, padarytų
       judant tam tikra trajektorija (pvz., važiuojant gatve). Jei dabartinė rodoma nuotrauka priklauso sekai,
       programa bando rasti ankstesnę ir vėlesnę nuotrauką toje pačioje sekoje.
-    - Įgyvendinimas:
+    - Įgyvendinimas --
         1. Pirmiausia kreipiamasi į „Mapillary“ API, prašoma visų nuotraukų identifikatorių (ID), priklausančių
            dabartinės nuotraukos sekai.
         2. Gavus visų sekos nuotraukų ID sąrašą, nustatoma dabartinės nuotraukos pozicija šiame sąraše.
         3. Remiantis šia pozicija, identifikuojamas ankstesnis (jei yra) ir vėlesnis (jei yra) nuotraukos ID sekoje.
         4. Naudotojui pateikiamos parinktys judėti pirmyn (angl. _forwards_) arba atgal (angl. _backwards_) seka.
-    - Privalumai: dažniausiai užtikrina sklandų ir logišką judėjimą ta pačia gatve ar keliu. Nuotraukos dydis
+    - Privalumai -- dažniausiai užtikrina sklandų ir logišką judėjimą ta pačia gatve ar keliu. Nuotraukos dydis
       naviguojant visuomet yra toks pats, dienos laikas taip pat pastovus.
-    - Trūkumai: veikia tik tada, kai nuotrauka priklauso sekai -- kitu atveju nei pirmyn, nei atgal paeiti nebus galima.
+    - Trūkumai -- veikia tik tada, kai nuotrauka priklauso sekai -- kitu atveju nei pirmyn, nei atgal paeiti nebus galima.
       Neleidžia pasukti į šonines gatves ar tyrinėti aplinkos laisviau, jei nėra tiesioginės sekos jungties.
 
 - Navigacija pagal atstumą (angl. _Proximity-based navigation_):
-    - Logika: šis tipas leidžia naudotojui judėti į artimiausias aplinkines nuotraukas, nepriklausomai nuo sekų.
+    - Logika -- šis tipas leidžia naudotojui judėti į artimiausias aplinkines nuotraukas, nepriklausomai nuo sekų.
       Paieška atliekama tam tikru spinduliu aplink dabartinę naudotojo poziciją.
-    - Įgyvendinimas:
+    - Įgyvendinimas --
         1. Kreipiamasi į „Mapillary“ API, pateikiant dabartinės nuotraukos koordinates ir paieškos spindulį.
         2. API grąžina sąrašą nuotraukų, esančių nurodytame spindulyje. Iš šio sąrašo pašalinama pati dabartinė
            nuotrauka, kad nebūtų siūloma judėti į tą pačią vietą.
@@ -99,9 +99,9 @@ Detaliau apie kiekvieną navigacijos tipą ir jo realizaciją:
         5. Paimamas ribotas kiekis (5) artimiausių nuotraukų.
         6. Naudotojui pateikiamas šių artimiausių lokacijų sąrašas, dažnai nurodant atstumą ir apytikslę kryptį.
            Kryptis apskaičiuojama lyginant dabartinį kompaso kampą su guoliu (angl. _bearing_) į tikslinę koordinatę.
-    - Privalumai: suteikia daugiau laisvės tyrinėti aplinką, leidžia pereiti į šonines gatves ar kitus objektus,
+    - Privalumai -- suteikia daugiau laisvės tyrinėti aplinką, leidžia pereiti į šonines gatves ar kitus objektus,
       kurie nėra tiesiogiai sujungti seka.
-    - Trūkumai: kartais gali pasiūlyti judėjimą, kuris nėra logiškas kelio atžvilgiu (pvz., peršokti į kitą gatvės pusę
+    - Trūkumai -- kartais gali pasiūlyti judėjimą, kuris nėra logiškas kelio atžvilgiu (pvz., peršokti į kitą gatvės pusę
       ar į paralelinę gatvę). Rezultatų kokybė priklauso nuo „Mapillary“ padengimo tankumo toje vietoje. Galima gauti
       kitokio dydžio nuotrauką ar vaizdą kitokiu dienos laiku (pvz. iš dienos perėjimas į naktį).
 
@@ -116,11 +116,11 @@ yra nebūtina bei sunkiau matyti pasikeitimus tarp dabartinio ir praeito paveiks
 
 Grįžtamasis ryšys tekstinėje sąsajoje yra ribotas, bet užtikrinamas keliais būdais:
 
-- Ekrano pokyčiai: ekrano išvalymas ir naujo turinio (vaizdo ar tekstinės informacijos) atvaizdavimas aiškiai parodo,
+- Ekrano pokyčiai -- ekrano išvalymas ir naujo turinio (vaizdo ar tekstinės informacijos) atvaizdavimas aiškiai parodo,
   kad įvyko perėjimas tarp būsenų ar įvykdytas veiksmas.
-- Tiesioginis atsakas: dėl „raw“ režimo, naudotojas mato greitą reakciją į klavišų paspaudimus
+- Tiesioginis atsakas -- dėl „raw“ režimo, naudotojas mato greitą reakciją į klavišų paspaudimus
   (nors duomenų gavimas iš „Mapillary“ gali užtrukti).
-- Klaidų pranešimai: įvykus klaidai (pvz., nepavykus gauti duomenų iš API), pateikiamas tekstinis klaidos pranešimas.
+- Klaidų pranešimai -- įvykus klaidai (pvz., nepavykus gauti duomenų iš API), pateikiamas tekstinis klaidos pranešimas.
 
 === Išvada
 

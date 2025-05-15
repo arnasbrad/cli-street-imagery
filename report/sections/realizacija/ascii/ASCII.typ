@@ -76,7 +76,7 @@ būtina suderinti abu anksčiau aptartus reikalavimus.
 
 === Nuotraukos reprezentacija pilkos spalvos tonais
 
-ASCII meną galima skirstyti į 2 grupes: spalvotąjį ir nespalvotąjį. Kadangi visi kadrai gaunami iš gatvės lygio platformos
+ASCII meną galima skirstyti į 2 grupes -- spalvotąjį ir nespalvotąjį. Kadangi visi kadrai gaunami iš gatvės lygio platformos
 „Mapillary“ jau bus spalvoti, pasirūpinti reikės tik konvertavimu iš RGB į pilkus atspalvius. Kovertuoti
 turėsime kiekvieną nuotraukos pikselį, tai atlikti galima pasitelkus viena iš trijų galimų formulių:
 
@@ -172,7 +172,7 @@ reprezentuojamos „tankesniais“ ar daugiau ploto padengiančiais simboliais (
 net pilnas blokas _█_). Žinoma, šis principas gali būti ir atvirkštinis, jei pasirenkamas šviesus fonas ir tamsūs
 simboliai – tuomet tankiausi simboliai atitiks tamsiausias vaizdo dalis.
 
-Norint pritaikyti šį algoritmą, pirmiausia reikia turėti vaizdą, paruoštą pagal anksčiau aptartus principus: konvertuotą
+Norint pritaikyti šį algoritmą, pirmiausia reikia turėti vaizdą, paruoštą pagal anksčiau aptartus principus -- konvertuotą
 į pilkos spalvos tonų paletę. Tokiame vaizde kiekvienas pikselis nebeturi sudėtingos RGB spalvos informacijos, o yra apibūdinamas
 viena skaitine reikšme, nurodančia jo šviesumą. Dažniausiai ši reikšmė svyruoja intervale nuo 0 (visiškai juoda) iki 255
 (visiškai balta). Kitas būtinas komponentas yra ASCII simbolių rinkinys, kuris tarnaus kaip mūsų „ASCII paletė“. Svarbu,
@@ -244,25 +244,25 @@ Ten, kur pokytis yra didelis, laikoma, kad yra kontūras; kur pokytis mažas, pa
 Algoritmo veikimas prasideda, kaip ir šviesumo algoritmo atveju, nuo vaizdo paruošimo – konvertavimo į pilkų atspalvių
 paletę. Kiekvienas pikselis čia taip pat apibūdinamas viena šviesumo reikšme. Toliau vykdomi šie žingsniai, siekiant
 rasti kraštus nuotraukoje:
-- Pasiruošimas ir kraštinių pikselių apdorojimas: pirmiausia patikrinami vaizdo matmenys. Kadangi kontūrų aptikimui naudojamas
+- Pasiruošimas ir kraštinių pikselių apdorojimas -- pirmiausia patikrinami vaizdo matmenys. Kadangi kontūrų aptikimui naudojamas
   3x3 dydžio filtras (Sobelio operatorius), vaizdas turi būti bent 3 pikselių aukščio ir pločio. Jei vaizdas per mažas,
   algoritmas grąžina originalų vaizdą. Svarbu pažymėti, kad kontūrų skaičiavimas atliekamas tik vidiniams vaizdo pikseliams,
   aplink kuriuos galima suformuoti pilną 3x3 matricą. Pats kraštinis vieno pikselio pločio rėmelis dažniausiai lieka
   neapdorotas – jo pikseliai išlaiko pradinę pilko tono reikšmę.
-- Sobelio operatoriaus taikymas: kiekvienam vidiniam pikseliui (x, y) yra išskiriama jo 3x3 matrica. Šiai matricai yra
+- Sobelio operatoriaus taikymas -- kiekvienam vidiniam pikseliui (x, y) yra išskiriama jo 3x3 matrica. Šiai matricai yra
   pritaikomi du Sobelio filtrai (angl. _kernels_) @sobel-edge-detection:
   - sobelX = $mat(-1, 0, 1; -2, 0, 2; -1, 0, 1)$ – aptinka vertikalius kontūrus (pokyčius horizontalia kryptimi).
   - sobelY = $mat(-1, -2, -1; 0, 0, 0; 1, 2, 1)$ – aptinka horizontalius kontūrus (pokyčius vertikalia kryptimi).
-- Filtro reikšmių sumavimas: kiekvienas 3x3 matricos pikselio šviesumo reikšmė padauginama iš atitinkamo
-  Sobelio filtro elemento, ir visi rezultatai sumuojami. Taip gaunamos dvi reikšmės: _gx_ (gradiento X kryptimi įvertis)
+- Filtro reikšmių sumavimas -- kiekvienas 3x3 matricos pikselio šviesumo reikšmė padauginama iš atitinkamo
+  Sobelio filtro elemento, ir visi rezultatai sumuojami. Taip gaunamos dvi reikšmės -- _gx_ (gradiento X kryptimi įvertis)
   ir _gy_ (gradiento Y kryptimi įvertis).
-- Gradiento stiprumo skaičiavimas: gautos gx ir gy reikšmės parodo, koks stiprus yra šviesumo pokytis atitinkamai
+- Gradiento stiprumo skaičiavimas -- gautos gx ir gy reikšmės parodo, koks stiprus yra šviesumo pokytis atitinkamai
   horizontalia ir vertikalia kryptimis. Bendra kontūro stiprumo reikšmė, apskaičiuojama naudojant Pitagoro teoremą @sobel-edge-detection-algorithm.
   Gauta reikšmė normalizuojama, kad tilptų į [0, 255] intervalą. Ši reikšmė parodo, kontūro ryškumą tame taške.
-- Kraštų invertavimas: algoritmas numato galimybę rezultatą invertuoti. Tai reiškia, kad ryškūs kontūrai gaus mažą reikšmę
+- Kraštų invertavimas -- algoritmas numato galimybę rezultatą invertuoti. Tai reiškia, kad ryškūs kontūrai gaus mažą reikšmę
   ir bus atvaizduojami tamsiai, o lygūs plotai gaus didelę reikšmę ir bus šviesūs. Tai dažnai yra pageidaujamas efektas
   ASCII mene, nes kontūrai gali būti prastai matomi priklausomai nuo komandinės eilutės fono spalvos.
-- Rezultato formavimas: po šių žingsnių gaunamas naujas dvimatis masyvas, kurio kiekvienas elementas atitinka apskaičiuotą
+- Rezultato formavimas -- po šių žingsnių gaunamas naujas dvimatis masyvas, kurio kiekvienas elementas atitinka apskaičiuotą
   kontūro stiprumo reikšmę normalizuotą intervale [0, 255].
 
 Galiausiai, programa naudoja šį kontūrų stiprumo masyvą ir konvertuoja jį į ASCII simbolius. Šis konvertavimo etapas yra
@@ -324,7 +324,7 @@ Algoritmo veikimas susideda iš kelių nuoseklių etapų @canny-edge-detection, 
   - Kryptis parodo kontūro orientaciją. Ši kryptis yra esminė Canny algoritmo dalis, nes ji naudojama vėlesniame etapuose
     siekiant atvaizduoti kraštinių kryptį ASCII simboliais. Kryptis yra supaprastinama į vieną iš keturių pagrindinių
     krypčių: 0° (horizontali), 45° (linkstanti į dešinę), 90° (vertikali) arba 135° (linkstanti į kairę).
-  - Rezultatas yra du masyvai: vienas su gradiento reikšmėmis ir kitas su supaprastintomis kryptimis.
+  - Rezultatas yra du masyvai -- vienas su gradiento reikšmėmis ir kitas su supaprastintomis kryptimis.
 - Triukšmo sukeltų kraštų naikinimas:
   - Kontūrai, gauti po gradiento skaičiavimo, dažnai būna storesni nei vienas pikselis. Šio etapo tikslas yra suploninti
     šiuos kontūrus iki vieno pikselio pločio linijų.
@@ -336,14 +336,14 @@ Algoritmo veikimas susideda iš kelių nuoseklių etapų @canny-edge-detection, 
 - Trūkumų taisymas:
   - Tai paskutinis ir vienas svarbiausių Canny algoritmo žingsnių, skirtas atskirti tikrus kontūrus nuo triukšmo sukeltų
     artefaktų ir sujungti nutrūkusius kontūrų segmentus.
-  - Naudojamos dvi slenkstinės reikšmės: aukšta  ir žema ribos, pikseliai, kurių reikšmė viršija aukštą ribą, iš karto
+  - Naudojamos dvi slenkstinės reikšmės -- aukšta  ir žema ribos, pikseliai, kurių reikšmė viršija aukštą ribą, iš karto
     laikomi "stipriais" kontūrų taškais ir pažymimi galutine kontūro reikšme. Pikseliai, kurių reikšmė yra tarp žemos ir
     aukštos ribų, laikomi "silpnais" kontūrų taškais. Jie potencialiai gali būti kontūro dalis, bet tik jei yra susiję
     su stipriu kontūru. Pikseliai, kurių reikšmė yra mažesnė už žemąją ribą, atmetami kaip triukšmas.
-  - Toliau rekursyviai vykdomas kontūrų sekimas: pradedant nuo stiprių kontūrų taškų, ieškoma greta esančių silpnų taškų.
+  - Toliau rekursyviai vykdomas kontūrų sekimas -- pradedant nuo stiprių kontūrų taškų, ieškoma greta esančių silpnų taškų.
     Visi silpni taškai, kurie tiesiogiai ar netiesiogiai jungiasi prie stipraus taško taip pat tampa galutinio kontūro dalimi.
     Silpni taškai, kurie neprisijungia prie jokio stipraus kontūro, galiausiai atmetami.
-  - Rezultatas: gaunamas galutinis kontūrų žemėlapis, kuriame kontūrai yra ploni, geriau sujungti ir mažiau paveikti triukšmo.
+  - Rezultatas -- gaunamas galutinis kontūrų žemėlapis, kuriame kontūrai yra ploni, geriau sujungti ir mažiau paveikti triukšmo.
 - Galutinis apdorojimas ir konvertavimas į ASCII meną:
   - Gautas kontūrų žemėlapis gali būti invertuojamas, jei norima, kad kontūrai būtų tamsūs šviesiame fone.
   - Tikrinama kiekvieno pikselio kontūro reikšmė. Jei ji pakankamai didelė, kad būtų laikoma kontūru -- programa parenka
@@ -366,7 +366,7 @@ sužibėtų. Žemiau pateikiama nuotrauka yra optimali pasirinktam algoritmui (#
   caption: [Optimalus Canny algoritmo pavyzdys.],
 ) <canny_example2>
 
-Canny kraštų atpažinimo algoritmo rezultatas labai priklauso nuo parinktų parametrų: Gauso filtro dydžio ir
+Canny kraštų atpažinimo algoritmo rezultatas labai priklauso nuo parinktų parametrų -- Gauso filtro dydžio ir
 slenkstinių ribų reikšmių. Per aukšti slenksčiai gali praleisti svarbius kontūrus, per žemi – įtraukti daug triukšmo.
 Pagrindinis šio algoritmo pranašumas, lyginant su Sobelio algortimu, yra geresnis triukšmo valdymas, dėl pradinio Gauso
 filtravimo algoritmas yra atsparesnis triukšmui. Algoritmas natūraliai apskaičiuoja kontūro kryptį, kurią galima panaudoti
@@ -422,14 +422,14 @@ Pagrindinė algoritmo idėja yra tokia:
 
 Nors Brailio algoritmas gali pasiekti didesnį efektyvų detalumą nei šviesumo algoritmas, jis turi reikšmingų apribojimų (#ref(<braille_example>)),
 ypač dirbant su sudėtingomis fotografijomis, tokiomis kaip gatvės lygio vaizdai:
-- Globalus slenkstis: didžiausias trūkumas yra vieno globalaus slenksčio naudojimas visam vaizdui. Vaizdai su dideliais
+- Globalus slenkstis -- didžiausias trūkumas yra vieno globalaus slenksčio naudojimas visam vaizdui. Vaizdai su dideliais
   šviesumo skirtumais, pavyzdžiui, ryškus dangus ir tamsūs pastatų šešėliai gatvės scenoje bus prastai atvaizduoti.
   Slenkstis, parinktas pagal vidutinį šviesumą, gali būti per aukštas tamsioms sritims (prarandamos detalės šešėliuose)
   ir per žemas šviesioms sritims (viskas tampa baltais taškais).
-- Dvejetainis atvaizdavimas: šis metodas gali reprezentuoti vaizdą kiekviename 2x4 bloke tik dviejose stadijose –
+- Dvejetainis atvaizdavimas -- šis metodas gali reprezentuoti vaizdą kiekviename 2x4 bloke tik dviejose stadijose –
   pikselis yra arba tamsus, arba šviesus. Tai reiškia, kad prarandamas labai didelis kiekis informacijos. Švelnūs
   perėjimai, tekstūros ir šešėliai, būdingi realioms scenoms, negali būti perteikti.
-- Nesuderinamumas su spalvotu atvaizdavimu: kadangi vienas šiuo metodu sugeneruoto vaizdo simbolis talpina 8 pikselius,
+- Nesuderinamumas su spalvotu atvaizdavimu -- kadangi vienas šiuo metodu sugeneruoto vaizdo simbolis talpina 8 pikselius,
   prarandame ir spalvų informaciją. Žinoma, galima būtų naudoti šių pikselių spalvų visdurkį, tačiau toks kiekis sumaišytų
   spalvų ne pagerins, o pakenks galutinio rezultato kokybei.
 
@@ -477,12 +477,12 @@ meną (angl. _pixel art_), tik vietoj spalvotų kvadratėlių naudojami spalvoti
 ) <blank_filled_example>
 
 Privalumai:
-- Itin paprastas ir greitas: pats greičiausias ir paprasčiausias šiame projekte naudotas konvertavimo metodas.
-- Pilnas vaizdo padengimas: bloko simboliai pilnai užpildo vaizdą, matomas tik minimalus kiekis vienspalvio fono.
+- Itin paprastas ir greitas -- pats greičiausias ir paprasčiausias šiame projekte naudotas konvertavimo metodas.
+- Pilnas vaizdo padengimas -- bloko simboliai pilnai užpildo vaizdą, matomas tik minimalus kiekis vienspalvio fono.
 
 Trūkumai:
-- Visiškai neinformatyvus be spalvų: pats savaime, be papildomo spalvinimo etapo, algoritmas nesukuria jokio atpažįstamo vaizdo.
-- Neišnaudoja ASCII simbolių įvairovės: priešingai nei tradiciniai algoritmai, šis nepasinaudoja skirtingų simbolių vizualiniu
+- Visiškai neinformatyvus be spalvų -- pats savaime, be papildomo spalvinimo etapo, algoritmas nesukuria jokio atpažįstamo vaizdo.
+- Neišnaudoja ASCII simbolių įvairovės -- priešingai nei tradiciniai algoritmai, šis nepasinaudoja skirtingų simbolių vizualiniu
   svoriu ar forma detalių ar tekstūrų perteikimui.
 
 Apibendrinant, vieno simbolio užpildymo metodas yra netradicinis ASCII meno generavimo metodas, kuris pats nesukuria

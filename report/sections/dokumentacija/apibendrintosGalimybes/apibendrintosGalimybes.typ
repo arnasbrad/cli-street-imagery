@@ -8,7 +8,7 @@ komandas vietoj įprastos grafinės sąsajos. Sistema sujungia prieigą prie gat
 su dinamišku vaizdų konvertavimu į ASCII simbolius.
 
 Pagrindinės funkcijos, prieinamos galutiniam naudotojui, apima kelias sritis. Visų pirma, naudotojas
-gali pradėti naršymą įvairiais būdais: nurodydamas konkrečią vietą (pagal geografines koordinates, adresą
+gali pradėti naršymą įvairiais būdais -- nurodydamas konkrečią vietą (pagal geografines koordinates, adresą
 ar specifinį „Mapillary“ paveikslėlio identifikatorių) arba pasirinkdamas žaidybinį režimą. Šis režimas
 pateikia atsitiktinį gatvės vaizdą ASCII formatu, o naudotojo užduotis – atspėti, kurioje šalyje jis yra.
 Pradėjus naršymą ar žaidimą, naudotojas gali judėti virtualioje aplinkoje: arba pasirinkdamas vieną iš

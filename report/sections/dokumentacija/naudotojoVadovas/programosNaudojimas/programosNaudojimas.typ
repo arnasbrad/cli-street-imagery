@@ -25,7 +25,7 @@ vaizdų vienu iš dviejų būdų, abiejų šių būdų valdymas irgi skiriasi:
   - _q_ -- sustabdyti programą ir išeiti.
 
 Jeigu programa yra paleidžiama spėliojimo režime, naudotojas papildomai gali atidaryti šalies spėjimo meniu, šis atidaromas
-paspaudus _g_ mygtuką. Atsidariusiame lange galimos šios įvesty:
+paspaudus _g_ mygtuką. Atsidariusiame lange galimos šios įvestys:
 - _[1-5]_ -- paspaudus bet kurį iš šių mygtukų, įvedamas šalies atvaizduotos gatvės lygio navigacijoje spėjimas.
 - _q_ -- sustabdyti programą ir išeiti.
 Jei naudotojo spėjimas yra teisingas -- programa leidžia tęsti spėliojimą toliau su naujomis atsitiktinėmis lokacijomis.

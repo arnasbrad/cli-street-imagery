@@ -22,9 +22,9 @@ Dėl šių sutrikimų tam tikros spalvų poros tampa sunkiai atskiriamos, kas ga
 Realizuoti daltonizmo filtrai siekia sušvelninti šias problemas. Jų tikslas nėra tiesiog atkurti trūkstamas spalvas,
 nes tai yra neįmanoma. Vietoj to, jie modifikuoja esamas vaizdo spalvas taip, kad probleminės spalvų poros būtų
 transformuotos į tokias, kurias asmuo su konkrečiu sutrikimu galėtų lengviau atskirti. Tai dažnai pasiekiama keliais būdais:
-- Perkeliant informaciją: pavyzdžiui, raudonos ir žalios spalvų skirtumai gali būti subtiliai perkelti į mėlynus ir
+- Perkeliant informaciją -- pavyzdžiui, raudonos ir žalios spalvų skirtumai gali būti subtiliai perkelti į mėlynus ir
   geltonus atspalvius, kuriuos paveikti asmenys paprastai regi geriau.
-- Didinant skirtumus: esami spalvų skirtumai gali būti dirbtinai padidinti. Tai veikia kaip kontrasto didinimo filtras,
+- Didinant skirtumus -- esami spalvų skirtumai gali būti dirbtinai padidinti. Tai veikia kaip kontrasto didinimo filtras,
   tačiau jis pritaikomas tik kelioms spalvoms.
 
 Šie korekciniai filtrai ne tik pagerina vaizdo informatyvumą, bet ir leidžia platesniam žmonių ratui naudotis programa.
