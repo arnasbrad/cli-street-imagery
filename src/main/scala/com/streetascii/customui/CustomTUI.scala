@@ -294,9 +294,10 @@ object CustomTUI {
                 } yield code
 
               case Left(e) =>
-                printAsciiText(chars, e.message).as(
-                  ExitCode.Error
-                )
+                IO.println(e.message)
+                  .as(
+                    ExitCode.Error
+                  )
             }
 
           } yield code
@@ -392,9 +393,10 @@ object CustomTUI {
                 } yield code
 
               case Left(e) =>
-                printAsciiText(chars, e.message).as(
-                  ExitCode.Error
-                )
+                IO.println(e.message)
+                  .as(
+                    ExitCode.Error
+                  )
             }
           } yield code
         }
@@ -492,9 +494,10 @@ object CustomTUI {
                 } yield code
 
               case Left(e) =>
-                printAsciiText(chars, e.message).as(
-                  ExitCode.Error
-                )
+                IO.println(e.message)
+                  .as(
+                    ExitCode.Error
+                  )
             }
           } yield code
         }
@@ -533,9 +536,10 @@ object CustomTUI {
                                       location.country
                                     )
                                   case Left(e) =>
-                                    printAsciiText(chars, e.message).as(
-                                      ExitCode.Error
-                                    )
+                                    IO.println(e.message)
+                                      .as(
+                                        ExitCode.Error
+                                      )
                                 }
                               } yield code
                             case 'q' =>
@@ -616,9 +620,10 @@ object CustomTUI {
                   )
                 } yield code
               case Left(e) =>
-                printAsciiText(chars, e.message).as(
-                  ExitCode.Error
-                )
+                IO.println(e.message)
+                  .as(
+                    ExitCode.Error
+                  )
             }
           } yield code
         }
@@ -658,9 +663,10 @@ object CustomTUI {
                       code <- loop(chars, colors, imageInfo, currentCountry)
                     } yield code
                   case Left(e) =>
-                    printAsciiText(chars, e.message).as(
-                      ExitCode.Error
-                    )
+                    IO.println(e.message)
+                      .as(
+                        ExitCode.Error
+                      )
                 }
               } yield code
 
@@ -701,6 +707,16 @@ object CustomTUI {
             case 'h' =>
               for {
                 _    <- printAsciiText(chars, mainHelpText)
+                code <- loop(chars, colors, imageInfo, currentCountry)
+              } yield code
+
+            case 'x' =>
+              for {
+                _ <- clearScreen(terminal)
+                _ <- IO.blocking {
+                  writer.write(mainHelpText)
+                  writer.flush()
+                }
                 code <- loop(chars, colors, imageInfo, currentCountry)
               } yield code
 
