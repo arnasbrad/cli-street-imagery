@@ -418,7 +418,7 @@ object CustomTUI {
                       navigateToLocation(backwards, currentCountry)
                     case None =>
                       for {
-                        _ <- printAsciiText(chars, "CANNOT GO\nFURTHER BACK")
+                        _ <- printAsciiText(chars, "[B] NOT AVAILABLE")
                         code <- readSequenceFastNavigationChoice(
                           backwardsOpt,
                           forwardsOpt
@@ -432,7 +432,7 @@ object CustomTUI {
                       navigateToLocation(forwards, currentCountry)
                     case None =>
                       for {
-                        _ <- printAsciiText(chars, "CANNOT GO\nFURTHER FORWARD")
+                        _ <- printAsciiText(chars, "[F] NOT AVAILABLE")
                         code <- readSequenceFastNavigationChoice(
                           backwardsOpt,
                           forwardsOpt

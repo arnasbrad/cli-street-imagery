@@ -9,7 +9,7 @@ MLY|1111111111111111|22222222222222222233333333333333
 ## Kauno Pilis - 1
 
 ```
-java -jar street-ascii.jar address "Kauno pilis"
+java -jar street-ascii.jar address "Kauno pilis" --config ./sequencenav.conf
 ```
 
 # Koordinatės
